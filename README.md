@@ -20,14 +20,14 @@ touch tsconfig.json
 **`eslintrc.js`**
 ```js
 module.exports = {
-  extends: ['../config/eslint/[ESLINT_CONFIG].json']
+  extends: [require.resolve('@kaizen/config/eslint/[CONFIG_VERSION].json')]
 };
 ```
 
 **`tsconfig.json`**
 ```json
 {
-  "extends": "@kaizen/config/typescript/[TYPESCRIPT_CONFIG].json",
+  "extends": "@kaizen/config/typescript/[CONFIG_VERSION].json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }
