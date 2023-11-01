@@ -1,5 +1,9 @@
 {
-  "extends": ["./base.json", "plugin:react/recommended", "plugin:react-hooks/recommended"],
+  "extends": [
+    "./base.json",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
   "settings": {
     "react": {
       "version": "detect"
