@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 const Button = () => {
-  const test = 'hello';
   const [state] = useState(false);
 
   useEffect(() => {
