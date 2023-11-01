@@ -1,25 +1,11 @@
 {
-  "overrides": [
-    {
-      "files": ["*"],
-      "env": {
-        "browser": true,
-        "es2021": true
-      }
-    }
-  ],
-  "extends": [
-    "./base.json",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["./base.json", "plugin:react/recommended", "plugin:react-hooks/recommended"],
   "settings": {
     "react": {
       "version": "detect"
     }
   },
   "rules": {
-    "prettier/prettier": "error"
+    "react/react-in-jsx-scope": "off"
   }
 }

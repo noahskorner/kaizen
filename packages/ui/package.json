@@ -6,6 +6,6 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint . --fix"
   }
 }

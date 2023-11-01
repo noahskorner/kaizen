@@ -1,11 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Button = () => {
   const test = 'hello';
+  const [state] = useState(false);
 
   useEffect(() => {
-    console.log('Button loaded');
-  });
+    if (state == true) {
+      console.log('false');
+    }
+  }, []);
 
   return <button>Click me!</button>;
 };
