@@ -4,9 +4,11 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}'"
   },
   "devDependencies": {
+    "@kaizen/config": "*",
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -19,9 +21,9 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
-    "tsconfig": "*",
     "turbo": "latest",
     "typescript": "^4.5.2"
   },
@@ -34,5 +36,13 @@
   "volta": {
     "node": "20.9.0",
     "npm": "10.2.2"
+  },
+  "prettier": {
+    "semi": true,
+    "tabWidth": 2,
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "jsxBracketSameLine": true
   }
 }
