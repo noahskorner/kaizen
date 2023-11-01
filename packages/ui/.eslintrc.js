@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['../config/eslint/react.json']
+  extends: [require.resolve('@kaizen/config/eslint/react.json')]
 };

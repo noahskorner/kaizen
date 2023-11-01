@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['./packages/config/eslint/base.json']
+  extends: [require.resolve('@kaizen/config/eslint/base.json')]
 };
