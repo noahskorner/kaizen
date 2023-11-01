@@ -1,0 +1,3 @@
+{
+  "extends": "@kaizen/config/typescript/base.json"
+}
