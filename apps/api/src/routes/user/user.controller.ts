@@ -2,6 +2,8 @@ import { CreateUserRequest } from './create-user.request';
 import { CreateUserService } from '@kaizen/services';
 import { Request, Response } from 'express';
 import { catchAsync } from '../../middleware/catch-async';
+import { badRequest } from '../../responses/bad-request';
+import { created } from '../../responses';
 
 export class UserController {
   private readonly _createUserService: CreateUserService;
@@ -15,9 +17,9 @@ export class UserController {
     const response = await this._createUserService.create(request);
 
     if (response.type === 'FAILURE') {
-      return res.sendStatus(500);
-    } else {
-      return res.status(201).json(response.data);
+      return badRequest(res, response);
     }
+
+    return created(res, response);
   });
 }
