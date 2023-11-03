@@ -3,37 +3,31 @@
 ## Prerequisites
 
 - Volta
+  - https://docs.volta.sh/guide/getting-started
+- Docker Desktop
+  - https://docs.docker.com/desktop/install
 
 ## Getting Started
 
-- Clone the repository
-- `npm install`
-- `npm run dev`
+1. Clone the repository
 
-## Adding a new package
+   ```
+   gh repo clone noahskorner/kaizen
+   ```
 
-```bash
-cd packages
-mkdir [PACKAGE_NAME]
-npm init
-touch eslintrc.js
-touch tsconfig.json
-```
+2. Install dependencies
 
-**`eslintrc.js`**
+   ```
+   npm install
+   ```
 
-```js
-module.exports = {
-  extends: [require.resolve('@kaizen/config/eslint/[CONFIG_VERSION].json')]
-};
-```
+3. Run the application
 
-**`tsconfig.json`**
+   ```
+   npm run dev
+   ```
 
-```json
-{
-  "extends": "@kaizen/config/typescript/[CONFIG_VERSION].json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
-}
-```
+## Documentation
+
+- [Continuous Integration / Continous Deployment](./docs//ci-cd.md)
+- [Package Management](./docs/packages.md)
