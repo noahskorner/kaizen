@@ -16,7 +16,8 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "clean": "git clean -fdX"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
@@ -47,7 +48,8 @@
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
     "turbo": "latest",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "@kaizen/services": "*"
   },
   "dependencies": {
     "cors": "^2.8.5",
