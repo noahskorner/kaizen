@@ -54,12 +54,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install docker.io
-          sudo service docker start
-
       - name: Build the Docker image
         run: docker build -t kaizen .
 
