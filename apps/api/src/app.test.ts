@@ -7,6 +7,6 @@ describe('Test the root path', () => {
     const response = await request(app).get('/');
 
     // Assert
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toBe(200);
   });
 });
