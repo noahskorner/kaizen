@@ -12,12 +12,21 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "test": "turbo run test --parallel",
+    "dev": "dotenv -e ./packages/env/.env.development turbo run dev",
+    "test": "docker-compose up -d && dotenv -e ./packages/env/.env.test -- prisma migrate dev && dotenv -e ./packages/env/.env.test turbo run test --parallel && docker-compose down",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier . --write",
-    "clean": "find . -type d -name 'node_modules' -exec rm -rf {} + && find . -type d -name '.turbo' -exec rm -rf {} +"
+    "clean": "find . -type d -name 'node_modules' -exec rm -rf {} + && find . -type d -name '.turbo' -exec rm -rf {} +",
+    "prisma:migrate:dev": "dotenv -e ./packages/env/.env.development -- prisma migrate dev",
+    "prisma:db:push": "dotenv -e ./packages/env/.env.development -- prisma db push",
+    "prisma:migrate:reset": "dotenv -e ./packages/env/.env.development -- prisma migrate reset",
+    "prisma:db:seed": "dotenv -e ./packages/env/.env.development -- prisma db seed",
+    "prisma:generate": "dotenv -e ./packages/env/.env.development -- prisma generate",
+    "prisma:studio": "dotenv -e ./packages/env/.env.development -- prisma studio"
+  },
+  "prisma": {
+    "schema": "packages/services/src/prisma/schema.prisma"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
@@ -55,6 +64,7 @@
     "@kaizen/core": "*",
     "@kaizen/env": "*",
     "@kaizen/services": "*",
+    "@prisma/client": "^5.5.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "react": "^18.2.0"

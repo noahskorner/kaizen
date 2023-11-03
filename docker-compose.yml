@@ -1,0 +1,11 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: kaizen_test_db
+    environment:
+      POSTGRES_USER: kaizen_api_test
+      POSTGRES_PASSWORD: gMXEUi0jv30n
+      POSTGRES_DB: kaizen_test
+    ports:
+      - '54320:5432'
