@@ -12,12 +12,12 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "dotenv -e @kaizen/env/.env.local turbo run dev",
+    "dev": "turbo run dev",
     "test": "turbo run test --parallel",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier . --write",
-    "clean": "git clean -fdX -e .env.development"
+    "clean": "find . -type d -name 'node_modules' -exec rm -rf {} + && find . -type d -name '.turbo' -exec rm -rf {} +"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
