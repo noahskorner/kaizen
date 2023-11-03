@@ -17,7 +17,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier . --write",
-    "clean": "git clean -fdX"
+    "clean": "git clean -fdX -e .env.development"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
