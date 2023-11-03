@@ -5,7 +5,7 @@ services:
     container_name: kaizen_test_db
     environment:
       POSTGRES_USER: kaizen_api_test
-      POSTGRES_PASSWORD: gMXEUi0jv30n
+      POSTGRES_PASSWORD: kaizen_api_test_password
       POSTGRES_DB: kaizen_test
     ports:
       - '54320:5432'
