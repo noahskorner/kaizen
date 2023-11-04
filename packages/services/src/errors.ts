@@ -29,5 +29,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_USER_EMAIL_ALREADY_EXISTS]: {
     key: ErrorKey.CREATE_USER_EMAIL_ALREADY_EXISTS,
     message: 'A user with this email already exists.'
+  },
+  [ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD]: {
+    key: ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD,
+    message: 'Incorrect email or password.'
   }
 };
