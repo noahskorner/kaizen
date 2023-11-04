@@ -11,5 +11,6 @@ router.get('/', (_, res: Response) => {
 });
 router.post('/user', userController.create);
 router.post('/auth', authController.login);
+router.get('/auth', authController.refreshToken);
 
 export { router };
