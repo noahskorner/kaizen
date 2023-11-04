@@ -1,9 +1,11 @@
 import { User } from '@kaizen/core';
-import { ApiError, CreateUserCommand, ErrorKey } from '@kaizen/services';
+import { CreateUserCommand, ErrorKey } from '@kaizen/services';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
 import { v4 as uuid } from 'uuid';
+import { expectError } from '../../fixtures/expect-error';
+import { validPassword } from '../../fixtures/valid-password';
 
 describe('/user should', () => {
   it('returns 400 when request is null', async () => {
@@ -97,7 +99,7 @@ describe('/user should', () => {
     // Arrange
     const request: CreateUserCommand = {
       email: createUniqueEmail(),
-      password: '1234567a$'
+      password: validPassword
     };
     await supertest(app).post('/user').send(request);
 
@@ -112,7 +114,7 @@ describe('/user should', () => {
     // Arrange
     const request: CreateUserCommand = {
       email: `${uuid()}-UPPERcase@test.com`,
-      password: '1234567a$'
+      password: validPassword
     };
 
     // Act
@@ -124,9 +126,3 @@ describe('/user should', () => {
     expect(body.email).toBe(request.email.toLowerCase());
   });
 });
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const expectError = (response: any, error: ErrorKey) => {
-  const errors: ApiError[] = response.body;
-  expect(errors.map((x) => x.key)).toContain(error);
-};
