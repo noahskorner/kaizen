@@ -1,19 +1,20 @@
 import { ApiError } from '../../api-error';
 import { ApiResponse } from '../../api-response';
 import { Errors } from '../../errors';
-import { Service } from '../../services';
 import { CreateUserCommand } from './create-user.command';
 import { User } from '@kaizen/core';
-import { UserRepository } from './user.repository';
+import { genSalt, hash } from 'bcrypt';
+import { UserService } from './user.service';
+import { GetUserService } from './get-user-service';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export class CreateUserService extends Service {
-  private readonly _userRepository: UserRepository;
+export class CreateUserService extends UserService {
+  private readonly _getUserService: GetUserService;
 
   constructor() {
     super();
-    this._userRepository = new UserRepository();
+    this._getUserService = new GetUserService();
   }
 
   public async create(command: CreateUserCommand): Promise<ApiResponse<User>> {
@@ -22,12 +23,17 @@ export class CreateUserService extends Service {
       return this.failures(errors);
     }
 
-    const existingUser = await this._userRepository.findByEmail(command.email);
+    const existingUser = await this._getUserService.findByEmail(command.email);
     if (existingUser != null) {
       return this.failure(Errors.CREATE_USER_EMAIL_ALREADY_EXISTS);
     }
 
-    const user = await this._userRepository.create(command);
+    const normalizedEmail = this.normalizeEmail(command.email);
+    const hashedPassword = await this.hashPassword(command.password);
+    const user = await this._userRepository.create({
+      email: normalizedEmail,
+      password: hashedPassword
+    });
     return this.success(user);
   }
 
@@ -55,5 +61,10 @@ export class CreateUserService extends Service {
     }
 
     return errors;
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await genSalt();
+    return await hash(password, salt);
   }
 }
