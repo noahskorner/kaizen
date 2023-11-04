@@ -33,5 +33,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD]: {
     key: ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD,
     message: 'Incorrect email or password.'
+  },
+  [ErrorKey.REFRESH_TOKEN_INVALID]: {
+    key: ErrorKey.REFRESH_TOKEN_INVALID,
+    message: 'Must provide a valid refreshToken.'
   }
 };

@@ -84,4 +84,14 @@ describe('/auth should', () => {
       expect(body.refreshToken).toBe(refreshToken);
     });
   });
+  describe('refreshToken should', () => {
+    it('returns 401 if refresh token is not provided', async () => {
+      // Act
+      const response = await supertest(app).get('/auth').send();
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+      expectError(response, ErrorKey.REFRESH_TOKEN_INVALID);
+    });
+  });
 });

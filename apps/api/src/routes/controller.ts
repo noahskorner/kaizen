@@ -14,7 +14,9 @@ export abstract class Controller {
     return res.status(401).json(response.errors);
   }
 
-  public ok = <T>(res: Response, response: ApiSuccessResponse<T>) => {
+  public ok = <T>(res: Response, response?: ApiSuccessResponse<T>) => {
+    if (response == null) return res.sendStatus(200);
+
     return res.status(200).json(response.data);
   };
 }

@@ -1,14 +1,12 @@
-import { AuthToken, User } from '@kaizen/core';
+import { AuthToken } from '@kaizen/core';
 import { compare } from 'bcrypt';
 import { ApiResponse } from '../../api-response';
 import { Errors } from '../../errors';
-import { Service } from '../../services';
 import { UserRepository } from '../user';
 import { LoginCommand } from './login.command';
-import jwt from 'jsonwebtoken';
-import { environment } from '@kaizen/env';
+import { AuthService } from './auth.service';
 
-export class LoginService extends Service {
+export class LoginService extends AuthService {
   private readonly _userRepository: UserRepository;
 
   constructor() {
@@ -38,21 +36,5 @@ export class LoginService extends Service {
       refreshToken: this.createRefreshToken(userRecord)
     };
     return this.success(authToken);
-  }
-
-  private createAccessToken(user: User): string {
-    const accessToken = jwt.sign(user, environment.ACCESS_TOKEN_SECRET, {
-      expiresIn: environment.ACCESS_TOKEN_EXPIRATION
-    });
-
-    return accessToken;
-  }
-
-  private createRefreshToken(user: User): string {
-    const refreshToken = jwt.sign(user, environment.REFRESH_TOKEN_SECRET, {
-      expiresIn: environment.REFRESH_TOKEN_EXPIRATION
-    });
-
-    return refreshToken;
   }
 }
