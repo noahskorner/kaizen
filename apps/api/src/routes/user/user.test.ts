@@ -1,6 +1,9 @@
+import { User } from '@kaizen/core';
 import { ApiError, CreateUserCommand, ErrorKey } from '@kaizen/services';
 import supertest from 'supertest';
 import { app } from '../../app';
+import { createUniqueEmail } from '../../fixtures/create-unique-email';
+import { v4 as uuid } from 'uuid';
 
 describe('/user should', () => {
   it('returns 400 when request is null', async () => {
@@ -38,7 +41,7 @@ describe('/user should', () => {
   it('returns 400 when password not provided', async () => {
     // Arrange
     const request = {
-      email: 'kaizen@gmail.com'
+      email: createUniqueEmail()
     };
 
     // Act
@@ -51,7 +54,7 @@ describe('/user should', () => {
   it('returns 400 when password not long enough', async () => {
     // Arrange
     const request: CreateUserCommand = {
-      email: 'kaizen@gmail.com',
+      email: createUniqueEmail(),
       password: '1234567'
     };
 
@@ -65,7 +68,7 @@ describe('/user should', () => {
   it('returns 400 when password has no numbers', async () => {
     // Arrange
     const request: CreateUserCommand = {
-      email: 'kaizen@gmail.com',
+      email: createUniqueEmail(),
       password: 'abcdefghi'
     };
 
@@ -79,7 +82,7 @@ describe('/user should', () => {
   it('returns 400 when password has no symbols', async () => {
     // Arrange
     const request: CreateUserCommand = {
-      email: 'kaizen@gmail.com',
+      email: createUniqueEmail(),
       password: '1234567a'
     };
 
@@ -93,7 +96,7 @@ describe('/user should', () => {
   it('returns 400 when email already exists', async () => {
     // Arrange
     const request: CreateUserCommand = {
-      email: 'kaizen@gmail.com',
+      email: createUniqueEmail(),
       password: '1234567a$'
     };
     await supertest(app).post('/user').send(request);
@@ -105,10 +108,25 @@ describe('/user should', () => {
     expect(response.statusCode).toBe(400);
     expectError(response, ErrorKey.CREATE_USER_EMAIL_ALREADY_EXISTS);
   });
+  it('returns 201 and user with normalized email', async () => {
+    // Arrange
+    const request: CreateUserCommand = {
+      email: `${uuid()}-UPPERcase@test.com`,
+      password: '1234567a$'
+    };
+
+    // Act
+    const response = await supertest(app).post('/user').send(request);
+    const body: User = response.body;
+
+    // Assert
+    expect(response.statusCode).toBe(201);
+    expect(body.email).toBe(request.email.toLowerCase());
+  });
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const expectError = (response: any, error: ErrorKey) => {
-  const errors: ApiError[] = response._body;
+  const errors: ApiError[] = response.body;
   expect(errors.map((x) => x.key)).toContain(error);
 };
