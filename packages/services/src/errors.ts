@@ -37,5 +37,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.REFRESH_TOKEN_INVALID]: {
     key: ErrorKey.REFRESH_TOKEN_INVALID,
     message: 'Must provide a valid refreshToken.'
+  },
+  [ErrorKey.REFRESH_TOKEN_EXPIRED]: {
+    key: ErrorKey.REFRESH_TOKEN_EXPIRED,
+    message: 'Your token has expired.'
   }
 };
