@@ -6,6 +6,9 @@ import { createUniqueEmail } from '../../fixtures/create-unique-email';
 import { expectError } from '../../fixtures/expect-error';
 import { getRefreshToken } from '../../fixtures/get-refresh-token';
 import { validPassword } from '../../fixtures/valid-password';
+import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
+import { environment } from '@kaizen/env';
+import jwt from 'jsonwebtoken';
 
 describe('/auth should', () => {
   describe('login should', () => {
@@ -87,11 +90,36 @@ describe('/auth should', () => {
   describe('refreshToken should', () => {
     it('returns 401 if refresh token is not provided', async () => {
       // Act
-      const response = await supertest(app).get('/auth').send();
+      const response = await supertest(app).get('/auth');
 
       // Assert
       expect(response.statusCode).toBe(401);
       expectError(response, ErrorKey.REFRESH_TOKEN_INVALID);
+    });
+    it('returns 401 if refresh token is invalid', async () => {
+      // Act
+      const response = await supertest(app)
+        .get('/auth')
+        .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=null`]);
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+      expectError(response, ErrorKey.REFRESH_TOKEN_INVALID);
+    });
+    it('returns 401 if refresh token is expired', async () => {
+      // Arrange
+      const refreshToken = jwt.sign({}, environment.REFRESH_TOKEN_SECRET, {
+        expiresIn: '0s'
+      });
+
+      // Act
+      const response = await supertest(app)
+        .get('/auth')
+        .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=${refreshToken}`]);
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+      expectError(response, ErrorKey.REFRESH_TOKEN_EXPIRED);
     });
   });
 });
