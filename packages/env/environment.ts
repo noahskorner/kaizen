@@ -5,6 +5,8 @@ export interface Environment {
   ACCESS_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_SECRET: string;
   REFRESH_TOKEN_EXPIRATION: string;
+  API_PORT: number;
+  API_DOMAIN: string;
 }
 
 const NODE_ENV = process.env.NODE_ENV ?? '';
@@ -43,6 +45,18 @@ if (REFRESH_TOKEN_EXPIRATION == null) {
     `Must provide REFRESH_TOKEN_EXPIRATION. Did you forget to set it in your environment file?`
   );
 }
+const API_PORT = parseInt(process.env.API_PORT ?? '');
+if (API_PORT == null || isNaN(API_PORT)) {
+  throw new Error(
+    `Must provide API_PORT. Did you forget to set it in your environment file?`
+  );
+}
+const API_DOMAIN = process.env.API_DOMAIN;
+if (API_DOMAIN == null) {
+  throw new Error(
+    `Must provide API_DOMAIN. Did you forget to set it in your environment file?`
+  );
+}
 
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
@@ -50,5 +64,7 @@ export const environment: Environment = {
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRATION: ACCESS_TOKEN_EXPIRATION,
   REFRESH_TOKEN_SECRET: REFRESH_TOKEN_SECRET,
-  REFRESH_TOKEN_EXPIRATION: REFRESH_TOKEN_EXPIRATION
+  REFRESH_TOKEN_EXPIRATION: REFRESH_TOKEN_EXPIRATION,
+  API_PORT: API_PORT,
+  API_DOMAIN: API_DOMAIN
 };
