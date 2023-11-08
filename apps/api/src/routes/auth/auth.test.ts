@@ -7,10 +7,19 @@ import { expectError } from '../../fixtures/expect-error';
 import { getRefreshToken } from '../../fixtures/get-refresh-token';
 import { validPassword } from '../../fixtures/valid-password';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
-import { environment } from '@kaizen/env';
-import jwt from 'jsonwebtoken';
+import * as env from '@kaizen/env';
+import { createAndLoginUser } from '../../fixtures/create-and-login-user';
+const mockEnvironment = env.environment;
 
 describe('/auth should', () => {
+  beforeAll(() => {
+    jest.mock('@kaizen/env', () => ({
+      environment: mockEnvironment
+    }));
+  });
+  beforeEach(() => {
+    env.environment.REFRESH_TOKEN_EXPIRATION = '5m';
+  });
   describe('login should', () => {
     it('returns 401 if request is empty', async () => {
       // Act
@@ -108,9 +117,8 @@ describe('/auth should', () => {
     });
     it('returns 401 if refresh token is expired', async () => {
       // Arrange
-      const refreshToken = jwt.sign({}, environment.REFRESH_TOKEN_SECRET, {
-        expiresIn: '0s'
-      });
+      env.environment.REFRESH_TOKEN_EXPIRATION = '0s';
+      const { refreshToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
@@ -120,6 +128,22 @@ describe('/auth should', () => {
       // Assert
       expect(response.statusCode).toBe(401);
       expectError(response, ErrorKey.REFRESH_TOKEN_EXPIRED);
+    });
+    it('returns 200 if refreshToken is valid', async () => {
+      // Arrange
+      const { refreshToken } = await createAndLoginUser();
+
+      // Act
+      const response = await supertest(app)
+        .get('/auth')
+        .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=${refreshToken}`]);
+      const refreshedToken = getRefreshToken(response);
+
+      // Assert
+      expect(response.statusCode).toBe(200);
+      expect(response.body.accessToken).toBeDefined();
+      expect(response.body.refreshToken).toBeDefined();
+      expect(response.body.refreshToken).toBe(refreshedToken);
     });
   });
 });
