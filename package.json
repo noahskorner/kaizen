@@ -13,7 +13,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "dotenv -e ./packages/env/.env.development turbo run dev",
-    "test": "docker-compose up -d && dotenv -e ./packages/env/.env.test -- prisma migrate dev && dotenv -e ./packages/env/.env.test turbo run test --parallel && docker-compose down",
+    "test": "docker-compose up -d && dotenv -e ./packages/env/.env.test -- prisma migrate dev && dotenv -e ./packages/env/.env.test turbo run test && docker-compose down",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier . --write",
