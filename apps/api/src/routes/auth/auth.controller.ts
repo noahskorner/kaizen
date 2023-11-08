@@ -12,12 +12,12 @@ import { jwtDecode } from 'jwt-decode';
 
 export class AuthController extends Controller {
   private readonly _loginService: LoginService;
-  private readonly refreshTokenService: RefreshTokenService;
+  private readonly _refreshTokenService: RefreshTokenService;
 
   constructor() {
     super();
     this._loginService = new LoginService();
-    this.refreshTokenService = new RefreshTokenService();
+    this._refreshTokenService = new RefreshTokenService();
   }
 
   public login = catchAsync(async (req: Request, res: Response) => {
@@ -29,11 +29,7 @@ export class AuthController extends Controller {
       return this.unauthorized(res, response);
     }
 
-    res.cookie(REFRESH_TOKEN_COOKIE_KEY, response.data.refreshToken, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      expires: this.getTokenExpirationDate(response.data.refreshToken)
-    });
+    this.setRefreshToken(res, response.data.refreshToken);
     return this.ok(res, response);
   });
 
@@ -41,13 +37,22 @@ export class AuthController extends Controller {
     const refreshToken: string = req.cookies?.[REFRESH_TOKEN_COOKIE_KEY];
     const command: RefreshTokenCommand = { token: refreshToken };
 
-    const response = await this.refreshTokenService.refreshToken(command);
+    const response = await this._refreshTokenService.refreshToken(command);
     if (response.type === 'FAILURE') {
       return this.unauthorized(res, response);
     }
 
-    return this.ok(res);
+    this.setRefreshToken(res, response.data.refreshToken);
+    return this.ok(res, response);
   });
+
+  private setRefreshToken(res: Response, refreshToken: string) {
+    res.cookie(REFRESH_TOKEN_COOKIE_KEY, refreshToken, {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      expires: this.getTokenExpirationDate(refreshToken)
+    });
+  }
 
   private getTokenExpirationDate = (token: string) => {
     const { exp } = jwtDecode<{ exp: number }>(token);

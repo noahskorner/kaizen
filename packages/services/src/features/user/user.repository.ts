@@ -3,6 +3,14 @@ import { prisma } from '../../prisma/prisma';
 import { CreateUserCommand } from './create-user.command';
 
 export class UserRepository {
+  public async get(id: string): Promise<UserRecord | null> {
+    return await prisma.userRecord.findUnique({
+      where: {
+        id: id
+      }
+    });
+  }
+
   public async findByEmail(email: string): Promise<UserRecord | null> {
     return await prisma.userRecord.findUnique({
       where: {
