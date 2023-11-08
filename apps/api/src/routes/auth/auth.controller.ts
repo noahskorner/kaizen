@@ -46,6 +46,11 @@ export class AuthController extends Controller {
     return this.ok(res, response);
   });
 
+  public logout = catchAsync(async (req: Request, res: Response) => {
+    res.clearCookie(REFRESH_TOKEN_COOKIE_KEY);
+    return res.sendStatus(200);
+  });
+
   private setRefreshToken(res: Response, refreshToken: string) {
     res.cookie(REFRESH_TOKEN_COOKIE_KEY, refreshToken, {
       secure: process.env.NODE_ENV === 'production',
