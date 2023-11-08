@@ -29,5 +29,6 @@
 
 ## Documentation
 
-- [Continuous Integration / Continous Deployment](./docs//ci-cd.md)
+- [Project Backlog](./docs/project-backlog.md)
+- [Continuous Integration / Continous Deployment](./docs/ci-cd.md)
 - [Package Management](./docs/packages.md)
