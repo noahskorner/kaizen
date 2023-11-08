@@ -1,5 +1,6 @@
+import { environment } from '@kaizen/env';
 import { app } from './app';
 
-app.listen(3000, () => {
-  console.log(`Server listening on port 3000...`);
+app.listen(environment.API_PORT, () => {
+  console.log(`Server listening on port ${environment.API_PORT}...`);
 });

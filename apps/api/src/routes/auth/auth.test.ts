@@ -19,6 +19,7 @@ describe('/auth should', () => {
   });
   beforeEach(() => {
     env.environment.REFRESH_TOKEN_EXPIRATION = '5m';
+    env.environment.ACCESS_TOKEN_EXPIRATION = '5m';
   });
   describe('login should', () => {
     it('returns 401 if request is empty', async () => {
@@ -144,6 +145,51 @@ describe('/auth should', () => {
       expect(response.body.accessToken).toBeDefined();
       expect(response.body.refreshToken).toBeDefined();
       expect(response.body.refreshToken).toBe(refreshedToken);
+    });
+  });
+  describe('logout should', () => {
+    it('returns 401 when accessToken does not exist', async () => {
+      // Act
+      const response = await supertest(app).delete('/auth');
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+    });
+    it('returns 401 when accessToken is invalid', async () => {
+      // Act
+      const response = await supertest(app)
+        .delete('/auth')
+        .auth('invalid-token', { type: 'bearer' });
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+    });
+    it('returns 401 when accessToken is expired', async () => {
+      // Arrange
+      env.environment.ACCESS_TOKEN_EXPIRATION = '0s';
+      const { accessToken } = await createAndLoginUser();
+
+      // Act
+      const response = await supertest(app)
+        .delete('/auth')
+        .auth(accessToken, { type: 'bearer' });
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+    });
+    it('returns 200 when accessToken is valid', async () => {
+      // Arrange
+      const { accessToken } = await createAndLoginUser();
+
+      // Act
+      const response = await supertest(app)
+        .delete('/auth')
+        .auth(accessToken, { type: 'bearer' });
+      const refreshToken = getRefreshToken(response);
+
+      // Assert
+      expect(response.statusCode).toBe(200);
+      expect(refreshToken).toBeNull();
     });
   });
 });
