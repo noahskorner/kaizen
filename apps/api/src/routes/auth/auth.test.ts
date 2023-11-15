@@ -1,5 +1,4 @@
-import { AuthToken } from '@kaizen/core';
-import { CreateUserCommand, ErrorKey } from '@kaizen/services';
+import { AuthToken, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
@@ -9,6 +8,7 @@ import { validPassword } from '../../fixtures/valid-password';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import * as env from '@kaizen/env';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
+import { CreateUserCommand } from '@kaizen/user-server';
 const mockEnvironment = env.environment;
 
 describe('/auth should', () => {

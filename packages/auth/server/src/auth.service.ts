@@ -1,6 +1,6 @@
 import { AccessToken, RefreshToken } from '@kaizen/core';
 import { environment } from '@kaizen/env';
-import { Service } from '../../services';
+import { Service } from '@kaizen/core';
 import jwt from 'jsonwebtoken';
 
 export class AuthService extends Service {
