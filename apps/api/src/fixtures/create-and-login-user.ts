@@ -1,9 +1,10 @@
-import { CreateUserCommand, LoginCommand } from '@kaizen/services';
 import supertest from 'supertest';
 import { app } from '../app';
 import { createUniqueEmail } from './create-unique-email';
 import { validPassword } from './valid-password';
 import { AuthToken } from '@kaizen/core';
+import { CreateUserCommand } from '@kaizen/user-server';
+import { LoginCommand } from '@kaizen/auth-server';
 
 export const createAndLoginUser = async () => {
   const email = createUniqueEmail();

@@ -1,5 +1,5 @@
 import { UserRecord } from '@prisma/client';
-import { prisma } from '../../prisma/prisma';
+import { prisma } from '@kaizen/data';
 import { CreateUserCommand } from './create-user.command';
 
 export class UserRepository {

@@ -1,4 +1,4 @@
-import { ApiFailureResponse, ApiSuccessResponse } from '@kaizen/services';
+import { ApiFailureResponse, ApiSuccessResponse } from '@kaizen/core';
 import { Response } from 'express';
 
 export abstract class Controller {

@@ -1,14 +1,14 @@
-import {
-  LoginCommand,
-  LoginService,
-  RefreshTokenCommand,
-  RefreshTokenService
-} from '@kaizen/services';
 import { Request, Response } from 'express';
 import { catchAsync } from '../../middleware/catch-async';
 import { Controller } from '../controller';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { jwtDecode } from 'jwt-decode';
+import {
+  LoginCommand,
+  LoginService,
+  RefreshTokenCommand,
+  RefreshTokenService
+} from '@kaizen/auth-server';
 
 export class AuthController extends Controller {
   private readonly _loginService: LoginService;

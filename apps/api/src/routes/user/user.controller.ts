@@ -1,7 +1,7 @@
-import { CreateUserCommand, CreateUserService } from '@kaizen/services';
 import { Request, Response } from 'express';
 import { catchAsync } from '../../middleware/catch-async';
 import { Controller } from '../controller';
+import { CreateUserService, CreateUserCommand } from '@kaizen/user-server';
 
 export class UserController extends Controller {
   private readonly _createUserService: CreateUserService;
