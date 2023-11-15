@@ -1,8 +1,5 @@
-import { ApiError } from '../../api-error';
-import { ApiResponse } from '../../api-response';
-import { Errors } from '../../errors';
 import { CreateUserCommand } from './create-user.command';
-import { User } from '@kaizen/core';
+import { ApiError, ApiResponse, Errors, User } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import { UserService } from './user.service';
 import { GetUserService } from './get-user-service';

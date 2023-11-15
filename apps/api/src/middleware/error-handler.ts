@@ -1,4 +1,4 @@
-import { ApiError, ErrorKey } from '@kaizen/services';
+import { ApiError, ErrorKey } from '@kaizen/core';
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
 export const errorHandler = (

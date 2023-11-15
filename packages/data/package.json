@@ -1,5 +1,5 @@
 {
-  "name": "@kaizen/services",
+  "name": "@kaizen/data",
   "version": "0.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
