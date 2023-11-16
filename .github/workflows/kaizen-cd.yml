@@ -11,6 +11,10 @@ on:
   workflow_dispatch:
     branches:
       - release/**
+    inputs:
+      branch-name:
+        description: 'Branch to deploy'
+        required: true
 
 jobs:
   development:
@@ -32,10 +36,6 @@ jobs:
   production:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
-    inputs:
-      branch-name:
-        description: 'Branch to deploy'
-        required: true
     steps:
       - name: Deploy to production
         run: |
