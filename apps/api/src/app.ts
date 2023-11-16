@@ -4,7 +4,7 @@ import { router } from './routes/routes';
 import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
 import { AccessToken } from '@kaizen/core';
-import { environment } from '@kaizen/env';
+import { environment } from '@kaizen/env-server';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
