@@ -1,4 +1,4 @@
-import { environment } from '@kaizen/env';
+import { environment } from '@kaizen/env-server';
 import { app } from './app';
 
 app.listen(environment.API_PORT, () => {
