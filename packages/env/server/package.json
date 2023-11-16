@@ -1,5 +1,5 @@
 {
-  "name": "@kaizen/env",
+  "name": "@kaizen/env-server",
   "version": "0.0.0",
   "main": "./environment.ts",
   "types": "./environment.ts",

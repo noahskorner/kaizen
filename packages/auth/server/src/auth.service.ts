@@ -1,5 +1,5 @@
 import { AccessToken, RefreshToken } from '@kaizen/core';
-import { environment } from '@kaizen/env';
+import { environment } from '@kaizen/env-server';
 import { Service } from '@kaizen/core';
 import jwt from 'jsonwebtoken';
 

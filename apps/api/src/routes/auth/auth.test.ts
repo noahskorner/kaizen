@@ -6,14 +6,14 @@ import { expectError } from '../../fixtures/expect-error';
 import { getRefreshToken } from '../../fixtures/get-refresh-token';
 import { validPassword } from '../../fixtures/valid-password';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
-import * as env from '@kaizen/env';
+import * as env from '@kaizen/env-server';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { CreateUserCommand } from '@kaizen/user-server';
 const mockEnvironment = env.environment;
 
 describe('/auth should', () => {
   beforeAll(() => {
-    jest.mock('@kaizen/env', () => ({
+    jest.mock('@kaizen/env-server', () => ({
       environment: mockEnvironment
     }));
   });

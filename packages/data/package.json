@@ -7,8 +7,5 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  },
-  "prisma": {
-    "schema": "src/prisma/schema.prisma"
   }
 }
