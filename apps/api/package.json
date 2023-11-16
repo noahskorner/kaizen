@@ -7,7 +7,7 @@
     "dev": "dotenv -e ./src/env/.env.development nodemon src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "docker-compose up -d && sleep 5 && dotenv -e ./src/env/.env.test -- prisma migrate dev && dotenv -e ./src/env/.env.test jest && docker-compose down",
+    "test": "docker-compose up -d && sleep 2 && dotenv -e ./src/env/.env.test -- prisma migrate dev && dotenv -e ./src/env/.env.test jest && docker-compose down",
     "prisma:migrate:dev": "dotenv -e ./src/env/.env.development -- prisma migrate dev",
     "prisma:db:push": "dotenv -e ./src/env/.env.development -- prisma db push",
     "prisma:migrate:reset": "dotenv -e ./src/env/.env.development -- prisma migrate reset",
