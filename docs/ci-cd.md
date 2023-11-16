@@ -1,4 +1,4 @@
-# Continous Integration / Continuous Development
+# Continous Integration / Continuous Deployment
 
 ## GitHub Workflow
 
@@ -9,3 +9,6 @@ The GitHub workflow [found here](./github/workflows.kaizen-ci.yml), currently ru
 3. Test
 
 The `test` check spins up a docker container for integration testing. The `docker-compose.yml` can be [found here](/docker-compose.yml).
+
+## Continous Deployment
+

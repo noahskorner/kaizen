@@ -1,0 +1,42 @@
+name: Kaizen CD
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [created]
+    branches:
+      - 'release/**'
+  workflow_dispatch:
+    branches:
+      - release/**
+
+jobs:
+  development:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to development
+        run: |
+          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to development"
+
+  staging:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/release/')
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to staging"
+
+  production:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    inputs:
+      branch-name:
+        description: 'Branch to deploy'
+        required: true
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to production"
