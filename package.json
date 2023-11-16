@@ -10,6 +10,9 @@
     "node": "20.9.0",
     "npm": "10.2.2"
   },
+  "prisma": {
+    "schema": "packages/data/src/prisma/schema.prisma"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
