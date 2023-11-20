@@ -1,21 +1,22 @@
 import { CreateUserCommand } from './create-user.command';
-import { ApiError, ApiResponse, Errors, User } from '@kaizen/core';
+import { ApiResponse, Errors, User } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import { UserService } from './user.service';
 import { GetUserService } from './get-user-service';
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { CreateUserValidator } from '@kaizen/user';
 
 export class CreateUserService extends UserService {
   private readonly _getUserService: GetUserService;
+  private readonly _createUserValidator: CreateUserValidator;
 
   constructor() {
     super();
     this._getUserService = new GetUserService();
+    this._createUserValidator = new CreateUserValidator();
   }
 
   public async create(command: CreateUserCommand): Promise<ApiResponse<User>> {
-    const errors = this.validate(command);
+    const errors = this._createUserValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
     }
@@ -27,37 +28,16 @@ export class CreateUserService extends UserService {
 
     const normalizedEmail = this.normalizeEmail(command.email);
     const hashedPassword = await this.hashPassword(command.password);
-    const user = await this._userRepository.create({
+    const userRecord = await this._userRepository.create({
       email: normalizedEmail,
       password: hashedPassword
     });
+
+    const user: User = {
+      id: userRecord.id,
+      email: userRecord.email
+    };
     return this.success(user);
-  }
-
-  private validate(command: CreateUserCommand): ApiError[] {
-    const errors: ApiError[] = [];
-
-    if (command.email == null) {
-      errors.push(Errors.CREATE_USER_INVALID_EMAIL);
-    }
-    if (!emailRegex.test(command.email)) {
-      errors.push(Errors.CREATE_USER_INVALID_EMAIL);
-    }
-    if (command.password == null) {
-      errors.push(Errors.CREATE_USER_INVALID_PASSWORD);
-    } else {
-      if (command.password.length < 8) {
-        errors.push(Errors.CREATE_USER_PASSWORD_TOO_SHORT);
-      }
-      if (!/\d/.test(command.password)) {
-        errors.push(Errors.CREATE_USER_PASSWORD_NO_NUMBER);
-      }
-      if (!/[!@#$%^&*]/.test(command.password)) {
-        errors.push(Errors.CREATE_USER_PASSWORD_NO_SYMBOL);
-      }
-    }
-
-    return errors;
   }
 
   private async hashPassword(password: string): Promise<string> {

@@ -1,0 +1,4 @@
+{
+  "extends": "./react.json",
+  "references": [{ "path": "./vite.node.json" }]
+}

@@ -1,3 +1,3 @@
-export default function LoginPage() {
-  return <div>login page</div>;
-}
+export const LoginPage = () => {
+  return <div>LoginPage</div>;
+};
