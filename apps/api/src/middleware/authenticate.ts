@@ -1,4 +1,4 @@
-import { AccessToken } from '@kaizen/core';
+import { AccessToken } from '@kaizen/auth';
 import { serverEnvironment } from '@kaizen/env-server';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';

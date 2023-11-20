@@ -3,7 +3,7 @@ import cors from 'cors';
 import { router } from './routes/routes';
 import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
-import { AccessToken } from '@kaizen/core';
+import { AccessToken } from '@kaizen/auth';
 import { serverEnvironment } from '@kaizen/env-server';
 
 declare global {
