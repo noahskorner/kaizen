@@ -9,13 +9,13 @@ export interface TextInputProps {
 
 export function TextInput({ id, label, value, onChange }: TextInputProps) {
   return (
-    <div className="text-gray-100 text-sm gap-y-2 flex flex-col">
+    <div className="flex flex-col gap-y-2 text-sm text-gray-100">
       <label className="font-semibold" htmlFor={id}>
         {label}
       </label>
       <input
         type="text"
-        className="w-full h-10 bg-slate-800 border rounded-lg border-slate-900 outline-none px-2 focus:ring-2 focus:ring-indigo-900"
+        className="h-10 w-full rounded-lg border border-slate-900 bg-slate-800 px-2 outline-none focus:ring-2 focus:ring-indigo-900"
         name={id}
         id={id}
         value={value}

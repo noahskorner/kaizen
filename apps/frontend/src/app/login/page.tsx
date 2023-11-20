@@ -24,10 +24,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center ">
+    <div className="flex h-screen w-screen items-center justify-center ">
       <form
         onSubmit={submitLoginForm}
-        className="w-full max-w-sm flex flex-col gap-y-6 px-4">
+        className="flex w-full max-w-sm flex-col gap-y-6 px-4">
         <TextInput
           id={LOGIN_PAGE_EMAIL_INPUT_ID}
           label="Email address"
