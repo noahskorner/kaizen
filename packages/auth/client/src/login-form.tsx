@@ -1,15 +1,16 @@
 import { TextInput, Button, Toast } from '@kaizen/ui';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
+import { CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
-import { UserService } from '.';
 import { AxiosError } from 'axios';
+import { AuthService } from '.';
+import { LoginRequest } from '@kaizen/auth';
 
-const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
-const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
+const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
+const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
 const userValidator = new CreateUserValidator();
 
-export const CreateUserForm = () => {
+export const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
@@ -30,13 +31,13 @@ export const CreateUserForm = () => {
 
     setLoading(true);
 
-    const request: CreateUserRequest = {
+    const request: LoginRequest = {
       email: email,
       password: password
     };
 
     try {
-      const response = await UserService.create(request);
+      const response = await AuthService.login(request);
       console.log(response.data);
     } catch (e: unknown) {
       const error = e as AxiosError;
@@ -79,21 +80,21 @@ export const CreateUserForm = () => {
           onSubmit={submitRegisterForm}
           className="flex w-full flex-col gap-y-2">
           <TextInput
-            id={CREATE_USER_FORM_EMAIL_INPUT_ID}
+            id={LOGIN_FORM_EMAIL_INPUT_ID}
             label="Email address"
             value={email}
             errors={emailErrors}
             onChange={onEmailChange}
           />
           <TextInput
-            id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
+            id={LOGIN_FORM_PASSWORD_INPUT_ID}
             type="password"
             label="Password"
             value={password}
             errors={passwordErrors}
             onChange={onPasswordChange}
           />
-          <Button disabled={loading}>Register</Button>
+          <Button disabled={loading}>Login</Button>
         </form>
       </div>
     </div>

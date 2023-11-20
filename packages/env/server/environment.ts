@@ -1,4 +1,4 @@
-export interface Environment {
+export interface ServerEnvironment {
   NODE_ENV: 'DEVELOPMENT' | 'TEST';
   DATABASE_URL: string;
   ACCESS_TOKEN_SECRET: string;
@@ -65,7 +65,7 @@ if (FRONTEND_DOMAIN == null) {
   );
 }
 
-export const environment: Environment = {
+export const serverEnvironment: ServerEnvironment = {
   NODE_ENV: NODE_ENV,
   DATABASE_URL: DATABASE_URL,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,

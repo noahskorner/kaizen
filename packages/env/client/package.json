@@ -1,0 +1,11 @@
+{
+  "name": "@kaizen/env-client",
+  "version": "0.0.0",
+  "main": "./environment.ts",
+  "types": "./environment.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
