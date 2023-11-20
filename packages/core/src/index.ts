@@ -4,4 +4,3 @@ export * from './errors';
 export * from './api-response';
 export * from './utils';
 export * from './service';
-export * from '@kaizen/user/src/user';

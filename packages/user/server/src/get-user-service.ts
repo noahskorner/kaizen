@@ -1,4 +1,4 @@
-import { User } from '@kaizen/core';
+import { User } from '@kaizen/user';
 import { UserService } from './user.service';
 
 export class GetUserService extends UserService {
