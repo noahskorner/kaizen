@@ -1,0 +1,11 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: kaizen_db
+    environment:
+      POSTGRES_USER: kaizen_api
+      POSTGRES_PASSWORD: kaizen_api_password
+      POSTGRES_DB: kaizen
+    ports:
+      - '54320:5432'
