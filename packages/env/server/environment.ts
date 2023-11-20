@@ -7,6 +7,7 @@ export interface Environment {
   REFRESH_TOKEN_EXPIRATION: string;
   API_PORT: number;
   API_DOMAIN: string;
+  FRONTEND_DOMAIN: string;
 }
 
 const NODE_ENV = process.env.NODE_ENV ?? '';
@@ -57,6 +58,12 @@ if (API_DOMAIN == null) {
     `Must provide API_DOMAIN. Did you forget to set it in your environment file?`
   );
 }
+const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN;
+if (FRONTEND_DOMAIN == null) {
+  throw new Error(
+    `Must provide FRONTEND_DOMAIN. Did you forget to set it in your environment file?`
+  );
+}
 
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
@@ -66,5 +73,6 @@ export const environment: Environment = {
   REFRESH_TOKEN_SECRET: REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRATION: REFRESH_TOKEN_EXPIRATION,
   API_PORT: API_PORT,
-  API_DOMAIN: API_DOMAIN
+  API_DOMAIN: API_DOMAIN,
+  FRONTEND_DOMAIN: FRONTEND_DOMAIN
 };

@@ -19,7 +19,7 @@ export const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [environment.API_DOMAIN]
+    origin: [environment.FRONTEND_DOMAIN]
   })
 );
 app.use(cookieParser());

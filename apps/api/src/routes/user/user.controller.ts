@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '../../middleware/catch-async';
 import { Controller } from '../controller';
-import { CreateUserService, CreateUserCommand } from '@kaizen/user-server';
+import { CreateUserService } from '@kaizen/user-server';
+import { CreateUserRequest } from '@kaizen/user';
 
 export class UserController extends Controller {
   private readonly _createUserService: CreateUserService;
@@ -12,7 +13,7 @@ export class UserController extends Controller {
   }
 
   public create = catchAsync(async (req: Request, res: Response) => {
-    const request: CreateUserCommand = req.body;
+    const request: CreateUserRequest = req.body;
     const response = await this._createUserService.create(request);
 
     if (response.type === 'FAILURE') {
