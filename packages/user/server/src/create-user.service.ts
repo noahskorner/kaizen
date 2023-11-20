@@ -1,9 +1,9 @@
 import { CreateUserCommand } from './create-user.command';
-import { ApiResponse, Errors, User } from '@kaizen/core';
+import { ApiResponse, Errors } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import { UserService } from './user.service';
 import { GetUserService } from './get-user-service';
-import { CreateUserValidator } from '@kaizen/user';
+import { CreateUserValidator, User } from '@kaizen/user';
 
 export class CreateUserService extends UserService {
   private readonly _getUserService: GetUserService;
