@@ -1,5 +1,5 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": [".", "../user/shared/src/user.ts"],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

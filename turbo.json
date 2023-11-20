@@ -10,7 +10,7 @@
     "lint:fix": {},
     "test": {},
     "dev": {
-      "cache": true,
+      "cache": false,
       "persistent": false
     }
   }
