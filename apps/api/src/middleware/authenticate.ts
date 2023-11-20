@@ -1,5 +1,5 @@
 import { AccessToken } from '@kaizen/core';
-import { environment } from '@kaizen/env-server';
+import { serverEnvironment } from '@kaizen/env-server';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -16,7 +16,7 @@ export const authenticate = (
 
     req.user = jwt.verify(
       token,
-      environment.ACCESS_TOKEN_SECRET
+      serverEnvironment.ACCESS_TOKEN_SECRET
     ) as AccessToken;
     return next();
   } catch {

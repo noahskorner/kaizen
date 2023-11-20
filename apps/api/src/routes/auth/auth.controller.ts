@@ -4,11 +4,11 @@ import { Controller } from '../controller';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { jwtDecode } from 'jwt-decode';
 import {
-  LoginCommand,
   LoginService,
   RefreshTokenCommand,
   RefreshTokenService
 } from '@kaizen/auth-server';
+import { LoginRequest } from '@kaizen/auth';
 
 export class AuthController extends Controller {
   private readonly _loginService: LoginService;
@@ -21,7 +21,7 @@ export class AuthController extends Controller {
   }
 
   public login = catchAsync(async (req: Request, res: Response) => {
-    const command: LoginCommand = req.body;
+    const command: LoginRequest = req.body;
 
     const response = await this._loginService.login(command);
 

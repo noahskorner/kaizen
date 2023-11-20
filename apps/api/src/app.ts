@@ -4,7 +4,7 @@ import { router } from './routes/routes';
 import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
 import { AccessToken } from '@kaizen/core';
-import { environment } from '@kaizen/env-server';
+import { serverEnvironment } from '@kaizen/env-server';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -19,7 +19,7 @@ export const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [environment.FRONTEND_DOMAIN]
+    origin: [serverEnvironment.FRONTEND_DOMAIN]
   })
 );
 app.use(cookieParser());

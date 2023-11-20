@@ -1,7 +1,7 @@
 import { ApiResponse, AuthToken, Errors, RefreshToken } from '@kaizen/core';
 import { AuthService } from './auth.service';
 import { RefreshTokenCommand } from './refresh-token.command';
-import { environment } from '@kaizen/env-server';
+import { serverEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { GetUserService } from '../../../user/server/src/get-user-service';
 
@@ -23,7 +23,7 @@ export class RefreshTokenService extends AuthService {
     try {
       const refreshToken = jwt.verify(
         command.token,
-        environment.REFRESH_TOKEN_SECRET
+        serverEnvironment.REFRESH_TOKEN_SECRET
       ) as RefreshToken;
 
       const user = await this._getUserService.get(refreshToken.id);

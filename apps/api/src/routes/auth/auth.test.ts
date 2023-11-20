@@ -1,4 +1,4 @@
-import { AuthToken, ErrorKey } from '@kaizen/core';
+import { ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
@@ -9,7 +9,8 @@ import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import * as env from '@kaizen/env-server';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { CreateUserCommand } from '@kaizen/user-server';
-const mockEnvironment = env.environment;
+import { AuthToken, LoginRequest } from '@kaizen/auth';
+const mockEnvironment = env.serverEnvironment;
 
 describe('/auth should', () => {
   beforeAll(() => {
@@ -18,13 +19,27 @@ describe('/auth should', () => {
     }));
   });
   beforeEach(() => {
-    env.environment.REFRESH_TOKEN_EXPIRATION = '5m';
-    env.environment.ACCESS_TOKEN_EXPIRATION = '5m';
+    env.serverEnvironment.REFRESH_TOKEN_EXPIRATION = '5m';
+    env.serverEnvironment.ACCESS_TOKEN_EXPIRATION = '5m';
   });
   describe('login should', () => {
     it('returns 401 if request is empty', async () => {
       // Act
       const response = await supertest(app).post('/auth').send();
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+    });
+    it('returns 401 if email or password is empty', async () => {
+      // Arrange
+      const request: LoginRequest = {
+        email: '',
+        password: ''
+      };
+
+      // Act
+      const response = await supertest(app).post('/auth').send(request);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -118,7 +133,7 @@ describe('/auth should', () => {
     });
     it('returns 401 if refresh token is expired', async () => {
       // Arrange
-      env.environment.REFRESH_TOKEN_EXPIRATION = '0s';
+      env.serverEnvironment.REFRESH_TOKEN_EXPIRATION = '0s';
       const { refreshToken } = await createAndLoginUser();
 
       // Act
@@ -166,7 +181,7 @@ describe('/auth should', () => {
     });
     it('returns 401 when accessToken is expired', async () => {
       // Arrange
-      env.environment.ACCESS_TOKEN_EXPIRATION = '0s';
+      env.serverEnvironment.ACCESS_TOKEN_EXPIRATION = '0s';
       const { accessToken } = await createAndLoginUser();
 
       // Act
