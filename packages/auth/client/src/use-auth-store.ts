@@ -3,32 +3,44 @@ import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 
 export interface AuthStore extends AccessToken {
-  isLoggedIn: boolean;
-  login: (accessToken: string) => Promise<void>;
-  logout: () => Promise<void>;
+  loading: boolean;
+  authenticated: boolean;
+  login: (accessToken: string) => void;
+  logout: () => void;
+  refreshToken: () => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  isLoggedIn: false,
+const initialState: Omit<AuthStore, 'login' | 'logout' | 'refreshToken'> = {
+  loading: true,
+  authenticated: false,
   id: '',
-  email: '',
-  login: async (accessToken: string) => {
+  email: ''
+};
+
+export const useAuthStore = create<AuthStore>((set) => ({
+  ...initialState,
+  login: (accessToken: string) => {
     return set(() => {
       const { id, email } = jwtDecode<AccessToken>(accessToken);
 
       return {
-        isLoggedIn: true,
+        loading: false,
+        authenticated: true,
         id,
         email
       };
     });
   },
-  logout: async () => {
+  logout: () => {
+    return set(() => {
+      return initialState;
+    });
+  },
+  refreshToken: () => {
     return set(() => {
       return {
-        isLoggedIn: false,
-        id: '',
-        email: ''
+        ...initialState,
+        loading: true
       };
     });
   }
