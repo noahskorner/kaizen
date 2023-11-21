@@ -6,9 +6,9 @@ export interface ToastProps {
 
 export const Toast = ({ id, children, onDismiss }: ToastProps) => {
   return (
-    <div className="flex w-full items-center rounded-lg border border-slate-700 bg-slate-800 px-2 text-left">
+    <div className="flex w-full items-center rounded-lg border border-gray-700 bg-gray-800 px-2 text-left">
       <div className="h-full w-2 border border-red-600 bg-red-600"></div>
-      <p className="w-full px-2 py-3 text-sm">{children}</p>
+      <p className="w-full px-2 py-3 text-sm font-semibold">{children}</p>
       <button onClick={() => onDismiss?.(id)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
