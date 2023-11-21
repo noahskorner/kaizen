@@ -3,6 +3,7 @@ import { ApiError } from '@kaizen/core';
 
 export interface TextInputProps {
   id: string;
+  name: string;
   label: string;
   value: string;
   type?: HTMLInputTypeAttribute;
@@ -12,6 +13,7 @@ export interface TextInputProps {
 
 export function TextInput({
   id,
+  name,
   label,
   value,
   type = 'text',
@@ -30,7 +32,7 @@ export function TextInput({
             : 'ring-indigo-800 focus:ring-2'
         } h-10 w-full rounded-lg bg-gray-900 px-2 outline-none`}
         type={type}
-        name={id}
+        name={name}
         id={id}
         value={value}
         onChange={onChange}

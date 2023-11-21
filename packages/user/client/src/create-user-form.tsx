@@ -9,7 +9,13 @@ const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
 const userValidator = new CreateUserValidator();
 
-export const CreateUserForm = () => {
+export interface CreateUserFormProps {
+  onRegisterSuccess?: () => void;
+}
+
+export const CreateUserForm = ({
+  onRegisterSuccess = () => {}
+}: CreateUserFormProps) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
@@ -36,8 +42,8 @@ export const CreateUserForm = () => {
     };
 
     try {
-      const response = await UserService.create(request);
-      console.log(response.data);
+      await UserService.create(request);
+      onRegisterSuccess();
     } catch (e: unknown) {
       const error = e as AxiosError;
       const response: ApiError[] = (error.response?.data as ApiError[]) ?? [];
@@ -80,6 +86,7 @@ export const CreateUserForm = () => {
           className="flex w-full flex-col gap-y-2">
           <TextInput
             id={CREATE_USER_FORM_EMAIL_INPUT_ID}
+            name="email"
             label="Email address"
             value={email}
             errors={emailErrors}
@@ -87,13 +94,16 @@ export const CreateUserForm = () => {
           />
           <TextInput
             id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
+            name="password"
             type="password"
             label="Password"
             value={password}
             errors={passwordErrors}
             onChange={onPasswordChange}
           />
-          <Button disabled={loading}>Register</Button>
+          <Button type="submit" disabled={loading}>
+            Register
+          </Button>
         </form>
       </div>
     </div>

@@ -68,18 +68,20 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
           className="flex w-full flex-col gap-y-2">
           <TextInput
             id={LOGIN_FORM_EMAIL_INPUT_ID}
+            name="email"
             label="Email address"
             value={email}
             onChange={onEmailChange}
           />
           <TextInput
             id={LOGIN_FORM_PASSWORD_INPUT_ID}
+            name="password"
             type="password"
             label="Password"
             value={password}
             onChange={onPasswordChange}
           />
-          <Button disabled={loading} onClick={onSubmitLoginForm}>
+          <Button disabled={loading} onClick={onSubmitLoginForm} type="submit">
             Login
           </Button>
         </form>
