@@ -4,6 +4,8 @@ export interface GlobalLayoutProps {
 
 export const GlobalLayout = ({ children }: GlobalLayoutProps) => {
   return (
-    <div className="h-screen w-screen bg-slate-900 text-white">{children}</div>
+    <div className="font-primary h-screen w-screen bg-gray-950 text-white">
+      {children}
+    </div>
   );
 };

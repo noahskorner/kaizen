@@ -5,6 +5,7 @@ export interface ServerEnvironment {
   ACCESS_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_SECRET: string;
   REFRESH_TOKEN_EXPIRATION: string;
+  REFRESH_TOKEN_COOKIE_DOMAIN: string;
   API_PORT: number;
   API_DOMAIN: string;
   FRONTEND_DOMAIN: string;
@@ -58,10 +59,17 @@ if (API_DOMAIN == null) {
     `Must provide API_DOMAIN. Did you forget to set it in your environment file?`
   );
 }
+
 const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN;
 if (FRONTEND_DOMAIN == null) {
   throw new Error(
     `Must provide FRONTEND_DOMAIN. Did you forget to set it in your environment file?`
+  );
+}
+const REFRESH_TOKEN_COOKIE_DOMAIN = process.env.REFRESH_TOKEN_COOKIE_DOMAIN;
+if (REFRESH_TOKEN_COOKIE_DOMAIN == null) {
+  throw new Error(
+    `Must provide REFRESH_TOKEN_COOKIE_DOMAIN. Did you forget to set it in your environment file?`
   );
 }
 
@@ -74,5 +82,6 @@ export const serverEnvironment: ServerEnvironment = {
   REFRESH_TOKEN_EXPIRATION: REFRESH_TOKEN_EXPIRATION,
   API_PORT: API_PORT,
   API_DOMAIN: API_DOMAIN,
-  FRONTEND_DOMAIN: FRONTEND_DOMAIN
+  FRONTEND_DOMAIN: FRONTEND_DOMAIN,
+  REFRESH_TOKEN_COOKIE_DOMAIN: REFRESH_TOKEN_COOKIE_DOMAIN
 };

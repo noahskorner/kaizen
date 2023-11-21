@@ -71,13 +71,13 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@kaizen/auth-server": "*",
-    "@kaizen/auth-client": "*",
     "@kaizen/auth": "*",
+    "@kaizen/auth-client": "*",
+    "@kaizen/auth-server": "*",
     "@kaizen/core": "*",
     "@kaizen/data": "*",
-    "@kaizen/env-server": "*",
     "@kaizen/env-client": "*",
+    "@kaizen/env-server": "*",
     "@kaizen/user": "*",
     "@kaizen/user-client": "*",
     "@kaizen/user-server": "*",
@@ -97,6 +97,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0",
     "sort-by": "^1.2.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.6"
   }
 }

@@ -7,7 +7,12 @@ module.exports = {
     '../../packages/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        primary: ['Inter', 'sans-serif'],
+        secondary: ['Merriweather', 'serif']
+      }
+    }
   },
   plugins: []
 };

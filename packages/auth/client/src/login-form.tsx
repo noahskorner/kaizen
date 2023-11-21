@@ -1,63 +1,50 @@
 import { TextInput, Button, Toast } from '@kaizen/ui';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { CreateUserValidator } from '@kaizen/user';
+import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { ApiError } from '@kaizen/core';
-import { AxiosError } from 'axios';
-import { AuthService } from '.';
+import { authService } from '.';
 import { LoginRequest } from '@kaizen/auth';
+import { useAuthStore } from './use-auth-store';
 
 const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
-const userValidator = new CreateUserValidator();
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  onLoginSuccess: () => void;
+}
+
+export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
-  const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
   const [password, setPassword] = useState('');
-  const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
   const [errors, setErrors] = useState<ApiError[]>([]);
+  const authStore = useAuthStore();
 
-  const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitLoginForm = async (
+    event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
 
-    const emailErrors = userValidator.validateEmail(email);
-    const passwordErrors = userValidator.validatePassword(password);
-    if (emailErrors.length > 0 || passwordErrors.length > 0) {
-      setEmailErrors(emailErrors);
-      setPasswordErrors(passwordErrors);
-      return;
-    }
-
     setLoading(true);
-
     const request: LoginRequest = {
       email: email,
       password: password
     };
-
-    try {
-      const response = await AuthService.login(request);
-      console.log(response.data);
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      const response: ApiError[] = (error.response?.data as ApiError[]) ?? [];
-      setErrors(response);
-    } finally {
-      setLoading(false);
+    const response = await authService.login(request);
+    setLoading(false);
+    if (response.type === 'SUCCESS') {
+      authStore.login(response.data.accessToken);
+      return onLoginSuccess();
     }
   };
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors([]);
     setEmail(event.target.value);
-    setEmailErrors(userValidator.validateEmail(event.target.value));
   };
 
   const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors([]);
     setPassword(event.target.value);
-    setPasswordErrors(userValidator.validatePassword(event.target.value));
   };
 
   const onDismissError = (key: string) => {
@@ -77,13 +64,12 @@ export const LoginForm = () => {
           })}
         </div>
         <form
-          onSubmit={submitRegisterForm}
+          onSubmit={onSubmitLoginForm}
           className="flex w-full flex-col gap-y-2">
           <TextInput
             id={LOGIN_FORM_EMAIL_INPUT_ID}
             label="Email address"
             value={email}
-            errors={emailErrors}
             onChange={onEmailChange}
           />
           <TextInput
@@ -91,10 +77,11 @@ export const LoginForm = () => {
             type="password"
             label="Password"
             value={password}
-            errors={passwordErrors}
             onChange={onPasswordChange}
           />
-          <Button disabled={loading}>Login</Button>
+          <Button disabled={loading} onClick={onSubmitLoginForm}>
+            Login
+          </Button>
         </form>
       </div>
     </div>

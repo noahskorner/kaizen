@@ -28,7 +28,7 @@ export function TextInput({
           errors.length > 0
             ? 'ring-2 ring-red-600'
             : 'ring-indigo-800 focus:ring-2'
-        } h-10 w-full rounded-lg bg-slate-800 px-2 outline-none`}
+        } h-10 w-full rounded-lg bg-gray-900 px-2 outline-none`}
         type={type}
         name={id}
         id={id}
