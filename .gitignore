@@ -39,3 +39,5 @@ yarn-error.log*
 dist
 
 cdk.out
+apps/frontend/cypress/screenshots
+apps/frontend/cypress/downloads

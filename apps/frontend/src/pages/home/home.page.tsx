@@ -3,6 +3,8 @@ import { routes } from '../routes';
 import { authService } from '@kaizen/auth-client';
 import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
 
+const HOME_PAGE_LOGOUT_BUTTON_ID = 'home-page-logout-button';
+
 export const HomePage = () => {
   const authStore = useAuthStore();
 
@@ -22,7 +24,9 @@ export const HomePage = () => {
           );
         })}
         {authStore.isLoggedIn && (
-          <Button onClick={onLogoutClick}>logout</Button>
+          <Button id={HOME_PAGE_LOGOUT_BUTTON_ID} onClick={onLogoutClick}>
+            logout
+          </Button>
         )}
       </div>
     </div>
