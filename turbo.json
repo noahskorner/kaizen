@@ -9,6 +9,7 @@
     "lint": {},
     "lint:fix": {},
     "test": {},
+    "test:e2e": {},
     "dev": {
       "cache": false,
       "persistent": false
