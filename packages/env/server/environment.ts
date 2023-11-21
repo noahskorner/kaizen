@@ -1,5 +1,5 @@
 export interface ServerEnvironment {
-  NODE_ENV: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
+  NODE_ENV: 'DEVELOPMENT' | 'TEST';
   DATABASE_URL: string;
   ACCESS_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;

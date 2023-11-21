@@ -9,6 +9,7 @@ import {
   RefreshTokenService
 } from '@kaizen/auth-server';
 import { LoginRequest } from '@kaizen/auth';
+import { serverEnvironment } from '@kaizen/env-server';
 
 export class AuthController extends Controller {
   private readonly _loginService: LoginService;
@@ -55,7 +56,10 @@ export class AuthController extends Controller {
     res.cookie(REFRESH_TOKEN_COOKIE_KEY, refreshToken, {
       domain: 'localhost',
       path: '/',
-      secure: false,
+      secure:
+        serverEnvironment.NODE_ENV !== 'TEST' &&
+        serverEnvironment.NODE_ENV !== 'DEVELOPMENT',
+      httpOnly: true,
       expires: this.getTokenExpirationDate(refreshToken)
     });
   }
