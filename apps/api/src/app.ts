@@ -19,7 +19,8 @@ export const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [serverEnvironment.FRONTEND_DOMAIN]
+    origin: [serverEnvironment.FRONTEND_DOMAIN],
+    credentials: true
   })
 );
 app.use(cookieParser());

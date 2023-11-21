@@ -3,5 +3,6 @@ import { clientEnvironment } from '@kaizen/env-client';
 
 export const apiClient = axios.create({
   baseURL: clientEnvironment.API_DOMAIN,
-  headers: { 'content-type': 'application/json' }
+  headers: { 'content-type': 'application/json' },
+  withCredentials: true
 });
