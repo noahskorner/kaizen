@@ -13,6 +13,7 @@ router.get('/', (_, res: Response) => {
 
 // /user
 router.post('/user', userController.create);
+router.post('/user/link-token', authenticate, userController.createLinkToken);
 
 // /auth
 router.post('/auth', authController.login);

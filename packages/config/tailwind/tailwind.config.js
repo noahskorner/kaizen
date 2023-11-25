@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       fontFamily: {
         primary: ['Inter', 'sans-serif'],
-        secondary: ['Merriweather', 'serif']
+        secondary: ['Roboto Mono', 'monospace']
       }
     }
   },

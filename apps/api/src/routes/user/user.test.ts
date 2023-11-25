@@ -1,4 +1,4 @@
-import { User, ErrorKey } from '@kaizen/core';
+import { ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { expectError } from '../../fixtures/expect-error';
 import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand } from '@kaizen/user-server';
+import { User } from '@kaizen/user';
 
 describe('/user should', () => {
   it('returns 400 when request is null', async () => {

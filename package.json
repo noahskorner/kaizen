@@ -73,6 +73,8 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@kaizen/account": "*",
+    "@kaizen/account-server": "*",
     "@kaizen/auth": "*",
     "@kaizen/auth-client": "*",
     "@kaizen/auth-server": "*",
@@ -95,8 +97,10 @@
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "next": "14.0.3",
+    "plaid": "^18.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-plaid-link": "^3.5.1",
     "react-router-dom": "^6.19.0",
     "sort-by": "^1.2.0",
     "uuid": "^9.0.1",

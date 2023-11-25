@@ -10,7 +10,9 @@ export abstract class Controller {
     return res.status(400).json(response.errors);
   }
 
-  public unauthorized(res: Response, response: ApiFailureResponse) {
+  public unauthorized(res: Response, response?: ApiFailureResponse) {
+    if (response == null) return res.sendStatus(401);
+
     return res.status(401).json(response.errors);
   }
 
@@ -19,4 +21,10 @@ export abstract class Controller {
 
     return res.status(200).json(response.data);
   };
+
+  public internalServerError(res: Response, response?: ApiFailureResponse) {
+    if (response == null) return res.sendStatus(500);
+
+    return res.status(500).json(response.errors);
+  }
 }
