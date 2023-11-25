@@ -52,40 +52,38 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
-        <div className="flex flex-col gap-y-2">
-          {errors.map((error) => {
-            return (
-              <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
-                {error.message}
-              </Toast>
-            );
-          })}
-        </div>
-        <form
-          onSubmit={onSubmitLoginForm}
-          className="flex w-full flex-col gap-y-2">
-          <TextInput
-            id={LOGIN_FORM_EMAIL_INPUT_ID}
-            name="email"
-            label="Email address"
-            value={email}
-            onChange={onEmailChange}
-          />
-          <TextInput
-            id={LOGIN_FORM_PASSWORD_INPUT_ID}
-            name="password"
-            type="password"
-            label="Password"
-            value={password}
-            onChange={onPasswordChange}
-          />
-          <Button disabled={loading} onClick={onSubmitLoginForm} type="submit">
-            Login
-          </Button>
-        </form>
+    <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
+      <div className="flex flex-col gap-y-2">
+        {errors.map((error) => {
+          return (
+            <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
+              {error.message}
+            </Toast>
+          );
+        })}
       </div>
+      <form
+        onSubmit={onSubmitLoginForm}
+        className="flex w-full flex-col gap-y-2">
+        <TextInput
+          id={LOGIN_FORM_EMAIL_INPUT_ID}
+          name="email"
+          label="Email address"
+          value={email}
+          onChange={onEmailChange}
+        />
+        <TextInput
+          id={LOGIN_FORM_PASSWORD_INPUT_ID}
+          name="password"
+          type="password"
+          label="Password"
+          value={password}
+          onChange={onPasswordChange}
+        />
+        <Button disabled={loading} onClick={onSubmitLoginForm} type="submit">
+          Login
+        </Button>
+      </form>
     </div>
   );
 };
