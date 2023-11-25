@@ -1,6 +1,5 @@
 import { Button, Link } from '@kaizen/ui';
 import { routes } from '../routes';
-import { authService } from '@kaizen/auth-client';
 import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +10,6 @@ export const HomePage = () => {
   const navigate = useNavigate();
 
   const onLogoutClick = async () => {
-    await authService.logout();
     authStore.logout();
     navigate(routes.home.path);
   };

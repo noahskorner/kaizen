@@ -1,6 +1,7 @@
 import { AccessToken } from '@kaizen/auth';
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
+import { authService } from '.';
 
 export interface AuthStore extends AccessToken {
   loading: boolean;
@@ -31,7 +32,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
       };
     });
   },
-  logout: () => {
+  logout: async () => {
+    await authService.logout();
     return set(() => {
       return initialState;
     });

@@ -9,6 +9,8 @@ export interface ServerEnvironment {
   API_PORT: number;
   API_DOMAIN: string;
   FRONTEND_DOMAIN: string;
+  PLAID_CLIENT_ID: string;
+  PLAID_SECRET: string;
 }
 
 const NODE_ENV = process.env.NODE_ENV ?? '';
@@ -72,6 +74,18 @@ if (REFRESH_TOKEN_COOKIE_DOMAIN == null) {
     `Must provide REFRESH_TOKEN_COOKIE_DOMAIN. Did you forget to set it in your environment file?`
   );
 }
+const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
+if (PLAID_CLIENT_ID == null) {
+  throw new Error(
+    `Must provide PLAID_CLIENT_ID. Did you forget to set it in your environment file?`
+  );
+}
+const PLAID_SECRET = process.env.PLAID_SECRET;
+if (PLAID_SECRET == null) {
+  throw new Error(
+    `Must provide PLAID_SECRET. Did you forget to set it in your environment file?`
+  );
+}
 
 export const serverEnvironment: ServerEnvironment = {
   NODE_ENV: NODE_ENV,
@@ -83,5 +97,7 @@ export const serverEnvironment: ServerEnvironment = {
   API_PORT: API_PORT,
   API_DOMAIN: API_DOMAIN,
   FRONTEND_DOMAIN: FRONTEND_DOMAIN,
-  REFRESH_TOKEN_COOKIE_DOMAIN: REFRESH_TOKEN_COOKIE_DOMAIN
+  REFRESH_TOKEN_COOKIE_DOMAIN: REFRESH_TOKEN_COOKIE_DOMAIN,
+  PLAID_CLIENT_ID: PLAID_CLIENT_ID,
+  PLAID_SECRET: PLAID_SECRET
 };

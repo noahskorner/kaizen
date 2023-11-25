@@ -41,5 +41,13 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.REFRESH_TOKEN_EXPIRED]: {
     key: ErrorKey.REFRESH_TOKEN_EXPIRED,
     message: 'Your token has expired.'
+  },
+  [ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND]: {
+    key: ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND,
+    message: 'User not found.'
+  },
+  [ErrorKey.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN]: {
+    key: ErrorKey.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN,
+    message: 'User not found.'
   }
 };
