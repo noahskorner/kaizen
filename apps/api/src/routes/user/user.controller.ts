@@ -40,11 +40,6 @@ export class UserController extends Controller {
     if (response.type === 'FAILURE') {
       if (hasErrorFor(response, ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND)) {
         return this.badRequest(res, response);
-      }
-      if (
-        hasErrorFor(response, ErrorKey.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN)
-      ) {
-        return this.badRequest(res, response);
       } else return this.internalServerError(res, response);
     }
 

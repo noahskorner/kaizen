@@ -1,33 +1,33 @@
 import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
 import { routes } from '../routes';
 import { useNavigate } from 'react-router-dom';
-import { usePlaidLink, PlaidLinkOnSuccessMetadata } from 'react-plaid-link';
-
-const PLAID_LINK_TOKEN = 'PLAID_LINK_TOKEN';
+import { useEffect, useState } from 'react';
+import { UserService } from '@kaizen/user-client';
+import { PlaidLink } from './plaid-link';
 
 export const DashboardPage = () => {
+  const [linkToken, setLinkToken] = useState<string | null>(null);
   const authStore = useAuthStore();
   const navigate = useNavigate();
-  const { open } = usePlaidLink({
-    token: PLAID_LINK_TOKEN,
-    onSuccess: (public_token: string, metadata: PlaidLinkOnSuccessMetadata) => {
-      console.log({ public_token, metadata });
+
+  useEffect(() => {
+    if (authStore.authenticated) {
+      UserService.createLinkToken().then((response) => {
+        setLinkToken(response.data.token);
+      });
     }
-  });
+  }, [authStore.authenticated]);
 
   const onLogoutClick = () => {
     authStore.logout();
     navigate(routes.home.path);
   };
 
-  const onCreateClick = () => {
-    open();
-  };
   return (
     <>
       <div className="flex h-screen">
         <div className="h-full p-2">
-          <div className="flex h-full w-20 flex-col items-center justify-between rounded-2xl  bg-gradient-to-b from-slate-900 to-transparent p-2 shadow-2xl">
+          <div className="flex h-full w-20 flex-col items-center justify-between rounded-2xl bg-slate-900 p-2 shadow-2xl">
             <div>
               <button className="flex h-12 w-12 items-center justify-center rounded-2xl hover:bg-slate-800">
                 <svg
@@ -89,11 +89,7 @@ export const DashboardPage = () => {
                 | NOVEMBER 23
               </span>
             </h1>
-            <button
-              onClick={onCreateClick}
-              className="font-primary rounded-lg bg-indigo-800 px-4 py-2 text-xs hover:bg-indigo-900">
-              Create
-            </button>
+            {linkToken && <PlaidLink linkToken={linkToken} />}
           </div>
           <hr className="mt-4 h-[1px] border-gray-900" />
           <div className="flex w-full p-4">
