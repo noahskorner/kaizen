@@ -26,7 +26,7 @@ export class CreateLinkTokenService extends Service {
         user: {
           client_user_id: userId
         },
-        client_name: 'kaizen',
+        client_name: 'Kaizen',
         language: 'en',
         country_codes: [CountryCode.Us],
         products: [Products.Transactions]
