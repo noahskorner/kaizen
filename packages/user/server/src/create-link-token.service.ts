@@ -3,7 +3,7 @@ import { plaidClient } from './plaid-client';
 import { CreateLinkTokenCommand } from './create-link-token.command';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { UserRepository } from './user.repository';
-import { LinkToken } from '@kaizen/user/src/link-token';
+import { LinkToken } from '@kaizen/user';
 
 export class CreateLinkTokenService extends Service {
   private readonly _userRepository: UserRepository;

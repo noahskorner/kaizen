@@ -9,8 +9,7 @@ import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand } from '@kaizen/user-server';
 import { User } from '@kaizen/user';
 import { LinkToken } from '@kaizen/user/src/link-token';
-import * as userServer from '@kaizen/user-server';
-const mockUserServer = userServer;
+import { mockLinkToken } from '@kaizen/user-server/src/plaid-api.fixture';
 
 describe('/user', () => {
   describe('create should', () => {
@@ -133,20 +132,6 @@ describe('/user', () => {
     });
   });
   describe('createLinkToken should', () => {
-    beforeAll(() => {
-      jest.mock('@kaizen/user-server', () => ({
-        ...mockUserServer,
-        plaidClient: {
-          linkTokenCreate: () => {
-            return Promise.resolve({
-              data: {
-                link_token: 'TEST_LINK_TOKEN'
-              }
-            });
-          }
-        }
-      }));
-    });
     it('return 401 when user is not authenticated', async () => {
       // Act
       const response = await supertest(app).post('/user/link-token').send();
@@ -166,7 +151,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(linkToken.token).toBeDefined();
+      expect(linkToken.token).toBe(mockLinkToken);
     });
   });
 });
