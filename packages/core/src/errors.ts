@@ -45,9 +45,5 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND]: {
     key: ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND,
     message: 'User not found.'
-  },
-  [ErrorKey.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN]: {
-    key: ErrorKey.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN,
-    message: 'User not found.'
   }
 };

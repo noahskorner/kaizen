@@ -3,6 +3,7 @@ import { plaidClient } from './plaid-client';
 import { CreateLinkTokenCommand } from './create-link-token.command';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { UserRepository } from './user.repository';
+import { LinkToken } from '@kaizen/user';
 
 export class CreateLinkTokenService extends Service {
   private readonly _userRepository: UserRepository;
@@ -14,22 +15,18 @@ export class CreateLinkTokenService extends Service {
 
   public async create({
     userId
-  }: CreateLinkTokenCommand): Promise<ApiResponse<string>> {
+  }: CreateLinkTokenCommand): Promise<ApiResponse<LinkToken>> {
     try {
       const user = await this._userRepository.get(userId);
       if (user == null) {
         return this.failure(Errors.CREATE_LINK_TOKEN_USER_NOT_FOUND);
       }
 
-      if (user.plaidToken != null) {
-        return this.failure(Errors.CREATE_LINK_TOKEN_USER_ALREADY_HAS_TOKEN);
-      }
-
       const createLinkTokenRequest: LinkTokenCreateRequest = {
         user: {
           client_user_id: userId
         },
-        client_name: 'kaizen',
+        client_name: 'Kaizen',
         language: 'en',
         country_codes: [CountryCode.Us],
         products: [Products.Transactions]
@@ -43,11 +40,7 @@ export class CreateLinkTokenService extends Service {
       }
       const linkToken = createTokenResponse.data.link_token;
 
-      await this._userRepository.update({
-        userId,
-        plaidToken: linkToken
-      });
-      return this.success(linkToken);
+      return this.success({ token: linkToken });
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);

@@ -12,7 +12,7 @@ import { CreateUserCommand } from '@kaizen/user-server';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
 const mockEnvironment = env.serverEnvironment;
 
-describe('/auth should', () => {
+describe('/auth', () => {
   beforeAll(() => {
     jest.mock('@kaizen/env-server', () => ({
       environment: mockEnvironment
