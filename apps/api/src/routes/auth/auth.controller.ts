@@ -12,13 +12,11 @@ import { LoginRequest } from '@kaizen/auth';
 import { serverEnvironment } from '@kaizen/env-server';
 
 export class AuthController extends Controller {
-  private readonly _loginService: LoginService;
-  private readonly _refreshTokenService: RefreshTokenService;
-
-  constructor() {
+  constructor(
+    private readonly _loginService: LoginService,
+    private readonly _refreshTokenService: RefreshTokenService
+  ) {
     super();
-    this._loginService = new LoginService();
-    this._refreshTokenService = new RefreshTokenService();
   }
 
   public login = catchAsync(async (req: Request, res: Response) => {

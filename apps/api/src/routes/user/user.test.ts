@@ -9,7 +9,7 @@ import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand } from '@kaizen/user-server';
 import { User } from '@kaizen/user';
 import { LinkToken } from '@kaizen/user/src/link-token';
-import { mockLinkToken } from '@kaizen/user-server/src/plaid-api.fixture';
+import { mockLinkToken } from '@kaizen/plaid';
 
 describe('/user', () => {
   describe('create should', () => {
@@ -141,12 +141,12 @@ describe('/user', () => {
     });
     it('returns 201 and link token', async () => {
       // Arrange
-      const { accessToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
         .post('/user/link-token')
-        .auth(accessToken, { type: 'bearer' });
+        .auth(authToken.accessToken, { type: 'bearer' });
       const linkToken = response.body as LinkToken;
 
       // Assert

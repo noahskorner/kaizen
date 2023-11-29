@@ -7,11 +7,8 @@ import { GetUserService } from '../../../user/server/src/get-user-service';
 import { AuthToken, RefreshToken } from '@kaizen/auth';
 
 export class RefreshTokenService extends AuthService {
-  private readonly _getUserService: GetUserService;
-
-  constructor() {
+  constructor(private readonly _getUserService: GetUserService) {
     super();
-    this._getUserService = new GetUserService();
   }
 
   public async refreshToken(

@@ -5,16 +5,19 @@ import { validPassword } from './valid-password';
 import { AuthToken } from '@kaizen/auth';
 import { CreateUserCommand } from '@kaizen/user-server';
 import { LoginCommand } from '@kaizen/auth-server';
+import { User } from '@kaizen/user';
 
 export const createAndLoginUser = async () => {
   const email = createUniqueEmail();
-  await supertest(app)
+  const userResponse = await supertest(app)
     .post('/user')
     .send({ email, password: validPassword } as CreateUserCommand);
+  const user: User = userResponse.body;
 
-  const response = await supertest(app)
+  const authResponse = await supertest(app)
     .post('/auth')
     .send({ email: email, password: validPassword } as LoginCommand);
+  const authToken: AuthToken = authResponse.body;
 
-  return response.body as AuthToken;
+  return { authToken: authToken, user: user };
 };

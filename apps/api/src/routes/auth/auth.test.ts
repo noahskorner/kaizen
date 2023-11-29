@@ -134,12 +134,14 @@ describe('/auth', () => {
     it('returns 401 if refresh token is expired', async () => {
       // Arrange
       env.serverEnvironment.REFRESH_TOKEN_EXPIRATION = '0s';
-      const { refreshToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
         .get('/auth')
-        .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=${refreshToken}`]);
+        .set('Cookie', [
+          `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
+        ]);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -147,12 +149,14 @@ describe('/auth', () => {
     });
     it('returns 200 if refreshToken is valid', async () => {
       // Arrange
-      const { refreshToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
         .get('/auth')
-        .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=${refreshToken}`]);
+        .set('Cookie', [
+          `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
+        ]);
       const refreshedToken = getRefreshToken(response);
 
       // Assert
@@ -182,24 +186,24 @@ describe('/auth', () => {
     it('returns 401 when accessToken is expired', async () => {
       // Arrange
       env.serverEnvironment.ACCESS_TOKEN_EXPIRATION = '0s';
-      const { accessToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
         .delete('/auth')
-        .auth(accessToken, { type: 'bearer' });
+        .auth(authToken.accessToken, { type: 'bearer' });
 
       // Assert
       expect(response.statusCode).toBe(401);
     });
     it('returns 200 when accessToken is valid', async () => {
       // Arrange
-      const { accessToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser();
 
       // Act
       const response = await supertest(app)
         .delete('/auth')
-        .auth(accessToken, { type: 'bearer' });
+        .auth(authToken.accessToken, { type: 'bearer' });
       const refreshToken = getRefreshToken(response);
 
       // Assert

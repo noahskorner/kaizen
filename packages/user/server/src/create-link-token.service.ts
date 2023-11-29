@@ -1,16 +1,12 @@
 import { CountryCode, LinkTokenCreateRequest, Products } from 'plaid';
-import { plaidClient } from './plaid-client';
 import { CreateLinkTokenCommand } from './create-link-token.command';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '@kaizen/data';
 import { LinkToken } from '@kaizen/user';
 
 export class CreateLinkTokenService extends Service {
-  private readonly _userRepository: UserRepository;
-
-  constructor() {
+  constructor(private readonly _userRepository: UserRepository) {
     super();
-    this._userRepository = new UserRepository();
   }
 
   public async create({
