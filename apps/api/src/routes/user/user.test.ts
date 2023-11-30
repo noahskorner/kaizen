@@ -9,7 +9,6 @@ import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand } from '@kaizen/user-server';
 import { User } from '@kaizen/user';
 import { LinkToken } from '@kaizen/user/src/link-token';
-import { mockLinkToken } from '@kaizen/provider';
 
 describe('/user', () => {
   describe('create should', () => {
@@ -151,7 +150,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(linkToken.token).toBe(mockLinkToken);
+      expect(linkToken.token).toBe('MOCK_LINK_TOKEN');
     });
   });
 });
