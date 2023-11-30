@@ -9,7 +9,7 @@ import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand } from '@kaizen/user-server';
 import { User } from '@kaizen/user';
 import { LinkToken } from '@kaizen/user/src/link-token';
-import { mockLinkToken } from '@kaizen/plaid';
+import { mockLinkToken } from '@kaizen/provider';
 
 describe('/user', () => {
   describe('create should', () => {

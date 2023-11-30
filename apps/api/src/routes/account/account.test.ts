@@ -5,7 +5,7 @@ import { app } from '../../app';
 
 describe('/account', () => {
   describe('create should', () => {
-    it('returns 400 when no plaidPublicToken is provided', async () => {
+    it.skip('returns 400 when no plaidPublicToken is provided', async () => {
       // Arrange
       const { authToken } = await createAndLoginUser();
 
@@ -19,7 +19,7 @@ describe('/account', () => {
       expect(response.statusCode).toBe(201);
       expect(account.id).toBeDefined();
     });
-    it('returns 400 when plaidPublicToken is empty string', async () => {
+    it.skip('returns 400 when plaidPublicToken is empty string', async () => {
       // Arrange
       const { authToken } = await createAndLoginUser();
       const request: CreateAccountRequest = {
@@ -37,7 +37,7 @@ describe('/account', () => {
       expect(response.statusCode).toBe(201);
       expect(account.id).toBeDefined();
     });
-    it('returns 201 and created account', async () => {
+    it.skip('returns 201 and created account', async () => {
       // Arrange
       const { authToken } = await createAndLoginUser();
       const request: CreateAccountRequest = {

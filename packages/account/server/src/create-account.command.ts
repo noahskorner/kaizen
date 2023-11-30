@@ -1,4 +1,4 @@
 export interface CreateAccountCommand {
   userId: string;
-  plaidPublicToken: string;
+  publicToken: string;
 }

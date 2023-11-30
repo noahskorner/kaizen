@@ -1,11 +1,14 @@
-import { CountryCode, LinkTokenCreateRequest, Products } from 'plaid';
 import { CreateLinkTokenCommand } from './create-link-token.command';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { UserRepository } from '@kaizen/data';
 import { LinkToken } from '@kaizen/user';
+import { FinancialProvider } from '@kaizen/provider';
 
 export class CreateLinkTokenService extends Service {
-  constructor(private readonly _userRepository: UserRepository) {
+  constructor(
+    private readonly _userRepository: UserRepository,
+    private readonly _financialProvider: FinancialProvider
+  ) {
     super();
   }
 
@@ -18,25 +21,12 @@ export class CreateLinkTokenService extends Service {
         return this.failure(Errors.CREATE_LINK_TOKEN_USER_NOT_FOUND);
       }
 
-      const createLinkTokenRequest: LinkTokenCreateRequest = {
-        user: {
-          client_user_id: userId
-        },
-        client_name: 'Kaizen',
-        language: 'en',
-        country_codes: [CountryCode.Us],
-        products: [Products.Transactions]
-      };
-      const createTokenResponse = await plaidClient.linkTokenCreate(
-        createLinkTokenRequest
-      );
-
-      if (createTokenResponse.status !== 200) {
-        return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      const response = await this._financialProvider.createLinkToken(userId);
+      if (response.type === 'FAILURE') {
+        return this.failures(response.errors);
       }
-      const linkToken = createTokenResponse.data.link_token;
 
-      return this.success({ token: linkToken });
+      return this.success({ token: response.data });
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);

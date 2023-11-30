@@ -1,4 +1,10 @@
-import { CountryCode, LinkTokenCreateRequest, PlaidApi, Products } from 'plaid';
+import {
+  CountryCode,
+  ItemPublicTokenExchangeRequest,
+  LinkTokenCreateRequest,
+  PlaidApi,
+  Products
+} from 'plaid';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 
 export class FinancialProvider extends Service {
@@ -8,7 +14,7 @@ export class FinancialProvider extends Service {
 
   public async createLinkToken(userId: string): Promise<ApiResponse<string>> {
     try {
-      const createLinkTokenRequest: LinkTokenCreateRequest = {
+      const request: LinkTokenCreateRequest = {
         user: {
           client_user_id: userId
         },
@@ -17,23 +23,36 @@ export class FinancialProvider extends Service {
         country_codes: [CountryCode.Us],
         products: [Products.Transactions]
       };
-      const createTokenResponse = await this._plaidClient.linkTokenCreate(
-        createLinkTokenRequest
-      );
+      const response = await this._plaidClient.linkTokenCreate(request);
 
-      if (createTokenResponse.status !== 200) {
+      if (response.status !== 200) {
         return this.failure(Errors.INTERNAL_SERVER_ERROR);
       }
-      const linkToken = createTokenResponse.data.link_token;
 
-      return this.success(linkToken);
+      return this.success(response.data.link_token);
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);
     }
   }
 
-  public async exchangePublicToken(): Promise<string> {
-    
+  public async exchangePublicToken(
+    publicToken: string
+  ): Promise<ApiResponse<string>> {
+    try {
+      const request: ItemPublicTokenExchangeRequest = {
+        public_token: publicToken
+      };
+      const response = await this._plaidClient.itemPublicTokenExchange(request);
+
+      if (response.status !== 200) {
+        return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      }
+
+      return this.success(response.data.access_token);
+    } catch (error) {
+      console.log(error);
+      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+    }
   }
 }

@@ -7,6 +7,7 @@ import { GetUserService } from '@kaizen/user-server/src/get-user-service';
 import { AccountController } from './account/account.controller';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
+import { FinancialProvider, plaidClient } from '@kaizen/provider';
 
 // Repositories
 export const userRepository = new UserRepository();
@@ -14,6 +15,9 @@ export const accountRepository = new AccountRepository();
 
 // Validators
 export const createUserValidator = new CreateUserValidator();
+
+// Providers
+export const financialProvider = new FinancialProvider(plaidClient);
 
 // Services
 export const getUserService = new GetUserService(userRepository);
@@ -23,11 +27,15 @@ export const createUserService = new CreateUserService(
   createUserValidator
 );
 export const createLinkTokenService = new CreateLinkTokenService(
-  userRepository
+  userRepository,
+  financialProvider
 );
 export const loginService = new LoginService(userRepository);
 export const refreshTokenService = new RefreshTokenService(getUserService);
-export const createAccountService = new CreateAccountService(accountRepository);
+export const createAccountService = new CreateAccountService(
+  accountRepository,
+  financialProvider
+);
 
 // Controllers
 export const userController = new UserController(

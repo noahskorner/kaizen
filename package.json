@@ -73,7 +73,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@kaizen/plaid": "*",
+    "@kaizen/provider": "*",
     "@kaizen/account": "*",
     "@kaizen/account-server": "*",
     "@kaizen/auth": "*",
