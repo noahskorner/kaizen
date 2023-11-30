@@ -1,3 +1,3 @@
 export interface CreateAccountRequest {
-  plaidPublicToken: string;
+  publicToken: string;
 }
