@@ -1,16 +1,13 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { UserRepository } from '../../../user/server/src';
+import { UserRepository } from '@kaizen/data';
 import { LoginCommand } from './login.command';
 import { AuthService } from './auth.service';
 import { AuthToken } from '@kaizen/auth';
 
 export class LoginService extends AuthService {
-  private readonly _userRepository: UserRepository;
-
-  constructor() {
+  constructor(private readonly _userRepository: UserRepository) {
     super();
-    this._userRepository = new UserRepository();
   }
 
   public async login(command: LoginCommand): Promise<ApiResponse<AuthToken>> {

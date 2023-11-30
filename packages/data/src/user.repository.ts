@@ -1,6 +1,5 @@
 import { UserRecord } from '@prisma/client';
-import { prisma } from '@kaizen/data';
-import { CreateUserCommand } from './create-user.command';
+import { prisma } from './prisma';
 
 export class UserRepository {
   public async get(userId: string): Promise<UserRecord | null> {
@@ -19,11 +18,11 @@ export class UserRepository {
     });
   }
 
-  public async create(command: CreateUserCommand): Promise<UserRecord> {
+  public async create(email: string, password: string): Promise<UserRecord> {
     return await prisma.userRecord.create({
       data: {
-        email: command.email,
-        password: command.password
+        email: email,
+        password: password
       }
     });
   }

@@ -4,15 +4,15 @@ import { genSalt, hash } from 'bcrypt';
 import { UserService } from './user.service';
 import { GetUserService } from './get-user-service';
 import { CreateUserValidator, User } from '@kaizen/user';
+import { UserRepository } from '@kaizen/data';
 
 export class CreateUserService extends UserService {
-  private readonly _getUserService: GetUserService;
-  private readonly _createUserValidator: CreateUserValidator;
-
-  constructor() {
-    super();
-    this._getUserService = new GetUserService();
-    this._createUserValidator = new CreateUserValidator();
+  constructor(
+    _userRepository: UserRepository,
+    private readonly _getUserService: GetUserService,
+    private readonly _createUserValidator: CreateUserValidator
+  ) {
+    super(_userRepository);
   }
 
   public async create(command: CreateUserCommand): Promise<ApiResponse<User>> {
@@ -28,10 +28,10 @@ export class CreateUserService extends UserService {
 
     const normalizedEmail = this.normalizeEmail(command.email);
     const hashedPassword = await this.hashPassword(command.password);
-    const userRecord = await this._userRepository.create({
-      email: normalizedEmail,
-      password: hashedPassword
-    });
+    const userRecord = await this._userRepository.create(
+      normalizedEmail,
+      hashedPassword
+    );
 
     const user: User = {
       id: userRecord.id,

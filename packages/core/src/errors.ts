@@ -45,5 +45,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND]: {
     key: ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND,
     message: 'User not found.'
+  },
+  [ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN]: {
+    key: ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN,
+    message: 'Must provide a valid plaidPublicToken.'
   }
 };
