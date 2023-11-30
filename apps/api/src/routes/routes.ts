@@ -1,11 +1,12 @@
 import { Response, Router } from 'express';
-import { AuthController } from './auth/auth.controller';
-import { UserController } from './user';
 import { authenticate } from '../middleware/authenticate';
+import {
+  userController,
+  authController,
+  accountController
+} from './service-collection';
 
-const userController = new UserController();
-const authController = new AuthController();
-
+// Routes
 const router = Router();
 router.get('/', (_, res: Response) => {
   return res.sendStatus(200);
@@ -19,5 +20,8 @@ router.post('/user/link-token', authenticate, userController.createLinkToken);
 router.post('/auth', authController.login);
 router.get('/auth', authController.refreshToken);
 router.delete('/auth', authenticate, authController.logout);
+
+// /account
+router.post('/account', authenticate, accountController.create);
 
 export { router };

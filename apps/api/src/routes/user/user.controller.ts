@@ -6,13 +6,11 @@ import { CreateLinkTokenRequest, CreateUserRequest } from '@kaizen/user';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
 
 export class UserController extends Controller {
-  private readonly _createUserService: CreateUserService;
-  private readonly _createLinkTokenService: CreateLinkTokenService;
-
-  constructor() {
+  constructor(
+    private readonly _createUserService: CreateUserService,
+    private readonly _createLinkTokenService: CreateLinkTokenService
+  ) {
     super();
-    this._createUserService = new CreateUserService();
-    this._createLinkTokenService = new CreateLinkTokenService();
   }
 
   public create = catchAsync(async (req: Request, res: Response) => {
@@ -27,13 +25,8 @@ export class UserController extends Controller {
   });
 
   public createLinkToken = catchAsync(async (req: Request, res: Response) => {
-    const userId = req.user?.id;
-    if (userId == null) {
-      return this.unauthorized(res);
-    }
-
     const request: CreateLinkTokenRequest = {
-      userId: userId
+      userId: req.user.id
     };
     const response = await this._createLinkTokenService.create(request);
 

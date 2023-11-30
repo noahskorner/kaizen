@@ -11,12 +11,24 @@ datasource db {
 }
 
 model UserRecord {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String          @id @default(uuid())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now()) @updatedAt
+  email     String          @unique
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  accounts  AccountRecord[]
 
   @@index([email])
   @@map("user")
+}
+
+model AccountRecord {
+  id               String     @id @default(uuid())
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @default(now()) @updatedAt
+  plaidAccessToken String
+  userId           String
+  user             UserRecord @relation(fields: [userId], references: [id])
+
+  @@map("account")
 }

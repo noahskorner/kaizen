@@ -1,11 +1,8 @@
 import { Service } from '@kaizen/core';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '@kaizen/data';
 
 export class UserService extends Service {
-  protected readonly _userRepository: UserRepository;
-
-  constructor() {
+  constructor(protected readonly _userRepository: UserRepository) {
     super();
-    this._userRepository = new UserRepository();
   }
 }
