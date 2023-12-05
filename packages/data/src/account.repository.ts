@@ -1,3 +1,4 @@
+import { FindAllAccountsQuery } from './find-all-accounts.query';
 import { prisma } from './prisma';
 import { AccountRecord } from '@prisma/client';
 
@@ -10,6 +11,14 @@ export class AccountRepository {
       data: {
         userId,
         plaidAccessToken
+      }
+    });
+  }
+
+  public async findAll(query: FindAllAccountsQuery): Promise<AccountRecord[]> {
+    return await prisma.accountRecord.findMany({
+      where: {
+        userId: query.userId
       }
     });
   }

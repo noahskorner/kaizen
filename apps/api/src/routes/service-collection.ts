@@ -1,4 +1,7 @@
-import { CreateAccountService } from '@kaizen/account-server';
+import {
+  CreateAccountService,
+  FindAccountsService
+} from '@kaizen/account-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import { UserRepository, AccountRepository } from '@kaizen/data';
 import { CreateUserValidator } from '@kaizen/user';
@@ -36,6 +39,7 @@ export const createAccountService = new CreateAccountService(
   accountRepository,
   financialProvider
 );
+export const findAccountsService = new FindAccountsService(accountRepository);
 
 // Controllers
 export const userController = new UserController(
@@ -46,4 +50,7 @@ export const authController = new AuthController(
   loginService,
   refreshTokenService
 );
-export const accountController = new AccountController(createAccountService);
+export const accountController = new AccountController(
+  createAccountService,
+  findAccountsService
+);
