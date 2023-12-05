@@ -2,14 +2,19 @@ import { catchAsync } from '../../middleware/catch-async';
 import { Request, Response } from 'express';
 import {
   CreateAccountCommand,
-  CreateAccountService
+  CreateAccountService,
+  FindAccountsCommand,
+  FindAccountsService
 } from '@kaizen/account-server';
 import { CreateAccountRequest } from '@kaizen/account';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
 import { Controller } from '../controller';
 
 export class AccountController extends Controller {
-  constructor(private readonly _createAccountService: CreateAccountService) {
+  constructor(
+    private readonly _createAccountService: CreateAccountService,
+    private readonly _findAccountsService: FindAccountsService
+  ) {
     super();
   }
 
@@ -33,5 +38,16 @@ export class AccountController extends Controller {
     }
 
     return this.created(res, response);
+  });
+
+  public find = catchAsync(async (req: Request, res: Response) => {
+    const command: FindAccountsCommand = {
+      userId: req.user.id
+    };
+    const response = await this._findAccountsService.find(command);
+
+    if (response.type === 'FAILURE') {
+      return this.internalServerError(res, response);
+    } else return this.ok(res, response);
   });
 }

@@ -1,4 +1,6 @@
-import { usePlaidLink, PlaidLinkOnSuccessMetadata } from 'react-plaid-link';
+import { usePlaidLink } from 'react-plaid-link';
+import { AccountService } from '@kaizen/account-client';
+import { CreateAccountRequest } from '@kaizen/account';
 
 interface PlaidLinkProps {
   linkToken: string;
@@ -7,13 +9,21 @@ interface PlaidLinkProps {
 export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
   const { open } = usePlaidLink({
     token: linkToken,
-    onSuccess: (public_token: string, metadata: PlaidLinkOnSuccessMetadata) => {
-      console.log({ public_token, metadata });
+    onSuccess: (public_token: string) => {
+      createAccount(public_token);
     }
   });
 
   const onCreateClick = () => {
     open();
+  };
+
+  const createAccount = async (publicToken: string) => {
+    const request: CreateAccountRequest = {
+      publicToken: publicToken
+    };
+    const response = await AccountService.create(request);
+    console.log(response.data);
   };
 
   return (
