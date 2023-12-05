@@ -1,5 +1,6 @@
 import {
   CountryCode,
+  AccountsGetRequest,
   ItemPublicTokenExchangeRequest,
   LinkTokenCreateRequest,
   PlaidApi,
@@ -50,6 +51,19 @@ export class FinancialProvider extends Service {
       }
 
       return this.success(response.data.access_token);
+    } catch (error) {
+      console.log(error);
+      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  public async getAccounts(accessToken: string) {
+    try {
+      const request: AccountsGetRequest = {
+        access_token: accessToken
+      };
+      const response = await this._plaidClient.accountsGet(request);
+      return this.success(response.data);
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);

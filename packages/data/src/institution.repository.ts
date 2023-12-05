@@ -24,4 +24,12 @@ export class InstitutionRepository {
       }
     });
   }
+
+  public async get(id: string): Promise<InstitutionRecord | null> {
+    return await prisma.institutionRecord.findUnique({
+      where: {
+        id
+      }
+    });
+  }
 }

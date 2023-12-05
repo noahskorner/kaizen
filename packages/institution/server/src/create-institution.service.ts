@@ -19,8 +19,6 @@ export class CreateInstitutionService extends Service {
       return this.failure(Errors.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
     }
 
-    // const user = await
-
     try {
       const response = await this._financialProvider.exchangePublicToken(
         command.publicToken

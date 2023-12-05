@@ -32,3 +32,4 @@
 - [Project Backlog](./docs/project-backlog.md)
 - [Continuous Integration / Continous Deployment](./docs/ci-cd.md)
 - [Package Management](./docs/packages.md)
+- [Plaid API](https://plaid.com/docs/)
