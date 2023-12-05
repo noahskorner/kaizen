@@ -1,7 +1,7 @@
 import { useAuthStore } from '@kaizen/auth-client';
 import { routes } from '../routes';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { UserService } from '@kaizen/user-client';
 import { PlaidLink } from './plaid-link';
 import { Account } from '@kaizen/account';
@@ -12,6 +12,7 @@ export const DashboardPage = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const authStore = useAuthStore();
   const navigate = useNavigate();
+  const monthAndYear = useRef(getCurrentMonthAndYear());
 
   useEffect(() => {
     if (authStore.authenticated) {
@@ -91,8 +92,8 @@ export const DashboardPage = () => {
           <div className="flex items-center justify-between">
             <h1 className="font-secondary text-5xl tracking-tighter">
               64,001.89
-              <span className="font-secondaryk pl-2 text-sm font-normal tracking-normal text-gray-500">
-                | NOVEMBER 23
+              <span className="font-secondaryk pl-2 text-sm font-normal uppercase tracking-normal text-gray-500">
+                | {monthAndYear.current.month} {monthAndYear.current.year}
               </span>
             </h1>
             {linkToken && <PlaidLink linkToken={linkToken} />}
@@ -105,4 +106,19 @@ export const DashboardPage = () => {
       </div>
     </>
   );
+};
+
+interface CurrentMonthAndYear {
+  month: string;
+  year: number;
+}
+
+const getCurrentMonthAndYear = (): CurrentMonthAndYear => {
+  const currentDate = new Date();
+  const currentMonth = new Intl.DateTimeFormat('en-US', {
+    month: 'long'
+  }).format(currentDate);
+  const currentYear = parseInt(currentDate.getFullYear().toString().slice(-2));
+
+  return { month: currentMonth, year: currentYear };
 };
