@@ -23,5 +23,6 @@ router.delete('/auth', authenticate, authController.logout);
 
 // /account
 router.post('/account', authenticate, accountController.create);
+router.get('/account', authenticate, accountController.find);
 
 export { router };

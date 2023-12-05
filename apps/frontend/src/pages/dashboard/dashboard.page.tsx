@@ -1,12 +1,15 @@
-import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
+import { useAuthStore } from '@kaizen/auth-client';
 import { routes } from '../routes';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { UserService } from '@kaizen/user-client';
 import { PlaidLink } from './plaid-link';
+import { Account } from '@kaizen/account';
+import { AccountService } from '@kaizen/account-client';
 
 export const DashboardPage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const authStore = useAuthStore();
   const navigate = useNavigate();
 
@@ -14,6 +17,9 @@ export const DashboardPage = () => {
     if (authStore.authenticated) {
       UserService.createLinkToken().then((response) => {
         setLinkToken(response.data.token);
+      });
+      AccountService.find().then((response) => {
+        setAccounts(response.data);
       });
     }
   }, [authStore.authenticated]);
@@ -93,55 +99,7 @@ export const DashboardPage = () => {
           </div>
           <hr className="mt-4 h-[1px] border-gray-900" />
           <div className="flex w-full p-4">
-            <div className="font-secondary flex h-full w-1/2 flex-col gap-y-6">
-              <div className="flex w-1/2 flex-col gap-y-6">
-                <div>
-                  <div className="mb-2 text-lg">Budget</div>
-                  <ul className="font-primary text-sm">
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have made this month ... 6,001.29
-                    </li>
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have spent ... 4,001.23
-                    </li>
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have spent on fixed expenses ...
-                      3,001.19
-                    </li>
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have spent on variable expenses ...
-                      1,000.00
-                    </li>
-                  </ul>
-                </div>
-                <div className="text-lg">Spending</div>
-                <div>
-                  <div className="mb-2 text-lg">Goals</div>
-                  <ul className="font-primary text-sm">
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have saved for trip x ... 6,001.29
-                    </li>
-                    <li className="rounded-lg px-2 py-1 hover:bg-gray-900">
-                      This is how much you have saved for lift kit ... 6,001.29
-                    </li>
-                  </ul>
-                </div>
-                <div className="text-lg">Cash</div>
-                <div className="text-lg">Investing</div>
-                <div className="text-lg">Loans</div>
-              </div>
-            </div>
-            <div className="h-full w-1/2">
-              <div className="font-secondary text-lg">Retirement</div>
-              <p className="text-sm">
-                Chart, numbers with how much you might retire with
-              </p>
-              <p>Optimistically, pessmistically, etc</p>
-              <p>
-                If you want to retire at X age, youll have x amount per year to
-                spend & vice versa
-              </p>
-            </div>
+            {JSON.stringify(accounts, null, 2)}
           </div>
         </div>
       </div>

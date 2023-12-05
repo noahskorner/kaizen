@@ -76,6 +76,7 @@
     "@kaizen/provider": "*",
     "@kaizen/account": "*",
     "@kaizen/account-server": "*",
+    "@kaizen/account-client": "*",
     "@kaizen/auth": "*",
     "@kaizen/auth-client": "*",
     "@kaizen/auth-server": "*",
