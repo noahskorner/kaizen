@@ -16,13 +16,13 @@ model UserRecord {
   updatedAt DateTime        @default(now()) @updatedAt
   email     String          @unique
   password  String
-  accounts  AccountRecord[]
+  institutions  InstitutionRecord[]
 
   @@index([email])
   @@map("user")
 }
 
-model AccountRecord {
+model InstitutionRecord {
   id               String     @id @default(uuid())
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @default(now()) @updatedAt
@@ -30,5 +30,5 @@ model AccountRecord {
   userId           String
   user             UserRecord @relation(fields: [userId], references: [id])
 
-  @@map("account")
+  @@map("institution")
 }

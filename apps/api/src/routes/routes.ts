@@ -3,7 +3,7 @@ import { authenticate } from '../middleware/authenticate';
 import {
   userController,
   authController,
-  accountController
+  institutionController
 } from './service-collection';
 
 // Routes
@@ -21,8 +21,8 @@ router.post('/auth', authController.login);
 router.get('/auth', authController.refreshToken);
 router.delete('/auth', authenticate, authController.logout);
 
-// /account
-router.post('/account', authenticate, accountController.create);
-router.get('/account', authenticate, accountController.find);
+// /institution
+router.post('/institution', authenticate, institutionController.create);
+router.get('/institution', authenticate, institutionController.find);
 
 export { router };

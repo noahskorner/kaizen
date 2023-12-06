@@ -1,20 +1,20 @@
-import { CreateAccountCommand } from './create-account.command';
-import { Account } from '@kaizen/account';
+import { CreateInstitutionCommand } from './create-institution.command';
+import { Institution } from '@kaizen/institution';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
-import { AccountRepository } from '@kaizen/data';
+import { InstitutionRepository } from '@kaizen/data';
 import { FinancialProvider } from '@kaizen/provider';
 
-export class CreateAccountService extends Service {
+export class CreateInstitutionService extends Service {
   constructor(
-    private readonly _accountRepository: AccountRepository,
+    private readonly _institutionRepository: InstitutionRepository,
     private readonly _financialProvider: FinancialProvider
   ) {
     super();
   }
 
   public async create(
-    command: CreateAccountCommand
-  ): Promise<ApiResponse<Account>> {
+    command: CreateInstitutionCommand
+  ): Promise<ApiResponse<Institution>> {
     if (command.publicToken == null || command.publicToken === '') {
       return this.failure(Errors.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
     }
@@ -30,15 +30,15 @@ export class CreateAccountService extends Service {
         return this.failures(response.errors);
       }
 
-      const accountRecord = await this._accountRepository.create(
+      const institutionRecord = await this._institutionRepository.create(
         command.userId,
         response.data
       );
-      const account: Account = {
-        id: accountRecord.id,
-        userId: accountRecord.userId
+      const institution: Institution = {
+        id: institutionRecord.id,
+        userId: institutionRecord.userId
       };
-      return this.success(account);
+      return this.success(institution);
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);

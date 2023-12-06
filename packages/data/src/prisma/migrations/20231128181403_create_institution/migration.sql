@@ -1,9 +1,9 @@
 -- CreateTable
-CREATE TABLE "account" (
+CREATE TABLE "institution" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "plaidAccessToken" TEXT NOT NULL,
 
-    CONSTRAINT "account_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "institution_pkey" PRIMARY KEY ("id")
 );
