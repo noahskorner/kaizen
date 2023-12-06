@@ -34,7 +34,7 @@ export const DashboardPage = () => {
     <>
       <div className="flex h-screen">
         <div className="h-full p-2">
-          <div className="flex h-full w-20 flex-col items-center justify-between rounded-2xl bg-slate-900 p-2 shadow-2xl">
+          <div className="fixed flex h-full w-20 flex-col items-center justify-between rounded-2xl bg-slate-900 p-2 shadow-2xl">
             <div>
               <button className="flex h-12 w-12 items-center justify-center rounded-2xl hover:bg-slate-800">
                 <svg
@@ -88,11 +88,11 @@ export const DashboardPage = () => {
             </div>
           </div>
         </div>
-        <div className="h-full w-full py-6 pl-2 pr-6">
+        <div className="h-full w-full py-6 pl-24 pr-6">
           <div className="flex items-center justify-between">
             <h1 className="font-secondary text-5xl tracking-tighter">
               64,001.89
-              <span className="font-secondaryk pl-2 text-sm font-normal uppercase tracking-normal text-gray-500">
+              <span className="font-secondary pl-2 text-sm font-normal uppercase tracking-normal text-gray-500">
                 | {monthAndYear.current.month} {monthAndYear.current.year}
               </span>
             </h1>
@@ -100,7 +100,7 @@ export const DashboardPage = () => {
           </div>
           <hr className="mt-4 h-[1px] border-gray-900" />
           <div className="flex w-full p-4">
-            {JSON.stringify(institutions, null, 2)}
+            <pre>{JSON.stringify(institutions, null, 2)}</pre>
           </div>
         </div>
       </div>
