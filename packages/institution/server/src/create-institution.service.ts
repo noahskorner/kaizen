@@ -3,6 +3,9 @@ import { Institution } from '@kaizen/institution';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { InstitutionRepository } from '@kaizen/data';
 import { FinancialProvider } from '@kaizen/provider';
+import { CreateAccountQuery, CreateInstitutionQuery } from '@kaizen/data';
+import { ExternalAccount } from '@kaizen/provider';
+import { InstitutionAdapter } from './institution.adapter';
 
 export class CreateInstitutionService extends Service {
   constructor(
@@ -19,29 +22,67 @@ export class CreateInstitutionService extends Service {
       return this.failure(Errors.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
     }
 
-    // const user = await
-
     try {
-      const response = await this._financialProvider.exchangePublicToken(
-        command.publicToken
-      );
-
+      const response = await this.buildCreateInstitutionQuery(command);
       if (response.type == 'FAILURE') {
         return this.failures(response.errors);
       }
 
       const institutionRecord = await this._institutionRepository.create(
-        command.userId,
         response.data
       );
+
       const institution: Institution = {
         id: institutionRecord.id,
-        userId: institutionRecord.userId
+        userId: institutionRecord.userId,
+        accounts: institutionRecord.accounts.map(InstitutionAdapter.toAccount)
       };
       return this.success(institution);
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private async buildCreateInstitutionQuery(
+    command: CreateInstitutionCommand
+  ): Promise<ApiResponse<CreateInstitutionQuery>> {
+    const exchangeExternalPublicTokenResponse =
+      await this._financialProvider.exchangeExternalPublicToken(
+        command.publicToken
+      );
+    if (exchangeExternalPublicTokenResponse.type == 'FAILURE') {
+      return this.failures(exchangeExternalPublicTokenResponse.errors);
+    }
+
+    const externalAccountsResponse =
+      await this._financialProvider.getExternalAccounts(
+        exchangeExternalPublicTokenResponse.data
+      );
+    if (externalAccountsResponse.type == 'FAILURE') {
+      return this.failures(externalAccountsResponse.errors);
+    }
+
+    const createAccountQueries = externalAccountsResponse.data.map(
+      this.toCreateAccountQuery
+    );
+    const createInstitutionQuery: CreateInstitutionQuery = {
+      userId: command.userId,
+      plaidAccessToken: exchangeExternalPublicTokenResponse.data,
+      accounts: createAccountQueries
+    };
+    return this.success(createInstitutionQuery);
+  }
+
+  private toCreateAccountQuery(
+    externalAccount: ExternalAccount
+  ): CreateAccountQuery {
+    const createAccountQuery: CreateAccountQuery = {
+      externalId: externalAccount.id,
+      current: externalAccount.balance.current,
+      available: externalAccount.balance.available
+    };
+
+    return createAccountQuery;
   }
 }

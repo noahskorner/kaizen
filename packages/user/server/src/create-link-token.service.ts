@@ -21,7 +21,8 @@ export class CreateLinkTokenService extends Service {
         return this.failure(Errors.CREATE_LINK_TOKEN_USER_NOT_FOUND);
       }
 
-      const response = await this._financialProvider.createLinkToken(userId);
+      const response =
+        await this._financialProvider.createExternalLinkToken(userId);
       if (response.type === 'FAILURE') {
         return this.failures(response.errors);
       }

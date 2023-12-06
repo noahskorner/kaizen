@@ -1,5 +1,9 @@
 import { ApiError } from './api-error';
-import { ApiFailureResponse, ApiSuccessResponse } from './api-response';
+import {
+  ApiFailureResponse,
+  ApiResponse,
+  ApiSuccessResponse
+} from './api-response';
 
 export abstract class Service {
   protected success<T>(data: T): ApiSuccessResponse<T> {
@@ -31,5 +35,24 @@ export abstract class Service {
 
   protected normalizeEmail(email: string): string {
     return email.toLowerCase();
+  }
+
+  protected getFailures<T>(responses: ApiResponse<T>[]): ApiError[] {
+    return responses
+      .filter(
+        (response): response is ApiFailureResponse =>
+          response.type === 'FAILURE'
+      )
+      .map((response: ApiFailureResponse) => response.errors)
+      .flat();
+  }
+
+  protected getSuccesses<T>(responses: ApiResponse<T>[]): T[] {
+    return responses
+      .filter(
+        (response): response is ApiSuccessResponse<T> =>
+          response.type === 'SUCCESS'
+      )
+      .map((response: ApiSuccessResponse<T>) => response.data);
   }
 }
