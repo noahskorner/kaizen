@@ -49,9 +49,5 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN]: {
     key: ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN,
     message: 'Must provide a valid plaidPublicToken.'
-  },
-  [ErrorKey.GET_INSTITUTION_INSTITUTION_NOT_FOUND]: {
-    key: ErrorKey.GET_INSTITUTION_INSTITUTION_NOT_FOUND,
-    message: 'Insitution was not found.'
   }
 };

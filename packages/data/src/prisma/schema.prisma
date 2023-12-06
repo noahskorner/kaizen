@@ -11,24 +11,38 @@ datasource db {
 }
 
 model UserRecord {
-  id        String          @id @default(uuid())
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @default(now()) @updatedAt
-  email     String          @unique
-  password  String
-  institutions  InstitutionRecord[]
+  id           String              @id @default(uuid())
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt
+  email        String              @unique
+  password     String
+  institutions InstitutionRecord[]
 
   @@index([email])
   @@map("user")
 }
 
 model InstitutionRecord {
-  id               String     @id @default(uuid())
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @default(now()) @updatedAt
+  id               String          @id @default(uuid())
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
   plaidAccessToken String
   userId           String
-  user             UserRecord @relation(fields: [userId], references: [id])
+  user             UserRecord      @relation(fields: [userId], references: [id])
+  accounts         AccountRecord[]
 
   @@map("institution")
+}
+
+model AccountRecord {
+  id            String            @id @default(uuid())
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now()) @updatedAt
+  externalId    String
+  institutionId String
+  institution   InstitutionRecord @relation(fields: [institutionId], references: [id])
+  current       Float
+  available     Float
+
+  @@map("account")
 }

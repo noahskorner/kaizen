@@ -2,13 +2,10 @@ import { Institution } from '@kaizen/institution';
 import { ApiResponse, Service } from '@kaizen/core';
 import { FindInstitutionsCommand } from './find-institutions.command';
 import { InstitutionRepository } from '@kaizen/data';
-import { GetInstitutionService } from './get-institution.service';
+import { InstitutionAdapter } from './institution.adapter';
 
 export class FindInstitutionsService extends Service {
-  constructor(
-    private readonly institutionRepository: InstitutionRepository,
-    private readonly getInstitutionService: GetInstitutionService
-  ) {
+  constructor(private readonly institutionRepository: InstitutionRepository) {
     super();
   }
 
@@ -18,19 +15,9 @@ export class FindInstitutionsService extends Service {
     const institutionRecords =
       await this.institutionRepository.findAll(command);
 
-    const responses = await Promise.all(
-      institutionRecords.map((institutionRecord) => {
-        return this.getInstitutionService.get({
-          id: institutionRecord.id
-        });
-      })
+    const institutions: Institution[] = institutionRecords.map(
+      InstitutionAdapter.toInstitution
     );
-    const errors = this.getFailures(responses);
-    if (errors.length > 0) {
-      return this.failures(errors);
-    }
-
-    const institutions = this.getSuccesses(responses);
     return this.success(institutions);
   }
 }

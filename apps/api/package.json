@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "docker-compose -f ./docker-compose.test.yml up -d && sleep 1 && dotenv -e ./src/env/.env.test -- prisma migrate dev && dotenv -e ./src/env/.env.test jest && docker-compose -f ./docker-compose.test.yml down",
-    "test:setup": "dotenv -e ./src/env/.env.test jest",
+    "test:debug": "dotenv -e ./src/env/.env.test jest",
     "prisma:migrate:dev": "dotenv -e ./src/env/.env.development -- prisma migrate dev",
     "prisma:db:push": "dotenv -e ./src/env/.env.development -- prisma db push",
     "prisma:migrate:reset": "dotenv -e ./src/env/.env.development -- prisma migrate reset",

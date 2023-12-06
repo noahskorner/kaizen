@@ -6,7 +6,7 @@ import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import { UserRepository, InstitutionRepository } from '@kaizen/data';
 import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
-import { GetUserService } from '@kaizen/user-server/src/get-user-service';
+import { GetUserService } from '@kaizen/user-server';
 import { InstitutionController } from './institution/institution.controller';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
