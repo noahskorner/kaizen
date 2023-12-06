@@ -1,30 +1,30 @@
 import { catchAsync } from '../../middleware/catch-async';
 import { Request, Response } from 'express';
 import {
-  CreateAccountCommand,
-  CreateAccountService,
-  FindAccountsCommand,
-  FindAccountsService
-} from '@kaizen/account-server';
-import { CreateAccountRequest } from '@kaizen/account';
+  CreateInstitutionCommand,
+  CreateInstitutionService,
+  FindInstitutionsCommand,
+  FindInstitutionsService
+} from '@kaizen/institution-server';
+import { CreateInstitutionRequest } from '@kaizen/institution';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
 import { Controller } from '../controller';
 
-export class AccountController extends Controller {
+export class InstitutionController extends Controller {
   constructor(
-    private readonly _createAccountService: CreateAccountService,
-    private readonly _findAccountsService: FindAccountsService
+    private readonly _createInstitutionService: CreateInstitutionService,
+    private readonly _findInstitutionsService: FindInstitutionsService
   ) {
     super();
   }
 
   public create = catchAsync(async (req: Request, res: Response) => {
-    const request: CreateAccountRequest = req.body;
-    const command: CreateAccountCommand = {
+    const request: CreateInstitutionRequest = req.body;
+    const command: CreateInstitutionCommand = {
       userId: req.user.id,
       ...request
     };
-    const response = await this._createAccountService.create(command);
+    const response = await this._createInstitutionService.create(command);
 
     if (response.type === 'FAILURE') {
       if (
@@ -41,10 +41,10 @@ export class AccountController extends Controller {
   });
 
   public find = catchAsync(async (req: Request, res: Response) => {
-    const command: FindAccountsCommand = {
+    const command: FindInstitutionsCommand = {
       userId: req.user.id
     };
-    const response = await this._findAccountsService.find(command);
+    const response = await this._findInstitutionsService.find(command);
 
     if (response.type === 'FAILURE') {
       return this.internalServerError(res, response);

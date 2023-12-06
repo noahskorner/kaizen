@@ -1,6 +1,6 @@
 import { usePlaidLink } from 'react-plaid-link';
-import { AccountService } from '@kaizen/account-client';
-import { CreateAccountRequest } from '@kaizen/account';
+import { InstitutionService } from '@kaizen/institution-client';
+import { CreateInstitutionRequest } from '@kaizen/institution';
 
 interface PlaidLinkProps {
   linkToken: string;
@@ -10,7 +10,7 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
   const { open } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token: string) => {
-      createAccount(public_token);
+      createInstitution(public_token);
     }
   });
 
@@ -18,11 +18,11 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
     open();
   };
 
-  const createAccount = async (publicToken: string) => {
-    const request: CreateAccountRequest = {
+  const createInstitution = async (publicToken: string) => {
+    const request: CreateInstitutionRequest = {
       publicToken: publicToken
     };
-    const response = await AccountService.create(request);
+    const response = await InstitutionService.create(request);
     console.log(response.data);
   };
 

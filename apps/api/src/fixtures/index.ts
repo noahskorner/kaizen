@@ -1,4 +1,4 @@
-export * from './create-account';
+export * from './create-institution';
 export * from './create-and-login-user';
 export * from './expect-error';
 export * from './get-refresh-token';
