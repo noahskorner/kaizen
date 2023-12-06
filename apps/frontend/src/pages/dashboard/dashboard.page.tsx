@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { UserService } from '@kaizen/user-client';
 import { PlaidLink } from './plaid-link';
-import { Account } from '@kaizen/account';
-import { AccountService } from '@kaizen/account-client';
+import { Institution } from '@kaizen/institution';
+import { InstitutionService } from '@kaizen/institution-client';
 
 export const DashboardPage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [institutions, setInstitutions] = useState<Institution[]>([]);
   const authStore = useAuthStore();
   const navigate = useNavigate();
   const monthAndYear = useRef(getCurrentMonthAndYear());
@@ -19,8 +19,8 @@ export const DashboardPage = () => {
       UserService.createLinkToken().then((response) => {
         setLinkToken(response.data.token);
       });
-      AccountService.find().then((response) => {
-        setAccounts(response.data);
+      InstitutionService.find().then((response) => {
+        setInstitutions(response.data);
       });
     }
   }, [authStore.authenticated]);
@@ -100,7 +100,7 @@ export const DashboardPage = () => {
           </div>
           <hr className="mt-4 h-[1px] border-gray-900" />
           <div className="flex w-full p-4">
-            {JSON.stringify(accounts, null, 2)}
+            {JSON.stringify(institutions, null, 2)}
           </div>
         </div>
       </div>
