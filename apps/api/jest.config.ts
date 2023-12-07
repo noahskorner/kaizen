@@ -86,7 +86,8 @@ export default {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '@kaizen/provider': '@kaizen/provider/src/__mocks__/index.ts'
+    // '@kaizen/provider': '@kaizen/provider/src/__mocks__/index.ts',
+    plaid: '@kaizen/provider/src/__mocks__/plaid.ts'
     // Adjust the regex and paths according to your monorepo structure
   }
 
