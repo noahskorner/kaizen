@@ -3,9 +3,8 @@ import { Institution } from '@kaizen/institution';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { InstitutionRepository } from '@kaizen/data';
 import { FinancialProvider } from '@kaizen/provider';
-import { CreateAccountQuery, CreateInstitutionQuery } from '@kaizen/data';
-import { ExternalAccount } from '@kaizen/provider';
-import { InstitutionAdapter } from './institution.adapter';
+import { CreateInstitutionQuery } from '@kaizen/data';
+import { AccountAdapter } from './account.adapter';
 
 export class CreateInstitutionService extends Service {
   constructor(
@@ -35,7 +34,7 @@ export class CreateInstitutionService extends Service {
       const institution: Institution = {
         id: institutionRecord.id,
         userId: institutionRecord.userId,
-        accounts: institutionRecord.accounts.map(InstitutionAdapter.toAccount)
+        accounts: institutionRecord.accounts.map(AccountAdapter.toAccount)
       };
       return this.success(institution);
     } catch (error) {
@@ -64,7 +63,7 @@ export class CreateInstitutionService extends Service {
     }
 
     const createAccountQueries = externalAccountsResponse.data.map(
-      this.toCreateAccountQuery
+      AccountAdapter.toCreateAccountQuery
     );
     const createInstitutionQuery: CreateInstitutionQuery = {
       userId: command.userId,
@@ -72,17 +71,5 @@ export class CreateInstitutionService extends Service {
       accounts: createAccountQueries
     };
     return this.success(createInstitutionQuery);
-  }
-
-  private toCreateAccountQuery(
-    externalAccount: ExternalAccount
-  ): CreateAccountQuery {
-    const createAccountQuery: CreateAccountQuery = {
-      externalId: externalAccount.id,
-      current: externalAccount.balance.current,
-      available: externalAccount.balance.available
-    };
-
-    return createAccountQuery;
   }
 }

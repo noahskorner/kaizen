@@ -1,5 +1,6 @@
-import { Account, Institution } from '@kaizen/institution';
+import { Institution } from '@kaizen/institution';
 import { AccountRecord, InstitutionRecord } from '@prisma/client';
+import { AccountAdapter } from './account.adapter';
 
 export class InstitutionAdapter {
   public static toInstitution(
@@ -8,21 +9,8 @@ export class InstitutionAdapter {
     const institution: Institution = {
       id: institutionRecord.id,
       userId: institutionRecord.userId,
-      accounts: institutionRecord.accounts.map(InstitutionAdapter.toAccount)
+      accounts: institutionRecord.accounts.map(AccountAdapter.toAccount)
     };
     return institution;
-  }
-
-  public static toAccount(accountRecord: AccountRecord): Account {
-    const account: Account = {
-      id: accountRecord.id,
-      externalId: accountRecord.externalId,
-      balance: {
-        current: accountRecord.current,
-        available: accountRecord.available
-      }
-    };
-
-    return account;
   }
 }

@@ -1,8 +1,9 @@
 import { IFinancialProvider } from '../financial.provider';
+// import { ExternalAccount, ExternalAccountType } from '@kaizen/provider';
 
 const mockAccount = {
   id: 'MOCK_EXTERNAL_ACCOUNT_ID',
-  type: 'depository',
+  type: 'depostitory',
   balance: {
     current: 100,
     available: 75
