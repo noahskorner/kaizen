@@ -44,7 +44,7 @@ describe('/institution', () => {
       expect(response.statusCode).toBe(400);
       expectError(response, ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
     });
-    it.only('returns 201 and created institution', async () => {
+    it('returns 201 and created institution', async () => {
       // Arrange
       const { authToken, user } = await createAndLoginUser();
       const request: CreateInstitutionRequest = {
@@ -62,9 +62,7 @@ describe('/institution', () => {
       expect(response.statusCode).toBe(201);
       expect(institution.id).toBeDefined();
       expect(institution.userId).toBe(user.id);
-      expect(institution.accounts[0].externalId).toBe(
-        'MOCK_EXTERNAL_ACCOUNT_ID'
-      );
+      expect(institution.accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
       expect(institution.accounts[0].balance.current).toBe(100);
       expect(institution.accounts[0].balance.available).toBe(75);
       expect(institution.accounts[0].type).toBe(AccountType.Depository);
@@ -107,7 +105,7 @@ describe('/institution', () => {
       expect(body.length).toBe(1);
       expect(body[0].id).toBe(institution.id);
       expect(body[0].userId).toBe(institution.userId);
-      expect(body[0].accounts[0].externalId).toBe('MOCK_EXTERNAL_ACCOUNT_ID');
+      expect(body[0].accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
       expect(body[0].accounts[0].balance.current).toBe(100);
       expect(body[0].accounts[0].balance.available).toBe(75);
       expect(body[0].accounts[0].type).toBe(AccountType.Depository);

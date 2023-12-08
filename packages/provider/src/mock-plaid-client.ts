@@ -1,11 +1,13 @@
 import { AxiosHeaders, AxiosResponse } from 'axios';
 import {
+  LinkTokenCreateResponse,
+  ItemPublicTokenExchangeResponse,
+  Item,
+  ItemUpdateTypeEnum,
   AccountBalance,
   AccountBase,
+  AccountType,
   AccountsGetResponse,
-  Item,
-  ItemPublicTokenExchangeResponse,
-  LinkTokenCreateResponse,
   PlaidApi as ActualPlaidApi
 } from 'plaid';
 
@@ -60,14 +62,14 @@ const mockItemPublicTokenExchangeResponse: ItemPublicTokenExchangeResponse = {
   request_id: ''
 };
 
-const mockItem: any = {
+const mockItem: Item = {
   item_id: 'MOCK_ITEM_ID',
   webhook: null,
   error: null,
   available_products: [],
   billed_products: [],
   consent_expiration_time: null,
-  update_type: 'background'
+  update_type: ItemUpdateTypeEnum.Background
 };
 
 const mockBalances: AccountBalance = {
@@ -78,13 +80,13 @@ const mockBalances: AccountBalance = {
   unofficial_currency_code: null
 };
 
-const mockAccount: any = {
+const mockAccount: AccountBase = {
   account_id: 'MOCK_ACCOUNT_ID',
   balances: mockBalances,
   mask: null,
   name: '',
   official_name: null,
-  type: 'depository',
+  type: AccountType.Depository,
   subtype: null
 };
 
@@ -94,29 +96,20 @@ const mockAccountsGetResponse: AccountsGetResponse = {
   request_id: ''
 };
 
-const PlaidApi = jest.fn().mockImplementation(() => {
-  const plaidApi: Pick<
-    ActualPlaidApi,
-    'linkTokenCreate' | 'itemPublicTokenExchange' | 'accountsGet'
-  > = {
-    linkTokenCreate: jest.fn().mockResolvedValue({
-      ...mockAxiosResponse,
-      data: mockLinkTokenCreateResponse
-    }),
-    itemPublicTokenExchange: jest.fn().mockResolvedValue({
-      ...mockAxiosResponse,
-      data: mockItemPublicTokenExchangeResponse
-    }),
-    accountsGet: jest.fn().mockResolvedValue({
-      ...mockAxiosResponse,
-      data: mockAccountsGetResponse
-    })
-  };
-
-  return plaidApi;
-});
-
-export default {
-  ...jest.requireActual('plaid'),
-  PlaidApi
+export const mockPlaidApi: Pick<
+  ActualPlaidApi,
+  'linkTokenCreate' | 'itemPublicTokenExchange' | 'accountsGet'
+> = {
+  linkTokenCreate: jest.fn().mockResolvedValue({
+    ...mockAxiosResponse,
+    data: mockLinkTokenCreateResponse
+  }),
+  itemPublicTokenExchange: jest.fn().mockResolvedValue({
+    ...mockAxiosResponse,
+    data: mockItemPublicTokenExchangeResponse
+  }),
+  accountsGet: jest.fn().mockResolvedValue({
+    ...mockAxiosResponse,
+    data: mockAccountsGetResponse
+  })
 };
