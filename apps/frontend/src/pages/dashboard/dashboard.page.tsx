@@ -3,13 +3,18 @@ import { useEffect, useRef, useState } from 'react';
 import { UserService } from '@kaizen/user-client';
 import { PlaidLink } from './plaid-link';
 import { Sidebar } from './sidebar';
-import { useInstitutionStore } from '@kaizen/institution-client';
+import {
+  groupAccountsByType,
+  useInstitutionStore
+} from '@kaizen/institution-client';
 
 export const DashboardPage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const authStore = useAuthStore();
   const institutionStore = useInstitutionStore();
   const monthAndYear = useRef(getCurrentMonthAndYear());
+
+  const accountGroups = groupAccountsByType(institutionStore.institutions);
 
   useEffect(() => {
     if (authStore.authenticated) {
@@ -36,8 +41,21 @@ export const DashboardPage = () => {
             {linkToken && <PlaidLink linkToken={linkToken} />}
           </div>
           <hr className="mt-4 h-[1px] border-gray-900" />
-          <div className="flex w-full p-4">
-            <pre>{JSON.stringify(institutionStore.institutions, null, 2)}</pre>
+          <div className="flex w-full flex-col gap-y-2 p-4">
+            {Object.keys(accountGroups).map((accountType) => {
+              const accountGroup = accountGroups[accountType];
+
+              return (
+                <div
+                  key={accountType}
+                  className="flex h-16 w-full items-center justify-between rounded-xl bg-slate-800 p-4">
+                  <h6 className="font-secondary font-bold uppercase">
+                    {accountType}
+                  </h6>
+                  <div>{accountGroup.available}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
