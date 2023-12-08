@@ -8,7 +8,7 @@ import {
   AccountBase,
   AccountType,
   AccountsGetResponse,
-  PlaidApi as ActualPlaidApi
+  PlaidApi
 } from 'plaid';
 
 const mockAxiosHeaders: AxiosHeaders = {
@@ -96,8 +96,8 @@ const mockAccountsGetResponse: AccountsGetResponse = {
   request_id: ''
 };
 
-export const mockPlaidApi: Pick<
-  ActualPlaidApi,
+const mockPlaidApiImplementation: Pick<
+  PlaidApi,
   'linkTokenCreate' | 'itemPublicTokenExchange' | 'accountsGet'
 > = {
   linkTokenCreate: jest.fn().mockResolvedValue({
@@ -113,3 +113,5 @@ export const mockPlaidApi: Pick<
     data: mockAccountsGetResponse
   })
 };
+
+export const mockPlaidApi = mockPlaidApiImplementation as PlaidApi;
