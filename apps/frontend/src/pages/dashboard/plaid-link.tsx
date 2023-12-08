@@ -1,5 +1,8 @@
 import { usePlaidLink } from 'react-plaid-link';
-import { InstitutionService } from '@kaizen/institution-client';
+import {
+  InstitutionService,
+  useInstitutionStore
+} from '@kaizen/institution-client';
 import { CreateInstitutionRequest } from '@kaizen/institution';
 
 interface PlaidLinkProps {
@@ -7,6 +10,7 @@ interface PlaidLinkProps {
 }
 
 export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
+  const institutionStore = useInstitutionStore();
   const { open } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token: string) => {
@@ -23,7 +27,9 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
       publicToken: publicToken
     };
     const response = await InstitutionService.create(request);
-    console.log(response.data);
+    if (response.status === 201) {
+      institutionStore.addInsitution(response.data);
+    }
   };
 
   return (

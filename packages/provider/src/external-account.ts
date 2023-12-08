@@ -1,16 +1,5 @@
-export declare enum ExternalAccountType {
-  Investment = 'investment',
-  Credit = 'credit',
-  Depository = 'depository',
-  Loan = 'loan',
-  Brokerage = 'brokerage',
-  Other = 'other'
-}
-
-export interface ExternalBalance {
-  current: number;
-  available: number;
-}
+import { ExternalAccountType } from './external-account-type';
+import { ExternalBalance } from './external-balance';
 
 export interface ExternalAccount {
   id: string;

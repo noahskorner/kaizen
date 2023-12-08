@@ -34,11 +34,21 @@ model InstitutionRecord {
   @@map("institution")
 }
 
+enum AccountRecordType {
+  Investment
+  Credit
+  Depository
+  Loan
+  Brokerage
+  Other
+}
+
 model AccountRecord {
   id            String            @id @default(uuid())
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @default(now()) @updatedAt
   externalId    String
+  type          AccountRecordType @default(Other)
   institutionId String
   institution   InstitutionRecord @relation(fields: [institutionId], references: [id])
   current       Float

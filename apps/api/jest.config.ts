@@ -18,7 +18,7 @@ export default {
 
   // Automatically clear mock calls, instances and results before every test
   clearMocks: true,
-  testTimeout: 30000,
+  testTimeout: 30000
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
@@ -85,10 +85,9 @@ export default {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    '@kaizen/provider': '@kaizen/provider/src/__mocks__/financial.provider.ts'
-    // Adjust the regex and paths according to your monorepo structure
-  }
+  // moduleNameMapper: {
+  //   Adjust the regex and paths according to your monorepo structure
+  // }
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -132,7 +131,7 @@ export default {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: [],
+  // setupFiles: ['./jest.setup.ts']
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],

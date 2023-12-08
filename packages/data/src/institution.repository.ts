@@ -16,7 +16,8 @@ export class InstitutionRepository {
               return {
                 externalId: account.externalId,
                 current: account.current,
-                available: account.available
+                available: account.available,
+                type: account.type
               };
             })
           }

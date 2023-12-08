@@ -11,7 +11,7 @@ export interface AuthStore extends AccessToken {
   refreshToken: () => void;
 }
 
-const initialState: Omit<AuthStore, 'login' | 'logout' | 'refreshToken'> = {
+const initialState = {
   loading: true,
   authenticated: false,
   id: '',
