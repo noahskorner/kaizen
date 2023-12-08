@@ -1,5 +1,9 @@
 import supertest from 'supertest';
-import { Institution, CreateInstitutionRequest } from '@kaizen/institution';
+import {
+  Institution,
+  CreateInstitutionRequest,
+  AccountType
+} from '@kaizen/institution';
 import { app } from '../../app';
 import {
   expectError,
@@ -58,11 +62,10 @@ describe('/institution', () => {
       expect(response.statusCode).toBe(201);
       expect(institution.id).toBeDefined();
       expect(institution.userId).toBe(user.id);
-      expect(institution.accounts[0].externalId).toBe(
-        'MOCK_EXTERNAL_ACCOUNT_ID'
-      );
+      expect(institution.accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
       expect(institution.accounts[0].balance.current).toBe(100);
       expect(institution.accounts[0].balance.available).toBe(75);
+      expect(institution.accounts[0].type).toBe(AccountType.Depository);
     });
   });
   describe('find should', () => {
@@ -102,9 +105,10 @@ describe('/institution', () => {
       expect(body.length).toBe(1);
       expect(body[0].id).toBe(institution.id);
       expect(body[0].userId).toBe(institution.userId);
-      expect(body[0].accounts[0].externalId).toBe('MOCK_EXTERNAL_ACCOUNT_ID');
+      expect(body[0].accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
       expect(body[0].accounts[0].balance.current).toBe(100);
       expect(body[0].accounts[0].balance.available).toBe(75);
+      expect(body[0].accounts[0].type).toBe(AccountType.Depository);
     });
   });
 });

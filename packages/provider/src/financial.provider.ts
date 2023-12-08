@@ -4,12 +4,11 @@ import {
   ItemPublicTokenExchangeRequest,
   LinkTokenCreateRequest,
   PlaidApi,
-  Products,
-  AccountBase,
-  AccountType
+  Products
 } from 'plaid';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
-import { ExternalAccount, ExternalAccountType } from './external-account';
+import { ExternalAccount } from './external-account';
+import { ExternalAccountAdapter } from './external-account.adapter';
 
 export interface IFinancialProvider {
   createExternalLinkToken(userId: string): Promise<ApiResponse<string>>;
@@ -81,39 +80,12 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       };
       const response = await this._plaidClient.accountsGet(request);
 
-      return this.success(response.data.accounts.map(this.toExternalAccount));
+      return this.success(
+        response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)
+      );
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  private toExternalAccount(account: AccountBase): ExternalAccount {
-    const externalAccount: ExternalAccount = {
-      id: account.account_id,
-      type: this.toExternalAccountType(account.type),
-      balance: {
-        current: account.balances.current ?? 0,
-        available: account.balances.available ?? 0
-      }
-    };
-    return externalAccount;
-  }
-
-  private toExternalAccountType(type: AccountType): ExternalAccountType {
-    switch (type) {
-      case AccountType.Credit:
-        return ExternalAccountType.Credit;
-      case AccountType.Depository:
-        return ExternalAccountType.Depository;
-      case AccountType.Investment:
-        return ExternalAccountType.Investment;
-      case AccountType.Loan:
-        return ExternalAccountType.Loan;
-      case AccountType.Other:
-        return ExternalAccountType.Other;
-      default:
-        return ExternalAccountType.Other;
     }
   }
 }

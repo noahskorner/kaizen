@@ -4,8 +4,8 @@
     "node_modules",
     "dist",
     "jest.config.ts",
-    "fixtures",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "jest.setup.ts"
   ],
   "compilerOptions": {
     "outDir": "dist",
