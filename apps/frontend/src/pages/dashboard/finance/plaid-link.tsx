@@ -4,6 +4,7 @@ import {
   useInstitutionStore
 } from '@kaizen/institution-client';
 import { CreateInstitutionRequest } from '@kaizen/institution';
+import { Button } from '@kaizen/ui';
 
 interface PlaidLinkProps {
   linkToken: string;
@@ -32,11 +33,5 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
     }
   };
 
-  return (
-    <button
-      onClick={onCreateClick}
-      className="font-primary rounded-lg bg-indigo-800 px-4 py-2 text-xs hover:bg-indigo-900">
-      Create
-    </button>
-  );
+  return <Button onClick={onCreateClick}>Add account</Button>;
 };

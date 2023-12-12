@@ -21,16 +21,16 @@ export function TextInput({
   onChange
 }: TextInputProps) {
   return (
-    <div className="flex flex-col gap-y-2 text-sm text-gray-100">
+    <div className="flex flex-col gap-y-2 text-sm">
       <label className="font-semibold" htmlFor={id}>
         {label}
       </label>
       <input
         className={`${
           errors.length > 0
-            ? 'ring-2 ring-red-600'
-            : 'ring-indigo-800 focus:ring-2'
-        } h-10 w-full rounded-lg bg-gray-900 px-2 outline-none`}
+            ? 'ring-1 ring-red-600'
+            : 'ring-primary-100 focus:ring-2'
+        } h-10 w-full rounded-lg bg-neutral-100 px-2 outline-none`}
         type={type}
         name={name}
         id={id}

@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
-import { mockPlaidApi } from './mock-plaid-client';
 
 export const plaidClient =
   serverEnvironment.NODE_ENV === 'TEST'
-    ? mockPlaidApi
+    ? require('./mock-plaid-client').mockPlaidApi
     : new PlaidApi(
         new Configuration({
           basePath: PlaidEnvironments.sandbox,
