@@ -14,11 +14,13 @@
     "prisma:migrate:reset": "dotenv -e ./src/env/.env.development -- prisma migrate reset",
     "prisma:db:seed": "dotenv -e ./src/env/.env.development -- prisma db seed",
     "prisma:generate": "dotenv -e ./src/env/.env.development -- prisma generate",
-    "prisma:studio": "dotenv -e ./src/env/.env.development -- prisma studio"
+    "prisma:studio": "dotenv -e ./src/env/.env.development -- prisma studio",
+    "seed": "npm run prisma:db:seed"
   },
   "author": "",
   "license": "ISC",
   "prisma": {
-    "schema": "../../packages/data/src/prisma/schema.prisma"
+    "schema": "../../packages/data/src/prisma/schema.prisma",
+    "seed": "ts-node ../../packages/data/src/prisma/seed/seed.ts"
   }
 }

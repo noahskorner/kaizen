@@ -11,12 +11,11 @@
     "node": "20.9.0",
     "npm": "10.2.2"
   },
-  "prisma": {
-    "schema": "packages/data/src/prisma/schema.prisma"
-  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
+    "db:seed": "npm run --prefix ./apps/api seed",
     "start": "turbo run start",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
