@@ -11,14 +11,12 @@ export const GlobalLayout = ({ children }: GlobalLayoutProps) => {
 
   useEffect(() => {
     const refreshToken = async () => {
-      if (authService.isAuthenticated()) {
-        authStore.refreshToken();
-        const response = await authService.refreshToken();
-        if (response.type === 'SUCCESS') {
-          authStore.login(response.data.accessToken);
-        } else {
-          authStore.logout();
-        }
+      authStore.refreshToken();
+      const response = await authService.refreshToken();
+      if (response.type === 'SUCCESS') {
+        authStore.login(response.data.accessToken);
+      } else {
+        authStore.logout();
       }
     };
 
@@ -27,7 +25,7 @@ export const GlobalLayout = ({ children }: GlobalLayoutProps) => {
   }, []);
 
   return (
-    <div className="font-primary h-screen w-screen overflow-auto bg-gray-950 text-white">
+    <div className="font-primary h-screen w-screen overflow-auto bg-white text-neutral-950">
       {children}
     </div>
   );

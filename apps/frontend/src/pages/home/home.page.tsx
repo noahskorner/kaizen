@@ -1,5 +1,5 @@
-import { Button, Link } from '@kaizen/ui';
-import { routes } from '../routes';
+import { Button } from '@kaizen/ui';
+import { paths } from '../routes';
 import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,17 +11,17 @@ export const HomePage = () => {
 
   const onLogoutClick = async () => {
     authStore.logout();
-    navigate(routes.home.path);
+    navigate(paths.home);
   };
 
   return (
     <div className="flex flex-col gap-y-8 p-4">
       <div className="flex flex-col gap-2">
-        {Object.keys(routes).map((key) => {
+        {Object.keys(paths).map((key) => {
           return (
-            <Link key={key} to={routes[key].path ?? '/'}>
-              {routes[key].path}
-            </Link>
+            <Button key={key} to={paths[key]}>
+              {paths[key]}
+            </Button>
           );
         })}
         {authStore.authenticated && (

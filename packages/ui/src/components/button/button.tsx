@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react';
+import { Link } from 'react-router-dom';
 
 export interface ButtonProps {
   id?: string;
@@ -6,22 +7,31 @@ export interface ButtonProps {
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
+  to?: string;
 }
+
+const BUTTON_CLASS =
+  'bg-primary-700 w-full rounded-lg p-2 text-sm font-semibold text-white hover:bg-primary-800 active:outline active:outline-1 active:outline-primary-700';
 
 export const Button = ({
   id,
   children,
   type = 'button',
   disabled = false,
-  onClick = () => {}
+  onClick = () => {},
+  to
 }: ButtonProps) => {
-  return (
+  return to != null ? (
+    <Link id={id} to={to} className={BUTTON_CLASS}>
+      {children}
+    </Link>
+  ) : (
     <button
       id={id}
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className="w-full rounded-lg bg-indigo-900 p-2 text-sm font-semibold text-white hover:bg-indigo-800 active:outline active:outline-1 active:outline-indigo-700">
+      className={BUTTON_CLASS}>
       {children}
     </button>
   );
