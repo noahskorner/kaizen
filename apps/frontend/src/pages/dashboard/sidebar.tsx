@@ -29,7 +29,7 @@ export const Sidebar = () => {
           </div>
 
           <div className="w-full">
-            <p className="mb-2 text-xs text-neutral-300">Dashboards</p>
+            <p className="mb-2 text-xs text-neutral-100">Dashboards</p>
             <SidebarButton
               icon={<BankNotesIcon />}
               href={paths.finance}
@@ -43,7 +43,7 @@ export const Sidebar = () => {
           </div>
         </div>
         <div className="w-full">
-          <p className="mb-2 text-xs text-neutral-300">Account</p>
+          <p className="mb-2 text-xs text-neutral-100">Account</p>
           <SidebarButton
             icon={<LogoutIcon />}
             onClick={onLogoutClick}
