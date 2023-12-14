@@ -7,5 +7,15 @@ export default defineConfig({
   server: {
     port: 3000
   },
-  envDir: './src/env'
+  envDir: './src/env',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom']
+          // Add more chunks as needed
+        }
+      }
+    }
+  }
 });

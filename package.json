@@ -11,6 +11,10 @@
     "node": "20.9.0",
     "npm": "10.2.2"
   },
+  "prisma": {
+    "schema": "packages/data/src/prisma/schema.prisma",
+    "seed": "ts-node packages/data/src/prisma/seed/seed.ts"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
