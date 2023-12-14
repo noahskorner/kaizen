@@ -42,3 +42,4 @@ dist
 cdk.out
 apps/frontend/cypress/screenshots
 apps/frontend/cypress/downloads
+packages/data/src/prisma/seed/local.json
