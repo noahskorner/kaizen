@@ -4,23 +4,16 @@ import {
   ItemPublicTokenExchangeRequest,
   LinkTokenCreateRequest,
   PlaidApi,
-  Products
+  Products,
+  TransactionsSyncRequest
 } from 'plaid';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
 import { ExternalAccount } from './external-account';
 import { ExternalAccountAdapter } from './external-account.adapter';
+import { ExternalTransactionAdapter } from './external-transaction.adapter';
+import { SyncExternalTransactionsResponse } from './sync-external-transactions-response';
 
-export interface IFinancialProvider {
-  createExternalLinkToken(userId: string): Promise<ApiResponse<string>>;
-  exchangeExternalPublicToken(
-    publicToken: string
-  ): Promise<ApiResponse<string>>;
-  getExternalAccounts(
-    accessToken: string
-  ): Promise<ApiResponse<ExternalAccount[]>>;
-}
-
-export class FinancialProvider extends Service implements IFinancialProvider {
+export class FinancialProvider extends Service {
   constructor(private readonly _plaidClient: PlaidApi) {
     super();
   }
@@ -83,6 +76,31 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       return this.success(
         response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)
       );
+    } catch (error) {
+      console.log(error);
+      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  public async syncExternalTransactions(
+    accessToken: string
+  ): Promise<ApiResponse<SyncExternalTransactionsResponse>> {
+    try {
+      const request: TransactionsSyncRequest = {
+        access_token: accessToken
+      };
+      const response = await this._plaidClient.transactionsSync(request);
+
+      const result: SyncExternalTransactionsResponse = {
+        added: response.data.added.map(
+          ExternalTransactionAdapter.toExternalTransaction
+        ),
+        modified: response.data.modified.map(
+          ExternalTransactionAdapter.toExternalTransaction
+        ),
+        removed: [] // TODO: Handle removed transactions
+      };
+      return this.success(result);
     } catch (error) {
       console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);

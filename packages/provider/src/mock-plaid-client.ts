@@ -1,4 +1,5 @@
-import { AxiosHeaders, AxiosResponse } from 'axios';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { AxiosResponse } from 'axios';
 import {
   LinkTokenCreateResponse,
   ItemPublicTokenExchangeResponse,
@@ -8,38 +9,14 @@ import {
   AccountBase,
   AccountType,
   AccountsGetResponse,
-  PlaidApi
+  PlaidApi,
+  TransactionsSyncResponse,
+  Transaction,
+  TransactionPaymentChannelEnum,
+  RemovedTransaction
 } from 'plaid';
 
-const mockAxiosHeaders: AxiosHeaders = {
-  set: jest.fn(),
-  get: jest.fn(),
-  has: jest.fn(),
-  delete: jest.fn(),
-  clear: jest.fn(),
-  normalize: jest.fn(),
-  concat: jest.fn(),
-  toJSON: jest.fn(),
-  getContentType: jest.fn(),
-  setContentType: jest.fn(),
-  hasContentType: jest.fn(),
-  getContentLength: jest.fn(),
-  setContentLength: jest.fn(),
-  hasContentLength: jest.fn(),
-  setAccept: jest.fn(),
-  getAccept: jest.fn(),
-  hasAccept: jest.fn(),
-  setUserAgent: jest.fn(),
-  getUserAgent: jest.fn(),
-  hasUserAgent: jest.fn(),
-  setContentEncoding: jest.fn(),
-  getContentEncoding: jest.fn(),
-  hasContentEncoding: jest.fn(),
-  setAuthorization: jest.fn(),
-  getAuthorization: jest.fn(),
-  hasAuthorization: jest.fn(),
-  [Symbol.iterator]: jest.fn()
-};
+const mockAxiosHeaders: any = {};
 
 const mockAxiosResponse: Omit<AxiosResponse<unknown, unknown>, 'data'> = {
   status: 200,
@@ -96,9 +73,70 @@ const mockAccountsGetResponse: AccountsGetResponse = {
   request_id: ''
 };
 
+const mockAddedTransaction: Transaction = {
+  transaction_id: 'MOCK_ADDED_TRANSACTION_ID',
+  account_id: 'MOCK_ACCOUNT_ID',
+  amount: 0,
+  iso_currency_code: null,
+  unofficial_currency_code: null,
+  category: null,
+  category_id: null,
+  date: '',
+  location: {
+    address: null,
+    city: null,
+    region: null,
+    postal_code: null,
+    country: null,
+    lat: null,
+    lon: null,
+    store_number: null
+  },
+  name: '',
+  payment_meta: {
+    reference_number: null,
+    ppd_id: null,
+    payee: null,
+    by_order_of: null,
+    payer: null,
+    payment_method: null,
+    payment_processor: null,
+    reason: null
+  },
+  pending: false,
+  pending_transaction_id: null,
+  account_owner: null,
+  authorized_date: null,
+  authorized_datetime: null,
+  datetime: null,
+  payment_channel: TransactionPaymentChannelEnum.Online,
+  transaction_code: null
+};
+
+const mockModifiedTransaction: Transaction = {
+  ...mockAddedTransaction,
+  transaction_id: 'MOCK_MODIFIED_TRANSACTION_ID'
+};
+
+const mockRemovedTransaction: RemovedTransaction = {
+  transaction_id: 'MOCK_REMOVED_TRANSACTION_ID'
+};
+
+const mockTransactionsSyncResponse: TransactionsSyncResponse = {
+  added: [mockAddedTransaction],
+  modified: [mockModifiedTransaction],
+  removed: [mockRemovedTransaction],
+  has_more: false,
+  next_cursor: '',
+  request_id: ''
+};
+
 const mockPlaidApiImplementation: Pick<
   PlaidApi,
-  'linkTokenCreate' | 'itemPublicTokenExchange' | 'accountsGet'
+  | 'linkTokenCreate'
+  | 'itemPublicTokenExchange'
+  | 'accountsGet'
+  | 'transactionsSync'
 > = {
   linkTokenCreate: jest.fn().mockResolvedValue({
     ...mockAxiosResponse,
@@ -111,6 +149,10 @@ const mockPlaidApiImplementation: Pick<
   accountsGet: jest.fn().mockResolvedValue({
     ...mockAxiosResponse,
     data: mockAccountsGetResponse
+  }),
+  transactionsSync: jest.fn().mockResolvedValue({
+    ...mockAxiosResponse,
+    data: mockTransactionsSyncResponse
   })
 };
 

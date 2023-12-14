@@ -1,8 +1,8 @@
-import { CreateAccountQuery } from '@kaizen/data';
+import { AccountRecord, AccountRecordType } from '@kaizen/data';
 import { Account } from '@kaizen/institution';
-import { ExternalAccount, ExternalAccountType } from '@kaizen/provider';
-import { AccountRecord, AccountRecordType } from '@prisma/client';
+import { ExternalAccountType } from '@kaizen/provider';
 import { AccountType } from 'plaid';
+import { TransactionAdapter } from './transaction.adapter';
 
 export class AccountAdapter {
   public static toAccount(accountRecord: AccountRecord): Account {
@@ -13,7 +13,10 @@ export class AccountAdapter {
       balance: {
         current: accountRecord.current,
         available: accountRecord.available
-      }
+      },
+      transactions: accountRecord.transactions.map(
+        TransactionAdapter.toTransaction
+      )
     };
 
     return account;
@@ -34,19 +37,6 @@ export class AccountAdapter {
       default:
         return AccountType.Other;
     }
-  }
-
-  public static toCreateAccountQuery(
-    externalAccount: ExternalAccount
-  ): CreateAccountQuery {
-    const createAccountQuery: CreateAccountQuery = {
-      externalId: externalAccount.id,
-      current: externalAccount.balance.current,
-      available: externalAccount.balance.available,
-      type: AccountAdapter.toAccountRecordType(externalAccount.type)
-    };
-
-    return createAccountQuery;
   }
 
   public static toAccountRecordType(

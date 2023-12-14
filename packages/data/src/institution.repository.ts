@@ -1,52 +1,85 @@
 import { CreateInstitutionQuery } from './create-institution.query';
 import { FindAllInstitutionsQuery } from './find-all-institutions.query';
-import { GetInstitutionQuery } from './get-institution.query';
+import { InstitutionRecord } from './institution-record';
 import { prisma } from './prisma';
-import { InstitutionRecord } from '@prisma/client';
 
 export class InstitutionRepository {
-  public async create(query: CreateInstitutionQuery) {
-    return await prisma.institutionRecord.create({
+  public async create(
+    query: CreateInstitutionQuery
+  ): Promise<InstitutionRecord> {
+    const institutionRecord = await prisma.institutionRecord.create({
       data: {
         userId: query.userId,
-        plaidAccessToken: query.plaidAccessToken,
-        accounts: {
-          createMany: {
-            data: query.accounts.map((account) => {
-              return {
-                externalId: account.externalId,
-                current: account.current,
-                available: account.available,
-                type: account.type
-              };
-            })
-          }
-        }
-      },
-      include: {
-        accounts: true
+        plaidAccessToken: query.plaidAccessToken
       }
     });
+
+    const accountRecords = await Promise.all(
+      query.accounts.map((createAccountQuery) => {
+        return prisma.accountRecord.create({
+          data: {
+            institutionId: institutionRecord.id,
+            externalId: createAccountQuery.externalId,
+            current: createAccountQuery.current,
+            available: createAccountQuery.available,
+            type: createAccountQuery.type,
+            transactions: {
+              createMany: {
+                data: createAccountQuery.transactions.map(
+                  (createTransactionQuery) => {
+                    return {
+                      externalId: createTransactionQuery.externalId
+                    };
+                  }
+                )
+              }
+            }
+          },
+          include: {
+            transactions: true
+          }
+        });
+      })
+    );
+
+    return {
+      ...institutionRecord,
+      accounts: accountRecords
+    };
   }
 
-  public async findAll(query: FindAllInstitutionsQuery) {
-    return await prisma.institutionRecord.findMany({
+  public async findAll(
+    query: FindAllInstitutionsQuery
+  ): Promise<InstitutionRecord[]> {
+    const institutionRecords = await prisma.institutionRecord.findMany({
       where: {
         userId: query.userId
-      },
-      include: {
-        accounts: true
       }
     });
-  }
 
-  public async get(
-    query: GetInstitutionQuery
-  ): Promise<InstitutionRecord | null> {
-    return await prisma.institutionRecord.findUnique({
-      where: {
-        id: query.id
-      }
+    const accountRecords = (
+      await Promise.all(
+        institutionRecords.map((institutionRecord) => {
+          return prisma.accountRecord.findMany({
+            where: {
+              institutionId: institutionRecord.id
+            },
+            include: {
+              transactions: true
+            }
+          });
+        })
+      )
+    ).flatMap((accountRecords) => accountRecords);
+
+    return institutionRecords.map((institutionRecord) => {
+      return {
+        ...institutionRecord,
+        accounts: accountRecords.filter(
+          (accountRecord) =>
+            accountRecord.institutionId === institutionRecord.id
+        )
+      };
     });
   }
 }
