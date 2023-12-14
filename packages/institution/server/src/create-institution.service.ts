@@ -1,10 +1,12 @@
 import { CreateInstitutionCommand } from './create-institution.command';
 import { Institution } from '@kaizen/institution';
 import { ApiResponse, Errors, Service } from '@kaizen/core';
-import { InstitutionRepository } from '@kaizen/data';
+import { CreateAccountQuery, InstitutionRepository } from '@kaizen/data';
 import { FinancialProvider } from '@kaizen/provider';
 import { CreateInstitutionQuery } from '@kaizen/data';
 import { AccountAdapter } from './account.adapter';
+import { CreateTransactionQuery } from '@kaizen/data/src/create-transaction.query';
+import { ExternalTransaction } from '@kaizen/provider/src/external-transaction';
 
 export class CreateInstitutionService extends Service {
   constructor(
@@ -54,22 +56,70 @@ export class CreateInstitutionService extends Service {
       return this.failures(exchangeExternalPublicTokenResponse.errors);
     }
 
+    const createAccountResponse = await this.buildCreateAccountQueries(
+      exchangeExternalPublicTokenResponse.data
+    );
+    if (createAccountResponse.type === 'FAILURE') {
+      return this.failures(createAccountResponse.errors);
+    }
+
+    const createInstitutionQuery: CreateInstitutionQuery = {
+      userId: command.userId,
+      plaidAccessToken: exchangeExternalPublicTokenResponse.data,
+      accounts: createAccountResponse.data
+    };
+    return this.success(createInstitutionQuery);
+  }
+
+  private async buildCreateAccountQueries(
+    accessToken: string
+  ): Promise<ApiResponse<CreateAccountQuery[]>> {
     const externalAccountsResponse =
-      await this._financialProvider.getExternalAccounts(
-        exchangeExternalPublicTokenResponse.data
-      );
+      await this._financialProvider.getExternalAccounts(accessToken);
     if (externalAccountsResponse.type == 'FAILURE') {
       return this.failures(externalAccountsResponse.errors);
     }
 
-    const createAccountQueries = externalAccountsResponse.data.map(
-      AccountAdapter.toCreateAccountQuery
+    const syncExternalTransactionsResponse =
+      await this._financialProvider.syncExternalTransactions(accessToken);
+    if (syncExternalTransactionsResponse.type === 'FAILURE') {
+      return this.failures(syncExternalTransactionsResponse.errors);
+    }
+
+    const createAccountQueries = await Promise.all(
+      externalAccountsResponse.data.map(async (externalAccount) => {
+        const createAccountQuery: CreateAccountQuery = {
+          externalId: externalAccount.id,
+          current: externalAccount.balance.current,
+          available: externalAccount.balance.available,
+          type: AccountAdapter.toAccountRecordType(externalAccount.type),
+          transactions: this.getTransactionQueries(
+            externalAccount.id,
+            syncExternalTransactionsResponse.data.added // TODO: Pretty sure we only care about added ones here.
+          )
+        };
+
+        return createAccountQuery;
+      })
     );
-    const createInstitutionQuery: CreateInstitutionQuery = {
-      userId: command.userId,
-      plaidAccessToken: exchangeExternalPublicTokenResponse.data,
-      accounts: createAccountQueries
-    };
-    return this.success(createInstitutionQuery);
+    return this.success(createAccountQueries);
+  }
+
+  private getTransactionQueries(
+    externalAccountId: string,
+    externalTransactions: ExternalTransaction[]
+  ): CreateTransactionQuery[] {
+    return externalTransactions
+      .filter(
+        (externalTransaction) =>
+          externalTransaction.accountId === externalAccountId
+      )
+      .map((externalTransaction) => {
+        const createTransactionQuery: CreateTransactionQuery = {
+          externalId: externalTransaction.id,
+          externalAccountId: externalTransaction.accountId
+        };
+        return createTransactionQuery;
+      });
   }
 }

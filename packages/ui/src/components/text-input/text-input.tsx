@@ -29,7 +29,7 @@ export function TextInput({
         className={`${
           errors.length > 0
             ? 'ring-1 ring-red-600'
-            : 'ring-primary-100 focus:ring-2'
+            : 'ring-neutral-600 focus:ring-2'
         } h-10 w-full rounded-lg bg-neutral-100 px-2 outline-none`}
         type={type}
         name={name}

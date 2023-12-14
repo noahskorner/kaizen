@@ -44,15 +44,27 @@ enum AccountRecordType {
 }
 
 model AccountRecord {
-  id            String            @id @default(uuid())
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @default(now()) @updatedAt
+  id            String              @id @default(uuid())
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @default(now()) @updatedAt
   externalId    String
-  type          AccountRecordType @default(Other)
+  type          AccountRecordType   @default(Other)
   institutionId String
-  institution   InstitutionRecord @relation(fields: [institutionId], references: [id])
+  institution   InstitutionRecord   @relation(fields: [institutionId], references: [id])
   current       Float
   available     Float
+  transactions  TransactionRecord[]
 
   @@map("account")
+}
+
+model TransactionRecord {
+  id         String        @id @default(uuid())
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @default(now()) @updatedAt
+  externalId String
+  accountId  String
+  account    AccountRecord @relation(fields: [accountId], references: [id])
+
+  @@map("transaction")
 }
