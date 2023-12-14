@@ -12,11 +12,14 @@
     "npm": "10.2.2"
   },
   "prisma": {
-    "schema": "packages/data/src/prisma/schema.prisma"
+    "schema": "packages/data/src/prisma/schema.prisma",
+    "seed": "ts-node packages/data/src/prisma/seed/seed.ts"
   },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
+    "db:seed": "npm run --prefix ./apps/api seed",
     "start": "turbo run start",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
@@ -105,7 +108,6 @@
     "react-dom": "^18.2.0",
     "react-plaid-link": "^3.5.1",
     "react-router-dom": "^6.19.0",
-    "sort-by": "^1.2.0",
     "uuid": "^9.0.1",
     "zustand": "^4.4.6"
   }
