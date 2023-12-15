@@ -14,25 +14,15 @@ export class InstitutionRepository {
       }
     });
 
-    // TODO: Here, let's emit up an event, and then create the transactions async instead.
     const accountRecords = await Promise.all(
       query.accounts.map((createAccountQuery) => {
         return prisma.accountRecord.create({
           data: {
             institutionId: institutionRecord.id,
-            externalId: createAccountQuery.externalId,
-            current: createAccountQuery.current,
-            available: createAccountQuery.available,
-            type: createAccountQuery.type,
+            ...createAccountQuery,
             transactions: {
               createMany: {
-                data: createAccountQuery.transactions.map(
-                  (createTransactionQuery) => {
-                    return {
-                      externalId: createTransactionQuery.externalId
-                    };
-                  }
-                )
+                data: createAccountQuery.transactions
               }
             }
           },

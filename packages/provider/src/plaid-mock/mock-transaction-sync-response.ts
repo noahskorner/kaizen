@@ -5,11 +5,14 @@ import {
   TransactionsSyncResponse
 } from 'plaid';
 
-const createMockTransaction = (id: string): Transaction => {
+const createMockTransaction = (
+  id: string,
+  authorizedDate: Date = new Date()
+): Transaction => {
   return {
     transaction_id: id,
     account_id: 'MOCK_ACCOUNT_ID',
-    amount: 0,
+    amount: 100,
     iso_currency_code: null,
     unofficial_currency_code: null,
     category: null,
@@ -40,7 +43,7 @@ const createMockTransaction = (id: string): Transaction => {
     pending_transaction_id: null,
     account_owner: null,
     authorized_date: null,
-    authorized_datetime: null,
+    authorized_datetime: authorizedDate.toISOString(),
     datetime: null,
     payment_channel: TransactionPaymentChannelEnum.Online,
     transaction_code: null
@@ -63,7 +66,7 @@ const mockAddedTransactions = [
   'MOCK_ADDED_TRANSACTION_ID_13',
   'MOCK_ADDED_TRANSACTION_ID_14',
   'MOCK_ADDED_TRANSACTION_ID_15'
-].map((id) => createMockTransaction(id));
+].map((id, index) => createMockTransaction(id, new Date(2020, 1, 1 + index)));
 
 const mockModifiedTransaction: Transaction = createMockTransaction(
   'MOCK_MODIFIED_TRANSACTION_ID'

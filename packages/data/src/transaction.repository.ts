@@ -21,7 +21,7 @@ export class TransactionRepository {
       prisma.transactionRecord.findMany({
         where: where,
         orderBy: {
-          createdAt: 'desc'
+          date: 'desc'
         },
         skip: query.pageSize * (query.page - 1),
         take: query.pageSize

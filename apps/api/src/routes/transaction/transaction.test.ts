@@ -84,9 +84,10 @@ describe('/transaction', () => {
     it('returns 200 and custom page size', async () => {
       // Arrange
       const { authToken } = await createInstitution();
+      const pageSize = 7;
       const request: FindTransactionsRequest = {
         page: 1,
-        pageSize: 7
+        pageSize: pageSize
       };
 
       // Act
@@ -97,8 +98,34 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(200);
-      expect(body.hits.length).toBe(7);
+      expect(body.hits.length).toBe(pageSize);
       expect(body.total).toBe(15);
+    });
+    it('returns ordered by authorizedDate', async () => {
+      // Arrange
+      const { authToken } = await createInstitution();
+      const request: FindTransactionsRequest = {
+        page: 1,
+        pageSize: 15
+      };
+
+      // Act
+      const response = await supertest(app)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: Paginated<Transaction> = response.body;
+
+      // Asserts
+      expect(response.status).toBe(200);
+      expect(body.total).toBe(15);
+      expect(body.hits.length).toBe(15);
+      const sortedHits = [...body.hits].sort((a, b) => {
+        if (a.date == null) return -1;
+        if (b.date == null) return 1;
+
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      expect(body.hits).toEqual(sortedHits);
     });
   });
 });
