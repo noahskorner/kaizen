@@ -4,7 +4,7 @@ import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 
 export const plaidClient =
   serverEnvironment.NODE_ENV === 'TEST'
-    ? require('./mock-plaid-client').mockPlaidApi
+    ? require('./plaid-mock').mockPlaidApi
     : new PlaidApi(
         new Configuration({
           basePath: PlaidEnvironments.sandbox,

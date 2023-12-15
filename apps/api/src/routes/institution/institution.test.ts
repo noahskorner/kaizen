@@ -66,11 +66,6 @@ describe('/institution', () => {
       expect(institution.accounts[0].balance.current).toBe(100);
       expect(institution.accounts[0].balance.available).toBe(75);
       expect(institution.accounts[0].type).toBe(AccountType.Depository);
-      expect(institution.accounts[0].transactions.length).toBe(1);
-      expect(institution.accounts[0].transactions[0].id).toBeDefined();
-      expect(institution.accounts[0].transactions[0].externalId).toBe(
-        'MOCK_ADDED_TRANSACTION_ID'
-      );
     });
   });
   describe('find should', () => {
@@ -114,11 +109,6 @@ describe('/institution', () => {
       expect(body[0].accounts[0].balance.current).toBe(100);
       expect(body[0].accounts[0].balance.available).toBe(75);
       expect(body[0].accounts[0].type).toBe(AccountType.Depository);
-      expect(institution.accounts[0].transactions.length).toBe(1);
-      expect(institution.accounts[0].transactions[0].id).toBeDefined();
-      expect(institution.accounts[0].transactions[0].externalId).toBe(
-        'MOCK_ADDED_TRANSACTION_ID'
-      );
     });
   });
 });

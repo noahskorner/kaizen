@@ -2,7 +2,6 @@ import { AccountRecord, AccountRecordType } from '@kaizen/data';
 import { Account } from '@kaizen/institution';
 import { ExternalAccountType } from '@kaizen/provider';
 import { AccountType } from 'plaid';
-import { TransactionAdapter } from './transaction.adapter';
 
 export class AccountAdapter {
   public static toAccount(accountRecord: AccountRecord): Account {
@@ -13,10 +12,7 @@ export class AccountAdapter {
       balance: {
         current: accountRecord.current,
         available: accountRecord.available
-      },
-      transactions: accountRecord.transactions.map(
-        TransactionAdapter.toTransaction
-      )
+      }
     };
 
     return account;

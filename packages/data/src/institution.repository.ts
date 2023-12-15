@@ -19,19 +19,10 @@ export class InstitutionRepository {
         return prisma.accountRecord.create({
           data: {
             institutionId: institutionRecord.id,
-            externalId: createAccountQuery.externalId,
-            current: createAccountQuery.current,
-            available: createAccountQuery.available,
-            type: createAccountQuery.type,
+            ...createAccountQuery,
             transactions: {
               createMany: {
-                data: createAccountQuery.transactions.map(
-                  (createTransactionQuery) => {
-                    return {
-                      externalId: createTransactionQuery.externalId
-                    };
-                  }
-                )
+                data: createAccountQuery.transactions
               }
             }
           },
@@ -51,35 +42,13 @@ export class InstitutionRepository {
   public async findAll(
     query: FindAllInstitutionsQuery
   ): Promise<InstitutionRecord[]> {
-    const institutionRecords = await prisma.institutionRecord.findMany({
+    return await prisma.institutionRecord.findMany({
       where: {
         userId: query.userId
+      },
+      include: {
+        accounts: true
       }
-    });
-
-    const accountRecords = (
-      await Promise.all(
-        institutionRecords.map((institutionRecord) => {
-          return prisma.accountRecord.findMany({
-            where: {
-              institutionId: institutionRecord.id
-            },
-            include: {
-              transactions: true
-            }
-          });
-        })
-      )
-    ).flatMap((accountRecords) => accountRecords);
-
-    return institutionRecords.map((institutionRecord) => {
-      return {
-        ...institutionRecord,
-        accounts: accountRecords.filter(
-          (accountRecord) =>
-            accountRecord.institutionId === institutionRecord.id
-        )
-      };
     });
   }
 }

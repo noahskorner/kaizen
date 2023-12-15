@@ -49,5 +49,13 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN]: {
     key: ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN,
     message: 'Must provide a valid plaidPublicToken.'
+  },
+  [ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE]: {
+    key: ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE,
+    message: 'Must provide a valid page number.'
+  },
+  [ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE]: {
+    key: ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE,
+    message: 'The page size you provided is invalid.'
   }
 };

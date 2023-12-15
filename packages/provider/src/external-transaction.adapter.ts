@@ -7,7 +7,15 @@ export class ExternalTransactionAdapter {
   ): ExternalTransaction {
     const externalTransaction: ExternalTransaction = {
       id: transaction.transaction_id,
-      accountId: transaction.account_id
+      accountId: transaction.account_id,
+      amount: transaction.amount,
+      date: transaction.authorized_datetime
+        ? new Date(transaction.authorized_datetime)
+        : null,
+      name: transaction.name,
+      merchantName: transaction.merchant_name ?? null,
+      pending: transaction.pending,
+      logoUrl: transaction.logo_url ?? null
     };
 
     return externalTransaction;
