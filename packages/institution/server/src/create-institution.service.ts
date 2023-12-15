@@ -7,6 +7,7 @@ import { CreateInstitutionQuery } from '@kaizen/data';
 import { AccountAdapter } from './account.adapter';
 import { CreateTransactionQuery } from '@kaizen/data/src/create-transaction.query';
 import { ExternalTransaction } from '@kaizen/provider/src/external-transaction';
+import { TransactionAdapter } from './transaction.adapter';
 
 export class CreateInstitutionService extends Service {
   constructor(
@@ -95,7 +96,7 @@ export class CreateInstitutionService extends Service {
           type: AccountAdapter.toAccountRecordType(externalAccount.type),
           transactions: this.getTransactionQueries(
             externalAccount.id,
-            syncExternalTransactionsResponse.data.added // TODO: Pretty sure we only care about added ones here.
+            syncExternalTransactionsResponse.data.added // TODO: Change to use the plaidClient.transactionsGet API instead.
           )
         };
 
@@ -114,12 +115,6 @@ export class CreateInstitutionService extends Service {
         (externalTransaction) =>
           externalTransaction.accountId === externalAccountId
       )
-      .map((externalTransaction) => {
-        const createTransactionQuery: CreateTransactionQuery = {
-          externalId: externalTransaction.id,
-          externalAccountId: externalTransaction.accountId
-        };
-        return createTransactionQuery;
-      });
+      .map(TransactionAdapter.toCreateTransactionQuery);
   }
 }

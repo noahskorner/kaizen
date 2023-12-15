@@ -9,12 +9,9 @@ import {
   AccountBase,
   AccountType,
   AccountsGetResponse,
-  PlaidApi,
-  TransactionsSyncResponse,
-  Transaction,
-  TransactionPaymentChannelEnum,
-  RemovedTransaction
+  PlaidApi
 } from 'plaid';
+import { mockTransactionsSyncResponse } from './mock-transaction-sync-response';
 
 const mockAxiosHeaders: any = {};
 
@@ -70,64 +67,6 @@ const mockAccount: AccountBase = {
 const mockAccountsGetResponse: AccountsGetResponse = {
   accounts: [mockAccount],
   item: mockItem,
-  request_id: ''
-};
-
-const mockAddedTransaction: Transaction = {
-  transaction_id: 'MOCK_ADDED_TRANSACTION_ID',
-  account_id: 'MOCK_ACCOUNT_ID',
-  amount: 0,
-  iso_currency_code: null,
-  unofficial_currency_code: null,
-  category: null,
-  category_id: null,
-  date: '',
-  location: {
-    address: null,
-    city: null,
-    region: null,
-    postal_code: null,
-    country: null,
-    lat: null,
-    lon: null,
-    store_number: null
-  },
-  name: '',
-  payment_meta: {
-    reference_number: null,
-    ppd_id: null,
-    payee: null,
-    by_order_of: null,
-    payer: null,
-    payment_method: null,
-    payment_processor: null,
-    reason: null
-  },
-  pending: false,
-  pending_transaction_id: null,
-  account_owner: null,
-  authorized_date: null,
-  authorized_datetime: null,
-  datetime: null,
-  payment_channel: TransactionPaymentChannelEnum.Online,
-  transaction_code: null
-};
-
-const mockModifiedTransaction: Transaction = {
-  ...mockAddedTransaction,
-  transaction_id: 'MOCK_MODIFIED_TRANSACTION_ID'
-};
-
-const mockRemovedTransaction: RemovedTransaction = {
-  transaction_id: 'MOCK_REMOVED_TRANSACTION_ID'
-};
-
-const mockTransactionsSyncResponse: TransactionsSyncResponse = {
-  added: [mockAddedTransaction],
-  modified: [mockModifiedTransaction],
-  removed: [mockRemovedTransaction],
-  has_more: false,
-  next_cursor: '',
   request_id: ''
 };
 
