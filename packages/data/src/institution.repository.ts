@@ -14,6 +14,7 @@ export class InstitutionRepository {
       }
     });
 
+    // TODO: Here, let's emit up an event, and then create the transactions async instead.
     const accountRecords = await Promise.all(
       query.accounts.map((createAccountQuery) => {
         return prisma.accountRecord.create({
@@ -51,35 +52,13 @@ export class InstitutionRepository {
   public async findAll(
     query: FindAllInstitutionsQuery
   ): Promise<InstitutionRecord[]> {
-    const institutionRecords = await prisma.institutionRecord.findMany({
+    return await prisma.institutionRecord.findMany({
       where: {
         userId: query.userId
+      },
+      include: {
+        accounts: true
       }
-    });
-
-    const accountRecords = (
-      await Promise.all(
-        institutionRecords.map((institutionRecord) => {
-          return prisma.accountRecord.findMany({
-            where: {
-              institutionId: institutionRecord.id
-            },
-            include: {
-              transactions: true
-            }
-          });
-        })
-      )
-    ).flatMap((accountRecords) => accountRecords);
-
-    return institutionRecords.map((institutionRecord) => {
-      return {
-        ...institutionRecord,
-        accounts: accountRecords.filter(
-          (accountRecord) =>
-            accountRecord.institutionId === institutionRecord.id
-        )
-      };
     });
   }
 }

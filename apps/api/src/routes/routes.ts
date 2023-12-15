@@ -3,7 +3,8 @@ import { authenticate } from '../middleware/authenticate';
 import {
   userController,
   authController,
-  institutionController
+  institutionController,
+  transactionController
 } from './service-collection';
 
 // Routes
@@ -24,5 +25,8 @@ router.delete('/auth', authenticate, authController.logout);
 // /institution
 router.post('/institution', authenticate, institutionController.create);
 router.get('/institution', authenticate, institutionController.find);
+
+// /transaction
+router.get('/transaction', authenticate, transactionController.find);
 
 export { router };
