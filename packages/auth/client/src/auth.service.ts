@@ -1,45 +1,40 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
-import { ApiError, ApiResponse } from '@kaizen/core';
-import { apiClient } from '@kaizen/ui';
-import { AxiosError } from 'axios';
+import {
+  ApiResponse,
+  DEFAULT_API_SUCCESS_RESPONSE,
+  handleAxiosRequest
+} from '@kaizen/core';
+import { ApiClient } from '@kaizen/ui';
 
-export const authService = {
+const setAccessToken = (accessToken: string) => {
+  ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+};
+
+export const AuthService = {
   login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
-    try {
-      const response = await apiClient.post<AuthToken>('/auth', request);
+    const response = await handleAxiosRequest(() => {
+      return ApiClient.post<ApiResponse<AuthToken>>('/auth', request);
+    });
 
-      apiClient.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${response.data.accessToken}`;
-
-      return { type: 'SUCCESS', data: response.data };
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      const errors: ApiError[] = (error.response?.data as ApiError[]) ?? [];
-
-      return { type: 'FAILURE', errors: errors };
+    if (response.type === 'FAILURE') {
+      return response;
     }
-  },
-  logout: async (): Promise<void> => {
-    apiClient.delete('/auth');
-    delete apiClient.defaults.headers.common['Authorization'];
 
-    return Promise.resolve();
+    setAccessToken(response.data.accessToken);
+    return response;
+  },
+  logout: async (): Promise<ApiResponse<null>> => {
+    ApiClient.delete<void>('/auth'); // Intentionally not awaiting this request
+    delete ApiClient.defaults.headers.common['Authorization'];
+    return Promise.resolve(DEFAULT_API_SUCCESS_RESPONSE);
   },
   refreshToken: async (): Promise<ApiResponse<AuthToken>> => {
-    try {
-      const response = await apiClient.get<AuthToken>('/auth');
+    const response = await handleAxiosRequest(() => {
+      return ApiClient.get<ApiResponse<AuthToken>>('/auth');
+    });
+    if (response.type === 'FAILURE') return response;
 
-      apiClient.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${response.data.accessToken}`;
-
-      return { type: 'SUCCESS', data: response.data };
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      const errors: ApiError[] = (error.response?.data as ApiError[]) ?? [];
-
-      return { type: 'FAILURE', errors: errors };
-    }
+    setAccessToken(response.data.accessToken);
+    return response;
   }
 };

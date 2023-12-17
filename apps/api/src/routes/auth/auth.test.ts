@@ -1,4 +1,4 @@
-import { ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
@@ -102,14 +102,14 @@ describe('/auth', () => {
 
       // Act
       const response = await supertest(app).post('/auth').send(request);
-      const body: AuthToken = response.body;
+      const body: ApiSuccessResponse<AuthToken> = response.body;
       const refreshToken = getRefreshToken(response);
 
       // Assert
       expect(response.statusCode).toBe(200);
-      expect(body.accessToken).toBeDefined();
-      expect(body.refreshToken).toBeDefined();
-      expect(body.refreshToken).toBe(refreshToken);
+      expect(body.data.accessToken).toBeDefined();
+      expect(body.data.refreshToken).toBeDefined();
+      expect(body.data.refreshToken).toBe(refreshToken);
     });
   });
   describe('refreshToken should', () => {
@@ -157,13 +157,14 @@ describe('/auth', () => {
         .set('Cookie', [
           `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
         ]);
+      const body: ApiSuccessResponse<AuthToken> = response.body;
       const refreshedToken = getRefreshToken(response);
 
       // Assert
       expect(response.statusCode).toBe(200);
-      expect(response.body.accessToken).toBeDefined();
-      expect(response.body.refreshToken).toBeDefined();
-      expect(response.body.refreshToken).toBe(refreshedToken);
+      expect(body.data.accessToken).toBeDefined();
+      expect(body.data.refreshToken).toBeDefined();
+      expect(body.data.refreshToken).toBe(refreshedToken);
     });
   });
   describe('logout should', () => {

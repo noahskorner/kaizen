@@ -37,7 +37,7 @@ export class InstitutionController extends Controller {
       } else return this.internalServerError(res, response);
     }
 
-    return this.created(res, response);
+    return this.protected(res, response);
   });
 
   public find = catchAsync(async (req: Request, res: Response) => {

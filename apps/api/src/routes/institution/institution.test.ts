@@ -10,7 +10,7 @@ import {
   createInstitution,
   createAndLoginUser
 } from '../../fixtures';
-import { ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 
 describe('/institution', () => {
   describe('create should', () => {
@@ -56,16 +56,16 @@ describe('/institution', () => {
         .post('/institution')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const institution: Institution = response.body;
+      const body: ApiSuccessResponse<Institution> = response.body;
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(institution.id).toBeDefined();
-      expect(institution.userId).toBe(user.id);
-      expect(institution.accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
-      expect(institution.accounts[0].balance.current).toBe(100);
-      expect(institution.accounts[0].balance.available).toBe(75);
-      expect(institution.accounts[0].type).toBe(AccountType.Depository);
+      expect(body.data.id).toBeDefined();
+      expect(body.data.userId).toBe(user.id);
+      expect(body.data.accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
+      expect(body.data.accounts[0].balance.current).toBe(100);
+      expect(body.data.accounts[0].balance.available).toBe(75);
+      expect(body.data.accounts[0].type).toBe(AccountType.Depository);
     });
   });
   describe('find should', () => {
@@ -84,11 +84,11 @@ describe('/institution', () => {
       const response = await supertest(app)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body = response.body as Institution[];
+      const body: ApiSuccessResponse<Institution[]> = response.body;
 
       // Assert
       expect(response.statusCode).toBe(200);
-      expect(body.length).toBe(0);
+      expect(body.data.length).toBe(0);
     });
     it('returns list with created institution', async () => {
       // Arrange
@@ -98,17 +98,17 @@ describe('/institution', () => {
       const response = await supertest(app)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body = response.body as Institution[];
+      const body: ApiSuccessResponse<Institution[]> = response.body;
 
       // Assert
       expect(response.statusCode).toBe(200);
-      expect(body.length).toBe(1);
-      expect(body[0].id).toBe(institution.id);
-      expect(body[0].userId).toBe(institution.userId);
-      expect(body[0].accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
-      expect(body[0].accounts[0].balance.current).toBe(100);
-      expect(body[0].accounts[0].balance.available).toBe(75);
-      expect(body[0].accounts[0].type).toBe(AccountType.Depository);
+      expect(body.data.length).toBe(1);
+      expect(body.data[0].id).toBe(institution.id);
+      expect(body.data[0].userId).toBe(institution.userId);
+      expect(body.data[0].accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
+      expect(body.data[0].accounts[0].balance.current).toBe(100);
+      expect(body.data[0].accounts[0].balance.available).toBe(75);
+      expect(body.data[0].accounts[0].type).toBe(AccountType.Depository);
     });
   });
 });
