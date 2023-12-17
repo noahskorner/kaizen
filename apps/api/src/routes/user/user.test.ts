@@ -1,4 +1,4 @@
-import { ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
 import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
@@ -123,11 +123,11 @@ describe('/user', () => {
 
       // Act
       const response = await supertest(app).post('/user').send(request);
-      const body: User = response.body;
+      const body: ApiSuccessResponse<User> = response.body;
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(body.email).toBe(request.email.toLowerCase());
+      expect(body.data.email).toBe(request.email.toLowerCase());
     });
   });
   describe('createLinkToken should', () => {
@@ -146,11 +146,11 @@ describe('/user', () => {
       const response = await supertest(app)
         .post('/user/link-token')
         .auth(authToken.accessToken, { type: 'bearer' });
-      const linkToken = response.body as LinkToken;
+      const body = response.body as ApiSuccessResponse<LinkToken>;
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(linkToken.token).toBe('MOCK_LINK_TOKEN');
+      expect(body.data.token).toBe('MOCK_LINK_TOKEN');
     });
   });
 });

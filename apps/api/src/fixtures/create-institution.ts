@@ -2,6 +2,7 @@ import { Institution, CreateInstitutionRequest } from '@kaizen/institution';
 import { createAndLoginUser } from './create-and-login-user';
 import supertest from 'supertest';
 import { app } from '../app';
+import { ApiSuccessResponse } from '@kaizen/core';
 
 export const createInstitution = async () => {
   const loginUser = await createAndLoginUser();
@@ -13,7 +14,7 @@ export const createInstitution = async () => {
     .post('/institution')
     .send(request)
     .auth(loginUser.authToken.accessToken, { type: 'bearer' });
+  const body: ApiSuccessResponse<Institution> = response.body;
 
-  const institution: Institution = response.body;
-  return { ...loginUser, institution: institution };
+  return { ...loginUser, institution: body.data };
 };

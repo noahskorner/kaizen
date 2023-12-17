@@ -3,7 +3,6 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
 import { UserService } from '.';
-import { AxiosError } from 'axios';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -35,21 +34,17 @@ export const CreateUserForm = ({
     }
 
     setLoading(true);
-
     const request: CreateUserRequest = {
       email: email,
       password: password
     };
+    const response = await UserService.create(request);
+    setLoading(false);
 
-    try {
-      await UserService.create(request);
+    if (response.type === 'FAILURE') {
+      setErrors(response.errors);
+    } else {
       onRegisterSuccess();
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      const response: ApiError[] = (error.response?.data as ApiError[]) ?? [];
-      setErrors(response);
-    } finally {
-      setLoading(false);
     }
   };
 

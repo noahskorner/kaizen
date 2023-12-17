@@ -1,7 +1,7 @@
-import { ApiError, ErrorKey } from '@kaizen/core';
+import { ApiFailureResponse, ErrorKey } from '@kaizen/core';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const expectError = (response: any, error: ErrorKey) => {
-  const errors: ApiError[] = response.body;
-  expect(errors.map((x) => x.key)).toContain(error);
+export const expectError = (res: any, error: ErrorKey) => {
+  const response: ApiFailureResponse = res.body;
+  expect(response.errors.map((x) => x.key)).toContain(error);
 };
