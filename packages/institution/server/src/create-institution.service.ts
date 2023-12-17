@@ -91,8 +91,9 @@ export class CreateInstitutionService extends Service {
       externalAccountsResponse.data.map(async (externalAccount) => {
         const createAccountQuery: CreateAccountQuery = {
           externalId: externalAccount.id,
-          current: externalAccount.balance.current,
-          available: externalAccount.balance.available,
+          current: externalAccount.current,
+          available: externalAccount.available,
+          currency: externalAccount.currency,
           type: AccountAdapter.toAccountRecordType(externalAccount.type),
           transactions: this.getTransactionQueries(
             externalAccount.id,

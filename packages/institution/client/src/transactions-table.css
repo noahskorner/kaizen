@@ -1,0 +1,11 @@
+.bg-transaction:nth-child(even) {
+  @apply bg-neutral-0;
+}
+
+.bg-transaction:nth-child(odd) {
+  @apply bg-neutral-50;
+}
+
+.bg-transaction:hover {
+  @apply bg-neutral-100;
+}

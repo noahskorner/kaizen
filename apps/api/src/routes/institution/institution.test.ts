@@ -63,8 +63,8 @@ describe('/institution', () => {
       expect(body.data.id).toBeDefined();
       expect(body.data.userId).toBe(user.id);
       expect(body.data.accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
-      expect(body.data.accounts[0].balance.current).toBe(100);
-      expect(body.data.accounts[0].balance.available).toBe(75);
+      expect(body.data.accounts[0].current).toBe(100);
+      expect(body.data.accounts[0].available).toBe(75);
       expect(body.data.accounts[0].type).toBe(AccountType.Depository);
     });
   });
@@ -106,8 +106,8 @@ describe('/institution', () => {
       expect(body.data[0].id).toBe(institution.id);
       expect(body.data[0].userId).toBe(institution.userId);
       expect(body.data[0].accounts[0].externalId).toBe('MOCK_ACCOUNT_ID');
-      expect(body.data[0].accounts[0].balance.current).toBe(100);
-      expect(body.data[0].accounts[0].balance.available).toBe(75);
+      expect(body.data[0].accounts[0].current).toBe(100);
+      expect(body.data[0].accounts[0].available).toBe(75);
       expect(body.data[0].accounts[0].type).toBe(AccountType.Depository);
     });
   });

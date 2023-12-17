@@ -9,10 +9,9 @@ export class AccountAdapter {
       id: accountRecord.id,
       externalId: accountRecord.externalId,
       type: AccountAdapter.toAccountType(accountRecord.type),
-      balance: {
-        current: accountRecord.current,
-        available: accountRecord.available
-      }
+      current: accountRecord.current,
+      available: accountRecord.available,
+      currency: accountRecord.currency
     };
 
     return account;

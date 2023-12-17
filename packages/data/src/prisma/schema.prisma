@@ -53,6 +53,7 @@ model AccountRecord {
   institution   InstitutionRecord   @relation(fields: [institutionId], references: [id])
   current       Float
   available     Float
+  currency      String?
   transactions  TransactionRecord[]
 
   @@map("account")
@@ -67,6 +68,7 @@ model TransactionRecord {
   account           AccountRecord @relation(fields: [accountId], references: [id])
   externalAccountId String
   amount            Float
+  currency          String?
   date              DateTime?
   name              String
   merchantName      String?

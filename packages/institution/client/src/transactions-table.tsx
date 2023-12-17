@@ -1,5 +1,7 @@
+import './transactions-table.css';
 import { useEffect } from 'react';
-import { TransactionService } from '.';
+import { TransactionService } from './transaction.service';
+import { formatCurrency } from './format-currency';
 import { FindTransactionsRequest } from '@kaizen/institution';
 import { useTransactionStore } from './use-transaction-store';
 
@@ -27,11 +29,19 @@ export const TransactionsTable = () => {
         return (
           <div
             key={transaction.id}
-            className="flex w-full items-center justify-between bg-neutral-50 hover:bg-neutral-100">
+            className="bg-transaction flex w-full items-center justify-between p-2">
             <div className="text-sm font-medium capitalize">
               {transaction.name}
             </div>
-            <div className="text-sm text-neutral-700">{transaction.amount}</div>
+            <div
+              className={`text-sm ${
+                transaction.amount < 0 ? 'text-primary-700' : 'text-neutral-700'
+              }`}>
+              {formatCurrency(
+                transaction.amount,
+                transaction.currency ?? 'USD'
+              )}
+            </div>
           </div>
         );
       })}
