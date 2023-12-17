@@ -19,8 +19,8 @@ export const groupAccountsByType = (
             accounts: []
           };
         }
-        acc[account.type].available += account.balance.available;
-        acc[account.type].current += account.balance.current;
+        acc[account.type].available += account.available;
+        acc[account.type].current += account.current;
         acc[account.type].accounts.push(account);
       });
       return acc;
