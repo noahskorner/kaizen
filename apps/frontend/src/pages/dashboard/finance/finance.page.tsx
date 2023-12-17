@@ -3,11 +3,11 @@ import { UserService } from '@kaizen/user-client';
 import {
   InstitutionService,
   TransactionsTable,
+  formatCurrency,
   groupAccountsByType,
   useInstitutionStore
 } from '@kaizen/institution-client';
 import { PlaidLink } from './plaid-link';
-import { formatCurrency } from './format-currency';
 import { Button } from '@kaizen/ui';
 import { getCurrentMonthAndYear } from './get-current-month-and-year';
 
@@ -61,7 +61,7 @@ export const FinancePage = () => {
               className="font-lg flex w-full items-center justify-between rounded-lg bg-neutral-50 p-4 font-semibold capitalize hover:bg-neutral-100">
               <h6>{accountType}</h6>
               <span className="font-normal text-neutral-500">
-                {formatCurrency(accountGroup.current)}
+                {formatCurrency(accountGroup.current, 'USD')}
               </span>
             </div>
           );

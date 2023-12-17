@@ -7,10 +7,9 @@ export class ExternalAccountAdapter {
     const externalAccount: ExternalAccount = {
       id: account.account_id,
       type: ExternalAccountAdapter.toExternalAccountType(account.type),
-      balance: {
-        current: account.balances.current ?? 0,
-        available: account.balances.available ?? 0
-      }
+      current: account.balances.current ?? 0,
+      available: account.balances.available ?? 0,
+      currency: account.balances.iso_currency_code
     };
     return externalAccount;
   }

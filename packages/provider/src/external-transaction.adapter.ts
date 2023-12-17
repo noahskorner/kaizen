@@ -9,6 +9,7 @@ export class ExternalTransactionAdapter {
       id: transaction.transaction_id,
       accountId: transaction.account_id,
       amount: transaction.amount,
+      currency: transaction.iso_currency_code,
       date: transaction.authorized_datetime
         ? new Date(transaction.authorized_datetime)
         : null,
