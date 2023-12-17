@@ -6,6 +6,7 @@ import {
   expectError
 } from '../../fixtures';
 import {
+  ApiSuccessResponse,
   DEFAULT_PAGE_SIZE,
   ErrorKey,
   Paginated,
@@ -74,12 +75,12 @@ describe('/transaction', () => {
       const response = await supertest(app)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body: Paginated<Transaction> = response.body;
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
 
       // Asserts
       expect(response.status).toBe(200);
-      expect(body.hits.length).toBe(DEFAULT_PAGE_SIZE);
-      expect(body.total).toBe(15);
+      expect(body.data.hits.length).toBe(DEFAULT_PAGE_SIZE);
+      expect(body.data.total).toBe(15);
     });
     it('returns 200 and custom page size', async () => {
       // Arrange
@@ -94,12 +95,12 @@ describe('/transaction', () => {
       const response = await supertest(app)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body: Paginated<Transaction> = response.body;
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
 
       // Asserts
       expect(response.status).toBe(200);
-      expect(body.hits.length).toBe(pageSize);
-      expect(body.total).toBe(15);
+      expect(body.data.hits.length).toBe(pageSize);
+      expect(body.data.total).toBe(15);
     });
     it('returns ordered by authorizedDate', async () => {
       // Arrange
@@ -113,19 +114,19 @@ describe('/transaction', () => {
       const response = await supertest(app)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body: Paginated<Transaction> = response.body;
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
 
       // Asserts
       expect(response.status).toBe(200);
-      expect(body.total).toBe(15);
-      expect(body.hits.length).toBe(15);
-      const sortedHits = [...body.hits].sort((a, b) => {
+      expect(body.data.total).toBe(15);
+      expect(body.data.hits.length).toBe(15);
+      const sortedHits = [...body.data.hits].sort((a, b) => {
         if (a.date == null) return -1;
         if (b.date == null) return 1;
 
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
-      expect(body.hits).toEqual(sortedHits);
+      expect(body.data.hits).toEqual(sortedHits);
     });
   });
 });

@@ -11,7 +11,7 @@ interface PlaidLinkProps {
 }
 
 export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
-  const institutionStore = useInstitutionStore();
+  const { addInstitution } = useInstitutionStore();
   const { open } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token: string) => {
@@ -28,8 +28,8 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
       publicToken: publicToken
     };
     const response = await InstitutionService.create(request);
-    if (response.status === 201) {
-      institutionStore.addInsitution(response.data);
+    if (response.type === 'SUCCESS') {
+      addInstitution(response.data);
     }
   };
 

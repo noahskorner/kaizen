@@ -1,7 +1,7 @@
 import { TextInput, Button, Toast } from '@kaizen/ui';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { ApiError } from '@kaizen/core';
-import { authService } from '.';
+import { AuthService } from '.';
 import { LoginRequest } from '@kaizen/auth';
 import { useAuthStore } from './use-auth-store';
 
@@ -13,27 +13,32 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<ApiError[]>([]);
-  const authStore = useAuthStore();
+  const { login } = useAuthStore();
 
   const onSubmitLoginForm = async (
     event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
 
-    setLoading(true);
-    const request: LoginRequest = {
-      email: email,
-      password: password
-    };
-    const response = await authService.login(request);
-    setLoading(false);
-    if (response.type === 'SUCCESS') {
-      authStore.login(response.data.accessToken);
-      return onLoginSuccess();
+    setIsSubmitting(true);
+    try {
+      const request: LoginRequest = {
+        email: email,
+        password: password
+      };
+      const response = await AuthService.login(request);
+      if (response.type === 'SUCCESS') {
+        login(response.data.accessToken);
+        return onLoginSuccess();
+      } else {
+        setErrors(response.errors);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -80,7 +85,10 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
           value={password}
           onChange={onPasswordChange}
         />
-        <Button disabled={loading} onClick={onSubmitLoginForm} type="submit">
+        <Button
+          disabled={isSubmitting}
+          onClick={onSubmitLoginForm}
+          type="submit">
           Login
         </Button>
       </form>

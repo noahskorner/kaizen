@@ -1,17 +1,16 @@
 import { AccessToken } from '@kaizen/auth';
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
-import { authService } from '.';
 
 export interface AuthStore extends AccessToken {
   loading: boolean;
   authenticated: boolean;
   login: (accessToken: string) => void;
   logout: () => void;
-  refreshToken: () => void;
+  setLoading: (loading: boolean) => void;
 }
 
-const initialState = {
+const initialState: Omit<AuthStore, 'login' | 'logout' | 'setLoading'> = {
   loading: true,
   authenticated: false,
   id: '',
@@ -22,6 +21,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   ...initialState,
   login: (accessToken: string) => {
     return set(() => {
+      // Not really sure where this logic belongs yet
       const { id, email } = jwtDecode<AccessToken>(accessToken);
 
       return {
@@ -32,17 +32,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
       };
     });
   },
-  logout: async () => {
-    await authService.logout();
-    return set(() => {
-      return initialState;
-    });
-  },
-  refreshToken: () => {
+  logout: () => {
     return set(() => {
       return {
         ...initialState,
-        loading: true
+        loading: false
+      };
+    });
+  },
+  setLoading: () => {
+    return set((store) => {
+      return {
+        ...store,
+        loading: false
       };
     });
   }

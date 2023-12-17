@@ -1,7 +1,8 @@
-import { useAuthStore } from '@kaizen/auth-client';
 import { useEffect, useRef, useState } from 'react';
 import { UserService } from '@kaizen/user-client';
 import {
+  InstitutionService,
+  TransactionsTable,
   groupAccountsByType,
   useInstitutionStore
 } from '@kaizen/institution-client';
@@ -12,20 +13,32 @@ import { getCurrentMonthAndYear } from './get-current-month-and-year';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
-  const authStore = useAuthStore();
-  const institutionStore = useInstitutionStore();
+  const { institutions, setInstitutions } = useInstitutionStore();
   const monthAndYear = useRef(getCurrentMonthAndYear());
-  const accountGroups = groupAccountsByType(institutionStore.institutions);
+  const accountGroups = groupAccountsByType(institutions);
 
   useEffect(() => {
-    if (authStore.authenticated) {
-      UserService.createLinkToken().then((response) => {
+    const createLinkToken = async () => {
+      const response = await UserService.createLinkToken();
+      if (response.type === 'SUCCESS') {
         setLinkToken(response.data.token);
-      });
-      institutionStore.loadInstitutions();
-    }
+      }
+    };
+
+    createLinkToken();
+  }, []);
+
+  useEffect(() => {
+    const loadInstitutions = async () => {
+      const response = await InstitutionService.find();
+      if (response.type === 'SUCCESS') {
+        setInstitutions(response.data);
+      }
+    };
+
+    loadInstitutions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authStore.authenticated]);
+  }, []);
 
   return (
     <div>
@@ -55,26 +68,9 @@ export const FinancePage = () => {
         })}
         <div className="flex w-full flex-col">
           <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
-            Recent Transactions
+            Transactions
           </h3>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => {
-            return (
-              <div key={index}>
-                <div className="flex w-full items-center justify-between bg-neutral-50 hover:bg-neutral-100">
-                  <div className="text-sm font-medium capitalize">
-                    transaction 1
-                  </div>
-                  <div className="text-sm text-neutral-700">$100.00</div>
-                </div>
-                <div className="bg-neutral-0 flex w-full items-center justify-between hover:bg-neutral-100">
-                  <div className="text-sm font-medium capitalize">
-                    transaction 2
-                  </div>
-                  <div className="text-sm text-neutral-700">$100.00</div>
-                </div>
-              </div>
-            );
-          })}
+          <TransactionsTable />
         </div>
       </div>
     </div>
