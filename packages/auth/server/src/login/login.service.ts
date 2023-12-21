@@ -1,12 +1,14 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { UserRepository } from '@kaizen/core-server';
+import { FindUserByEmailRepository } from '@kaizen/core-server';
 import { LoginCommand } from './login.command';
 import { AuthService } from '../auth.service';
 import { AuthToken } from '@kaizen/auth';
 
 export class LoginService extends AuthService {
-  constructor(private readonly _userRepository: UserRepository) {
+  constructor(
+    private readonly _findUserByEmailRepository: FindUserByEmailRepository
+  ) {
     super();
   }
 
@@ -16,7 +18,9 @@ export class LoginService extends AuthService {
     }
 
     const normalizedEmail = this.normalizeEmail(command.email);
-    const userRecord = await this._userRepository.findByEmail(normalizedEmail);
+    const userRecord = await this._findUserByEmailRepository.findByEmail({
+      normalizedEmail
+    });
 
     if (userRecord == null) {
       return this.failure(Errors.LOGIN_INCORECT_EMAIL_OR_PASSWORD);

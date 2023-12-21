@@ -1,13 +1,12 @@
 import { CreateLinkTokenCommand } from './create-link-token.command';
 import { ApiResponse, Errors } from '@kaizen/core';
-import { UserRepository } from '@kaizen/core-server';
 import { LinkToken } from '@kaizen/user';
-import { FinancialProvider } from '@kaizen/core-server';
+import { FinancialProvider, GetUserRepository } from '@kaizen/core-server';
 import { Service } from '@kaizen/core-server';
 
 export class CreateLinkTokenService extends Service {
   constructor(
-    private readonly _userRepository: UserRepository,
+    private readonly _getUserRepository: GetUserRepository,
     private readonly _financialProvider: FinancialProvider
   ) {
     super();
@@ -17,7 +16,7 @@ export class CreateLinkTokenService extends Service {
     userId
   }: CreateLinkTokenCommand): Promise<ApiResponse<LinkToken>> {
     try {
-      const user = await this._userRepository.get(userId);
+      const user = await this._getUserRepository.get({ userId });
       if (user == null) {
         return this.failure(Errors.CREATE_LINK_TOKEN_USER_NOT_FOUND);
       }

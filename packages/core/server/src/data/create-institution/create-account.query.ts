@@ -1,4 +1,4 @@
-import { AccountRecordType } from '@prisma/client';
+import { AccountRecordType } from '../account-record-type';
 import { CreateTransactionQuery } from './create-transaction.query';
 
 export interface CreateAccountQuery {
@@ -8,10 +8,4 @@ export interface CreateAccountQuery {
   currency: string | null;
   type: AccountRecordType;
   transactions: CreateTransactionQuery[];
-}
-
-export interface CreateInstitutionQuery {
-  userId: string;
-  plaidAccessToken: string;
-  accounts: CreateAccountQuery[];
 }

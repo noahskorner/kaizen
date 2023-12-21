@@ -12,8 +12,8 @@
     "npm": "10.2.2"
   },
   "prisma": {
-    "schema": "packages/core/server/src/data/prisma/schema.prisma",
-    "seed": "ts-node packages/core/server/src/data/prisma/seed/seed.ts"
+    "schema": "packages/core/server/src/data/_prisma/schema.prisma",
+    "seed": "ts-node packages/core/server/src/data/_prisma/seed/seed.ts"
   },
   "scripts": {
     "build": "turbo run build",

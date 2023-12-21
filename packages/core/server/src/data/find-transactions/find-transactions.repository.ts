@@ -1,9 +1,9 @@
-import { TransactionRecord } from './transaction-record';
-import { FindAllTransactionsQuery } from './find-all-transactions.query';
-import { prisma } from './prisma';
+import { prisma } from '../_prisma';
+import { TransactionRecord } from '../transaction-record';
+import { FindAllTransactionsQuery } from './find-transactions.query';
 import { Paginated } from '@kaizen/core';
 
-export class TransactionRepository {
+export class FindTransactionsRepository {
   constructor() {}
 
   public async findAll(

@@ -1,9 +1,8 @@
+import { prisma } from '../_prisma';
+import { InstitutionRecord } from '../institution-record';
 import { CreateInstitutionQuery } from './create-institution.query';
-import { FindAllInstitutionsQuery } from './find-all-institutions.query';
-import { InstitutionRecord } from './institution-record';
-import { prisma } from './prisma';
 
-export class InstitutionRepository {
+export class CreateInstitutionRepository {
   public async create(
     query: CreateInstitutionQuery
   ): Promise<InstitutionRecord> {
@@ -37,18 +36,5 @@ export class InstitutionRepository {
       ...institutionRecord,
       accounts: accountRecords
     };
-  }
-
-  public async findAll(
-    query: FindAllInstitutionsQuery
-  ): Promise<InstitutionRecord[]> {
-    return await prisma.institutionRecord.findMany({
-      where: {
-        userId: query.userId
-      },
-      include: {
-        accounts: true
-      }
-    });
   }
 }

@@ -4,10 +4,10 @@ import { RefreshTokenCommand } from './refresh-token.command';
 import { serverEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { AuthToken, RefreshToken } from '@kaizen/auth';
-import { UserRepository } from '@kaizen/core-server';
+import { GetUserRepository } from '@kaizen/core-server';
 
 export class RefreshTokenService extends AuthService {
-  constructor(private readonly _userRepository: UserRepository) {
+  constructor(private readonly _getUserRepository: GetUserRepository) {
     super();
   }
 
@@ -24,7 +24,9 @@ export class RefreshTokenService extends AuthService {
         serverEnvironment.REFRESH_TOKEN_SECRET
       ) as RefreshToken;
 
-      const user = await this._userRepository.get(refreshToken.id);
+      const user = await this._getUserRepository.get({
+        userId: refreshToken.id
+      });
       if (user == null) {
         throw new Error(
           'Something went wrong. We found a valid token, but no user associated with it.'

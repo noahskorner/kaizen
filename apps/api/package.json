@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "prisma": {
-    "schema": "../../packages/core/server/src/data/prisma/schema.prisma",
-    "seed": "ts-node ../../packages/core/server/src/data/prisma/seed/seed.ts"
+    "schema": "../../packages/core/server/src/data/_prisma/schema.prisma",
+    "seed": "ts-node ../../packages/core/server/src/data/_prisma/seed/seed.ts"
   }
 }

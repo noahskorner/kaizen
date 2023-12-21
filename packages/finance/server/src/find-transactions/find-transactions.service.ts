@@ -5,14 +5,15 @@ import {
   Errors,
   Paginated
 } from '@kaizen/core';
-import { Service } from '@kaizen/core-server';
+import { FindTransactionsRepository, Service } from '@kaizen/core-server';
 import { FindTransactionsCommand } from './find-transactions.command';
 import { Transaction } from '@kaizen/finance';
-import { TransactionRepository } from '@kaizen/core-server';
 import { TransactionAdapter } from '../transaction.adapter';
 
 export class FindTransactionsService extends Service {
-  constructor(private readonly _transactionRepository: TransactionRepository) {
+  constructor(
+    private readonly _findTransactionsRepository: FindTransactionsRepository
+  ) {
     super();
   }
 
@@ -25,7 +26,7 @@ export class FindTransactionsService extends Service {
     }
 
     const paginatedTransactionRecords =
-      await this._transactionRepository.findAll({
+      await this._findTransactionsRepository.findAll({
         userId: command.userId,
         page: command.page,
         pageSize: command.pageSize ?? DEFAULT_PAGE_SIZE

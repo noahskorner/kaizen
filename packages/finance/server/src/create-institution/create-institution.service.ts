@@ -1,8 +1,12 @@
 import { CreateInstitutionCommand } from './create-institution.command';
 import { Institution } from '@kaizen/finance';
 import { ApiResponse, Errors } from '@kaizen/core';
-import { CreateTransactionQuery, Service } from '@kaizen/core-server';
-import { CreateAccountQuery, InstitutionRepository } from '@kaizen/core-server';
+import {
+  CreateInstitutionRepository,
+  CreateTransactionQuery,
+  Service
+} from '@kaizen/core-server';
+import { CreateAccountQuery } from '@kaizen/core-server';
 import { FinancialProvider, ExternalTransaction } from '@kaizen/core-server';
 import { CreateInstitutionQuery } from '@kaizen/core-server';
 import { AccountAdapter } from '../account.adapter';
@@ -10,7 +14,7 @@ import { TransactionAdapter } from '../transaction.adapter';
 
 export class CreateInstitutionService extends Service {
   constructor(
-    private readonly _institutionRepository: InstitutionRepository,
+    private readonly _createInstitutionRepository: CreateInstitutionRepository,
     private readonly _financialProvider: FinancialProvider
   ) {
     super();
@@ -29,7 +33,7 @@ export class CreateInstitutionService extends Service {
         return this.failures(response.errors);
       }
 
-      const institutionRecord = await this._institutionRepository.create(
+      const institutionRecord = await this._createInstitutionRepository.create(
         response.data
       );
 
