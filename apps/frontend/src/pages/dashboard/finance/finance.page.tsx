@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { UserService } from '@kaizen/user-client';
+import { UserClient } from '@kaizen/user-client';
 import {
-  InstitutionService,
+  InstitutionClient,
   TransactionsTable,
   formatCurrency,
   groupAccountsByType,
   useInstitutionStore
-} from '@kaizen/institution-client';
+} from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
-import { Button } from '@kaizen/ui';
+import { Button } from '@kaizen/core-client';
 import { getCurrentMonthAndYear } from './get-current-month-and-year';
 
 export const FinancePage = () => {
@@ -19,7 +19,7 @@ export const FinancePage = () => {
 
   useEffect(() => {
     const createLinkToken = async () => {
-      const response = await UserService.createLinkToken();
+      const response = await UserClient.createLinkToken();
       if (response.type === 'SUCCESS') {
         setLinkToken(response.data.token);
       }
@@ -30,7 +30,7 @@ export const FinancePage = () => {
 
   useEffect(() => {
     const loadInstitutions = async () => {
-      const response = await InstitutionService.find();
+      const response = await InstitutionClient.find();
       if (response.type === 'SUCCESS') {
         setInstitutions(response.data);
       }

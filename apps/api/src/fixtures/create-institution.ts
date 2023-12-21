@@ -1,4 +1,4 @@
-import { Institution, CreateInstitutionRequest } from '@kaizen/institution';
+import { Institution, CreateInstitutionRequest } from '@kaizen/finance';
 import { createAndLoginUser } from './create-and-login-user';
 import supertest from 'supertest';
 import { app } from '../app';

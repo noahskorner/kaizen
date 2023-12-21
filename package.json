@@ -12,8 +12,8 @@
     "npm": "10.2.2"
   },
   "prisma": {
-    "schema": "packages/data/src/prisma/schema.prisma",
-    "seed": "ts-node packages/data/src/prisma/seed/seed.ts"
+    "schema": "packages/core/server/src/data/_prisma/schema.prisma",
+    "seed": "ts-node packages/core/server/src/data/_prisma/seed/seed.ts"
   },
   "scripts": {
     "build": "turbo run build",
@@ -81,13 +81,13 @@
     "@kaizen/auth-client": "*",
     "@kaizen/auth-server": "*",
     "@kaizen/core": "*",
-    "@kaizen/data": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/core-server": "*",
     "@kaizen/env-client": "*",
     "@kaizen/env-server": "*",
-    "@kaizen/institution": "*",
-    "@kaizen/institution-client": "*",
-    "@kaizen/institution-server": "*",
-    "@kaizen/provider": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/finance-client": "*",
+    "@kaizen/finance-server": "*",
     "@kaizen/user": "*",
     "@kaizen/user-client": "*",
     "@kaizen/user-server": "*",

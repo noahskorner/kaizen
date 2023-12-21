@@ -1,7 +1,7 @@
-import { TextInput, Button, Toast } from '@kaizen/ui';
+import { TextInput, Button, Toast } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { ApiError } from '@kaizen/core';
-import { AuthService } from '.';
+import { AuthClient } from '.';
 import { LoginRequest } from '@kaizen/auth';
 import { useAuthStore } from './use-auth-store';
 
@@ -30,7 +30,7 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
         email: email,
         password: password
       };
-      const response = await AuthService.login(request);
+      const response = await AuthClient.login(request);
       if (response.type === 'SUCCESS') {
         login(response.data.accessToken);
         return onLoginSuccess();

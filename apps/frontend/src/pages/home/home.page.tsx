@@ -1,4 +1,4 @@
-import { Button } from '@kaizen/ui';
+import { Button } from '@kaizen/core-client';
 import { paths } from '../routes';
 import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
 import { useNavigate } from 'react-router-dom';
