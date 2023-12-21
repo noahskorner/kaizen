@@ -26,7 +26,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier . --write",
-    "clean": "find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' ) -exec rm -rf {} +",
+    "clean": "npm run turbo:clean & find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' ) -exec rm -rf {} +",
     "turbo:clean": "turbo daemon clean"
   },
   "devDependencies": {
@@ -84,9 +84,9 @@
     "@kaizen/data": "*",
     "@kaizen/env-client": "*",
     "@kaizen/env-server": "*",
-    "@kaizen/institution": "*",
-    "@kaizen/institution-client": "*",
-    "@kaizen/institution-server": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/finance-client": "*",
+    "@kaizen/finance-server": "*",
     "@kaizen/provider": "*",
     "@kaizen/user": "*",
     "@kaizen/user-client": "*",

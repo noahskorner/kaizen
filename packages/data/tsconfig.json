@@ -1,5 +1,5 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": ["."],
+  "include": [".", "../finance/server/src/find-transactions/find-all-transactions.query.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

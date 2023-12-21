@@ -22,11 +22,9 @@ router.post('/auth', authController.login);
 router.get('/auth', authController.refreshToken);
 router.delete('/auth', authenticate, authController.logout);
 
-// /institution
-router.post('/institution', authenticate, institutionController.create);
-router.get('/institution', authenticate, institutionController.find);
-
-// /transaction
-router.get('/transaction', authenticate, transactionController.find);
+// /finance
+router.post('/finance/institution', authenticate, institutionController.create);
+router.get('/finance/institution', authenticate, institutionController.find);
+router.get('/finance/transaction', authenticate, transactionController.find);
 
 export { router };

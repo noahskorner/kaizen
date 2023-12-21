@@ -26,7 +26,7 @@ export const Sidebar = () => {
               </h6>
               <div className="text-neutral-0 -ml-1 flex items-center">
                 <CoinsIcon />
-                <span className="text-xs text-yellow-300">4,422</span>
+                <span className="text-xs">4,422</span>
               </div>
             </div>
           </div>

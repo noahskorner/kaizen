@@ -1,9 +1,9 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { UserRepository } from '@kaizen/data';
 import { LoginCommand } from './login.command';
 import { AuthService } from './auth.service';
 import { AuthToken } from '@kaizen/auth';
+import { UserRepository } from '@kaizen/user-server';
 
 export class LoginService extends AuthService {
   constructor(private readonly _userRepository: UserRepository) {

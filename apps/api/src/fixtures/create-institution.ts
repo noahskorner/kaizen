@@ -1,4 +1,4 @@
-import { Institution, CreateInstitutionRequest } from '@kaizen/institution';
+import { Institution, CreateInstitutionRequest } from '@kaizen/finance';
 import { createAndLoginUser } from './create-and-login-user';
 import supertest from 'supertest';
 import { app } from '../app';
@@ -11,7 +11,7 @@ export const createInstitution = async () => {
   };
 
   const response = await supertest(app)
-    .post('/institution')
+    .post('/finance/institution')
     .send(request)
     .auth(loginUser.authToken.accessToken, { type: 'bearer' });
   const body: ApiSuccessResponse<Institution> = response.body;

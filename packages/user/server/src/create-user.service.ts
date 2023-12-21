@@ -4,7 +4,7 @@ import { genSalt, hash } from 'bcrypt';
 import { UserService } from './user.service';
 import { GetUserService } from './get-user-service';
 import { CreateUserValidator, User } from '@kaizen/user';
-import { UserRepository } from '@kaizen/data';
+import { UserRepository } from './user.repository';
 
 export class CreateUserService extends UserService {
   constructor(
