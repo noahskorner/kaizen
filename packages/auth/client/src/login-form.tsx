@@ -1,4 +1,4 @@
-import { TextInput, Button, Toast } from '@kaizen/ui';
+import { TextInput, Button, Toast } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { ApiError } from '@kaizen/core';
 import { AuthClient } from '.';

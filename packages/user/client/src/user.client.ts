@@ -1,5 +1,5 @@
 import { ApiResponse } from '@kaizen/core';
-import { ApiClient } from '@kaizen/ui';
+import { ApiClient } from '@kaizen/core-client';
 import { CreateUserRequest, LinkToken, User } from '@kaizen/user';
 import { handleAxiosRequest } from '@kaizen/core-client';
 

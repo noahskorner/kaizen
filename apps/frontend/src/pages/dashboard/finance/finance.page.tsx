@@ -8,7 +8,7 @@ import {
   useInstitutionStore
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
-import { Button } from '@kaizen/ui';
+import { Button } from '@kaizen/core-client';
 import { getCurrentMonthAndYear } from './get-current-month-and-year';
 
 export const FinancePage = () => {

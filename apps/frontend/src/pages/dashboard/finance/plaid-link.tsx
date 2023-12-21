@@ -1,7 +1,7 @@
 import { usePlaidLink } from 'react-plaid-link';
 import { InstitutionClient, useInstitutionStore } from '@kaizen/finance-client';
 import { CreateInstitutionRequest } from '@kaizen/finance';
-import { Button } from '@kaizen/ui';
+import { Button } from '@kaizen/core-client';
 
 interface PlaidLinkProps {
   linkToken: string;

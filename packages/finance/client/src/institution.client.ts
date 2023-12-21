@@ -1,4 +1,4 @@
-import { ApiClient } from '@kaizen/ui';
+import { ApiClient } from '@kaizen/core-client';
 import { CreateInstitutionRequest, Institution } from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
 import { handleAxiosRequest } from '@kaizen/core-client';

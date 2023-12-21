@@ -2,7 +2,7 @@ import { useAuthStore } from '@kaizen/auth-client';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../routes';
 import { SidebarButton } from './sidebar-link';
-import { BankNotesIcon, CoinsIcon, LogoutIcon, TodosIcon } from '@kaizen/ui';
+import { BankNotesIcon, CoinsIcon, LogoutIcon, TodosIcon } from '@kaizen/core-client';
 import { Avatar } from './avatar';
 
 export const Sidebar = () => {

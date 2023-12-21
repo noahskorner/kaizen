@@ -1,6 +1,6 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
 import { ApiResponse } from '@kaizen/core';
-import { ApiClient } from '@kaizen/ui';
+import { ApiClient } from '@kaizen/core-client';
 import {
   handleAxiosRequest,
   DEFAULT_API_SUCCESS_RESPONSE
