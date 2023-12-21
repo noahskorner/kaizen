@@ -1,4 +1,4 @@
-import { Institution } from '@kaizen/institution';
+import { Institution } from '@kaizen/finance';
 import { AccountAdapter } from './account.adapter';
 import { InstitutionRecord } from '@kaizen/data';
 

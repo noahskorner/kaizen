@@ -2,7 +2,7 @@ import './transactions-table.css';
 import { useEffect } from 'react';
 import { TransactionService } from './transaction.service';
 import { formatCurrency } from './format-currency';
-import { FindTransactionsRequest } from '@kaizen/institution';
+import { FindTransactionsRequest } from '@kaizen/finance';
 import { useTransactionStore } from './use-transaction-store';
 
 export const TransactionsTable = () => {

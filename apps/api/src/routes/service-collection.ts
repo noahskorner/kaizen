@@ -2,7 +2,7 @@ import {
   CreateInstitutionService,
   FindInstitutionsService,
   FindTransactionsService
-} from '@kaizen/institution-server';
+} from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
   UserRepository,
@@ -12,11 +12,11 @@ import {
 import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
 import { GetUserService } from '@kaizen/user-server';
-import { InstitutionController } from './institution/institution.controller';
+import { InstitutionController } from './finance/institution/institution.controller';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
 import { FinancialProvider, plaidClient } from '@kaizen/provider';
-import { TransactionController } from './transaction/transaction.controller';
+import { TransactionController } from './finance/transaction/transaction.controller';
 
 // Repositories
 export const userRepository = new UserRepository();

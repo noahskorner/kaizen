@@ -6,7 +6,7 @@ import {
   formatCurrency,
   groupAccountsByType,
   useInstitutionStore
-} from '@kaizen/institution-client';
+} from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
 import { Button } from '@kaizen/ui';
 import { getCurrentMonthAndYear } from './get-current-month-and-year';

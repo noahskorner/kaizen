@@ -1,5 +1,5 @@
 {
-  "name": "@kaizen/institution-client",
+  "name": "@kaizen/finance-server",
   "version": "0.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

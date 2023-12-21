@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Transaction } from '@kaizen/institution';
+import { Transaction } from '@kaizen/finance';
 
 export interface TransactionStore {
   transactions: Transaction[];

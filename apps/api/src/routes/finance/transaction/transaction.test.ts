@@ -1,10 +1,10 @@
 import supertest from 'supertest';
-import { app } from '../../app';
+import { app } from '../../../app';
 import {
   createAndLoginUser,
   createInstitution,
   expectError
-} from '../../fixtures';
+} from '../../../fixtures';
 import {
   ApiSuccessResponse,
   DEFAULT_PAGE_SIZE,
@@ -12,7 +12,7 @@ import {
   Paginated,
   toSearchParams
 } from '@kaizen/core';
-import { FindTransactionsRequest, Transaction } from '@kaizen/institution';
+import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
 
 describe('/transaction', () => {
   describe('find should', () => {

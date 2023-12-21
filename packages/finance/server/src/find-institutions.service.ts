@@ -1,4 +1,4 @@
-import { Institution } from '@kaizen/institution';
+import { Institution } from '@kaizen/finance';
 import { ApiResponse, Service } from '@kaizen/core';
 import { FindInstitutionsCommand } from './find-institutions.command';
 import { InstitutionRepository } from '@kaizen/data';

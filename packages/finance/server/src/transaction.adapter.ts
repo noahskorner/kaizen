@@ -1,6 +1,6 @@
 import { TransactionRecord } from '@kaizen/data';
 import { CreateTransactionQuery } from '@kaizen/data/src/create-transaction.query';
-import { Transaction } from '@kaizen/institution';
+import { Transaction } from '@kaizen/finance';
 import { ExternalTransaction } from '@kaizen/provider/src/external-transaction';
 
 export class TransactionAdapter {

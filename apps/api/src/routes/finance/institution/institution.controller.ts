@@ -1,14 +1,14 @@
-import { catchAsync } from '../../middleware/catch-async';
+import { catchAsync } from '../../../middleware/catch-async';
 import { Request, Response } from 'express';
 import {
   CreateInstitutionCommand,
   CreateInstitutionService,
   FindInstitutionsCommand,
   FindInstitutionsService
-} from '@kaizen/institution-server';
-import { CreateInstitutionRequest } from '@kaizen/institution';
+} from '@kaizen/finance-server';
+import { CreateInstitutionRequest } from '@kaizen/finance';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
-import { Controller } from '../controller';
+import { Controller } from '../../controller';
 
 export class InstitutionController extends Controller {
   constructor(

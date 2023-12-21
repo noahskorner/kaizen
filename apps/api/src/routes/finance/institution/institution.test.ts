@@ -3,13 +3,13 @@ import {
   Institution,
   CreateInstitutionRequest,
   AccountType
-} from '@kaizen/institution';
-import { app } from '../../app';
+} from '@kaizen/finance';
+import { app } from '../../../app';
 import {
   expectError,
   createInstitution,
   createAndLoginUser
-} from '../../fixtures';
+} from '../../../fixtures';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 
 describe('/institution', () => {

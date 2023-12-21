@@ -1,5 +1,5 @@
 import { ApiClient } from '@kaizen/ui';
-import { FindTransactionsRequest, Transaction } from '@kaizen/institution';
+import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
 import {
   ApiResponse,
   Paginated,

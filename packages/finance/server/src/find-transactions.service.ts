@@ -7,7 +7,7 @@ import {
   Service
 } from '@kaizen/core';
 import { FindTransactionsCommand } from './find-transactions.command';
-import { Transaction } from '@kaizen/institution';
+import { Transaction } from '@kaizen/finance';
 import { TransactionRepository } from '@kaizen/data';
 import { TransactionAdapter } from './transaction.adapter';
 

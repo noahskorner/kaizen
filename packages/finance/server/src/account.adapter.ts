@@ -1,5 +1,5 @@
 import { AccountRecord, AccountRecordType } from '@kaizen/data';
-import { Account } from '@kaizen/institution';
+import { Account } from '@kaizen/finance';
 import { ExternalAccountType } from '@kaizen/provider';
 import { AccountType } from 'plaid';
 

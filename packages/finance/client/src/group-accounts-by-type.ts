@@ -1,4 +1,4 @@
-import { Institution, Account } from '@kaizen/institution';
+import { Institution, Account } from '@kaizen/finance';
 
 export interface AccountGroup {
   available: number;
