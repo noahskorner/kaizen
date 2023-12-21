@@ -8,11 +8,11 @@ import {
   TransactionsSyncRequest
 } from 'plaid';
 import { ApiResponse, Errors } from '@kaizen/core';
-import { Service } from '@kaizen/core-server';
 import { ExternalAccount } from './external-account';
 import { ExternalAccountAdapter } from './external-account.adapter';
 import { ExternalTransactionAdapter } from './external-transaction.adapter';
 import { SyncExternalTransactionsResponse } from './sync-external-transactions-response';
+import { Service } from '../service';
 
 export class FinancialProvider extends Service {
   constructor(private readonly _plaidClient: PlaidApi) {

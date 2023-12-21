@@ -7,3 +7,4 @@ export * from './account-record';
 export * from './account-record-type';
 export * from './find-all-transactions.query';
 export * from './transaction.repository';
+export * from './create-transaction.query';

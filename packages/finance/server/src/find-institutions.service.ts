@@ -1,7 +1,7 @@
 import { Institution } from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
 import { FindInstitutionsCommand } from './find-institutions.command';
-import { InstitutionRepository } from '@kaizen/data';
+import { InstitutionRepository } from '@kaizen/core-server';
 import { InstitutionAdapter } from './institution.adapter';
 import { Service } from '@kaizen/core-server';
 

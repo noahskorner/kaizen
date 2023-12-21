@@ -8,14 +8,14 @@ import {
   UserRepository,
   InstitutionRepository,
   TransactionRepository
-} from '@kaizen/data';
+} from '@kaizen/core-server';
 import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
 import { GetUserService } from '@kaizen/user-server';
 import { InstitutionController } from './finance/institution/institution.controller';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
-import { FinancialProvider, plaidClient } from '@kaizen/provider';
+import { FinancialProvider, plaidClient } from '@kaizen/core-server';
 import { TransactionController } from './finance/transaction/transaction.controller';
 
 // Repositories

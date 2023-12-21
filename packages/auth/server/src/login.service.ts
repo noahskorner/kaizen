@@ -1,6 +1,6 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { UserRepository } from '@kaizen/data';
+import { UserRepository } from '@kaizen/core-server';
 import { LoginCommand } from './login.command';
 import { AuthService } from './auth.service';
 import { AuthToken } from '@kaizen/auth';

@@ -1,6 +1,6 @@
 import { Institution } from '@kaizen/finance';
 import { AccountAdapter } from './account.adapter';
-import { InstitutionRecord } from '@kaizen/data';
+import { InstitutionRecord } from '@kaizen/core-server';
 
 export class InstitutionAdapter {
   public static toInstitution(

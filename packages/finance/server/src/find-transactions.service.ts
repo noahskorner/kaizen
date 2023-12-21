@@ -8,7 +8,7 @@ import {
 import { Service } from '@kaizen/core-server';
 import { FindTransactionsCommand } from './find-transactions.command';
 import { Transaction } from '@kaizen/finance';
-import { TransactionRepository } from '@kaizen/data';
+import { TransactionRepository } from '@kaizen/core-server';
 import { TransactionAdapter } from './transaction.adapter';
 
 export class FindTransactionsService extends Service {
