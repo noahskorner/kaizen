@@ -5,7 +5,7 @@ export interface TextInputProps {
   id: string;
   name: string;
   label: string;
-  value: string;
+  value: string | number;
   type?: HTMLInputTypeAttribute;
   onChange: ChangeEventHandler<HTMLInputElement>;
   errors?: ApiError[];

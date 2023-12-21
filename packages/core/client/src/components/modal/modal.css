@@ -1,0 +1,8 @@
+.modal {
+  transition: opacity 5s ease-in-out;
+  opacity: 0;
+}
+
+.modal.open {
+  opacity: 1;
+}

@@ -10,6 +10,8 @@ import {
 import { PlaidLink } from './plaid-link';
 import { Button } from '@kaizen/core-client';
 import { getCurrentMonthAndYear } from './get-current-month-and-year';
+import { AccountType } from '@kaizen/finance';
+import { CreateVirtualAccountModal } from './create-virtual-account-modal';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -56,13 +58,18 @@ export const FinancePage = () => {
         {Object.keys(accountGroups).map((accountType) => {
           const accountGroup = accountGroups[accountType];
           return (
-            <div
-              key={accountType}
-              className="font-lg flex w-full items-center justify-between rounded-lg bg-neutral-50 p-4 font-semibold capitalize hover:bg-neutral-100">
-              <h6>{accountType}</h6>
-              <span className="font-normal text-neutral-500">
-                {formatCurrency(accountGroup.current, 'USD')}
-              </span>
+            <div key={accountType}>
+              <div
+                key={accountType}
+                className="font-lg flex w-full items-center justify-between rounded-lg bg-neutral-50 p-4 font-semibold capitalize hover:bg-neutral-100">
+                <h6>{accountType}</h6>
+                <span className="font-normal text-neutral-500">
+                  {formatCurrency(accountGroup.current, 'USD')}
+                </span>
+              </div>
+              {accountType === AccountType.Depository && (
+                <CreateVirtualAccountModal />
+              )}
             </div>
           );
         })}
