@@ -1,15 +1,13 @@
 import { CreateUserCommand } from './create-user.command';
 import { ApiResponse, Errors } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
-import { UserService } from './user.service';
-import { GetUserService } from './get-user-service';
+import { UserService } from '../user.service';
 import { CreateUserValidator, User } from '@kaizen/user';
 import { UserRepository } from '@kaizen/core-server';
 
 export class CreateUserService extends UserService {
   constructor(
     _userRepository: UserRepository,
-    private readonly _getUserService: GetUserService,
     private readonly _createUserValidator: CreateUserValidator
   ) {
     super(_userRepository);
@@ -21,7 +19,7 @@ export class CreateUserService extends UserService {
       return this.failures(errors);
     }
 
-    const existingUser = await this._getUserService.findByEmail(command.email);
+    const existingUser = await this._userRepository.findByEmail(command.email);
     if (existingUser != null) {
       return this.failure(Errors.CREATE_USER_EMAIL_ALREADY_EXISTS);
     }

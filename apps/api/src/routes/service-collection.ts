@@ -33,7 +33,6 @@ export const financialProvider = new FinancialProvider(plaidClient);
 export const getUserService = new GetUserService(userRepository);
 export const createUserService = new CreateUserService(
   userRepository,
-  getUserService,
   createUserValidator
 );
 export const createLinkTokenService = new CreateLinkTokenService(
@@ -41,7 +40,7 @@ export const createLinkTokenService = new CreateLinkTokenService(
   financialProvider
 );
 export const loginService = new LoginService(userRepository);
-export const refreshTokenService = new RefreshTokenService(getUserService);
+export const refreshTokenService = new RefreshTokenService(userRepository);
 export const createInstitutionService = new CreateInstitutionService(
   institutionRepository,
   financialProvider

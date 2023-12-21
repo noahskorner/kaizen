@@ -5,8 +5,8 @@ import { CreateTransactionQuery, Service } from '@kaizen/core-server';
 import { CreateAccountQuery, InstitutionRepository } from '@kaizen/core-server';
 import { FinancialProvider, ExternalTransaction } from '@kaizen/core-server';
 import { CreateInstitutionQuery } from '@kaizen/core-server';
-import { AccountAdapter } from './account.adapter';
-import { TransactionAdapter } from './transaction.adapter';
+import { AccountAdapter } from '../account.adapter';
+import { TransactionAdapter } from '../transaction.adapter';
 
 export class CreateInstitutionService extends Service {
   constructor(
