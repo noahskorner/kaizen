@@ -9,5 +9,10 @@ export const RegisterPage = () => {
     navigate(paths.login);
   };
 
-  return <CreateUserForm onRegisterSuccess={onRegisterSuccess} />;
+  return (
+    <CreateUserForm
+      loginHref={paths.login}
+      onRegisterSuccess={onRegisterSuccess}
+    />
+  );
 };

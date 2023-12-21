@@ -9,10 +9,11 @@ const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
 
 interface LoginFormProps {
+  registerHref: string;
   onLoginSuccess: () => void;
 }
 
-export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
+export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -91,6 +92,12 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
           type="submit">
           Login
         </Button>
+        <p className="text-sm">
+          Need an account?&nbsp;
+          <a href={registerHref} className="text-blue-800 hover:underline">
+            Click here!
+          </a>
+        </p>
       </form>
     </div>
   );

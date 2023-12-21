@@ -9,10 +9,12 @@ const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
 const userValidator = new CreateUserValidator();
 
 export interface CreateUserFormProps {
+  loginHref: string;
   onRegisterSuccess?: () => void;
 }
 
 export const CreateUserForm = ({
+  loginHref,
   onRegisterSuccess = () => {}
 }: CreateUserFormProps) => {
   const [loading, setLoading] = useState(false);
@@ -99,6 +101,12 @@ export const CreateUserForm = ({
           <Button type="submit" disabled={loading}>
             Register
           </Button>
+          <p className="text-sm">
+            Already have an account?&nbsp;
+            <a href={loginHref} className="text-blue-800 hover:underline">
+              Click here!
+            </a>
+          </p>
         </form>
       </div>
     </div>

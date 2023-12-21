@@ -7,7 +7,10 @@ export const LoginPage = () => {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <LoginForm onLoginSuccess={() => navigate(paths.finance)} />
+      <LoginForm
+        registerHref={paths.register}
+        onLoginSuccess={() => navigate(paths.finance)}
+      />
     </div>
   );
 };
