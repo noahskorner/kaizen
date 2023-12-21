@@ -2,26 +2,32 @@ import {
   CreateInstitutionService,
   FindInstitutionsService,
   FindTransactionsService
-} from '@kaizen/institution-server';
+} from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
-  UserRepository,
-  InstitutionRepository,
-  TransactionRepository
-} from '@kaizen/data';
+  CreateInstitutionRepository,
+  CreateUserRepository,
+  FindTransactionsRepository,
+  FindUserByEmailRepository,
+  GetUserRepository,
+  FindInstitutionsRepository
+} from '@kaizen/core-server';
 import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
 import { GetUserService } from '@kaizen/user-server';
-import { InstitutionController } from './institution/institution.controller';
+import { InstitutionController } from './finance/institution/institution.controller';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
-import { FinancialProvider, plaidClient } from '@kaizen/provider';
-import { TransactionController } from './transaction/transaction.controller';
+import { FinancialProvider, plaidClient } from '@kaizen/core-server';
+import { TransactionController } from './finance/transaction/transaction.controller';
 
 // Repositories
-export const userRepository = new UserRepository();
-export const institutionRepository = new InstitutionRepository();
-export const transactionRepository = new TransactionRepository();
+export const createUserRepository = new CreateUserRepository();
+export const findUserByEmailRepository = new FindUserByEmailRepository();
+export const getUserRepository = new GetUserRepository();
+export const createInstitutionRepository = new CreateInstitutionRepository();
+export const findInstitutionsRepository = new FindInstitutionsRepository();
+export const findTransactionsRepository = new FindTransactionsRepository();
 
 // Validators
 export const createUserValidator = new CreateUserValidator();
@@ -30,27 +36,27 @@ export const createUserValidator = new CreateUserValidator();
 export const financialProvider = new FinancialProvider(plaidClient);
 
 // Services
-export const getUserService = new GetUserService(userRepository);
+export const getUserService = new GetUserService(getUserRepository);
 export const createUserService = new CreateUserService(
-  userRepository,
-  getUserService,
+  findUserByEmailRepository,
+  createUserRepository,
   createUserValidator
 );
 export const createLinkTokenService = new CreateLinkTokenService(
-  userRepository,
+  getUserRepository,
   financialProvider
 );
-export const loginService = new LoginService(userRepository);
-export const refreshTokenService = new RefreshTokenService(getUserService);
+export const loginService = new LoginService(findUserByEmailRepository);
+export const refreshTokenService = new RefreshTokenService(getUserRepository);
 export const createInstitutionService = new CreateInstitutionService(
-  institutionRepository,
+  createInstitutionRepository,
   financialProvider
 );
 export const findInstitutionsService = new FindInstitutionsService(
-  institutionRepository
+  findInstitutionsRepository
 );
 export const findTransactionsService = new FindTransactionsService(
-  transactionRepository
+  findTransactionsRepository
 );
 
 // Controllers

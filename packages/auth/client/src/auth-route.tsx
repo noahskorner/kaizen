@@ -1,4 +1,4 @@
-import { AuthService, useAuthStore } from '@kaizen/auth-client';
+import { AuthClient, useAuthStore } from '@kaizen/auth-client';
 import { useEffect } from 'react';
 
 export interface AuthRouteProps {
@@ -11,7 +11,7 @@ export const AuthRoute = ({ children, onUnauthenticated }: AuthRouteProps) => {
 
   useEffect(() => {
     const refreshToken = async () => {
-      const response = await AuthService.refreshToken();
+      const response = await AuthClient.refreshToken();
       if (response.type === 'SUCCESS') {
         login(response.data.accessToken);
       }
