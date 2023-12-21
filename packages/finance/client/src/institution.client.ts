@@ -1,8 +1,9 @@
 import { ApiClient } from '@kaizen/ui';
 import { CreateInstitutionRequest, Institution } from '@kaizen/finance';
-import { ApiResponse, handleAxiosRequest } from '@kaizen/core';
+import { ApiResponse } from '@kaizen/core';
+import { handleAxiosRequest } from '@kaizen/core-client';
 
-export const InstitutionService = {
+export const InstitutionClient = {
   create: (
     request: CreateInstitutionRequest
   ): Promise<ApiResponse<Institution>> => {

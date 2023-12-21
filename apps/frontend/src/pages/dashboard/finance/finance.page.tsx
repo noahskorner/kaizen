@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { UserService } from '@kaizen/user-client';
+import { UserClient } from '@kaizen/user-client';
 import {
-  InstitutionService,
+  InstitutionClient,
   TransactionsTable,
   formatCurrency,
   groupAccountsByType,
@@ -19,7 +19,7 @@ export const FinancePage = () => {
 
   useEffect(() => {
     const createLinkToken = async () => {
-      const response = await UserService.createLinkToken();
+      const response = await UserClient.createLinkToken();
       if (response.type === 'SUCCESS') {
         setLinkToken(response.data.token);
       }
@@ -30,7 +30,7 @@ export const FinancePage = () => {
 
   useEffect(() => {
     const loadInstitutions = async () => {
-      const response = await InstitutionService.find();
+      const response = await InstitutionClient.find();
       if (response.type === 'SUCCESS') {
         setInstitutions(response.data);
       }

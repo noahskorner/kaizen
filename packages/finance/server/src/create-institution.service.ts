@@ -1,6 +1,7 @@
 import { CreateInstitutionCommand } from './create-institution.command';
 import { Institution } from '@kaizen/finance';
-import { ApiResponse, Errors, Service } from '@kaizen/core';
+import { ApiResponse, Errors } from '@kaizen/core';
+import { Service } from '@kaizen/core-server';
 import { CreateAccountQuery, InstitutionRepository } from '@kaizen/data';
 import { FinancialProvider } from '@kaizen/provider';
 import { CreateInstitutionQuery } from '@kaizen/data';

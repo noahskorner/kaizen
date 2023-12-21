@@ -1,9 +1,9 @@
 import {
   ApiFailureResponse,
   ApiResponse,
-  ApiSuccessResponse
-} from '../api-response';
-import { Errors } from '../errors';
+  ApiSuccessResponse,
+  Errors
+} from '@kaizen/core';
 import { AxiosError, AxiosResponse } from 'axios';
 
 export const DEFAULT_API_SUCCESS_RESPONSE: ApiSuccessResponse<null> = {

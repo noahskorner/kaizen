@@ -2,7 +2,7 @@ import { TextInput, Button, Toast } from '@kaizen/ui';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
-import { UserService } from '.';
+import { UserClient } from '.';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -38,7 +38,7 @@ export const CreateUserForm = ({
       email: email,
       password: password
     };
-    const response = await UserService.create(request);
+    const response = await UserClient.create(request);
     setLoading(false);
 
     if (response.type === 'FAILURE') {

@@ -81,6 +81,8 @@
     "@kaizen/auth-client": "*",
     "@kaizen/auth-server": "*",
     "@kaizen/core": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/core-server": "*",
     "@kaizen/data": "*",
     "@kaizen/env-client": "*",
     "@kaizen/env-server": "*",

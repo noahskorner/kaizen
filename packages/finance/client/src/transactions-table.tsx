@@ -1,6 +1,6 @@
 import './transactions-table.css';
 import { useEffect } from 'react';
-import { TransactionService } from './transaction.service';
+import { TransactionClient } from './transaction.client';
 import { formatCurrency } from './format-currency';
 import { FindTransactionsRequest } from '@kaizen/finance';
 import { useTransactionStore } from './use-transaction-store';
@@ -13,7 +13,7 @@ export const TransactionsTable = () => {
       const request: FindTransactionsRequest = {
         page: 1
       };
-      const response = await TransactionService.find(request);
+      const response = await TransactionClient.find(request);
       if (response.type === 'SUCCESS') {
         setTransactions(response.data.hits);
       }

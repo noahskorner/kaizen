@@ -1,9 +1,9 @@
-import { ApiError } from './api-error';
+import { ApiError } from '@kaizen/core';
 import {
   ApiFailureResponse,
   ApiResponse,
   ApiSuccessResponse
-} from './api-response';
+} from '@kaizen/core';
 
 export abstract class Service {
   protected success<T>(data: T): ApiSuccessResponse<T> {

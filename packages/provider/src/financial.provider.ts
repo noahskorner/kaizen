@@ -7,7 +7,8 @@ import {
   Products,
   TransactionsSyncRequest
 } from 'plaid';
-import { ApiResponse, Errors, Service } from '@kaizen/core';
+import { ApiResponse, Errors } from '@kaizen/core';
+import { Service } from '@kaizen/core-server';
 import { ExternalAccount } from './external-account';
 import { ExternalAccountAdapter } from './external-account.adapter';
 import { ExternalTransactionAdapter } from './external-transaction.adapter';

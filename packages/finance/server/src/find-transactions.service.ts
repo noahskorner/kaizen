@@ -3,9 +3,9 @@ import {
   ApiResponse,
   DEFAULT_PAGE_SIZE,
   Errors,
-  Paginated,
-  Service
+  Paginated
 } from '@kaizen/core';
+import { Service } from '@kaizen/core-server';
 import { FindTransactionsCommand } from './find-transactions.command';
 import { Transaction } from '@kaizen/finance';
 import { TransactionRepository } from '@kaizen/data';

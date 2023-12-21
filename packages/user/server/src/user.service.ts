@@ -1,4 +1,4 @@
-import { Service } from '@kaizen/core';
+import { Service } from '@kaizen/core-server';
 import { UserRepository } from '@kaizen/data';
 
 export class UserService extends Service {

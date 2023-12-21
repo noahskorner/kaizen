@@ -1,8 +1,5 @@
 import { usePlaidLink } from 'react-plaid-link';
-import {
-  InstitutionService,
-  useInstitutionStore
-} from '@kaizen/finance-client';
+import { InstitutionClient, useInstitutionStore } from '@kaizen/finance-client';
 import { CreateInstitutionRequest } from '@kaizen/finance';
 import { Button } from '@kaizen/ui';
 
@@ -27,7 +24,7 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
     const request: CreateInstitutionRequest = {
       publicToken: publicToken
     };
-    const response = await InstitutionService.create(request);
+    const response = await InstitutionClient.create(request);
     if (response.type === 'SUCCESS') {
       addInstitution(response.data);
     }

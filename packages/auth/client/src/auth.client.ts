@@ -1,16 +1,16 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
-import {
-  ApiResponse,
-  DEFAULT_API_SUCCESS_RESPONSE,
-  handleAxiosRequest
-} from '@kaizen/core';
+import { ApiResponse } from '@kaizen/core';
 import { ApiClient } from '@kaizen/ui';
+import {
+  handleAxiosRequest,
+  DEFAULT_API_SUCCESS_RESPONSE
+} from '@kaizen/core-client';
 
 const setAccessToken = (accessToken: string) => {
   ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 };
 
-export const AuthService = {
+export const AuthClient = {
   login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
     const response = await handleAxiosRequest(() => {
       return ApiClient.post<ApiResponse<AuthToken>>('/auth', request);
