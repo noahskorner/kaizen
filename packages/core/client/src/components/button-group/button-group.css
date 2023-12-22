@@ -1,0 +1,7 @@
+.button-group button:first-child {
+  @apply rounded-l-lg;
+}
+
+.button-group button:last-child {
+  @apply rounded-r-lg;
+}

@@ -4,6 +4,7 @@ import { ApiError } from '@kaizen/core';
 import { AuthClient } from '.';
 import { LoginRequest } from '@kaizen/auth';
 import { useAuthStore } from './use-auth-store';
+import { Link } from 'react-router-dom';
 
 const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
@@ -94,9 +95,9 @@ export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
         </Button>
         <p className="text-sm">
           Need an account?&nbsp;
-          <a href={registerHref} className="text-blue-800 hover:underline">
+          <Link to={registerHref} className="text-blue-800 hover:underline">
             Click here!
-          </a>
+          </Link>
         </p>
       </form>
     </div>
