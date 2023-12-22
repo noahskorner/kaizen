@@ -1,0 +1,11 @@
+.button.-primary {
+  @apply bg-primary-700 hover:bg-primary-800 active:outline-primary-800 text-white active:outline active:outline-1;
+}
+
+.button.-primary.-active {
+  @apply outline-primary-800 bg-primary-800 outline outline-1;
+}
+
+.button.-neutral {
+  @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:outline active:outline-1 active:outline-neutral-200;
+}

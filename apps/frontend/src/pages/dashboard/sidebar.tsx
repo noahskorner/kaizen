@@ -2,12 +2,7 @@ import { useAuthStore } from '@kaizen/auth-client';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../routes';
 import { SidebarButton } from './sidebar-link';
-import {
-  BankNotesIcon,
-  CoinsIcon,
-  LogoutIcon,
-  TodosIcon
-} from '@kaizen/core-client';
+import { BankNotesIcon, CoinsIcon, LogoutIcon } from '@kaizen/core-client';
 import { Avatar } from './avatar';
 
 export const Sidebar = () => {
@@ -31,7 +26,7 @@ export const Sidebar = () => {
               </h6>
               <div className="text-neutral-0 -ml-1 flex items-center">
                 <CoinsIcon />
-                <span className="text-xs text-yellow-300">4,422</span>
+                <span className="text-neutral-0 text-xs">4,422</span>
               </div>
             </div>
           </div>
@@ -42,11 +37,6 @@ export const Sidebar = () => {
               icon={<BankNotesIcon />}
               href={paths.finance}
               label="Finances"
-            />
-            <SidebarButton
-              icon={<TodosIcon />}
-              href={paths.todos}
-              label="Todos"
             />
           </div>
         </div>

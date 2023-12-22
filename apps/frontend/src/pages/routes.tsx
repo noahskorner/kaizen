@@ -5,15 +5,13 @@ import { DashboardLayout } from './dashboard/dashboard.layout';
 import { FinancePage } from './dashboard/finance/finance.page';
 import { DashboardPage } from './dashboard/dashboard.page';
 import { RouteObject } from 'react-router-dom';
-import { TodosPage } from './dashboard/todos/todos.page';
 
 export const paths: Record<string, string> = {
   home: '/',
   login: '/login',
   register: '/register',
   dashboard: '/dashboard',
-  finance: '/dashboard/finance',
-  todos: '/dashboard/todos'
+  finance: '/dashboard/finance'
 };
 
 export const routes: RouteObject[] = [
@@ -30,10 +28,6 @@ export const routes: RouteObject[] = [
       {
         path: paths.finance,
         element: <FinancePage />
-      },
-      {
-        path: paths.todos,
-        element: <TodosPage />
       }
     ]
   }
