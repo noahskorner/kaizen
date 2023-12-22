@@ -11,12 +11,13 @@ datasource db {
 }
 
 model UserRecord {
-  id           String              @id @default(uuid())
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @default(now()) @updatedAt
-  email        String              @unique
-  password     String
-  institutions InstitutionRecord[]
+  id                   String                 @id @default(uuid())
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt
+  email                String                 @unique
+  password             String
+  institutions         InstitutionRecord[]
+  VirtualAccountRecord VirtualAccountRecord[]
 
   @@index([email])
   @@map("user")
@@ -76,4 +77,25 @@ model TransactionRecord {
   logoUrl           String?
 
   @@map("transaction")
+}
+
+enum VirtualAccountRecordFrequency {
+  Weekly
+  Biweekly
+  Monthly
+}
+
+model VirtualAccountRecord {
+  id        String                        @id @default(uuid())
+  createdAt DateTime                      @default(now())
+  updatedAt DateTime                      @default(now()) @updatedAt
+  userId    String
+  user      UserRecord                    @relation(fields: [userId], references: [id])
+  name      String
+  balance   Float
+  amount    Float
+  currency  String
+  frequency VirtualAccountRecordFrequency @default(Monthly)
+
+  @@map("virtual_account")
 }

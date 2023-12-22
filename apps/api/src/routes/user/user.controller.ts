@@ -21,7 +21,7 @@ export class UserController extends Controller {
       return this.badRequest(res, response);
     }
 
-    return this.protected(res, response);
+    return this.created(res, response);
   });
 
   public createLinkToken = catchAsync(async (req: Request, res: Response) => {
@@ -36,6 +36,6 @@ export class UserController extends Controller {
       } else return this.internalServerError(res, response);
     }
 
-    return this.protected(res, response);
+    return this.created(res, response);
   });
 }
