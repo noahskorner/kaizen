@@ -4,3 +4,6 @@ export * from './account';
 export * from './account-type';
 export * from './transaction';
 export * from './find-transactions.request';
+export * from './create-virtual-account.request';
+export * from './virtual-account-frequency';
+export * from './virtual-account';

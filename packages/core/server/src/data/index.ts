@@ -8,3 +8,6 @@ export * from './account-record-type';
 export * from './account-record';
 export * from './institution-record';
 export * from './transaction-record';
+export * from './create-virtual-account';
+export * from './virtual-account-record';
+export * from './virtual-account-record-frequency';

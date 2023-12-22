@@ -1,5 +1,6 @@
 import {
   CreateInstitutionService,
+  CreateVirtualAccountService,
   FindInstitutionsService,
   FindTransactionsService
 } from '@kaizen/finance-server';
@@ -10,7 +11,8 @@ import {
   FindTransactionsRepository,
   FindUserByEmailRepository,
   GetUserRepository,
-  FindInstitutionsRepository
+  FindInstitutionsRepository,
+  CreateVirtualAccountRepository
 } from '@kaizen/core-server';
 import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
@@ -20,6 +22,7 @@ import { AuthController } from './auth/auth.controller';
 import { UserController } from './user';
 import { FinancialProvider, plaidClient } from '@kaizen/core-server';
 import { TransactionController } from './finance/transaction/transaction.controller';
+import { VirtualAccountController } from './finance';
 
 // Repositories
 export const createUserRepository = new CreateUserRepository();
@@ -28,6 +31,8 @@ export const getUserRepository = new GetUserRepository();
 export const createInstitutionRepository = new CreateInstitutionRepository();
 export const findInstitutionsRepository = new FindInstitutionsRepository();
 export const findTransactionsRepository = new FindTransactionsRepository();
+export const createVirtualAccountRepository =
+  new CreateVirtualAccountRepository();
 
 // Validators
 export const createUserValidator = new CreateUserValidator();
@@ -58,6 +63,9 @@ export const findInstitutionsService = new FindInstitutionsService(
 export const findTransactionsService = new FindTransactionsService(
   findTransactionsRepository
 );
+export const createVirtualAccountService = new CreateVirtualAccountService(
+  createVirtualAccountRepository
+);
 
 // Controllers
 export const userController = new UserController(
@@ -74,4 +82,7 @@ export const institutionController = new InstitutionController(
 );
 export const transactionController = new TransactionController(
   findTransactionsService
+);
+export const virtualAccountController = new VirtualAccountController(
+  createVirtualAccountService
 );

@@ -4,7 +4,8 @@ import {
   userController,
   authController,
   institutionController,
-  transactionController
+  transactionController,
+  virtualAccountController
 } from './service-collection';
 
 // Routes
@@ -28,5 +29,8 @@ router.get('/institution', authenticate, institutionController.find);
 
 // /transaction
 router.get('/transaction', authenticate, transactionController.find);
+
+// /virtual-account
+router.post('/virtual-account', authenticate, virtualAccountController.create);
 
 export { router };
