@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export interface SidebarButtonProps {
   icon: React.ReactNode;
   label: string;
@@ -16,10 +18,10 @@ export const SidebarButton = ({
   onClick = () => {}
 }: SidebarButtonProps) => {
   return href != null ? (
-    <a href={href} className={BUTTON_CLASS}>
+    <Link to={href} className={BUTTON_CLASS}>
       {icon}
       <span className={BUTTON_LABEL_CLASS}>{label}</span>
-    </a>
+    </Link>
   ) : (
     <button onClick={onClick} className={BUTTON_CLASS}>
       {icon}

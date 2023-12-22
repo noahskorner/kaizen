@@ -3,6 +3,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
 import { UserClient } from '.';
+import { Link } from 'react-router-dom';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -67,48 +68,46 @@ export const CreateUserForm = ({
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
-        <div className="flex flex-col gap-y-2">
-          {errors.map((error) => {
-            return (
-              <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
-                {error.message}
-              </Toast>
-            );
-          })}
-        </div>
-        <form
-          onSubmit={submitRegisterForm}
-          className="flex w-full flex-col gap-y-2">
-          <TextInput
-            id={CREATE_USER_FORM_EMAIL_INPUT_ID}
-            name="email"
-            label="Email address"
-            value={email}
-            errors={emailErrors}
-            onChange={onEmailChange}
-          />
-          <TextInput
-            id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
-            name="password"
-            type="password"
-            label="Password"
-            value={password}
-            errors={passwordErrors}
-            onChange={onPasswordChange}
-          />
-          <Button type="submit" disabled={loading}>
-            Register
-          </Button>
-          <p className="text-sm">
-            Already have an account?&nbsp;
-            <a href={loginHref} className="text-blue-800 hover:underline">
-              Click here!
-            </a>
-          </p>
-        </form>
+    <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
+      <div className="flex flex-col gap-y-2">
+        {errors.map((error) => {
+          return (
+            <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
+              {error.message}
+            </Toast>
+          );
+        })}
       </div>
+      <form
+        onSubmit={submitRegisterForm}
+        className="flex w-full flex-col gap-y-2">
+        <TextInput
+          id={CREATE_USER_FORM_EMAIL_INPUT_ID}
+          name="email"
+          label="Email address"
+          value={email}
+          errors={emailErrors}
+          onChange={onEmailChange}
+        />
+        <TextInput
+          id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
+          name="password"
+          type="password"
+          label="Password"
+          value={password}
+          errors={passwordErrors}
+          onChange={onPasswordChange}
+        />
+        <Button type="submit" disabled={loading}>
+          Register
+        </Button>
+        <p className="text-sm">
+          Already have an account?&nbsp;
+          <Link to={loginHref} className="text-blue-800 hover:underline">
+            Click here!
+          </Link>
+        </p>
+      </form>
     </div>
   );
 };

@@ -1,28 +1,36 @@
+import './button.css';
 import { MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 
 export interface ButtonProps {
   id?: string;
   children: React.ReactNode;
+  style?: 'primary' | 'neutral';
+  className?: string;
   disabled?: boolean;
+  active?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
   to?: string;
 }
 
-const BUTTON_CLASS =
-  'bg-primary-700 w-full rounded-lg p-2 text-sm font-semibold text-white hover:bg-primary-800 active:outline active:outline-1 active:outline-primary-700';
-
 export const Button = ({
   id,
   children,
+  style = 'primary',
+  className = 'w-full rounded-lg',
   type = 'button',
+  active = false,
   disabled = false,
   onClick = () => {},
   to
 }: ButtonProps) => {
+  const buttonClassName = `button capitalize -${style} ${className} py-2 text-sm font-semibold px-4 ${
+    active && '-active'
+  }`;
+
   return to != null ? (
-    <Link id={id} to={to} className={BUTTON_CLASS}>
+    <Link id={id} to={to} className={buttonClassName}>
       {children}
     </Link>
   ) : (
@@ -31,7 +39,7 @@ export const Button = ({
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className={BUTTON_CLASS}>
+      className={buttonClassName}>
       {children}
     </button>
   );

@@ -1,3 +1,4 @@
+import './text-input.css';
 import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 import { ApiError } from '@kaizen/core';
 
@@ -6,9 +7,12 @@ export interface TextInputProps {
   name: string;
   label: string;
   value: string | number;
+  placeholder?: string;
   type?: HTMLInputTypeAttribute;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  description?: string;
   errors?: ApiError[];
+  min?: number;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 export function TextInput({
@@ -16,8 +20,11 @@ export function TextInput({
   name,
   label,
   value,
+  placeholder,
+  description,
   type = 'text',
   errors = [],
+  min,
   onChange
 }: TextInputProps) {
   return (
@@ -35,8 +42,11 @@ export function TextInput({
         name={name}
         id={id}
         value={value}
+        min={min}
+        placeholder={placeholder}
         onChange={onChange}
       />
+      {description && <p className="text-xs text-neutral-700">{description}</p>}
       <ol>
         {errors.map((error) => (
           <li className="text-red-600" key={error.message}>
