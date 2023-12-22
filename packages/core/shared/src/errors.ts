@@ -57,5 +57,21 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE]: {
     key: ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE,
     message: 'The page size you provided is invalid.'
+  },
+  [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT]: {
+    key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT,
+    message: 'Must provide a valid amount.'
+  },
+  [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE]: {
+    key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE,
+    message: 'Must provide a valid balance.'
+  },
+  [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY]: {
+    key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY,
+    message: 'Must provide a valid frequency.'
+  },
+  [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME]: {
+    key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME,
+    message: 'Must provide a valid virtual account name.'
   }
 };
