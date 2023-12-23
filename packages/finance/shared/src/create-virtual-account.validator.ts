@@ -20,7 +20,7 @@ export class CreateVirtualAccountValidator {
   public static validateBalance(balance: number): ApiError[] {
     return balance == null ||
       isNaN(parseInt(balance as unknown as string)) ||
-      balance <= 0
+      balance < 0
       ? [Errors.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE]
       : [];
   }
@@ -28,7 +28,7 @@ export class CreateVirtualAccountValidator {
   public static validateAmount(amount: number): ApiError[] {
     return amount == null ||
       isNaN(parseInt(amount as unknown as string)) ||
-      amount <= 0
+      amount < 0
       ? [Errors.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT]
       : [];
   }

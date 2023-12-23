@@ -45,6 +45,7 @@ export class VirtualAccountAdapter {
     const virtualAccount: VirtualAccount = {
       id: virtualAccountRecord.id,
       name: virtualAccountRecord.name,
+      createdAt: virtualAccountRecord.createdAt.toISOString(),
       balance: virtualAccountRecord.balance,
       amount: virtualAccountRecord.amount,
       currency: virtualAccountRecord.currency,

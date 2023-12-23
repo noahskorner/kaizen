@@ -7,13 +7,17 @@ import {
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { FREQUENCY_BUTTONS } from './frequency-buttons';
 import { ApiError } from '@kaizen/core';
-import { VirtualAccountClient } from '@kaizen/finance-client';
+import {
+  VirtualAccountClient,
+  useVirtualAccountStore
+} from '@kaizen/finance-client';
 
 export const NAME_INPUT_ID = 'name-input';
 export const STARTING_BALANCE_INPUT_ID = 'starting-balance-input';
 export const DONATION_AMOUNT_INPUT_ID = 'donation-amount-input';
 
 export const CreateVirtualAccountModal = () => {
+  const { addVirtualAccount } = useVirtualAccountStore();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [nameErrors, setNameErrors] = useState<ApiError[]>([]);
@@ -76,7 +80,7 @@ export const CreateVirtualAccountModal = () => {
       // TODO: Form errors go here
       console.error(response.errors);
     } else {
-      console.log(response.data);
+      addVirtualAccount(response.data);
     }
 
     setIsOpen(false);
