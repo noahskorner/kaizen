@@ -3,6 +3,7 @@ export * from './create-user';
 export * from './find-institutions';
 export * from './find-transactions';
 export * from './find-user-by-email';
+export * from './find-virtual-accounts';
 export * from './get-user';
 export * from './account-record-type';
 export * from './account-record';

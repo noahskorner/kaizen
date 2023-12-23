@@ -4,14 +4,14 @@ import { ApiError, Errors } from '@kaizen/core';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export class CreateUserValidator {
-  public validate(command: CreateUserRequest): ApiError[] {
+  public static validate(command: CreateUserRequest): ApiError[] {
     return [
-      ...this.validateEmail(command.email),
-      ...this.validatePassword(command.password)
+      ...CreateUserValidator.validateEmail(command.email),
+      ...CreateUserValidator.validatePassword(command.password)
     ];
   }
 
-  public validateEmail(email: string): ApiError[] {
+  public static validateEmail(email: string): ApiError[] {
     const errors: ApiError[] = [];
 
     if (email == null) {
@@ -24,7 +24,7 @@ export class CreateUserValidator {
     return errors;
   }
 
-  public validatePassword(password: string): ApiError[] {
+  public static validatePassword(password: string): ApiError[] {
     const errors: ApiError[] = [];
 
     if (password == null) {
