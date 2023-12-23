@@ -4,3 +4,4 @@ export * from './expect-error';
 export * from './get-refresh-token';
 export * from './valid-password';
 export * from './create-virtual-account';
+export * from './expect-valid-date';

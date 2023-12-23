@@ -5,6 +5,7 @@ import {
 } from '@kaizen/finance';
 import { createAndLoginUser } from '../../../fixtures/create-and-login-user';
 import { createVirtualAccount } from '../../../fixtures/create-virtual-account';
+import { expectValidDate } from '../../../fixtures/expect-valid-date';
 import supertest from 'supertest';
 import { app } from '../../../app';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
@@ -204,6 +205,7 @@ describe('/virtual-account', () => {
       // Assert
       expect(response.status).toEqual(201);
       expect(body.data.id).toBeDefined();
+      expectValidDate(body.data.createdAt);
       expect(body.data.name).toEqual(request.name);
       expect(body.data.balance).toEqual(request.balance);
       expect(body.data.amount).toEqual(request.amount);
@@ -238,6 +240,7 @@ describe('/virtual-account', () => {
       expect(response.status).toEqual(200);
       expect(body.data.length).toEqual(1);
       expect(body.data[0].id).toEqual(virtualAccount.id);
+      expectValidDate(body.data[0].createdAt);
       expect(body.data[0].name).toEqual(virtualAccount.name);
       expect(body.data[0].balance).toEqual(virtualAccount.balance);
       expect(body.data[0].amount).toEqual(virtualAccount.amount);
