@@ -13,5 +13,10 @@ export const VirtualAccountClient = {
         request
       );
     });
+  },
+  find: (): Promise<ApiResponse<VirtualAccount[]>> => {
+    return handleAxiosRequest(() => {
+      return ApiClient.get<ApiResponse<VirtualAccount[]>>('/virtual-account');
+    });
   }
 };
