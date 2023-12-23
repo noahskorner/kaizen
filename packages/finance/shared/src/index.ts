@@ -5,5 +5,7 @@ export * from './account-type';
 export * from './transaction';
 export * from './find-transactions.request';
 export * from './create-virtual-account.request';
+export * from './create-virtual-account.validator';
 export * from './virtual-account-frequency';
 export * from './virtual-account';
+export * from './find-virtual-accounts.request';

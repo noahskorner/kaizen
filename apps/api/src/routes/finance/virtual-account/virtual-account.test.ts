@@ -4,6 +4,7 @@ import {
   VirtualAccountFrequency
 } from '@kaizen/finance';
 import { createAndLoginUser } from '../../../fixtures/create-and-login-user';
+import { createVirtualAccount } from '../../../fixtures/create-virtual-account';
 import supertest from 'supertest';
 import { app } from '../../../app';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
@@ -208,6 +209,40 @@ describe('/virtual-account', () => {
       expect(body.data.amount).toEqual(request.amount);
       expect(body.data.frequency).toEqual(request.frequency);
       expect(body.data.currency).toEqual('USD');
+    });
+  });
+  describe('find should', () => {
+    it('returns 200 and empty array when no virtual accounts exist', async () => {
+      // Arrange
+      const { authToken } = await createAndLoginUser();
+
+      // Act
+      const response = await supertest(app)
+        .get('/virtual-account')
+        .auth(authToken.accessToken, { type: 'bearer' });
+
+      // Assert
+      expect(response.status).toEqual(200);
+    });
+    it('returns 200 and created virtual account', async () => {
+      // Arrange
+      const { authToken, virtualAccount } = await createVirtualAccount();
+
+      // Act
+      const response = await supertest(app)
+        .get('/virtual-account')
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: ApiSuccessResponse<VirtualAccount[]> = response.body;
+
+      // Assert
+      expect(response.status).toEqual(200);
+      expect(body.data.length).toEqual(1);
+      expect(body.data[0].id).toEqual(virtualAccount.id);
+      expect(body.data[0].name).toEqual(virtualAccount.name);
+      expect(body.data[0].balance).toEqual(virtualAccount.balance);
+      expect(body.data[0].amount).toEqual(virtualAccount.amount);
+      expect(body.data[0].frequency).toEqual(virtualAccount.frequency);
+      expect(body.data[0].currency).toEqual(virtualAccount.currency);
     });
   });
 });

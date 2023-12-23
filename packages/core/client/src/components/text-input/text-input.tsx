@@ -1,6 +1,7 @@
 import './text-input.css';
 import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 import { ApiError } from '@kaizen/core';
+import { InputErrors } from '../input-errors';
 
 export interface TextInputProps {
   id: string;
@@ -32,6 +33,7 @@ export function TextInput({
       <label className="font-semibold" htmlFor={id}>
         {label}
       </label>
+      {description && <p className="text-xs text-neutral-700">{description}</p>}
       <input
         className={`${
           errors.length > 0
@@ -46,14 +48,7 @@ export function TextInput({
         placeholder={placeholder}
         onChange={onChange}
       />
-      {description && <p className="text-xs text-neutral-700">{description}</p>}
-      <ol>
-        {errors.map((error) => (
-          <li className="text-red-600" key={error.message}>
-            {error.message}
-          </li>
-        ))}
-      </ol>
+      <InputErrors errors={errors} />
     </div>
   );
 }

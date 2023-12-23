@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
-const userValidator = new CreateUserValidator();
 
 export interface CreateUserFormProps {
   loginHref: string;
@@ -28,8 +27,8 @@ export const CreateUserForm = ({
   const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const emailErrors = userValidator.validateEmail(email);
-    const passwordErrors = userValidator.validatePassword(password);
+    const emailErrors = CreateUserValidator.validateEmail(email);
+    const passwordErrors = CreateUserValidator.validatePassword(password);
     if (emailErrors.length > 0 || passwordErrors.length > 0) {
       setEmailErrors(emailErrors);
       setPasswordErrors(passwordErrors);
@@ -54,13 +53,13 @@ export const CreateUserForm = ({
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors([]);
     setEmail(event.target.value);
-    setEmailErrors(userValidator.validateEmail(event.target.value));
+    setEmailErrors(CreateUserValidator.validateEmail(event.target.value));
   };
 
   const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setErrors([]);
     setPassword(event.target.value);
-    setPasswordErrors(userValidator.validatePassword(event.target.value));
+    setPasswordErrors(CreateUserValidator.validatePassword(event.target.value));
   };
 
   const onDismissError = (key: string) => {
