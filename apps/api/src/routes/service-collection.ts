@@ -2,7 +2,8 @@ import {
   CreateInstitutionService,
   CreateVirtualAccountService,
   FindInstitutionsService,
-  FindTransactionsService
+  FindTransactionsService,
+  FindVirtualAccountsService
 } from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
@@ -12,9 +13,9 @@ import {
   FindUserByEmailRepository,
   GetUserRepository,
   FindInstitutionsRepository,
-  CreateVirtualAccountRepository
+  CreateVirtualAccountRepository,
+  FindVirtualAccountsRepository
 } from '@kaizen/core-server';
-import { CreateUserValidator } from '@kaizen/user';
 import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
 import { GetUserService } from '@kaizen/user-server';
 import { InstitutionController } from './finance/institution/institution.controller';
@@ -33,9 +34,8 @@ export const findInstitutionsRepository = new FindInstitutionsRepository();
 export const findTransactionsRepository = new FindTransactionsRepository();
 export const createVirtualAccountRepository =
   new CreateVirtualAccountRepository();
-
-// Validators
-export const createUserValidator = new CreateUserValidator();
+export const findVirtualAccountsRepository =
+  new FindVirtualAccountsRepository();
 
 // Providers
 export const financialProvider = new FinancialProvider(plaidClient);
@@ -44,8 +44,7 @@ export const financialProvider = new FinancialProvider(plaidClient);
 export const getUserService = new GetUserService(getUserRepository);
 export const createUserService = new CreateUserService(
   findUserByEmailRepository,
-  createUserRepository,
-  createUserValidator
+  createUserRepository
 );
 export const createLinkTokenService = new CreateLinkTokenService(
   getUserRepository,
@@ -66,6 +65,9 @@ export const findTransactionsService = new FindTransactionsService(
 export const createVirtualAccountService = new CreateVirtualAccountService(
   createVirtualAccountRepository
 );
+export const findVirtualAccountsService = new FindVirtualAccountsService(
+  findVirtualAccountsRepository
+);
 
 // Controllers
 export const userController = new UserController(
@@ -84,5 +86,6 @@ export const transactionController = new TransactionController(
   findTransactionsService
 );
 export const virtualAccountController = new VirtualAccountController(
-  createVirtualAccountService
+  createVirtualAccountService,
+  findVirtualAccountsService
 );

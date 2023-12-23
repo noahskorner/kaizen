@@ -11,14 +11,13 @@ import {
 export class CreateUserService extends Service {
   constructor(
     private readonly _findUserByEmailRepository: FindUserByEmailRepository,
-    private readonly _createUserRepository: CreateUserRepository,
-    private readonly _createUserValidator: CreateUserValidator
+    private readonly _createUserRepository: CreateUserRepository
   ) {
     super();
   }
 
   public async create(command: CreateUserCommand): Promise<ApiResponse<User>> {
-    const errors = this._createUserValidator.validate(command);
+    const errors = CreateUserValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
     }

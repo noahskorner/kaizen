@@ -32,5 +32,6 @@ router.get('/transaction', authenticate, transactionController.find);
 
 // /virtual-account
 router.post('/virtual-account', authenticate, virtualAccountController.create);
+router.get('/virtual-account', authenticate, virtualAccountController.find);
 
 export { router };

@@ -1,10 +1,13 @@
 import { Button, ButtonGroup, Modal, TextInput } from '@kaizen/core-client';
 import {
   CreateVirtualAccountRequest,
+  CreateVirtualAccountValidator,
   VirtualAccountFrequency
 } from '@kaizen/finance';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { FREQUENCY_BUTTONS } from './frequency-buttons';
+import { ApiError } from '@kaizen/core';
+import { VirtualAccountClient } from '@kaizen/finance-client';
 
 export const NAME_INPUT_ID = 'name-input';
 export const STARTING_BALANCE_INPUT_ID = 'starting-balance-input';
@@ -13,39 +16,91 @@ export const DONATION_AMOUNT_INPUT_ID = 'donation-amount-input';
 export const CreateVirtualAccountModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
+  const [nameErrors, setNameErrors] = useState<ApiError[]>([]);
   const [balance, setBalance] = useState(0);
+  const [balanceErrors, setBalanceErrors] = useState<ApiError[]>([]);
   const [amount, setAmount] = useState(0);
+  const [amountErrors, setAmountErrors] = useState<ApiError[]>([]);
   const [frequency, setFrequency] = useState<VirtualAccountFrequency | null>(
     null
   );
+  const [frequencyErrors, setFrequencyErrors] = useState<ApiError[]>([]);
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+    setNameErrors(
+      CreateVirtualAccountValidator.validateName(event.target.value)
+    );
   };
 
   const onBalanceChange = (event: ChangeEvent<HTMLInputElement>) => {
     setBalance(event.target.valueAsNumber);
+    setBalanceErrors(
+      CreateVirtualAccountValidator.validateBalance(event.target.valueAsNumber)
+    );
   };
 
   const onAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.valueAsNumber);
+    setAmountErrors(
+      CreateVirtualAccountValidator.validateAmount(event.target.valueAsNumber)
+    );
   };
 
   const onFrequencyChange = (values: string[]) => {
     setFrequency(values[0] as VirtualAccountFrequency);
+    setFrequencyErrors(
+      CreateVirtualAccountValidator.validateFrequency(values[0])
+    );
   };
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (
+    event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
+
+    const isValid = validateForm();
+    if (!isValid) {
+      return;
+    }
 
     const request: CreateVirtualAccountRequest = {
       name: name,
       balance: balance,
       amount: amount,
-      frequency: frequency! // TODO: Actually validate this form
+      frequency: frequency!
     };
+    const response = await VirtualAccountClient.create(request);
 
-    console.log(request);
+    if (response.type === 'FAILURE') {
+      // TODO: Form errors go here
+      console.error(response.errors);
+    } else {
+      console.log(response.data);
+    }
+
+    setIsOpen(false);
+  };
+
+  const validateForm = () => {
+    const nameErrors = CreateVirtualAccountValidator.validateName(name);
+    setNameErrors(nameErrors);
+    const balanceErrors =
+      CreateVirtualAccountValidator.validateBalance(balance);
+    setBalanceErrors(balanceErrors);
+    const amountErrors = CreateVirtualAccountValidator.validateAmount(amount);
+    setAmountErrors(amountErrors);
+    const frequencyErrors = CreateVirtualAccountValidator.validateFrequency(
+      frequency as unknown as string
+    );
+    setFrequencyErrors(frequencyErrors);
+
+    return (
+      nameErrors.length === 0 &&
+      balanceErrors.length === 0 &&
+      amountErrors.length === 0 &&
+      frequencyErrors.length === 0
+    );
   };
 
   return (
@@ -65,6 +120,7 @@ export const CreateVirtualAccountModal = () => {
               label={'Name'}
               placeholder="Savings"
               value={name}
+              errors={nameErrors}
               onChange={onNameChange}
             />
             <TextInput
@@ -73,6 +129,7 @@ export const CreateVirtualAccountModal = () => {
               label={'Starting Balance'}
               description="How much money do you want in this account?"
               value={balance}
+              errors={balanceErrors}
               type="number"
               min={0}
               onChange={onBalanceChange}
@@ -82,6 +139,7 @@ export const CreateVirtualAccountModal = () => {
               name={'donation-amount'}
               label={'Donation Amount'}
               value={amount}
+              errors={amountErrors}
               description="How much money do you want to contribute?"
               type="number"
               min={0}
@@ -89,6 +147,7 @@ export const CreateVirtualAccountModal = () => {
             />
             <ButtonGroup
               buttons={FREQUENCY_BUTTONS}
+              errors={frequencyErrors}
               description="How often do you want to contribute?"
               onChange={onFrequencyChange}
             />
@@ -98,7 +157,9 @@ export const CreateVirtualAccountModal = () => {
               <Button onClick={() => setIsOpen(false)} style="neutral">
                 Cancel
               </Button>
-              <Button type="submit">Create</Button>
+              <Button type="submit" onClick={onSubmit}>
+                Create
+              </Button>
             </div>
           </div>
         </form>

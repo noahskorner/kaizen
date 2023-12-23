@@ -1,13 +1,13 @@
 import { prisma } from '../_prisma';
 import { TransactionRecord } from '../transaction-record';
-import { FindAllTransactionsQuery } from './find-transactions.query';
+import { FindTransactionsQuery } from './find-transactions.query';
 import { Paginated } from '@kaizen/core';
 
 export class FindTransactionsRepository {
   constructor() {}
 
   public async findAll(
-    query: FindAllTransactionsQuery
+    query: FindTransactionsQuery
   ): Promise<Paginated<TransactionRecord>> {
     const where = {
       account: {
