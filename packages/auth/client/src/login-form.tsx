@@ -1,10 +1,10 @@
-import { TextInput, Button, Toast } from '@kaizen/core-client';
+import { TextInput, Button } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
-import { ApiError } from '@kaizen/core';
 import { AuthClient } from '.';
 import { LoginRequest } from '@kaizen/auth';
 import { useAuthStore } from './use-auth-store';
 import { Link } from 'react-router-dom';
+import { useToastStore } from '@kaizen/core-client';
 
 const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
@@ -15,11 +15,11 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
+  const { addFailureToast } = useToastStore();
+  const { login } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<ApiError[]>([]);
-  const { login } = useAuthStore();
 
   const onSubmitLoginForm = async (
     event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
@@ -37,7 +37,7 @@ export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
         login(response.data.accessToken);
         return onLoginSuccess();
       } else {
-        setErrors(response.errors);
+        addFailureToast(response.errors);
       }
     } finally {
       setIsSubmitting(false);
@@ -45,30 +45,15 @@ export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
   };
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setErrors([]);
     setEmail(event.target.value);
   };
 
   const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setErrors([]);
     setPassword(event.target.value);
-  };
-
-  const onDismissError = (key: string) => {
-    setErrors(errors.filter((error) => error.key !== key));
   };
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
-      <div className="flex flex-col gap-y-2">
-        {errors.map((error) => {
-          return (
-            <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
-              {error.message}
-            </Toast>
-          );
-        })}
-      </div>
       <form
         onSubmit={onSubmitLoginForm}
         className="flex w-full flex-col gap-y-2">

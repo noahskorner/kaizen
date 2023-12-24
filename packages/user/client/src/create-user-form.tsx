@@ -1,4 +1,4 @@
-import { TextInput, Button, Toast } from '@kaizen/core-client';
+import { TextInput, Button, useToastStore } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
@@ -17,12 +17,12 @@ export const CreateUserForm = ({
   loginHref,
   onRegisterSuccess = () => {}
 }: CreateUserFormProps) => {
+  const { addFailureToast } = useToastStore();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
   const [password, setPassword] = useState('');
   const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
-  const [errors, setErrors] = useState<ApiError[]>([]);
 
   const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,39 +44,24 @@ export const CreateUserForm = ({
     setLoading(false);
 
     if (response.type === 'FAILURE') {
-      setErrors(response.errors);
+      addFailureToast(response.errors);
     } else {
       onRegisterSuccess();
     }
   };
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setErrors([]);
     setEmail(event.target.value);
     setEmailErrors(CreateUserValidator.validateEmail(event.target.value));
   };
 
   const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setErrors([]);
     setPassword(event.target.value);
     setPasswordErrors(CreateUserValidator.validatePassword(event.target.value));
   };
 
-  const onDismissError = (key: string) => {
-    setErrors(errors.filter((error) => error.key !== key));
-  };
-
   return (
     <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
-      <div className="flex flex-col gap-y-2">
-        {errors.map((error) => {
-          return (
-            <Toast key={error.key} id={error.key} onDismiss={onDismissError}>
-              {error.message}
-            </Toast>
-          );
-        })}
-      </div>
       <form
         onSubmit={submitRegisterForm}
         className="flex w-full flex-col gap-y-2">
