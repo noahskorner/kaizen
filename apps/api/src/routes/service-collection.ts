@@ -28,7 +28,7 @@ import { VirtualAccountController } from './finance';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 
-// Prisma TODO: Delete prisma.ts
+// Prisma
 export const prisma = new PrismaClient();
 
 // Repositories

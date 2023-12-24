@@ -24,7 +24,7 @@
   "author": "",
   "license": "ISC",
   "prisma": {
-    "schema": "../../packages/core/server/src/data/_prisma/schema.prisma",
-    "seed": "ts-node ../../packages/core/server/src/data/_prisma/seed/seed.ts"
+    "schema": "src/prisma/schema.prisma",
+    "seed": "ts-node src/prisma/seed/seed.ts"
   }
 }
