@@ -4,17 +4,17 @@ import { Controller } from '../controller';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { jwtDecode } from 'jwt-decode';
 import {
-  LoginService,
-  RefreshTokenCommand,
-  RefreshTokenService
-} from '@kaizen/auth-server';
-import { LoginRequest } from '@kaizen/auth';
+  ILoginService,
+  IRefreshTokenService,
+  LoginRequest,
+  RefreshTokenCommand
+} from '@kaizen/auth';
 import { serverEnvironment } from '@kaizen/env-server';
 
 export class AuthController extends Controller {
   constructor(
-    private readonly _loginService: LoginService,
-    private readonly _refreshTokenService: RefreshTokenService
+    private readonly _loginService: ILoginService,
+    private readonly _refreshTokenService: IRefreshTokenService
   ) {
     super();
   }

@@ -1,13 +1,15 @@
 import { catchAsync } from '../../../middleware/catch-async';
 import { Request, Response } from 'express';
 import { Controller } from '../../controller';
-import { FindTransactionsRequest } from '@kaizen/finance';
+import {
+  FindTransactionsRequest,
+  IFindTransactionsService
+} from '@kaizen/finance';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
-import { FindTransactionsService } from '@kaizen/finance-server';
 
 export class TransactionController extends Controller {
   constructor(
-    private readonly findTransactionsService: FindTransactionsService
+    private readonly findTransactionsService: IFindTransactionsService
   ) {
     super();
   }

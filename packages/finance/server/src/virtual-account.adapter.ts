@@ -1,10 +1,11 @@
-import { VirtualAccount, VirtualAccountFrequency } from '@kaizen/finance';
-import { CreateVirtualAccountCommand } from './create-virtual-account';
 import {
+  CreateVirtualAccountCommand,
   CreateVirtualAccountQuery,
+  VirtualAccount,
+  VirtualAccountFrequency,
   VirtualAccountRecord,
   VirtualAccountRecordFrequency
-} from '@kaizen/core-server';
+} from '@kaizen/finance';
 
 export class VirtualAccountAdapter {
   public static toCreateVirtualAccountQuery(

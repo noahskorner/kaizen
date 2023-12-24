@@ -1,9 +1,10 @@
-import { User } from '@kaizen/user';
-import { GetUserCommand } from './get-user.command';
-import { GetUserRepository, Service } from '@kaizen/core-server';
+import { IGetUserRepository, User } from '@kaizen/user';
+import { GetUserCommand } from '@kaizen/user/src/get-user/get-user.command';
+import { Service } from '@kaizen/core-server';
+import { IGetUserService } from '@kaizen/user/src/get-user/get-user.service.interface';
 
-export class GetUserService extends Service {
-  constructor(private readonly _getUserRepository: GetUserRepository) {
+export class GetUserService extends Service implements IGetUserService {
+  constructor(private readonly _getUserRepository: IGetUserRepository) {
     super();
   }
 

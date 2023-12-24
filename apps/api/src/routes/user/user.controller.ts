@@ -1,14 +1,18 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '../../middleware/catch-async';
 import { Controller } from '../controller';
-import { CreateLinkTokenService, CreateUserService } from '@kaizen/user-server';
-import { CreateLinkTokenRequest, CreateUserRequest } from '@kaizen/user';
+import {
+  CreateLinkTokenRequest,
+  CreateUserRequest,
+  ICreateLinkTokenService,
+  ICreateUserService
+} from '@kaizen/user';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
 
 export class UserController extends Controller {
   constructor(
-    private readonly _createUserService: CreateUserService,
-    private readonly _createLinkTokenService: CreateLinkTokenService
+    private readonly _createUserService: ICreateUserService,
+    private readonly _createLinkTokenService: ICreateLinkTokenService
   ) {
     super();
   }

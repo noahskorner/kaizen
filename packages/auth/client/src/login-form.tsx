@@ -1,10 +1,9 @@
-import { TextInput, Button } from '@kaizen/core-client';
+import { TextInput, Button, useToastStore } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { AuthClient } from '.';
 import { LoginRequest } from '@kaizen/auth';
 import { useAuthStore } from './use-auth-store';
 import { Link } from 'react-router-dom';
-import { useToastStore } from '@kaizen/core-client';
 
 const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';

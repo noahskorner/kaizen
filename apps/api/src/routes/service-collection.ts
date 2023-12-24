@@ -1,41 +1,53 @@
 import {
+  CreateInstitutionRepository,
   CreateInstitutionService,
+  CreateVirtualAccountRepository,
   CreateVirtualAccountService,
+  FindInstitutionsRepository,
   FindInstitutionsService,
+  FindTransactionsRepository,
   FindTransactionsService,
+  FindVirtualAccountsRepository,
   FindVirtualAccountsService
 } from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
-  CreateInstitutionRepository,
+  CreateUserService,
+  CreateLinkTokenService,
   CreateUserRepository,
-  FindTransactionsRepository,
   FindUserByEmailRepository,
   GetUserRepository,
-  FindInstitutionsRepository,
-  CreateVirtualAccountRepository,
-  FindVirtualAccountsRepository
-} from '@kaizen/core-server';
-import { CreateUserService, CreateLinkTokenService } from '@kaizen/user-server';
-import { GetUserService } from '@kaizen/user-server';
-import { InstitutionController } from './finance/institution/institution.controller';
+  GetUserService
+} from '@kaizen/user-server';
 import { AuthController } from './auth/auth.controller';
-import { UserController } from './user';
+import { UserController } from './user/user.controller';
 import { FinancialProvider, plaidClient } from '@kaizen/core-server';
+import { InstitutionController } from './finance/institution/institution.controller';
 import { TransactionController } from './finance/transaction/transaction.controller';
 import { VirtualAccountController } from './finance';
+import { PrismaClient } from '@prisma/client';
+
+// Prisma TODO: Delete prisma.ts
+export const prisma = new PrismaClient();
 
 // Repositories
-export const createUserRepository = new CreateUserRepository();
-export const findUserByEmailRepository = new FindUserByEmailRepository();
-export const getUserRepository = new GetUserRepository();
-export const createInstitutionRepository = new CreateInstitutionRepository();
-export const findInstitutionsRepository = new FindInstitutionsRepository();
-export const findTransactionsRepository = new FindTransactionsRepository();
+export const createUserRepository = new CreateUserRepository(prisma);
+export const findUserByEmailRepository = new FindUserByEmailRepository(prisma);
+export const getUserRepository = new GetUserRepository(prisma);
+export const createInstitutionRepository = new CreateInstitutionRepository(
+  prisma
+);
+export const findInstitutionsRepository = new FindInstitutionsRepository(
+  prisma
+);
+export const findTransactionsRepository = new FindTransactionsRepository(
+  prisma
+);
 export const createVirtualAccountRepository =
-  new CreateVirtualAccountRepository();
-export const findVirtualAccountsRepository =
-  new FindVirtualAccountsRepository();
+  new CreateVirtualAccountRepository(prisma);
+export const findVirtualAccountsRepository = new FindVirtualAccountsRepository(
+  prisma
+);
 
 // Providers
 export const financialProvider = new FinancialProvider(plaidClient);

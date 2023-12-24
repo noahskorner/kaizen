@@ -1,12 +1,19 @@
-import { Institution } from '@kaizen/finance';
+import {
+  FindInstitutionsCommand,
+  IFindInstitutionsRepository,
+  IFindInstitutionsService,
+  Institution
+} from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
-import { FindInstitutionsCommand } from './find-institutions.command';
 import { InstitutionAdapter } from '../institution.adapter';
-import { FindInstitutionsRepository, Service } from '@kaizen/core-server';
+import { Service } from '@kaizen/core-server';
 
-export class FindInstitutionsService extends Service {
+export class FindInstitutionsService
+  extends Service
+  implements IFindInstitutionsService
+{
   constructor(
-    private readonly _findInstitutionRepository: FindInstitutionsRepository
+    private readonly _findInstitutionRepository: IFindInstitutionsRepository
   ) {
     super();
   }
