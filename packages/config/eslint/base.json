@@ -10,6 +10,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "error",
+    "no-restricted-imports": ["error", "@prisma/client"]
   }
 }
