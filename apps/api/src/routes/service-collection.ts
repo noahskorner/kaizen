@@ -25,6 +25,7 @@ import { FinancialProvider, plaidClient } from '@kaizen/core-server';
 import { InstitutionController } from './finance/institution/institution.controller';
 import { TransactionController } from './finance/transaction/transaction.controller';
 import { VirtualAccountController } from './finance';
+// eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 
 // Prisma TODO: Delete prisma.ts

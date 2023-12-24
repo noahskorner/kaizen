@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { AccountRecordType, PrismaClient } from '@prisma/client';
 import { genSalt, hash } from 'bcrypt';
 
