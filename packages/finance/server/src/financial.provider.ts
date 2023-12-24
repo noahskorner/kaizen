@@ -8,15 +8,17 @@ import {
   TransactionsSyncRequest
 } from 'plaid';
 import { ApiResponse, Errors } from '@kaizen/core';
-import { ExternalAccount } from './external-account';
-import { ExternalAccountAdapter } from './external-account.adapter';
-import { ExternalTransactionAdapter } from './external-transaction.adapter';
-import { SyncExternalTransactionsResponse } from './sync-external-transactions-response';
-import { Service } from '../service';
-import { IFinancialProvider } from './financial.provider.interface';
+import {
+  ExternalAccount,
+  ExternalAccountAdapter,
+  ExternalTransactionAdapter,
+  IFinancialProvider,
+  SyncExternalTransactionsResponse
+} from '@kaizen/finance';
+import { Service } from '@kaizen/core-server';
 
 export class FinancialProvider extends Service implements IFinancialProvider {
-  constructor(private readonly _plaidClient: PlaidApi) {
+  constructor(private readonly _plaid: PlaidApi) {
     super();
   }
 
@@ -33,7 +35,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
         country_codes: [CountryCode.Us],
         products: [Products.Transactions]
       };
-      const response = await this._plaidClient.linkTokenCreate(request);
+      const response = await this._plaid.linkTokenCreate(request);
 
       if (response.status !== 200) {
         return this.failure(Errors.INTERNAL_SERVER_ERROR);
@@ -53,7 +55,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const request: ItemPublicTokenExchangeRequest = {
         public_token: publicToken
       };
-      const response = await this._plaidClient.itemPublicTokenExchange(request);
+      const response = await this._plaid.itemPublicTokenExchange(request);
 
       if (response.status !== 200) {
         return this.failure(Errors.INTERNAL_SERVER_ERROR);
@@ -73,7 +75,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const request: AccountsGetRequest = {
         access_token: accessToken
       };
-      const response = await this._plaidClient.accountsGet(request);
+      const response = await this._plaid.accountsGet(request);
 
       return this.success(
         response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)
@@ -91,7 +93,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const request: TransactionsSyncRequest = {
         access_token: accessToken
       };
-      const response = await this._plaidClient.transactionsSync(request);
+      const response = await this._plaid.transactionsSync(request);
 
       const result: SyncExternalTransactionsResponse = {
         added: response.data.added.map(

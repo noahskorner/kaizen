@@ -5,9 +5,9 @@ import {
   CreateVirtualAccountValidator,
   ICreateVirtualAccountRepository,
   ICreateVirtualAccountService,
-  VirtualAccount
+  VirtualAccount,
+  VirtualAccountAdapter
 } from '@kaizen/finance';
-import { VirtualAccountAdapter } from '../virtual-account.adapter';
 
 export class CreateVirtualAccountService
   extends Service

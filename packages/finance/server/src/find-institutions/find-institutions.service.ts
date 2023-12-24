@@ -2,10 +2,10 @@ import {
   FindInstitutionsCommand,
   IFindInstitutionsRepository,
   IFindInstitutionsService,
-  Institution
+  Institution,
+  InstitutionAdapter
 } from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
-import { InstitutionAdapter } from '../institution.adapter';
 import { Service } from '@kaizen/core-server';
 
 export class FindInstitutionsService
