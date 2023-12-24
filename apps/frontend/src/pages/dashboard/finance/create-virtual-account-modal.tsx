@@ -1,4 +1,10 @@
-import { Button, ButtonGroup, Modal, TextInput } from '@kaizen/core-client';
+import {
+  Button,
+  ButtonGroup,
+  Modal,
+  TextInput,
+  useToastStore
+} from '@kaizen/core-client';
 import {
   CreateVirtualAccountRequest,
   CreateVirtualAccountValidator,
@@ -17,6 +23,7 @@ export const STARTING_BALANCE_INPUT_ID = 'starting-balance-input';
 export const DONATION_AMOUNT_INPUT_ID = 'donation-amount-input';
 
 export const CreateVirtualAccountModal = () => {
+  const { addFailureToast } = useToastStore();
   const { addVirtualAccount } = useVirtualAccountStore();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
@@ -77,13 +84,11 @@ export const CreateVirtualAccountModal = () => {
     const response = await VirtualAccountClient.create(request);
 
     if (response.type === 'FAILURE') {
-      // TODO: Form errors go here
-      console.error(response.errors);
+      addFailureToast(response.errors);
     } else {
       addVirtualAccount(response.data);
+      setIsOpen(false);
     }
-
-    setIsOpen(false);
   };
 
   const validateForm = () => {
