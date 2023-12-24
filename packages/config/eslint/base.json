@@ -8,5 +8,8 @@
     "plugin:prettier/recommended"
   ],
   "plugins": ["@typescript-eslint", "prettier"],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-duplicate-imports": "error"
+  }
 }

@@ -6,8 +6,7 @@ import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { v4 as uuid } from 'uuid';
 import { expectError } from '../../fixtures/expect-error';
 import { validPassword } from '../../fixtures/valid-password';
-import { CreateUserCommand } from '@kaizen/user-server';
-import { User } from '@kaizen/user';
+import { CreateUserCommand, User } from '@kaizen/user';
 import { LinkToken } from '@kaizen/user/src/link-token';
 
 describe('/user', () => {

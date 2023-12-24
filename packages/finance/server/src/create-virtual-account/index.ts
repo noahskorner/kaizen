@@ -1,2 +1,2 @@
-export * from './create-virtual-account.command';
+export * from './create-virtual-account.repository';
 export * from './create-virtual-account.service';

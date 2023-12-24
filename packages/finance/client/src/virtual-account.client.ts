@@ -1,7 +1,6 @@
-import { ApiClient } from '@kaizen/core-client';
+import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 import { CreateVirtualAccountRequest, VirtualAccount } from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
-import { handleAxiosRequest } from '@kaizen/core-client';
 
 export const VirtualAccountClient = {
   create: (

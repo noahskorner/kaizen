@@ -8,8 +8,8 @@ import { validPassword } from '../../fixtures/valid-password';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import * as env from '@kaizen/env-server';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
-import { CreateUserCommand } from '@kaizen/user-server';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
+import { CreateUserCommand } from '@kaizen/user';
 const mockEnvironment = env.serverEnvironment;
 
 describe('/auth', () => {

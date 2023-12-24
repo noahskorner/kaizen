@@ -1,5 +1,4 @@
-import { AccountRecordType } from '@prisma/client';
-import { prisma } from '../prisma';
+import { AccountRecordType, PrismaClient } from '@prisma/client';
 import { genSalt, hash } from 'bcrypt';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -16,6 +15,7 @@ const hashPassword = async (password: string): Promise<string> => {
 };
 
 export const seed = async () => {
+  const prisma = new PrismaClient();
   const config: Config = require('./local.json');
   console.log('Seeding...');
 

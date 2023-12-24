@@ -1,6 +1,5 @@
-import { Institution } from '@kaizen/finance';
+import { Institution, InstitutionRecord } from '@kaizen/finance';
 import { AccountAdapter } from './account.adapter';
-import { InstitutionRecord } from '@kaizen/core-server';
 
 export class InstitutionAdapter {
   public static toInstitution(

@@ -1,13 +1,16 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { AuthService } from '../auth.service';
-import { RefreshTokenCommand } from './refresh-token.command';
+import { RefreshTokenCommand } from '@kaizen/auth/src/refresh-token/refresh-token.command';
 import { serverEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { AuthToken, RefreshToken } from '@kaizen/auth';
-import { GetUserRepository } from '@kaizen/core-server';
+import { AuthToken, RefreshToken, IRefreshTokenService } from '@kaizen/auth';
+import { IGetUserRepository } from '@kaizen/user';
 
-export class RefreshTokenService extends AuthService {
-  constructor(private readonly _getUserRepository: GetUserRepository) {
+export class RefreshTokenService
+  extends AuthService
+  implements IRefreshTokenService
+{
+  constructor(private readonly _getUserRepository: IGetUserRepository) {
     super();
   }
 
