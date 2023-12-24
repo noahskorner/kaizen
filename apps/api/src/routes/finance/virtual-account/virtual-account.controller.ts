@@ -1,16 +1,16 @@
-import {
-  CreateVirtualAccountService,
-  FindVirtualAccountsService
-} from '@kaizen/finance-server';
 import { catchAsync } from '../../../middleware/catch-async';
 import { Controller } from '../../controller';
 import { Request, Response } from 'express';
-import { CreateVirtualAccountRequest } from '@kaizen/finance';
+import {
+  CreateVirtualAccountRequest,
+  ICreateVirtualAccountService,
+  IFindVirtualAccountsService
+} from '@kaizen/finance';
 
 export class VirtualAccountController extends Controller {
   constructor(
-    private readonly _createVirtualAccountService: CreateVirtualAccountService,
-    private readonly _findVirtualAccountsService: FindVirtualAccountsService
+    private readonly _createVirtualAccountService: ICreateVirtualAccountService,
+    private readonly _findVirtualAccountsService: IFindVirtualAccountsService
   ) {
     super();
   }

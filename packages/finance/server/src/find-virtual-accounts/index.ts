@@ -1,2 +1,2 @@
-export * from './find-virtual-accounts.command';
+export * from './find-virtual-accounts.repository';
 export * from './find-virtual-accounts.service';

@@ -1,12 +1,19 @@
-import { FindVirtualAccountsRepository, Service } from '@kaizen/core-server';
-import { FindVirtualAccountsCommand } from './find-virtual-accounts.command';
+import { Service } from '@kaizen/core-server';
 import { ApiResponse } from '@kaizen/core';
-import { VirtualAccount } from '@kaizen/finance';
+import {
+  FindVirtualAccountsCommand,
+  IFindVirtualAccountsRepository,
+  IFindVirtualAccountsService,
+  VirtualAccount
+} from '@kaizen/finance';
 import { VirtualAccountAdapter } from '../virtual-account.adapter';
 
-export class FindVirtualAccountsService extends Service {
+export class FindVirtualAccountsService
+  extends Service
+  implements IFindVirtualAccountsService
+{
   constructor(
-    private readonly _findVirtualAccountsRepository: FindVirtualAccountsRepository
+    private readonly _findVirtualAccountsRepository: IFindVirtualAccountsRepository
   ) {
     super();
   }

@@ -1,5 +1,4 @@
-import { AccountRecord, AccountRecordType } from '@kaizen/core-server';
-import { Account } from '@kaizen/finance';
+import { Account, AccountRecord, AccountRecordType } from '@kaizen/finance';
 import { ExternalAccountType } from '@kaizen/core-server';
 import { AccountType } from 'plaid';
 

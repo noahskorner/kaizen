@@ -1,20 +1,24 @@
-import { CreateInstitutionCommand } from './create-institution.command';
-import { Institution } from '@kaizen/finance';
-import { ApiResponse, Errors } from '@kaizen/core';
 import {
-  CreateInstitutionRepository,
+  CreateAccountQuery,
+  CreateInstitutionCommand,
+  CreateInstitutionQuery,
   CreateTransactionQuery,
-  Service
-} from '@kaizen/core-server';
-import { CreateAccountQuery } from '@kaizen/core-server';
+  ICreateInstitutionRepository,
+  ICreateInstitutionService,
+  Institution
+} from '@kaizen/finance';
+import { ApiResponse, Errors } from '@kaizen/core';
+import { Service } from '@kaizen/core-server';
 import { FinancialProvider, ExternalTransaction } from '@kaizen/core-server';
-import { CreateInstitutionQuery } from '@kaizen/core-server';
 import { AccountAdapter } from '../account.adapter';
 import { TransactionAdapter } from '../transaction.adapter';
 
-export class CreateInstitutionService extends Service {
+export class CreateInstitutionService
+  extends Service
+  implements ICreateInstitutionService
+{
   constructor(
-    private readonly _createInstitutionRepository: CreateInstitutionRepository,
+    private readonly _createInstitutionRepository: ICreateInstitutionRepository,
     private readonly _financialProvider: FinancialProvider
   ) {
     super();
