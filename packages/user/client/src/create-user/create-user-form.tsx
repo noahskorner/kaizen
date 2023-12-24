@@ -2,7 +2,7 @@ import { TextInput, Button, useToastStore } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
-import { UserClient } from '.';
+import { UserClient } from '..';
 import { Link } from 'react-router-dom';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';

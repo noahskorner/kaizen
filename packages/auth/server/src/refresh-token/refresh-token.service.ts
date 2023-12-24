@@ -4,10 +4,10 @@ import { RefreshTokenCommand } from './refresh-token.command';
 import { serverEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { AuthToken, RefreshToken } from '@kaizen/auth';
-import { GetUserRepository } from '@kaizen/core-server';
+import { IGetUserRepository } from '@kaizen/user';
 
 export class RefreshTokenService extends AuthService {
-  constructor(private readonly _getUserRepository: GetUserRepository) {
+  constructor(private readonly _getUserRepository: IGetUserRepository) {
     super();
   }
 

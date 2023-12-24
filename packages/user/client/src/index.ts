@@ -1,2 +1,2 @@
-export * from './create-user-form';
+export * from './create-user';
 export * from './user.client';

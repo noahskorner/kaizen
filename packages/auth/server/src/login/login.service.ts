@@ -1,13 +1,13 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { FindUserByEmailRepository } from '@kaizen/core-server';
 import { LoginCommand } from './login.command';
 import { AuthService } from '../auth.service';
 import { AuthToken } from '@kaizen/auth';
+import { IFindUserByEmailRepository } from '@kaizen/user';
 
 export class LoginService extends AuthService {
   constructor(
-    private readonly _findUserByEmailRepository: FindUserByEmailRepository
+    private readonly _findUserByEmailRepository: IFindUserByEmailRepository
   ) {
     super();
   }
@@ -18,7 +18,7 @@ export class LoginService extends AuthService {
     }
 
     const normalizedEmail = this.normalizeEmail(command.email);
-    const userRecord = await this._findUserByEmailRepository.findByEmail({
+    const userRecord = await this._findUserByEmailRepository.find({
       normalizedEmail
     });
 

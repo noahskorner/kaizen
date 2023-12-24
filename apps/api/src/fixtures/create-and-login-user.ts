@@ -3,9 +3,8 @@ import { app } from '../app';
 import { createUniqueEmail } from './create-unique-email';
 import { validPassword } from './valid-password';
 import { AuthToken } from '@kaizen/auth';
-import { CreateUserCommand } from '@kaizen/user-server';
 import { LoginCommand } from '@kaizen/auth-server';
-import { User } from '@kaizen/user';
+import { CreateUserCommand, User } from '@kaizen/user';
 import { ApiSuccessResponse } from '@kaizen/core';
 
 export const createAndLoginUser = async () => {

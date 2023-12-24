@@ -1,17 +1,19 @@
-import { CreateUserCommand } from './create-user.command';
+import { CreateUserCommand } from '@kaizen/user/src/create-user/create-user.command';
 import { ApiResponse, Errors } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
-import { CreateUserValidator, User } from '@kaizen/user';
 import {
-  CreateUserRepository,
-  FindUserByEmailRepository,
-  Service
-} from '@kaizen/core-server';
+  CreateUserValidator,
+  ICreateUserRepository,
+  ICreateUserService,
+  IFindUserByEmailRepository,
+  User
+} from '@kaizen/user';
+import { Service } from '@kaizen/core-server';
 
-export class CreateUserService extends Service {
+export class CreateUserService extends Service implements ICreateUserService {
   constructor(
-    private readonly _findUserByEmailRepository: FindUserByEmailRepository,
-    private readonly _createUserRepository: CreateUserRepository
+    private readonly _findUserByEmailRepository: IFindUserByEmailRepository,
+    private readonly _createUserRepository: ICreateUserRepository
   ) {
     super();
   }
@@ -23,7 +25,7 @@ export class CreateUserService extends Service {
     }
 
     const normalizedEmail = this.normalizeEmail(command.email);
-    const existingUser = await this._findUserByEmailRepository.findByEmail({
+    const existingUser = await this._findUserByEmailRepository.find({
       normalizedEmail: normalizedEmail
     });
     if (existingUser != null) {
