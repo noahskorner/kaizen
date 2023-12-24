@@ -1,11 +1,11 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { compare } from 'bcrypt';
-import { LoginCommand } from './login.command';
+import { LoginCommand } from '@kaizen/auth/src/login/login.command';
 import { AuthService } from '../auth.service';
-import { AuthToken } from '@kaizen/auth';
+import { AuthToken, ILoginService } from '@kaizen/auth';
 import { IFindUserByEmailRepository } from '@kaizen/user';
 
-export class LoginService extends AuthService {
+export class LoginService extends AuthService implements ILoginService {
   constructor(
     private readonly _findUserByEmailRepository: IFindUserByEmailRepository
   ) {
