@@ -16,9 +16,9 @@ import {
   CreateLinkTokenService,
   CreateUserRepository,
   FindUserByEmailRepository,
-  GetUserRepository
+  GetUserRepository,
+  GetUserService
 } from '@kaizen/user-server';
-import { GetUserService } from '@kaizen/user-server';
 import { AuthController } from './auth/auth.controller';
 import { UserController } from './user/user.controller';
 import { FinancialProvider, plaidClient } from '@kaizen/core-server';

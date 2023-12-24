@@ -11,7 +11,7 @@ export * from './institution-record';
 export * from './institution';
 export * from './transaction-record';
 export * from './transaction';
-export * from './virtual-account-frequency-record';
+export * from './virtual-account-record-frequency';
 export * from './virtual-account-frequency';
 export * from './virtual-account-record';
 export * from './virtual-account';

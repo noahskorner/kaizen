@@ -1,5 +1,4 @@
-import { UserRecord } from '@prisma/client';
-import { CreateUserQuery } from '@kaizen/user';
+import { CreateUserQuery, UserRecord } from '@kaizen/user';
 import { Repository } from '@kaizen/core-server';
 
 export class CreateUserRepository

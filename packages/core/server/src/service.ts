@@ -1,5 +1,5 @@
-import { ApiError } from '@kaizen/core';
 import {
+  ApiError,
   ApiFailureResponse,
   ApiResponse,
   ApiSuccessResponse

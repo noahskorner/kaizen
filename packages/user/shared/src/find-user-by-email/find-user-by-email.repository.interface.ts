@@ -1,4 +1,4 @@
-import { UserRecord } from '../user.record';
+import { UserRecord } from '../user-record';
 import { FindUserByEmailQuery } from './find-user-by-email.query';
 
 export interface IFindUserByEmailRepository {

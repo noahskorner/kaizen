@@ -1,4 +1,4 @@
-import { VirtualAccountRecordFrequency } from '@prisma/client';
+import { VirtualAccountRecordFrequency } from '../virtual-account-record-frequency';
 
 export interface CreateVirtualAccountQuery {
   userId: string;
