@@ -11,13 +11,13 @@ datasource db {
 }
 
 model UserRecord {
-  id                   String                 @id @default(uuid())
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now()) @updatedAt
-  email                String                 @unique
-  password             String
-  institutions         InstitutionRecord[]
-  VirtualAccountRecord VirtualAccountRecord[]
+  id              String                 @id @default(uuid())
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @default(now()) @updatedAt
+  email           String                 @unique
+  password        String
+  institutions    InstitutionRecord[]
+  virtualAccounts VirtualAccountRecord[]
 
   @@index([email])
   @@map("user")
@@ -97,5 +97,5 @@ model VirtualAccountRecord {
   currency  String
   frequency VirtualAccountRecordFrequency @default(Monthly)
 
-  @@map("virtual_account")
+  @@map("virtualAccount")
 }
