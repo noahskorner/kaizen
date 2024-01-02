@@ -26,6 +26,7 @@ router.delete('/auth', authenticate, authController.logout);
 // /institution
 router.post('/institution', authenticate, institutionController.create);
 router.get('/institution', authenticate, institutionController.find);
+router.put('/institution/sync', authenticate, institutionController.sync);
 
 // /transaction
 router.get('/transaction', authenticate, transactionController.find);

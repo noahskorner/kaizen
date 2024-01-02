@@ -8,7 +8,8 @@ import {
   FindTransactionsRepository,
   FindTransactionsService,
   FindVirtualAccountsRepository,
-  FindVirtualAccountsService
+  FindVirtualAccountsService,
+  SyncInstitutionsService
 } from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
@@ -81,6 +82,7 @@ export const createVirtualAccountService = new CreateVirtualAccountService(
 export const findVirtualAccountsService = new FindVirtualAccountsService(
   findVirtualAccountsRepository
 );
+export const syncInstitutionsService = new SyncInstitutionsService();
 
 // Controllers
 export const userController = new UserController(
@@ -93,7 +95,8 @@ export const authController = new AuthController(
 );
 export const institutionController = new InstitutionController(
   createInstitutionService,
-  findInstitutionsService
+  findInstitutionsService,
+  syncInstitutionsService
 );
 export const transactionController = new TransactionController(
   findTransactionsService

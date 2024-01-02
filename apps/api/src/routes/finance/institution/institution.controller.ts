@@ -5,7 +5,9 @@ import {
   CreateInstitutionRequest,
   FindInstitutionsCommand,
   ICreateInstitutionService,
-  IFindInstitutionsService
+  IFindInstitutionsService,
+  ISyncInstitutionsService,
+  SyncInstitutionsCommand
 } from '@kaizen/finance';
 import { ErrorKey, hasErrorFor } from '@kaizen/core';
 import { Controller } from '../../controller';
@@ -13,7 +15,8 @@ import { Controller } from '../../controller';
 export class InstitutionController extends Controller {
   constructor(
     private readonly _createInstitutionService: ICreateInstitutionService,
-    private readonly _findInstitutionsService: IFindInstitutionsService
+    private readonly _findInstitutionsService: IFindInstitutionsService,
+    private readonly _syncInstitutionsService: ISyncInstitutionsService
   ) {
     super();
   }
@@ -45,6 +48,17 @@ export class InstitutionController extends Controller {
       userId: req.user.id
     };
     const response = await this._findInstitutionsService.find(command);
+
+    if (response.type === 'FAILURE') {
+      return this.internalServerError(res, response);
+    } else return this.ok(res, response);
+  });
+
+  public sync = catchAsync(async (req: Request, res: Response) => {
+    const command: SyncInstitutionsCommand = {
+      userId: req.user.id
+    };
+    const response = await this._syncInstitutionsService.sync(command);
 
     if (response.type === 'FAILURE') {
       return this.internalServerError(res, response);

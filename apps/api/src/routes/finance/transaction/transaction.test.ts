@@ -80,7 +80,7 @@ describe('/transaction', () => {
       // Asserts
       expect(response.status).toBe(200);
       expect(body.data.hits.length).toBe(DEFAULT_PAGE_SIZE);
-      expect(body.data.total).toBe(15);
+      expect(body.data.total).toBe(16);
     });
     it('returns 200 and custom page size', async () => {
       // Arrange
@@ -100,7 +100,7 @@ describe('/transaction', () => {
       // Asserts
       expect(response.status).toBe(200);
       expect(body.data.hits.length).toBe(pageSize);
-      expect(body.data.total).toBe(15);
+      expect(body.data.total).toBe(16);
     });
     it('returns ordered by authorizedDate', async () => {
       // Arrange
@@ -118,7 +118,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(200);
-      expect(body.data.total).toBe(15);
+      expect(body.data.total).toBe(16);
       expect(body.data.hits.length).toBe(15);
       const sortedHits = [...body.data.hits].sort((a, b) => {
         if (a.date == null) return -1;

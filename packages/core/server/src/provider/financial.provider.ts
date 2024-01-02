@@ -100,7 +100,11 @@ export class FinancialProvider extends Service implements IFinancialProvider {
         modified: response.data.modified.map(
           ExternalTransactionAdapter.toExternalTransaction
         ),
-        removed: [] // TODO: Handle removed transactions
+        removed: response.data.removed.reduce((prev, curr) => {
+          if (curr.transaction_id == null) return prev;
+
+          return [...prev, curr.transaction_id];
+        }, new Array<string>())
       };
       return this.success(result);
     } catch (error) {

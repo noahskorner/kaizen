@@ -12,6 +12,8 @@ import {
 } from '../../../fixtures';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 
+// Cursor?
+
 describe('/institution', () => {
   describe('create should', () => {
     it('returns 400 when no publicToken is provided', async () => {
@@ -110,5 +112,25 @@ describe('/institution', () => {
       expect(body.data[0].accounts[0].available).toBe(75);
       expect(body.data[0].accounts[0].type).toBe(AccountType.Depository);
     });
+  });
+  describe('sync should', () => {
+    it('returns empty array when no institutions exist', async () => {
+      // Arrange
+      const { authToken } = await createAndLoginUser();
+
+      // Act
+      const response = await supertest(app)
+        .put('/institution/sync')
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: ApiSuccessResponse<Institution[]> = response.body;
+
+      // Assert
+      expect(response.statusCode).toBe(200);
+      expect(body.data.length).toBe(0);
+    });
+    it('returns original transactions when none have been modified', async () => {});
+    it('returns added transactions', async () => {});
+    it('returns modified transactions', async () => {});
+    it('does not return deleted transactions', async () => {});
   });
 });

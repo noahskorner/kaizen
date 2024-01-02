@@ -35,7 +35,7 @@ export class CreateInstitutionService
     }
 
     try {
-      const response = await this.buildCreateInstitutionQuery(command);
+      const response = await this.createInsitutions(command);
       if (response.type == 'FAILURE') {
         return this.failures(response.errors);
       }
@@ -56,7 +56,7 @@ export class CreateInstitutionService
     }
   }
 
-  private async buildCreateInstitutionQuery(
+  private async createInsitutions(
     command: CreateInstitutionCommand
   ): Promise<ApiResponse<CreateInstitutionQuery>> {
     const exchangeExternalPublicTokenResponse =
@@ -67,7 +67,7 @@ export class CreateInstitutionService
       return this.failures(exchangeExternalPublicTokenResponse.errors);
     }
 
-    const createAccountResponse = await this.buildCreateAccountQueries(
+    const createAccountResponse = await this.createAccounts(
       exchangeExternalPublicTokenResponse.data
     );
     if (createAccountResponse.type === 'FAILURE') {
@@ -82,7 +82,7 @@ export class CreateInstitutionService
     return this.success(createInstitutionQuery);
   }
 
-  private async buildCreateAccountQueries(
+  private async createAccounts(
     accessToken: string
   ): Promise<ApiResponse<CreateAccountQuery[]>> {
     const externalAccountsResponse =
@@ -105,9 +105,11 @@ export class CreateInstitutionService
           available: externalAccount.available,
           currency: externalAccount.currency,
           type: AccountAdapter.toAccountRecordType(externalAccount.type),
-          transactions: this.getTransactionQueries(
+          transactions: this.createTransactions(
             externalAccount.id,
-            syncExternalTransactionsResponse.data.added // TODO: Change to use the plaidClient.transactionsGet API instead.
+            syncExternalTransactionsResponse.data.added.concat(
+              syncExternalTransactionsResponse.data.modified
+            )
           )
         };
 
@@ -117,7 +119,7 @@ export class CreateInstitutionService
     return this.success(createAccountQueries);
   }
 
-  private getTransactionQueries(
+  private createTransactions(
     externalAccountId: string,
     externalTransactions: ExternalTransaction[]
   ): CreateTransactionQuery[] {
