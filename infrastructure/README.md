@@ -12,7 +12,7 @@
 3. Bootstrap your environment
 
    ```sh
-   npx cdk bootstrap aws://524484118461/us-east-2
+   npx cdk bootstrap aws://ACCOUNT_ID/AWS_REGION
    ```
 
 ## Deploying a stack

@@ -31,6 +31,7 @@
 
 - [Continuous Integration / Continous Deployment](./docs/ci-cd.md)
 - [Database](./docs/database.md)
+- [Infrastructure](./infrastructure/README.md)
 - [Package Management](./docs/packages.md)
 - [Plaid API](https://plaid.com/docs/)
 - [Project Backlog](./docs/project-backlog.md)
