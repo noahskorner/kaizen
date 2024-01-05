@@ -27,6 +27,7 @@ import { TransactionController } from './finance/transaction/transaction.control
 import { VirtualAccountController } from './finance';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { HomeController } from './home.controller';
 
 // Prisma
 export const prisma = new PrismaClient();
@@ -83,6 +84,7 @@ export const findVirtualAccountsService = new FindVirtualAccountsService(
 );
 
 // Controllers
+export const homeController = new HomeController();
 export const userController = new UserController(
   createUserService,
   createLinkTokenService

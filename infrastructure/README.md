@@ -17,13 +17,19 @@
 
 ## Deploying a stack
 
-1. Create the CloudFormation template
+1. Navigate to the /infrastructure directory
+
+   ```sh
+   cd infrastructure
+   ```
+
+2. Create the CloudFormation template
 
    ```sh
    npx cdk synth
    ```
 
-2. Deploy every stack
+3. Deploy every stack
 
    ```sh
    npx cdk deploy --all
