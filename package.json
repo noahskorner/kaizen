@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "clean": "npm run turbo:clean && find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' ) -exec rm -rf {} +",
+    "clean": "npm run turbo:clean && find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' ) -exec rm -rf {} +",
     "dev": "turbo run dev",
     "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
     "db:seed": "npm run --prefix ./apps/api seed",

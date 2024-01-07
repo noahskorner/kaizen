@@ -7,5 +7,8 @@
     "../shared/src/refresh-token/refresh-token.service.interface.ts",
     "../shared/src/refresh-token/refresh-token.command.ts"
   ],
-  "exclude": ["dist", "build", "node_modules"]
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "baseUrl": "../../../"
+  }
 }
