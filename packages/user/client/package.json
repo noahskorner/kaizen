@@ -5,6 +5,7 @@
   "types": "./src/index.ts",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   }

@@ -9,6 +9,16 @@ export class VpcStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    this.vpc = new ec2.Vpc(this, config.VPC_ID);
+    // Create a VPC
+    this.vpc = new ec2.Vpc(this, config.VPC_ID, {
+      natGateways: 0,
+      subnetConfiguration: [
+        {
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          name: config.VPC_PRIVATE_SUBNET_NAME,
+          cidrMask: 24
+        }
+      ]
+    });
   }
 }
