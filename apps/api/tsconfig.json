@@ -9,7 +9,6 @@
     "src/fixtures"
   ],
   "compilerOptions": {
-    "module": "CommonJS",
     "outDir": "dist",
     "rootDir": "./src"
   }
