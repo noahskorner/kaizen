@@ -8,12 +8,9 @@
     },
     "lint": {},
     "lint:fix": {},
-    "test": {
-      "cache": false
-    },
+    "test": {},
     "test:e2e": {},
     "dev": {
-      "cache": false,
       "persistent": false
     }
   }

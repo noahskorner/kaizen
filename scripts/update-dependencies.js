@@ -27,6 +27,8 @@ function getPackageJsonFiles(dir) {
 
 function updateDependencies(packageJsonPath, dependencies) {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+
+  // Clear out existing dependencies
   packageJson.dependencies = {};
   packageJson.devDependencies = {};
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
