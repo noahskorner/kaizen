@@ -7,5 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  }
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }

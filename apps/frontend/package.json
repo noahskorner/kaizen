@@ -10,5 +10,22 @@
     "lint:fix": "eslint . --fix",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "cypress": "^13.5.1",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@kaizen/auth-client": "*",
+    "@kaizen/core": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/user-client": "*",
+    "react": "^18.2.0",
+    "react-plaid-link": "^3.5.1",
+    "react-router-dom": "^6.19.0",
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.6"
   }
 }

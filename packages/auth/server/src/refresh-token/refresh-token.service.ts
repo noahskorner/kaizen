@@ -1,9 +1,13 @@
 import { ApiResponse, Errors } from '@kaizen/core';
 import { AuthService } from '../auth.service';
-import { RefreshTokenCommand } from '@kaizen/auth/src/refresh-token/refresh-token.command';
 import { serverEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { AuthToken, RefreshToken, IRefreshTokenService } from '@kaizen/auth';
+import {
+  AuthToken,
+  RefreshToken,
+  IRefreshTokenService,
+  RefreshTokenCommand
+} from '@kaizen/auth';
 import { IGetUserRepository } from '@kaizen/user';
 
 export class RefreshTokenService

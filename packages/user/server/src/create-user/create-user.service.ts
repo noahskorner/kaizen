@@ -1,4 +1,3 @@
-import { CreateUserCommand } from '@kaizen/user/src/create-user/create-user.command';
 import { ApiResponse, Errors } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import {
@@ -6,7 +5,8 @@ import {
   ICreateUserRepository,
   ICreateUserService,
   IFindUserByEmailRepository,
-  User
+  User,
+  CreateUserCommand
 } from '@kaizen/user';
 import { Service } from '@kaizen/core-server';
 

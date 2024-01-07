@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Sidebar } from './sidebar';
-import { AuthRoute } from '@kaizen/auth-client/src/auth-route';
+import { AuthRoute } from '@kaizen/auth-client';
 import { paths } from '../routes';
 
 export const DashboardLayout = () => {

@@ -16,7 +16,23 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2020"
+    "target": "ES2020",
+    "paths": {
+      "@kaizen/auth-client": ["./packages/auth/client/src/index.ts"],
+      "@kaizen/auth-server": ["./packages/auth/server/src/index.ts"],
+      "@kaizen/auth": ["./packages/auth/shared/src/index.ts"],
+      "@kaizen/core-client": ["./packages/core/client/src/index.ts"],
+      "@kaizen/core-server": ["./packages/core/server/src/index.ts"],
+      "@kaizen/core": ["./packages/core/shared/src/index.ts"],
+      "@kaizen/env-client": ["./packages/env/client/src/index.ts"],
+      "@kaizen/env-server": ["./packages/env/server/src/index.ts"],
+      "@kaizen/finance-client": ["./packages/finance/client/src/index.ts"],
+      "@kaizen/finance-server": ["./packages/finance/server/src/index.ts"],
+      "@kaizen/finance": ["./packages/finance/shared/src/index.ts"],
+      "@kaizen/user-client": ["./packages/user/client/src/index.ts"],
+      "@kaizen/user-server": ["./packages/user/server/src/index.ts"],
+      "@kaizen/user": ["./packages/user/shared/src/index.ts"]
+    }
   },
   "exclude": ["cypress.config.ts", "cypress", "node_modules"]
 }
