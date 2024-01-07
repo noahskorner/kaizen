@@ -13,11 +13,5 @@
     "deploy": "npx cdk deploy --all",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "^2.108.1"
-  },
-  "devDependencies": {
-    "constructs": "^10.3.0"
   }
 }

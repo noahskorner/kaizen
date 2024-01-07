@@ -9,12 +9,27 @@ const rootPackageJson = JSON.parse(
   fs.readFileSync(path.join(rootDir, 'package.json'), 'utf-8')
 );
 
+function alphabetically(a, b) {
+  const regex = /^[a-zA-Z]/;
+
+  // If both start with a letter, or both start with a non-letter, sort alphabetically
+  if ((regex.test(a) && regex.test(b)) || (!regex.test(a) && !regex.test(b))) {
+    return a.localeCompare(b);
+  }
+
+  // Otherwise, sort non-letters first
+  return regex.test(a) ? 1 : -1;
+}
+
 function getPackageJsonFiles(dir) {
   return fs.readdirSync(dir).filter((file) => file === 'package.json');
 }
 
 function updateDependencies(packageJsonPath, dependencies) {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  packageJson.dependencies = {};
+  packageJson.devDependencies = {};
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
   dependencies.forEach((dependency) => {
     if (rootPackageJson.devDependencies[dependency] != null) {
@@ -74,7 +89,7 @@ function updateDependenciesForDir(directory) {
           return [...prev, ...imports];
         }, [])
       )
-    ].sort();
+    ].sort(alphabetically);
 
     updateDependencies(packageJsonPath, dependencies);
   });
@@ -96,8 +111,7 @@ const foldersToUpdate = [
   path.join(rootDir, 'packages/finance'),
   path.join(rootDir, 'packages/user/client'),
   path.join(rootDir, 'packages/user/server'),
-  path.join(rootDir, 'packages/user'),
-  path.join(rootDir, 'infrastructure')
+  path.join(rootDir, 'packages/user')
 ];
 
 foldersToUpdate.forEach((folder) => {

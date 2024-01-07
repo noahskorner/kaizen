@@ -32,21 +32,21 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
-    "@kaizen/env-server": "*",
-    "serverless-http": "^3.2.0",
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "cookie-parser": "^1.4.6",
     "@kaizen/auth": "*",
     "@kaizen/auth-server": "*",
-    "@kaizen/core-server": "*",
-    "@prisma/client": "^5.6.0",
     "@kaizen/core": "*",
-    "uuid": "^9.0.1",
-    "@kaizen/user": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/env-server": "*",
     "@kaizen/finance": "*",
-    "jwt-decode": "^4.0.0",
+    "@kaizen/user": "*",
+    "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "serverless-http": "^3.2.0",
+    "uuid": "^9.0.1"
   }
 }

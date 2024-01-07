@@ -1,18 +1,20 @@
 {
   "name": "@kaizen/user-server",
   "version": "0.0.0",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@kaizen/user": "*",
-    "@kaizen/core-server": "*",
     "@kaizen/core": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/user": "*",
     "bcrypt": "^5.1.1"
-  }
+  },
+  "devDependencies": {}
 }

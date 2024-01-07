@@ -12,19 +12,19 @@
     "cypress:run": "cypress run"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.2.0",
-    "cypress": "^13.5.1"
+    "cypress": "^13.5.1",
+    "vite": "^5.0.0"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-router-dom": "^6.19.0",
-    "@kaizen/core-client": "*",
-    "@kaizen/user-client": "*",
     "@kaizen/auth-client": "*",
-    "@kaizen/finance": "*",
-    "react-plaid-link": "^3.5.1",
     "@kaizen/core": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/user-client": "*",
+    "react": "^18.2.0",
+    "react-plaid-link": "^3.5.1",
+    "react-router-dom": "^6.19.0",
     "uuid": "^9.0.1"
   }
 }
