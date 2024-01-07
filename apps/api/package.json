@@ -8,7 +8,7 @@
     "build": "tsc",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
-    "start": "node dist/server.js",
+    "start": "node dist/apps/api/src/server.js",
     "test": "npm run test:setup && dotenv -e ./src/env/.env.test jest && npm run test:teardown",
     "test:debug": "dotenv -e ./src/env/.env.test jest",
     "test:setup": "docker-compose -f ./docker-compose.test.yml up -d && sleep 1 && dotenv -e ./src/env/.env.test -- prisma migrate dev",

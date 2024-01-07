@@ -74,7 +74,6 @@
     "supertest": "^6.3.3",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.1",
-    "tsup": "^8.0.1",
     "turbo": "^1.11.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"

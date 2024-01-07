@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 export interface ClientEnvironment {
   NODE_ENV: 'DEVELOPMENT' | 'TEST';
   API_DOMAIN: string;
