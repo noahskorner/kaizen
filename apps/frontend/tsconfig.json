@@ -1,3 +1,6 @@
 {
-  "extends": "@kaizen/config/typescript/vite.json"
+  "extends": "@kaizen/config/typescript/vite.json",
+  "compilerOptions": {
+    "baseUrl": "../../"
+  }
 }

@@ -1,12 +1,6 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": [
-    ".",
-    "../shared/src/login/login.service.interface.ts",
-    "../shared/src/login/login.command.ts",
-    "../shared/src/refresh-token/refresh-token.service.interface.ts",
-    "../shared/src/refresh-token/refresh-token.command.ts"
-  ],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "baseUrl": "../../../"
