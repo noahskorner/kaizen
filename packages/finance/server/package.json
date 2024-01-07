@@ -8,5 +8,11 @@
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@kaizen/core-server": "*",
+    "@kaizen/finance": "*",
+    "plaid": "^18.0.0",
+    "@kaizen/core": "*"
   }
 }

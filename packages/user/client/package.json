@@ -8,5 +8,12 @@
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@kaizen/core": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/user": "*",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.19.0"
   }
 }

@@ -8,5 +8,15 @@
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@kaizen/auth": "*",
+    "zustand": "^4.4.6",
+    "jwt-decode": "^4.0.0",
+    "@kaizen/core-client": "*",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.19.0",
+    "@kaizen/core": "*",
+    "@kaizen/auth-client": "*"
   }
 }

@@ -8,5 +8,12 @@
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@kaizen/core-client": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/core": "*",
+    "zustand": "^4.4.6",
+    "react": "^18.2.0"
   }
 }

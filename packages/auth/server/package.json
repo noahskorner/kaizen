@@ -8,5 +8,14 @@
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@kaizen/auth": "*",
+    "@kaizen/env-server": "*",
+    "@kaizen/core-server": "*",
+    "jsonwebtoken": "^9.0.2",
+    "@kaizen/core": "*",
+    "@kaizen/user": "*",
+    "bcrypt": "^5.1.1"
   }
 }
