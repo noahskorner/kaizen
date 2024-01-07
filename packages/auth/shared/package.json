@@ -9,5 +9,9 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  }
+  },
+  "dependencies": {
+    "@kaizen/core": "*"
+  },
+  "devDependencies": {}
 }

@@ -102,18 +102,19 @@ const foldersToUpdate = [
   path.join(rootDir, 'apps/frontend'),
   path.join(rootDir, 'packages/auth/client'),
   path.join(rootDir, 'packages/auth/server'),
-  path.join(rootDir, 'packages/auth'),
+  path.join(rootDir, 'packages/auth/shared'),
   path.join(rootDir, 'packages/config'),
   path.join(rootDir, 'packages/core/client'),
   path.join(rootDir, 'packages/core/server'),
-  path.join(rootDir, 'packages/core'),
-  path.join(rootDir, 'packages/env'),
+  path.join(rootDir, 'packages/core/shared'),
+  path.join(rootDir, 'packages/env/client'),
+  path.join(rootDir, 'packages/env/server'),
   path.join(rootDir, 'packages/finance/client'),
   path.join(rootDir, 'packages/finance/server'),
-  path.join(rootDir, 'packages/finance'),
+  path.join(rootDir, 'packages/finance/shared'),
   path.join(rootDir, 'packages/user/client'),
   path.join(rootDir, 'packages/user/server'),
-  path.join(rootDir, 'packages/user')
+  path.join(rootDir, 'packages/user/shared')
 ];
 
 foldersToUpdate.forEach((folder) => {
