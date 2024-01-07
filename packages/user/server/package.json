@@ -7,5 +7,12 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  }
+  },
+  "dependencies": {
+    "@kaizen/core": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/user": "*",
+    "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {}
 }

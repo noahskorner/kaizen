@@ -1,8 +1,11 @@
-import { CreateLinkTokenCommand } from '@kaizen/user/src/create-link-token/create-link-token.command';
 import { ApiResponse, Errors } from '@kaizen/core';
-import { IGetUserRepository, LinkToken } from '@kaizen/user';
+import {
+  IGetUserRepository,
+  LinkToken,
+  CreateLinkTokenCommand,
+  ICreateLinkTokenService
+} from '@kaizen/user';
 import { FinancialProvider, Service } from '@kaizen/core-server';
-import { ICreateLinkTokenService } from '@kaizen/user/src/create-link-token/create-link-token.service.interface';
 
 export class CreateLinkTokenService
   extends Service

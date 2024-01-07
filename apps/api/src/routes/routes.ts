@@ -1,18 +1,17 @@
-import { Response, Router } from 'express';
+import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate';
 import {
   userController,
   authController,
   institutionController,
   transactionController,
-  virtualAccountController
+  virtualAccountController,
+  homeController
 } from './service-collection';
 
 // Routes
 const router = Router();
-router.get('/', (_, res: Response) => {
-  return res.sendStatus(200);
-});
+router.get('/', homeController.find);
 
 // /user
 router.post('/user', userController.create);

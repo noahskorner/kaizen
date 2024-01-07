@@ -1,6 +1,6 @@
 import { Button } from '@kaizen/core-client';
 import { paths } from '../routes';
-import { useAuthStore } from '@kaizen/auth-client/src/use-auth-store';
+import { useAuthStore } from '@kaizen/auth-client';
 import { useNavigate } from 'react-router-dom';
 
 const HOME_PAGE_LOGOUT_BUTTON_ID = 'home-page-logout-button';

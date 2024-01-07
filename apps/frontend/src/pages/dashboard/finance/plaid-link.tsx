@@ -2,11 +2,11 @@ import { usePlaidLink } from 'react-plaid-link';
 import {
   InstitutionClient,
   TransactionClient,
-  useInstitutionStore
+  useInstitutionStore,
+  useTransactionStore
 } from '@kaizen/finance-client';
 import { CreateInstitutionRequest } from '@kaizen/finance';
 import { Button, useToastStore } from '@kaizen/core-client';
-import { useTransactionStore } from '@kaizen/finance-client/src/use-transaction-store';
 
 interface PlaidLinkProps {
   linkToken: string;
