@@ -8,8 +8,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@kaizen/core": "*",
-    "@prisma/client": "^5.6.0"
+    "@kaizen/core": "*"
   },
   "devDependencies": {}
 }
