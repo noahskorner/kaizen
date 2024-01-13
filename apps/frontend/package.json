@@ -17,6 +17,11 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@kaizen/auth-client": "*",
+    "@kaizen/core": "*",
+    "@kaizen/core-client": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/user-client": "*",
     "react": "^18.2.0",
     "react-plaid-link": "^3.5.1",
     "react-router-dom": "^6.19.0",

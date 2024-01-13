@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
-    "build": "rollup -c & cp ./package.json ./dist/package.json",
+    "build": "tsc",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
     "start": "node dist/apps/api/src/server.js",
@@ -32,6 +32,15 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
+    "@kaizen/auth": "*",
+    "@kaizen/auth-server": "*",
+    "@kaizen/core": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/env-server": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/finance-server": "*",
+    "@kaizen/user": "*",
+    "@kaizen/user-server": "*",
     "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",

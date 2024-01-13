@@ -34,9 +34,6 @@ function updateDependencies(packageJsonPath, dependencies) {
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
   dependencies.forEach((dependency) => {
-    // Excluding internal dependencies for now
-    if (dependency.startsWith('@kaizen')) return;
-
     // If the dependency is a devDependency in the root package.json
     if (rootPackageJson.devDependencies[dependency] != null) {
       if (packageJson.devDependencies == null) {
@@ -70,14 +67,12 @@ function updateDependencies(packageJsonPath, dependencies) {
 function findImports(filePath) {
   const fileContent = fs.readFileSync(path.resolve(rootDir, filePath), 'utf8');
   const imports =
-    fileContent.match(/import\s+.*\s+from\s+['"]([^'"]+)['"]/g) || [];
+    fileContent.match(/import\s+.*?\s+from\s+['"]([^'"]+)['"]/gs) || [];
 
   return imports.reduce((prev, importStatement) => {
     const importPath = importStatement.match(/['"]([^'"]+)['"]/)[1];
-    if (!importPath.startsWith('.')) {
-      return prev.concat(importPath);
-    }
-    return prev;
+    if (importPath.startsWith('.')) return prev;
+    return prev.concat(importPath);
   }, []);
 }
 
@@ -105,23 +100,23 @@ function updateDependenciesForDir(directory) {
 }
 
 const foldersToUpdate = [
-  path.join(rootDir, 'apps/api'),
-  path.join(rootDir, 'apps/frontend'),
-  path.join(rootDir, 'packages/auth/client'),
-  path.join(rootDir, 'packages/auth/server'),
-  path.join(rootDir, 'packages/auth/shared'),
-  path.join(rootDir, 'packages/config'),
-  path.join(rootDir, 'packages/core/client'),
-  path.join(rootDir, 'packages/core/server'),
-  path.join(rootDir, 'packages/core/shared'),
-  path.join(rootDir, 'packages/env/client'),
-  path.join(rootDir, 'packages/env/server'),
-  path.join(rootDir, 'packages/finance/client'),
-  path.join(rootDir, 'packages/finance/server'),
-  path.join(rootDir, 'packages/finance/shared'),
-  path.join(rootDir, 'packages/user/client'),
-  path.join(rootDir, 'packages/user/server'),
-  path.join(rootDir, 'packages/user/shared')
+  path.join(rootDir, 'apps/api')
+  // path.join(rootDir, 'apps/frontend'),
+  // path.join(rootDir, 'packages/auth/client'),
+  // path.join(rootDir, 'packages/auth/server'),
+  // path.join(rootDir, 'packages/auth/shared'),
+  // path.join(rootDir, 'packages/config'),
+  // path.join(rootDir, 'packages/core/client'),
+  // path.join(rootDir, 'packages/core/server'),
+  // path.join(rootDir, 'packages/core/shared'),
+  // path.join(rootDir, 'packages/env/client'),
+  // path.join(rootDir, 'packages/env/server'),
+  // path.join(rootDir, 'packages/finance/client'),
+  // path.join(rootDir, 'packages/finance/server'),
+  // path.join(rootDir, 'packages/finance/shared'),
+  // path.join(rootDir, 'packages/user/client'),
+  // path.join(rootDir, 'packages/user/server'),
+  // path.join(rootDir, 'packages/user/shared')
 ];
 
 foldersToUpdate.forEach((folder) => {
