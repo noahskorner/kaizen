@@ -18,21 +18,15 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "npm run turbo:clean && find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' ) -exec rm -rf {} +",
-    "clean": "npm run turbo:clean && find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' ) -exec rm -rf {} +",
     "dev": "turbo run dev",
     "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
     "db:seed": "npm run --prefix ./apps/api seed",
     "format": "prettier . --write",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "format": "prettier . --write",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
     "start": "turbo run start",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
-    "turbo:clean": "turbo daemon clean",
-    "update:deps": "node ./scripts/update-dependencies.js"
     "turbo:clean": "turbo daemon clean",
     "update:deps": "node ./scripts/update-dependencies.js"
   },
