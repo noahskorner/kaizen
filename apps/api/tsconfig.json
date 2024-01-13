@@ -10,6 +10,7 @@
   ],
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": "../../"
+    "declaration": false,
+    "declarationMap": false
   }
 }

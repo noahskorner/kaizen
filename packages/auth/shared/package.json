@@ -7,8 +7,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "dependencies": {
-    "@kaizen/core": "*"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }

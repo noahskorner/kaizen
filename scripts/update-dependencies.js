@@ -34,6 +34,9 @@ function updateDependencies(packageJsonPath, dependencies) {
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
   dependencies.forEach((dependency) => {
+    // Excluding internal dependencies for now
+    if (dependency.startsWith('@kaizen')) return;
+
     // If the dependency is a devDependency in the root package.json
     if (rootPackageJson.devDependencies[dependency] != null) {
       if (packageJson.devDependencies == null) {
@@ -41,11 +44,8 @@ function updateDependencies(packageJsonPath, dependencies) {
       }
 
       // Add it to devDependencies
-      packageJson.devDependencies[dependency] = dependency.startsWith('@kaizen')
-        ? // If it's a @kaizen package, use the latest version
-          '*'
-        : // Else use the root version
-          rootPackageJson.devDependencies[dependency];
+      packageJson.devDependencies[dependency] =
+        rootPackageJson.devDependencies[dependency];
       return;
     }
 
@@ -56,11 +56,8 @@ function updateDependencies(packageJsonPath, dependencies) {
       }
 
       // Add it to dependencies
-      packageJson.dependencies[dependency] = dependency.startsWith('@kaizen')
-        ? // If it's a @kaizen package, use the latest version
-          '*'
-        : // Else use the root version
-          rootPackageJson.dependencies[dependency];
+      packageJson.dependencies[dependency] =
+        rootPackageJson.dependencies[dependency];
       return;
     }
 
