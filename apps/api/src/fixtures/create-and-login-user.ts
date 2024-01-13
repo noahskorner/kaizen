@@ -2,8 +2,7 @@ import supertest from 'supertest';
 import { app } from '../app';
 import { createUniqueEmail } from './create-unique-email';
 import { validPassword } from './valid-password';
-import { AuthToken } from '@kaizen/auth';
-import { LoginCommand } from '@kaizen/auth-server';
+import { AuthToken, LoginCommand } from '@kaizen/auth';
 import { CreateUserCommand, User } from '@kaizen/user';
 import { ApiSuccessResponse } from '@kaizen/core';
 
