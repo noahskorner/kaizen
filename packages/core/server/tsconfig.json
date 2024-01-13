@@ -1,17 +1,5 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": [
-    ".",
-    "../../finance/shared/src/account-record-type.ts",
-    "../../finance/shared/src/account-record.ts",
-    "../../finance/shared/src/institution-record.ts",
-    "../../finance/shared/src/transaction-record.ts",
-    "../../finance/shared/src/virtual-account-record-frequency.ts",
-    "../../finance/shared/src/virtual-account-record.ts",
-    "../../finance/shared/src/create-institution/create-account.query.ts",
-    "../../finance/shared/src/create-institution/create-institution.query.ts",
-    "../../finance/shared/src/create-institution/create-institution.repository.interface.ts",
-    "../../finance/shared/src/create-institution/create-transaction.query.ts"
-  ],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

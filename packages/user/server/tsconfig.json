@@ -1,13 +1,5 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": [
-    ".",
-    "../shared/src/create-user/create-user.service.interface.ts",
-    "../shared/src/create-user/create-user.command.ts",
-    "../shared/src/create-link-token/create-link-token.command.ts",
-    "../shared/src/create-link-token/create-link-token.service.interface.ts",
-    "../shared/src/get-user/get-user.service.interface.ts",
-    "../shared/src/get-user/get-user.command.ts"
-  ],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
-    "build": "tsc",
+    "postinstall": "npx prisma generate",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
     "start": "node dist/server.js",
@@ -26,5 +26,29 @@
   "prisma": {
     "schema": "src/prisma/schema.prisma",
     "seed": "ts-node src/prisma/seed/seed.ts"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "@kaizen/auth": "*",
+    "@kaizen/auth-server": "*",
+    "@kaizen/core": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/env-server": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/finance-server": "*",
+    "@kaizen/user": "*",
+    "@kaizen/user-server": "*",
+    "@prisma/client": "^5.6.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "serverless-http": "^3.2.0",
+    "uuid": "^9.0.1"
   }
 }

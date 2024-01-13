@@ -9,6 +9,8 @@
     "npm": "10.2.2"
   },
   "scripts": {
+    "build": "npx cdk synth",
+    "deploy": "npx cdk deploy --all",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   }
