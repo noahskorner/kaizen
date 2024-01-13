@@ -17,7 +17,6 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2020",
-    "module": "CommonJS",
     "paths": {
       "@kaizen/auth-client": ["./packages/auth/client/src/index.ts"],
       "@kaizen/auth-server": ["./packages/auth/server/src/index.ts"],

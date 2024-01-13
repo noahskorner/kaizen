@@ -5,10 +5,11 @@
     "dist",
     "jest.config.ts",
     "**/*.test.ts",
-    "jest.setup.ts"
+    "jest.setup.ts",
+    "src/fixtures"
   ],
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "./src"
+    "baseUrl": "../../"
   }
 }
