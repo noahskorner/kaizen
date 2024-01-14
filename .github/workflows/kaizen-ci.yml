@@ -6,12 +6,8 @@ on:
       - main
 
 jobs:
-  setup:
-    uses: ./.github/workflows/kaizen-setup.yml
-
   build:
-    needs: setup
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/kaizen-setup.yml
 
     steps:
       - name: Build
@@ -19,8 +15,7 @@ jobs:
         continue-on-error: false
 
   lint:
-    needs: setup
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/kaizen-setup.yml
 
     steps:
       - name: Lint
@@ -28,8 +23,7 @@ jobs:
         continue-on-error: false
 
   test:
-    needs: setup
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/kaizen-setup.yml
 
     steps:
       - name: Test

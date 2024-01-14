@@ -1,4 +1,4 @@
-name: Kaizen Action
+name: Kaizen Setup
 on:
   workflow_call:
 
