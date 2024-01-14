@@ -7,7 +7,7 @@ on:
 
 jobs:
   setup:
-    uses: ./.github/workflows/kaizen-action.yml
+    uses: ./.github/workflows/kaizen-setup.yml
 
   build:
     needs: setup
