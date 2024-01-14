@@ -11,10 +11,15 @@ export class VpcStack extends Stack {
 
     // Create a VPC
     this.vpc = new ec2.Vpc(this, config.VPC_ID, {
-      natGateways: 0,
+      natGateways: 1,
       subnetConfiguration: [
         {
-          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          subnetType: ec2.SubnetType.PUBLIC,
+          name: config.VPC_PUBLIC_SUBNET_NAME,
+          cidrMask: 24
+        },
+        {
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
           name: config.VPC_PRIVATE_SUBNET_NAME,
           cidrMask: 24
         }

@@ -1,10 +1,10 @@
 import * as rds from 'aws-cdk-lib/aws-rds';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 export const config = {
   STACK_ID: 'kaizen-stack',
   VPC_STACK_ID: 'kaizen-vpc-stack',
   VPC_ID: 'kaizen-vpc',
+  VPC_PUBLIC_SUBNET_NAME: 'kaizen-vpc-public-subnet',
   VPC_PRIVATE_SUBNET_NAME: 'kaizen-vpc-private-subnet',
   DATABASE_ENGINE: rds.PostgresEngineVersion.VER_15_4,
   DATABASE_STACK_ID: 'kaizen-db-stack',
@@ -16,10 +16,8 @@ export const config = {
   DATABASE_PARAMETER_GROUP_ID: 'kaizen-db-parameter-group',
   DATABASE_SECURITY_GROUP_ID: 'kaizen-db-security-group',
   DATABASE_SUBNET_GROUP_ID: 'kaizen-db-subnet-group',
-  SERVER_APP_DIR: 'C://_git//kaizen//apps//api//dist',
   SERVER_STACK_ID: 'kaizen-server-stack',
-  SERVER_NODE_VERSION: lambda.Runtime.NODEJS_20_X,
-  SERVER_API_GATEWAY_ID: 'kaizen-api',
-  SERVER_API_GATEWAY_NAME: 'Kaizen API',
-  SERVER_LAMBDA_ID: 'kaizen-lambda'
+  SERVER_REPOSITORY_ID: 'kaizen-server-repository',
+  SERVER_LAMBDA_ID: 'kaizen-server-lambda',
+  SERVER_API_GATEWAY_ID: 'kaizen-server-api-gateway'
 };

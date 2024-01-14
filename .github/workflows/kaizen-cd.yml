@@ -4,39 +4,36 @@ on:
   push:
     branches:
       - main
-  release:
-    types: [created]
-    branches:
-      - 'release/**'
-  workflow_dispatch:
-    branches:
-      - release/**
-    inputs:
-      branch-name:
-        description: 'Branch to deploy'
-        required: true
 
 jobs:
-  development:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy to development
-        run: |
-          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to development"
+  setup:
+    uses: ./.github/workflows/kaizen-action.yml
 
-  staging:
+  deploy:
+    needs: setup
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release/')
-    steps:
-      - name: Deploy to staging
-        run: |
-          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to staging"
 
-  production:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    env:
+      AWS_REGION: us-east-2
+      AWS_ECS_REPOSITORY: kaizen-server-repository
+
     steps:
-      - name: Deploy to production
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Push Docker Image
         run: |
-          echo "Deploying branch ${{ github.event.inputs.deploy-branch }} to production"
+          cd apps/api
+          npm run docker:build
+          npm run docker:tag --region=${{ env.AWS_REGION }} --repository=${{ env.AWS_ECS_REPOSITORY }}
+          npm run docker:push --region=${{ env.AWS_REGION }} --repository=${{ env.AWS_ECS_REPOSITORY }}
+
+      - name: Deploy AWS Stack
+        run: |
+          cd ../../infrastructure
+          npm run stack:build
+          npm run stack:deploy

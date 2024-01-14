@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development --host",
-    "build": "tsc && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "cypress:open": "cypress open",

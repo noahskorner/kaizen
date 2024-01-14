@@ -8,6 +8,7 @@
     "typescript"
   ],
   "scripts": {
+    "build": "rm -rf ../../dist/packages/config && mkdir ..\\..\\dist\\packages\\config && cp -r package.json ./tailwind ../../dist/packages/config",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
