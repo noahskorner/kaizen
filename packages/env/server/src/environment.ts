@@ -1,12 +1,12 @@
-export interface ServerEnvironment {
-  NODE_ENV: 'DEVELOPMENT' | 'TEST';
+export interface ServerEnvironment extends Record<string, string> {
+  NODE_ENV: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
   DATABASE_URL: string;
   ACCESS_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_SECRET: string;
   REFRESH_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_COOKIE_DOMAIN: string;
-  API_PORT: number;
+  API_PORT: string;
   API_DOMAIN: string;
   FRONTEND_DOMAIN: string;
   PLAID_CLIENT_ID: string;
@@ -49,8 +49,8 @@ if (REFRESH_TOKEN_EXPIRATION == null) {
     `Must provide REFRESH_TOKEN_EXPIRATION. Did you forget to set it in your environment file?`
   );
 }
-const API_PORT = parseInt(process.env.API_PORT ?? '');
-if (API_PORT == null || isNaN(API_PORT)) {
+const API_PORT = process.env.API_PORT;
+if (API_PORT == null || isNaN(parseInt(process.env.API_PORT ?? ''))) {
   throw new Error(
     `Must provide API_PORT. Did you forget to set it in your environment file?`
   );

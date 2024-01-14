@@ -3,6 +3,7 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import { serverEnvironment } from '@kaizen/env-server';
 import { Construct } from 'constructs';
 import { config } from './config';
 
@@ -26,7 +27,8 @@ export class ApiStack extends cdk.Stack {
         vpc: vpc,
         vpcSubnets: {
           subnets: vpc.privateSubnets
-        }
+        },
+        environment: serverEnvironment
       }
     );
 
