@@ -12,9 +12,6 @@ jobs:
     environment: production
 
     steps:
-      - name: Echo
-        run: echo ${{ vars.AWS_REGION }}
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -36,6 +33,7 @@ jobs:
       - name: Push Docker Image
         run: |
           cd apps/api
+          chmod +x build.sh
           npm run docker:build
           npm run docker:tag --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
           npm run docker:push --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
