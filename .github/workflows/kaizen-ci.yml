@@ -6,8 +6,9 @@ on:
       - main
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -20,29 +21,44 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Build
         run: npm run build
         continue-on-error: false
 
   lint:
-    needs: setup
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Lint
         run: npm run lint
         continue-on-error: false
 
   test:
-    needs: setup
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Test
         run: npm run test
         continue-on-error: false
