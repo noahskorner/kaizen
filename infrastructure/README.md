@@ -23,14 +23,14 @@
    cd infrastructure
    ```
 
-2. Create the CloudFormation template
+2. Build the CloudFormation template
 
    ```sh
-   npx cdk synth
+   npm run build
    ```
 
 3. Deploy every stack
 
    ```sh
-   npx cdk deploy --all
+   npm run deploy
    ```

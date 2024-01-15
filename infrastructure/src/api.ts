@@ -1,34 +1,49 @@
+import * as cdk from 'aws-cdk-lib';
+import * as ecr from 'aws-cdk-lib/aws-ecr';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import { serverEnvironment } from '@kaizen/env-server';
 import { Construct } from 'constructs';
-import { Stack, StackProps } from 'aws-cdk-lib/core';
 import { config } from './config';
 
-interface ApiStackProps extends StackProps {
-  appDir: string;
-  nodeVersion: lambda.Runtime;
-}
-
-export class ApiStack extends Stack {
-  constructor(
-    scope: Construct,
-    id: string,
-    { appDir, nodeVersion }: ApiStackProps
-  ) {
+export class ApiStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, vpc: ec2.Vpc) {
     super(scope, id);
 
-    // Create an API Gateway REST API
-    const api = new apigateway.RestApi(this, config.SERVER_API_GATEWAY_ID, {
-      restApiName: config.SERVER_API_GATEWAY_NAME
-    });
+    // Create an ECR repository for your Docker image
+    const repository = ecr.Repository.fromRepositoryName(
+      this,
+      config.SERVER_REPOSITORY_ID,
+      config.SERVER_REPOSITORY_ID
+    );
 
-    // Create a Lambda function for the API Gateway
-    const lambdaHandler = new lambda.Function(this, config.SERVER_LAMBDA_ID, {
-      runtime: nodeVersion,
-      handler: 'index.handler',
-      code: lambda.Code.fromAsset(appDir)
-    });
+    // Create a Lambda function from the Docker image in the ECR repository
+    const lambdaFunction = new lambda.DockerImageFunction(
+      this,
+      config.SERVER_LAMBDA_ID,
+      {
+        code: lambda.DockerImageCode.fromEcr(repository),
+        vpc: vpc,
+        vpcSubnets: {
+          subnets: vpc.privateSubnets
+        },
+        environment: serverEnvironment
+      }
+    );
 
-    api.root.addMethod('GET', new apigateway.LambdaIntegration(lambdaHandler));
+    // Create an API Gateway REST API that routes requests to the Lambda function
+    const api = new apigateway.LambdaRestApi(
+      this,
+      config.SERVER_API_GATEWAY_ID,
+      {
+        handler: lambdaFunction
+      }
+    );
+
+    // Output the URL of your Express API
+    new cdk.CfnOutput(this, 'ExpressApiUrl', {
+      value: api.url
+    });
   }
 }

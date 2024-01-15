@@ -26,8 +26,8 @@ export class DatabaseStack extends Stack {
       this,
       config.DATABASE_SUBNET_GROUP_ID,
       {
-        vpc: vpc,
         description: id + 'subnet group',
+        vpc: vpc,
         vpcSubnets: {
           subnets: vpc.privateSubnets
         },
