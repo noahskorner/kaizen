@@ -14,8 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Working Directory
+        run: cd kaizen
+
       - name: Build
-        run: npm run build
+        run: |
+          cd kaizen 
+          npm run build
         continue-on-error: false
 
   lint:
@@ -23,6 +28,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Working Directory
+        run: cd kaizen
+
       - name: Lint
         run: npm run lint
         continue-on-error: false
@@ -32,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Working Directory
+        run: cd kaizen
+
       - name: Test
-        run: npm run test
+        run: cdnpm run test
         continue-on-error: false
