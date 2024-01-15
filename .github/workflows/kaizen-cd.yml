@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # TODO: We only have one environment for now
     environment: production
 
     steps:
