@@ -11,18 +11,19 @@ export class VpcStack extends Stack {
 
     // Create a VPC
     this.vpc = new ec2.Vpc(this, config.VPC_ID, {
-      natGateways: 1,
+      natGateways: 0, // TODO: Setting this to 0 to save on NAT Gateway costs
       subnetConfiguration: [
         {
           subnetType: ec2.SubnetType.PUBLIC,
           name: config.VPC_PUBLIC_SUBNET_NAME,
           cidrMask: 24
-        },
-        {
-          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-          name: config.VPC_PRIVATE_SUBNET_NAME,
-          cidrMask: 24
         }
+        // TODO: Making this public to save on NAT Gateway costs
+        // {
+        //   subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        //   name: config.VPC_PRIVATE_SUBNET_NAME,
+        //   cidrMask: 24
+        // }
       ]
     });
   }

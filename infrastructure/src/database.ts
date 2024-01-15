@@ -1,6 +1,7 @@
-import { Duration, RemovalPolicy, SecretValue, Stack } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Stack, CfnOutput } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { config } from './config';
 
@@ -9,17 +10,19 @@ export class DatabaseStack extends Stack {
     super(scope, id);
 
     // Create the security group
-    const dbsg = new ec2.SecurityGroup(
+    const securityGroup = new ec2.SecurityGroup(
       this,
       config.DATABASE_SECURITY_GROUP_ID,
       {
         vpc: vpc,
-        allowAllOutbound: true,
-        description: id + 'Database',
-        securityGroupName: id + 'Database'
+        allowAllOutbound: true
       }
     );
-    dbsg.addIngressRule(dbsg, ec2.Port.allTraffic(), 'all from self');
+    securityGroup.addIngressRule(
+      securityGroup,
+      ec2.Port.tcp(config.DATABASE_PORT),
+      'Allow postgres from self'
+    );
 
     // Create the subnet group
     const subnetGroup = new rds.SubnetGroup(
@@ -46,23 +49,31 @@ export class DatabaseStack extends Stack {
       }
     );
 
-    // Create the credentials
-    const credentials = rds.Credentials.fromPassword(
-      config.DATABASE_USERNAME,
-      SecretValue.unsafePlainText(config.DATABASE_PASSWORD)
-    );
+    // Create a secret to store database credentials
+    const secret = new secretsmanager.Secret(this, config.DATABASE_SECRET_ID, {
+      secretName: config.DATABASE_SECRET_ID,
+      generateSecretString: {
+        secretStringTemplate: JSON.stringify({
+          username: config.DATABASE_USERNAME
+        }),
+        generateStringKey: 'password',
+        passwordLength: 24
+      }
+    });
+    const credentials = rds.Credentials.fromSecret(secret);
 
     // Create the database
-    new rds.DatabaseInstance(this, config.DATABASE_ID, {
-      databaseName: config.DATABASE_NAME,
+    const database = new rds.DatabaseInstance(this, config.DATABASE_ID, {
       instanceIdentifier: config.DATABASE_ID,
+      databaseName: config.DATABASE_NAME,
+      port: config.DATABASE_PORT,
       credentials: credentials,
       engine: rds.DatabaseInstanceEngine.postgres({
         version: config.DATABASE_ENGINE
       }),
       backupRetention: Duration.days(0),
       allocatedStorage: 20,
-      securityGroups: [dbsg],
+      securityGroups: [securityGroup],
       allowMajorVersionUpgrade: true,
       autoMinorVersionUpgrade: true,
       instanceType: ec2.InstanceType.of(
@@ -70,16 +81,21 @@ export class DatabaseStack extends Stack {
         ec2.InstanceSize.MICRO
       ),
       vpcSubnets: {
+        // TODO: Making this public to save on NAT Gateway costs
+        // subnets: vpc.privateSubnets
         subnets: vpc.privateSubnets
       },
       vpc: vpc,
       removalPolicy: RemovalPolicy.DESTROY,
       storageEncrypted: true,
-      monitoringInterval: Duration.seconds(60),
-      enablePerformanceInsights: true,
       parameterGroup: parameterGroup,
-      subnetGroup: subnetGroup,
-      publiclyAccessible: false
+      subnetGroup: subnetGroup
+    });
+
+    // Output the database address
+    new CfnOutput(this, config.DATABASE_ADDRESS_ID, {
+      value: database.dbInstanceEndpointAddress,
+      exportName: config.DATABASE_ADDRESS_ID
     });
   }
 }
