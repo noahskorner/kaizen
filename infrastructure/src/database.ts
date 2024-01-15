@@ -32,7 +32,9 @@ export class DatabaseStack extends Stack {
         description: id + 'subnet group',
         vpc: vpc,
         vpcSubnets: {
-          subnets: vpc.privateSubnets
+          // TODO: Making this public to save on NAT Gateway costs
+          // subnets: vpc.privateSubnets
+          subnets: vpc.publicSubnets
         },
         subnetGroupName: id + 'subnet group'
       }
