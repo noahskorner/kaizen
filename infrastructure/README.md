@@ -25,7 +25,7 @@
 5. **Deploy the Elastic Container Registry**
 
    ```sh
-   cd infrastructure && npm run build && npm run deploy:ecr
+   cd infrastructure && npm run stack:build && npm run stack:deploy:ecr
    ```
 
 ## Deploying a stack
@@ -39,11 +39,11 @@
 2. Build the CloudFormation template
 
    ```sh
-   npm run build
+   npm run stack:build
    ```
 
 3. Deploy every stack
 
    ```sh
-   npm run deploy
+   npm run stack:deploy
    ```
