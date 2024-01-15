@@ -2,14 +2,16 @@
   "name": "@kaizen/api",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
-    "postinstall": "npx prisma generate",
     "build": "tsc",
+    "docker:build": "./build.sh && docker build -t kaizen/api .",
+    "docker:start": "docker run -p 3001:3001 kaizen/api",
+    "docker:tag": "docker tag kaizen/api:latest $npm_config_region.dkr.ecr.$npm_config_region.amazonaws.com/$npm_config_repository:latest",
+    "docker:push": "docker push $npm_config_region.dkr.ecr.$npm_config_region.amazonaws.com/$npm_config_repository:latest",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
-    "start": "node dist/apps/api/src/server.js",
     "test": "npm run test:setup && dotenv -e ./src/env/.env.test jest && npm run test:teardown",
     "test:debug": "dotenv -e ./src/env/.env.test jest",
     "test:setup": "docker-compose -f ./docker-compose.test.yml up -d && sleep 1 && dotenv -e ./src/env/.env.test -- prisma migrate dev",
@@ -49,8 +51,6 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
-    "plaid": "^18.0.0",
-    "serverless-http": "^3.2.0",
     "uuid": "^9.0.1"
   }
 }

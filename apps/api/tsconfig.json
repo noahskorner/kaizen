@@ -9,7 +9,6 @@
     "src/fixtures"
   ],
   "compilerOptions": {
-    "outDir": "dist",
-    "baseUrl": "../../"
+    "outDir": "../../dist/apps/api"
   }
 }
