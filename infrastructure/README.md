@@ -28,8 +28,6 @@
    cd infrastructure && npm run build && npm run deploy:ecr
    ```
 
-   **Important:** Currently the docker:build, docker:tag, and docker:push commands are hardcoded at [apps/api/package/json](../apps/api/package.json). If the repository name, aws account id, or aws region have changed, these must be updated.
-
 ## Deploying a stack
 
 1. Navigate to the /infrastructure directory
