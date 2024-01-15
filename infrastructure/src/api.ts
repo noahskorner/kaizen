@@ -7,8 +7,17 @@ import { serverEnvironment } from '@kaizen/env-server';
 import { Construct } from 'constructs';
 import { config } from './config';
 
+export interface ApiStackProps {
+  vpc: ec2.Vpc;
+  databaseSecurityGroup: ec2.SecurityGroup;
+}
+
 export class ApiStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, vpc: ec2.Vpc) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { vpc, databaseSecurityGroup }: ApiStackProps
+  ) {
     super(scope, id);
 
     // Create an ECR repository for your Docker image
@@ -16,13 +25,6 @@ export class ApiStack extends cdk.Stack {
       this,
       config.ECR_REPOSITORY_ID,
       config.ECR_REPOSITORY_ID
-    );
-
-    // Obtain the database security group
-    const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      config.DATABASE_SECURITY_GROUP_ID,
-      config.DATABASE_SECURITY_GROUP_ID
     );
 
     // Create a Lambda function from the Docker image in the ECR repository

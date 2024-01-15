@@ -6,11 +6,13 @@ import { Construct } from 'constructs';
 import { config } from './config';
 
 export class DatabaseStack extends Stack {
+  public readonly securityGroup: ec2.SecurityGroup;
+
   constructor(scope: Construct, id: string, vpc: ec2.Vpc) {
     super(scope, id);
 
     // Create the security group
-    const securityGroup = new ec2.SecurityGroup(
+    this.securityGroup = new ec2.SecurityGroup(
       this,
       config.DATABASE_SECURITY_GROUP_ID,
       {
@@ -18,8 +20,8 @@ export class DatabaseStack extends Stack {
         allowAllOutbound: true
       }
     );
-    securityGroup.addIngressRule(
-      securityGroup,
+    this.securityGroup.addIngressRule(
+      this.securityGroup,
       ec2.Port.tcp(config.DATABASE_PORT),
       'Allow postgres from self'
     );
@@ -75,7 +77,7 @@ export class DatabaseStack extends Stack {
       }),
       backupRetention: Duration.days(0),
       allocatedStorage: 20,
-      securityGroups: [securityGroup],
+      securityGroups: [this.securityGroup],
       allowMajorVersionUpgrade: true,
       autoMinorVersionUpgrade: true,
       instanceType: ec2.InstanceType.of(
