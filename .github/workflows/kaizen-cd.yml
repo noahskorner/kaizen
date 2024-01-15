@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Echo
-        run: echo ${{ env.AWS_REGION }}
+        run: echo ${{ vars.AWS_REGION }}
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -31,14 +31,14 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Push Docker Image
         run: |
           cd apps/api
           npm run docker:build
-          npm run docker:tag --region=${{ env.AWS_REGION }} --repository=${{ env.AWS_ECS_REPOSITORY }}
-          npm run docker:push --region=${{ env.AWS_REGION }} --repository=${{ env.AWS_ECS_REPOSITORY }}
+          npm run docker:tag --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
+          npm run docker:push --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
 
       - name: Deploy AWS Stack
         run: |
@@ -46,14 +46,14 @@ jobs:
           npm run stack:build
           npm run stack:deploy
         env:
-          NODE_ENV: ${{ env.NODE_ENV }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          ACCESS_TOKEN_EXPIRATION: ${{ env.ACCESS_TOKEN_EXPIRATION }}
+          ACCESS_TOKEN_EXPIRATION: ${{ vars.ACCESS_TOKEN_EXPIRATION }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
-          REFRESH_TOKEN_EXPIRATION: ${{ env.REFRESH_TOKEN_EXPIRATION }}
-          REFRESH_TOKEN_COOKIE_DOMAIN: ${{ env.REFRESH_TOKEN_COOKIE_DOMAIN }}
-          API_PORT: ${{ env.API_PORT }}
-          API_DOMAIN: ${{ env.API_DOMAIN }}
-          FRONTEND_DOMAIN: ${{ env.FRONTEND_DOMAIN }}
+          REFRESH_TOKEN_EXPIRATION: ${{ vars.REFRESH_TOKEN_EXPIRATION }}
+          REFRESH_TOKEN_COOKIE_DOMAIN: ${{ vars.REFRESH_TOKEN_COOKIE_DOMAIN }}
+          API_PORT: ${{ vars.API_PORT }}
+          API_DOMAIN: ${{ vars.API_DOMAIN }}
+          FRONTEND_DOMAIN: ${{ vars.FRONTEND_DOMAIN }}
           PLAID_CLIENT_ID: ${{ secrets.PLAID_CLIENT_ID }}
           PLAID_SECRET: ${{ secrets.PLAID_SECRET }}
