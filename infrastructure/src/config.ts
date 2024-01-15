@@ -1,7 +1,8 @@
 import * as rds from 'aws-cdk-lib/aws-rds';
 
 export const config = {
-  STACK_ID: 'kaizen-stack',
+  ECR_STACK_ID: 'kaizen-ecr-stack',
+  ECR_REPOSITORY_ID: 'kaizen-ecr-repository',
   VPC_STACK_ID: 'kaizen-vpc-stack',
   VPC_ID: 'kaizen-vpc',
   VPC_PUBLIC_SUBNET_NAME: 'kaizen-vpc-public-subnet',
@@ -19,7 +20,6 @@ export const config = {
   DATABASE_SUBNET_GROUP_ID: 'kaizen-db-subnet-group',
   DATABASE_ADDRESS_ID: 'kaizen-db-address',
   SERVER_STACK_ID: 'kaizen-server-stack',
-  SERVER_REPOSITORY_ID: 'kaizen-server-repository',
   SERVER_LAMBDA_ID: 'kaizen-server-lambda',
   SERVER_API_GATEWAY_ID: 'kaizen-server-api-gateway'
 };
