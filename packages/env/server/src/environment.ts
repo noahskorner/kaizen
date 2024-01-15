@@ -14,7 +14,11 @@ export interface ServerEnvironment extends Record<string, string> {
 }
 
 const NODE_ENV = process.env.NODE_ENV ?? '';
-if (NODE_ENV != 'DEVELOPMENT' && NODE_ENV != 'TEST') {
+if (
+  NODE_ENV != 'DEVELOPMENT' &&
+  NODE_ENV != 'TEST' &&
+  NODE_ENV != 'PRODUCTION'
+) {
   throw new Error(
     `Must provide NODE_ENV: ${NODE_ENV}. Did you forget to set it in your environment file?`
   );
