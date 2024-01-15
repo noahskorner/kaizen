@@ -80,12 +80,12 @@ export class DatabaseStack extends Stack {
         ec2.InstanceClass.T3,
         ec2.InstanceSize.MICRO
       ),
+      vpc: vpc,
       vpcSubnets: {
         // TODO: Making this public to save on NAT Gateway costs
         // subnets: vpc.privateSubnets
-        subnets: vpc.privateSubnets
+        subnets: vpc.publicSubnets
       },
-      vpc: vpc,
       removalPolicy: RemovalPolicy.DESTROY,
       storageEncrypted: true,
       parameterGroup: parameterGroup,
