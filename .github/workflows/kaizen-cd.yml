@@ -33,7 +33,7 @@ jobs:
       - name: Push Docker Image
         run: |
           cd apps/api
-          chmod +x build.sh
+          chmod +x ./build.sh
           npm run docker:build
           npm run docker:tag --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
           npm run docker:push --region=${{ vars.AWS_REGION }} --repository=${{ vars.AWS_ECS_REPOSITORY }}
