@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # Copy the dist directory
 COPY out/dist /usr/src/app
 
-# Change to the dist directory
+# Change to the app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
