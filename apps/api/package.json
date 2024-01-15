@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
     "build": "tsc",
-    "docker:build": "./build.sh && docker build -t kaizen/api .",
+    "docker:build": "build.sh && docker build -t kaizen/api .",
     "docker:start": "docker run -p 3001:3001 kaizen/api",
     "docker:tag": "docker tag kaizen/api:latest $npm_config_region.dkr.ecr.$npm_config_region.amazonaws.com/$npm_config_repository:latest",
     "docker:push": "docker push $npm_config_region.dkr.ecr.$npm_config_region.amazonaws.com/$npm_config_repository:latest",
