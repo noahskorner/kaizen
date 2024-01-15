@@ -37,9 +37,9 @@ jobs:
         run: |
           cd apps/api
           chmod +x ./build.sh
-          npm run docker:build --aws-repository-id ${{ vars.AWS_ECR_REPOSITORY_ID }}
-          npm run docker:tag --aws-repository-id ${{ vars.AWS_ECR_REPOSITORY_ID }} --aws-account-id ${{ vars.AWS_ACCOUNT_ID }} --aws-region ${{ vars.AWS_REGION }}
-          npm run docker:push --aws-repository-id ${{ vars.AWS_ECR_REPOSITORY_ID }} --aws-account-id ${{ vars.AWS_ACCOUNT_ID }} --aws-region ${{ vars.AWS_REGION }}
+          npm run docker:build --aws-repository-id=${{ vars.AWS_ECR_REPOSITORY_ID }}
+          npm run docker:tag --aws-repository-id=${{ vars.AWS_ECR_REPOSITORY_ID }} --aws-account-id=${{ vars.AWS_ACCOUNT_ID }} --aws-region=${{ vars.AWS_REGION }}
+          npm run docker:push --aws-repository-id=${{ vars.AWS_ECR_REPOSITORY_ID }} --aws-account-id=${{ vars.AWS_ACCOUNT_ID }} --aws-region=${{ vars.AWS_REGION }}
 
       - name: Deploy AWS Stack
         run: |
