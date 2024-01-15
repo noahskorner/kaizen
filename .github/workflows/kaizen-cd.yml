@@ -43,7 +43,7 @@ jobs:
 
       - name: Deploy AWS Stack
         run: |
-          cd ../../infrastructure
+          cd infrastructure
           npm run stack:build
           npm run stack:deploy
         env:
