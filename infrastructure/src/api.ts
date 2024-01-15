@@ -3,7 +3,6 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { serverEnvironment } from '@kaizen/env-server';
 import { Construct } from 'constructs';
 import { config } from './config';
@@ -15,21 +14,13 @@ export class ApiStack extends cdk.Stack {
     // Create an ECR repository for your Docker image
     const repository = ecr.Repository.fromRepositoryName(
       this,
-      config.SERVER_REPOSITORY_ID,
-      config.SERVER_REPOSITORY_ID
+      config.ECR_REPOSITORY_ID,
+      config.ECR_REPOSITORY_ID
     );
 
-    // Obtain the DATABASE_URL
-    const secret = secretsmanager.Secret.fromSecretNameV2(
-      scope,
-      config.DATABASE_SECRET_ID,
-      config.DATABASE_SECRET_ID
-    );
-    const { username, password } = JSON.parse(secret.secretValue.toString());
-    const databaseAddress = cdk.Fn.importValue(config.DATABASE_ADDRESS_ID);
-    const databaseUrl = `postgres://${username}:${password}@${databaseAddress}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+    // Obtain the database security group
     const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-      scope,
+      this,
       config.DATABASE_SECURITY_GROUP_ID,
       config.DATABASE_SECURITY_GROUP_ID
     );
@@ -41,16 +32,15 @@ export class ApiStack extends cdk.Stack {
       {
         code: lambda.DockerImageCode.fromEcr(repository),
         vpc: vpc,
+        // TODO: Making this public to save on NAT Gateway costs
+        allowPublicSubnet: true,
         vpcSubnets: {
           // TODO: Making this public to save on NAT Gateway costs
           // subnets: vpc.privateSubnets
           subnets: vpc.publicSubnets
         },
         securityGroups: [databaseSecurityGroup],
-        environment: {
-          ...serverEnvironment,
-          DATABASE_URL: databaseUrl
-        }
+        environment: serverEnvironment
       }
     );
 
