@@ -29,4 +29,4 @@ WORKDIR /usr/src/app
 EXPOSE 3001
 
 # Start the application
-CMD ["node", "apps/api/server.js"]
+CMD ["node", "apps/api/src/server.js"]

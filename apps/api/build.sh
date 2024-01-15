@@ -8,11 +8,11 @@ mkdir -p out;
 cp -R ../../temp/* out;
 rm -rf ../../temp;
 
-# Copy prisma files
-cd out/full;
-mkdir -p ./dist/apps/api/prisma;
-cp -R ./apps/api/src/prisma/migrations/ ./dist/apps/api/prisma;
-cp ./apps/api/src/prisma/schema.prisma ./dist/apps/api/prisma;
 
 # Build the application
+cd out/full;
 npm run build;
+
+# Copy the prisma files
+cp -R ./apps/api/src/prisma/migrations/ ./dist/apps/api/src/prisma;
+cp ./apps/api/src/prisma/schema.prisma ./dist/apps/api/src/prisma;
