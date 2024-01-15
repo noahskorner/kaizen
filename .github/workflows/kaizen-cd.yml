@@ -12,6 +12,9 @@ jobs:
     environment: production
 
     steps:
+      - name: Echo
+        run: echo ${{ env.AWS_REGION }}
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
