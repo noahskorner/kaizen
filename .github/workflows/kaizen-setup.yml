@@ -15,4 +15,6 @@ jobs:
           node-version: 20.9.0
 
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          npm ci
+          cd ../
