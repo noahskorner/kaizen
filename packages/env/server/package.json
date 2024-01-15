@@ -2,6 +2,10 @@
   "name": "@kaizen/env-server",
   "version": "0.0.0",
   "main": "src/index.ts",
+  "volta": {
+    "node": "20.9.0",
+    "npm": "10.2.2"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc",

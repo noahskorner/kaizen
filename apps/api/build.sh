@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 
 # Generate the pruned monorepo
-turbo prune @kaizen/api --out-dir temp;
+# This till be easier once turborepo adds an ignore feature option
+# Running --out-dir apps/api/out it will cause an infinite loop
+turbo prune @kaizen/api --out-dir temp --docker;
 mkdir -p out;
 cp -R ../../temp/* out;
 rm -rf ../../temp;
 
 # Build the application
-cd out;
+cd out/full;
 npm run build;
-
-# # Copy the package*.json files to the dist folder
-cp package.json dist;
-cp package-lock.json dist;
-find ./apps ./packages -name package.json -exec bash -c 'mkdir -p "dist/$(dirname {})" && cp "{}" "dist/{}"' \;
