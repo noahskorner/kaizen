@@ -16,6 +16,9 @@ WORKDIR /usr/src/app
 # Install app dependencies
 RUN npm install --omit-dev=true
 
+# Generate prisma client
+RUN prisma generate
+
 # Copy the rest of the application
 COPY out/full/dist /usr/src/app
 
