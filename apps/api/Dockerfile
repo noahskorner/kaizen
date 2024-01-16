@@ -23,4 +23,4 @@ RUN npx prisma generate
 EXPOSE 3001
 
 # Start the application
-CMD ["node", "apps/api/src/index.js"]
+CMD ["node", "apps/api/src/server.js"]

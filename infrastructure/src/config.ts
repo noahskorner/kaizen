@@ -19,7 +19,12 @@ export const config = {
   DATABASE_SECURITY_GROUP_ID: 'kaizen-db-security-group',
   DATABASE_SUBNET_GROUP_ID: 'kaizen-db-subnet-group',
   DATABASE_ADDRESS_ID: 'kaizen-db-address',
-  SERVER_STACK_ID: 'kaizen-server-stack',
-  SERVER_LAMBDA_ID: 'kaizen-server-lambda',
-  SERVER_API_GATEWAY_ID: 'kaizen-server-api-gateway'
+  API_STACK_ID: 'kaizen-api-stack',
+  API_CLUSTER_ID: 'kaizen-api-cluster',
+  API_TASK_DEFINITION_ID: 'kaizen-api-task-definition',
+  API_CONTAINER_ID: 'kaizen-api-container',
+  API_SECURITY_GROUP_ID: 'kaizen-api-security-group',
+  API_INSTANCE_ID: 'kaizen-api-instance',
+  API_SCALING_GROUP_CAPACITY_ID: 'kaizen-api-scaling-group-capacity',
+  API_SERVICE_ID: 'kaizen-api-service'
 };
