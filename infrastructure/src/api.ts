@@ -38,6 +38,7 @@ export class ApiStack extends cdk.Stack {
     );
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
+      memoryLimitMiB: 512,
       environment: serverEnvironment
     });
 
