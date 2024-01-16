@@ -24,7 +24,6 @@ export const config = {
   API_TASK_DEFINITION_ID: 'kaizen-api-task-definition',
   API_CONTAINER_ID: 'kaizen-api-container',
   API_SECURITY_GROUP_ID: 'kaizen-api-security-group',
-  API_INSTANCE_ID: 'kaizen-api-instance',
   API_SCALING_GROUP_CAPACITY_ID: 'kaizen-api-scaling-group-capacity',
   API_SERVICE_ID: 'kaizen-api-service'
 };

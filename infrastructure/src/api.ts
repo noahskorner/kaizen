@@ -43,36 +43,29 @@ export class ApiStack extends cdk.Stack {
     });
 
     // Create a security group for the EC2 instance
-    const securityGroup = new ec2.SecurityGroup(
+    const apiSecurityGroup = new ec2.SecurityGroup(
       this,
       config.API_SECURITY_GROUP_ID,
       { vpc: vpc }
     );
+    apiSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80));
+    apiSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443));
 
-    // Create a t3.micro EC2 instance
-    const instance = new ec2.Instance(this, config.API_INSTANCE_ID, {
-      vpc: vpc,
+    // Create a t3.micro EC2 instance and add it to the cluster
+    cluster.addCapacity(config.API_SCALING_GROUP_CAPACITY_ID, {
       vpcSubnets: {
         // TODO: Making this public to save on NAT Gateway costs
         // subnets: vpc.privateSubnets
         subnets: vpc.publicSubnets
       },
-      securityGroup: securityGroup,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T3,
         ec2.InstanceSize.MICRO
       ),
       machineImage: ecs.EcsOptimizedImage.amazonLinux2()
     });
-    instance.addSecurityGroup(databaseSecurityGroup);
-
-    // Add the instance to the ECS cluster
-    cluster.addCapacity(config.API_SCALING_GROUP_CAPACITY_ID, {
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T3,
-        ec2.InstanceSize.MICRO
-      )
-    });
+    cluster.connections.addSecurityGroup(apiSecurityGroup);
+    cluster.connections.addSecurityGroup(databaseSecurityGroup);
 
     // Start the task on the instance
     new ecs.Ec2Service(this, config.API_SERVICE_ID, {
