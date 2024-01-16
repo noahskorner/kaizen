@@ -10,7 +10,7 @@
   },
   "scripts": {
     "stack:build": "npx cdk synth",
-    "stack:deploy": "npx cdk deploy kaizen-vpc-stack kaizen-db-stack kaizen-server-stack --require-approval never",
+    "stack:deploy": "npx cdk deploy kaizen-vpc-stack kaizen-db-stack kaizen-api-stack --require-approval never",
     "stack:deploy:ecr": "npx cdk deploy kaizen-ecr-stack",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
