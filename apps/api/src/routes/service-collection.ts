@@ -96,6 +96,8 @@ const findVirtualAccountsService = new FindVirtualAccountsService(
 );
 
 // Controllers
+export const homeController = new HomeController();
+export const userController = new UserController(
 const userController = new UserController(
   createUserService,
   createLinkTokenService

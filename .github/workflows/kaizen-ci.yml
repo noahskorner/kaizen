@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 20.9.0
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
       - name: Build
@@ -29,15 +29,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 20.9.0
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
       - name: Lint
@@ -48,15 +48,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 20.9.0
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
       - name: Test

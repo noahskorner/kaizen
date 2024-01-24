@@ -1,7 +1,9 @@
-import { InstitutionRecord } from '@kaizen/finance/src/institution-record';
-import { CreateInstitutionQuery } from '@kaizen/finance/src/create-institution/create-institution.query';
 import { Repository } from '@kaizen/core-server';
-import { ICreateInstitutionRepository } from '@kaizen/finance';
+import {
+  ICreateInstitutionRepository,
+  CreateInstitutionQuery,
+  InstitutionRecord
+} from '@kaizen/finance';
 
 export class CreateInstitutionRepository
   extends Repository

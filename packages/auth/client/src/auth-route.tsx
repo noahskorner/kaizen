@@ -1,5 +1,6 @@
-import { AuthClient, useAuthStore } from '@kaizen/auth-client';
 import { useEffect } from 'react';
+import { useAuthStore } from './use-auth-store';
+import { AuthClient } from './auth.client';
 
 export interface AuthRouteProps {
   children: React.ReactNode;

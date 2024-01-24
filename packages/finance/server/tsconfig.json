@@ -1,12 +1,8 @@
 {
   "extends": "@kaizen/config/typescript/base.json",
-  "include": [
-    ".",
-    "../../data/src/institution.repository.ts",
-    "../shared/src/create-institution/create-institution.service.interface.ts",
-    "../shared/src/create-institution/create-institution.command.ts",
-    "../shared/src/create-virtual-account/create-virtual-account.service.interface.ts",
-    "../shared/src/create-virtual-account/create-virtual-account.command.ts"
-  ],
-  "exclude": ["dist", "build", "node_modules"]
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "outDir": "../../../dist/packages/finance/server"
+  }
 }
