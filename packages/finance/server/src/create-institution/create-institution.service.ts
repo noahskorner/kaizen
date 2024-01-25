@@ -89,11 +89,11 @@ export class CreateInstitutionService
       return this.failures(externalAccountsResponse.errors);
     }
 
-    const syncExternalTransactionsResponse =
-      await this._financialProvider.syncExternalTransactions(accessToken);
-    if (syncExternalTransactionsResponse.type === 'FAILURE') {
-      return this.failures(syncExternalTransactionsResponse.errors);
-    }
+    // const syncExternalTransactionsResponse =
+    //   await this._financialProvider.syncExternalTransactions(accessToken);
+    // if (syncExternalTransactionsResponse.type === 'FAILURE') {
+    //   return this.failures(syncExternalTransactionsResponse.errors);
+    // }
 
     const createAccountQueries = await Promise.all(
       externalAccountsResponse.data.map(async (externalAccount) => {
@@ -103,12 +103,13 @@ export class CreateInstitutionService
           available: externalAccount.available,
           currency: externalAccount.currency,
           type: AccountAdapter.toAccountRecordType(externalAccount.type),
-          transactions: this.createTransactions(
-            externalAccount.id,
-            syncExternalTransactionsResponse.data.added.concat(
-              syncExternalTransactionsResponse.data.modified
-            )
-          )
+          transactions: [] // TODO: Remove these from return type
+          // transactions: this.createTransactions(
+          //   externalAccount.id,
+          //   syncExternalTransactionsResponse.data.created.concat(
+          //     syncExternalTransactionsResponse.data.updated
+          //   )
+          // )
         };
 
         return createAccountQuery;

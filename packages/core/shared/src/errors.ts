@@ -73,5 +73,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME]: {
     key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME,
     message: 'Must provide a valid virtual account name.'
+  },
+  [ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND]: {
+    key: ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND,
+    message: 'Institution not found.'
   }
 };

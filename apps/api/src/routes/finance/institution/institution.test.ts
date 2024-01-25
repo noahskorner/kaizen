@@ -12,8 +12,6 @@ import {
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import { defaultAppFixture } from '../../../app.fixture';
 
-// Cursor?
-
 describe('/institution', () => {
   describe('create should', () => {
     it('returns 400 when no publicToken is provided', async () => {

@@ -1,5 +1,5 @@
 import { AccountRecordType } from '../account-record-type';
-import { CreateTransactionQuery } from './create-transaction.query';
+import { CreateTransactionQuery } from '../sync-transactions/create-transaction.query';
 
 export interface CreateAccountQuery {
   externalId: string;

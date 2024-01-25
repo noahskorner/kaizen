@@ -1,7 +1,11 @@
-import { CreateTransactionQuery } from './create-institution/create-transaction.query';
+import { CreateTransactionQuery } from './sync-transactions/create-transaction.query';
 import { ExternalTransaction } from './external-transaction';
 import { Transaction } from './transaction';
 import { TransactionRecord } from './transaction-record';
+import {
+  DeleteTransactionQuery,
+  UpdateTransactionQuery
+} from './sync-transactions';
 
 export class TransactionAdapter {
   public static toTransaction(
@@ -38,5 +42,33 @@ export class TransactionAdapter {
       logoUrl: externalTransaction.logoUrl
     };
     return createTransactionQuery;
+  }
+
+  public static toUpdateTransactionQuery(
+    externalTransaction: ExternalTransaction
+  ): UpdateTransactionQuery {
+    const updateTransactionQuery: UpdateTransactionQuery = {
+      externalId: externalTransaction.id,
+      externalAccountId: externalTransaction.accountId,
+      amount: externalTransaction.amount,
+      currency: externalTransaction.currency,
+      date: externalTransaction.date,
+      name: externalTransaction.name,
+      merchantName: externalTransaction.merchantName,
+      pending: externalTransaction.pending,
+      logoUrl: externalTransaction.logoUrl
+    };
+
+    return updateTransactionQuery;
+  }
+
+  public static toDeleteTransactionQuery(
+    externalTransactionId: string
+  ): DeleteTransactionQuery {
+    const deleteTransactionQuery: DeleteTransactionQuery = {
+      externalTransactionId: externalTransactionId
+    };
+
+    return deleteTransactionQuery;
   }
 }

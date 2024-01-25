@@ -1,4 +1,4 @@
-import { Transaction } from 'plaid';
+import { Transaction, RemovedTransaction } from 'plaid';
 import { ExternalTransaction } from './external-transaction';
 
 export class ExternalTransactionAdapter {
@@ -20,5 +20,14 @@ export class ExternalTransactionAdapter {
     };
 
     return externalTransaction;
+  }
+
+  public static toRemovedTransaction(
+    removedTransactions: string[],
+    removedTransaction: RemovedTransaction
+  ): string[] {
+    if (removedTransaction.transaction_id == null) return removedTransactions;
+
+    return removedTransactions.concat(removedTransaction.transaction_id);
   }
 }

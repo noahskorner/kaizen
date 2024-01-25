@@ -4,4 +4,4 @@ export * from './create-institution.query';
 export * from './create-institution.repository.interface';
 export * from './create-institution.request';
 export * from './create-institution.service.interface';
-export * from './create-transaction.query';
+export * from '../sync-transactions/create-transaction.query';

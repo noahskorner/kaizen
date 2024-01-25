@@ -10,6 +10,7 @@
     "*.fixture.ts"
   ],
   "compilerOptions": {
-    "outDir": "../../dist/apps/api/src"
+    "outDir": "../../dist/apps/api/src",
+    "types": ["./src/index.d.ts"]
   }
 }

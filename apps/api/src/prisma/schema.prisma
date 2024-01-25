@@ -28,6 +28,7 @@ model InstitutionRecord {
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now()) @updatedAt
   plaidAccessToken String
+  plaidCursor      String?         @map("plaidTransactionCursor")
   userId           String
   user             UserRecord      @relation(fields: [userId], references: [id])
   accounts         AccountRecord[]
@@ -48,7 +49,7 @@ model AccountRecord {
   id            String              @id @default(uuid())
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @default(now()) @updatedAt
-  externalId    String
+  externalId    String              @unique
   type          AccountRecordType   @default(Other)
   institutionId String
   institution   InstitutionRecord   @relation(fields: [institutionId], references: [id])
@@ -64,7 +65,7 @@ model TransactionRecord {
   id                String        @id @default(uuid())
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @default(now()) @updatedAt
-  externalId        String
+  externalId        String        @unique
   accountId         String
   account           AccountRecord @relation(fields: [accountId], references: [id])
   externalAccountId String
