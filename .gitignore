@@ -43,3 +43,4 @@ cdk.out
 apps/frontend/cypress/screenshots
 apps/frontend/cypress/downloads
 apps/api/src/prisma/seed/local.json
+temp

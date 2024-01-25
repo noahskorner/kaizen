@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import { app } from '../../../app';
 import {
   createAndLoginUser,
   createInstitution,
@@ -13,6 +12,7 @@ import {
   toSearchParams
 } from '@kaizen/core';
 import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
+import { defaultAppFixture } from '../../../app.fixture';
 
 describe('/transaction', () => {
   describe('find should', () => {
@@ -21,7 +21,7 @@ describe('/transaction', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get('/transaction')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -37,7 +37,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -56,7 +56,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -66,13 +66,14 @@ describe('/transaction', () => {
     });
     it('returns 200 and default page size when no page size provided', async () => {
       // Arrange
-      const { authToken } = await createInstitution();
+      const s = await createInstitution();
+      const { authToken } = s;
       const request: FindTransactionsRequest = {
         page: 1
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -92,7 +93,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -111,7 +112,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;

@@ -4,7 +4,4 @@ export * from './find-institutions';
 export * from './find-transactions';
 export * from './find-virtual-accounts';
 export * from './sync-institutions';
-export * from './account.adapter';
-export * from './transaction.adapter';
-export * from './institution.adapter';
-export * from './virtual-account.adapter';
+export * from './financial.provider';

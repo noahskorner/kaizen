@@ -1,14 +1,15 @@
 {
-  "extends": "@kaizen/config/typescript/base.json",
+  "extends": "../../tsconfig.base.json",
   "exclude": [
     "node_modules",
     "dist",
     "jest.config.ts",
     "**/*.test.ts",
-    "jest.setup.ts"
+    "jest.setup.ts",
+    "./src/fixtures",
+    "*.fixture.ts"
   ],
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "./src"
+    "outDir": "../../dist/apps/api/src"
   }
 }

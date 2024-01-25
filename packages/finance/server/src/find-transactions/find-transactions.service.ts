@@ -10,9 +10,9 @@ import {
   FindTransactionsCommand,
   IFindTransactionsRepository,
   IFindTransactionsService,
-  Transaction
+  Transaction,
+  TransactionAdapter
 } from '@kaizen/finance';
-import { TransactionAdapter } from '../transaction.adapter';
 
 export class FindTransactionsService
   extends Service

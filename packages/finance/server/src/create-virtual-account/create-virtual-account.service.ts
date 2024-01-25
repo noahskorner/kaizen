@@ -1,13 +1,13 @@
 import { Service } from '@kaizen/core-server';
-import { CreateVirtualAccountCommand } from '@kaizen/finance/src/create-virtual-account/create-virtual-account.command';
 import { ApiResponse } from '@kaizen/core';
 import {
   CreateVirtualAccountValidator,
   ICreateVirtualAccountRepository,
   ICreateVirtualAccountService,
-  VirtualAccount
+  VirtualAccount,
+  VirtualAccountAdapter,
+  CreateVirtualAccountCommand
 } from '@kaizen/finance';
-import { VirtualAccountAdapter } from '../virtual-account.adapter';
 
 export class CreateVirtualAccountService
   extends Service

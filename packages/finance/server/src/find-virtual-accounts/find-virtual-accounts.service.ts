@@ -4,9 +4,9 @@ import {
   FindVirtualAccountsCommand,
   IFindVirtualAccountsRepository,
   IFindVirtualAccountsService,
-  VirtualAccount
+  VirtualAccount,
+  VirtualAccountAdapter
 } from '@kaizen/finance';
-import { VirtualAccountAdapter } from '../virtual-account.adapter';
 
 export class FindVirtualAccountsService
   extends Service

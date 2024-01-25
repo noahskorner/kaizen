@@ -1,3 +1,0 @@
-{
-  "extends": ["./react.json", "plugin:@next/next/recommended"]
-}

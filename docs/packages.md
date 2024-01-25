@@ -14,7 +14,7 @@ touch tsconfig.json
 
 ```js
 module.exports = {
-  extends: [require.resolve('@kaizen/config/eslint/[CONFIG_VERSION].json')]
+  extends: [require.resolve('../../../eslintrc.{base,react}.json')]
 };
 ```
 
@@ -22,7 +22,7 @@ module.exports = {
 
 ```json
 {
-  "extends": "@kaizen/config/typescript/[CONFIG_VERSION].json",
+  "extends": "../../../tsconfig.{base, react, vite, vite.node}.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

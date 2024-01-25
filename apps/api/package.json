@@ -2,13 +2,20 @@
   "name": "@kaizen/api",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "volta": {
+    "node": "20.9.0",
+    "npm": "10.2.2"
+  },
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
     "build": "tsc",
+    "docker:build": "./build.sh && docker build -t $npm_config_aws_repository_id .",
+    "docker:start": "docker run -p 3001:3001 $npm_config_aws_repository_id",
+    "docker:tag": "docker tag $npm_config_aws_repository_id:latest $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
+    "docker:push": "docker push $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
-    "start": "node dist/server.js",
     "test": "npm run test:setup && dotenv -e ./src/env/.env.test jest && npm run test:teardown",
     "test:debug": "dotenv -e ./src/env/.env.test jest",
     "test:setup": "docker-compose -f ./docker-compose.test.yml up -d && sleep 1 && dotenv -e ./src/env/.env.test -- prisma migrate dev",
@@ -26,5 +33,28 @@
   "prisma": {
     "schema": "src/prisma/schema.prisma",
     "seed": "ts-node src/prisma/seed/seed.ts"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "@kaizen/auth": "*",
+    "@kaizen/auth-server": "*",
+    "@kaizen/core": "*",
+    "@kaizen/core-server": "*",
+    "@kaizen/env-server": "*",
+    "@kaizen/finance": "*",
+    "@kaizen/finance-server": "*",
+    "@kaizen/user": "*",
+    "@kaizen/user-server": "*",
+    "@prisma/client": "^5.6.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "uuid": "^9.0.1"
   }
 }

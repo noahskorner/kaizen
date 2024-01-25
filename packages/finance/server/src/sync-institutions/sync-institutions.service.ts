@@ -11,6 +11,7 @@ export class SyncInstitutionsService
   implements ISyncInstitutionsService
 {
   public async sync(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     command: SyncInstitutionsCommand
   ): Promise<ApiResponse<Institution[]>> {
     return this.success([]);

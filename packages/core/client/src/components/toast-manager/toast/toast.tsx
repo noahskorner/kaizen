@@ -33,7 +33,7 @@ export const Toast = ({
   return (
     <div
       onClick={() => removeToast(id)}
-      className="bg-neutral-0 bounce-in-from-top flex w-full cursor-pointer flex-col items-stretch gap-y-2 rounded-md border border-neutral-100 shadow md:max-w-md">
+      className="bounce-in-from-top flex w-full cursor-pointer flex-col items-stretch gap-y-2 rounded-md border border-neutral-100 bg-neutral-0 shadow md:max-w-md">
       <div className="flex h-full w-full items-stretch">
         <div className="flex-grow-1 ml-2 w-4 bg-red-300"></div>
         <div className="h-full w-full p-2">

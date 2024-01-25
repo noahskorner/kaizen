@@ -4,13 +4,13 @@ import {
   CreateInstitutionRequest,
   AccountType
 } from '@kaizen/finance';
-import { app } from '../../../app';
 import {
   expectError,
   createInstitution,
   createAndLoginUser
 } from '../../../fixtures';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
+import { defaultAppFixture } from '../../../app.fixture';
 
 // Cursor?
 
@@ -21,7 +21,7 @@ describe('/institution', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .post('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -37,7 +37,7 @@ describe('/institution', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .post('/institution')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -54,7 +54,7 @@ describe('/institution', () => {
       };
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .post('/institution')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -73,7 +73,7 @@ describe('/institution', () => {
   describe('find should', () => {
     it('returns 401 when user is not logged in', async () => {
       // Act
-      const response = await supertest(app).get('/institution');
+      const response = await supertest(defaultAppFixture).get('/institution');
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -83,7 +83,7 @@ describe('/institution', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Institution[]> = response.body;
@@ -97,7 +97,7 @@ describe('/institution', () => {
       const { authToken, institution } = await createInstitution();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Institution[]> = response.body;
@@ -119,7 +119,7 @@ describe('/institution', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(defaultAppFixture)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Institution[]> = response.body;
