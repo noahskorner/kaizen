@@ -1,6 +1,5 @@
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
-import { app } from '../../app';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
 import { expectError } from '../../fixtures/expect-error';
 import { getRefreshToken } from '../../fixtures/get-refresh-token';
@@ -10,6 +9,7 @@ import * as env from '@kaizen/env-server';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
 import { CreateUserCommand } from '@kaizen/user';
+import { appFixture } from '../../app.fixture';
 const mockEnvironment = env.serverEnvironment;
 
 describe('/auth', () => {
@@ -25,7 +25,7 @@ describe('/auth', () => {
   describe('login should', () => {
     it('returns 401 if request is empty', async () => {
       // Act
-      const response = await supertest(app).post('/auth').send();
+      const response = await supertest(appFixture).post('/auth').send();
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -39,7 +39,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/auth').send(request);
+      const response = await supertest(appFixture).post('/auth').send(request);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -52,7 +52,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/auth').send(request);
+      const response = await supertest(appFixture).post('/auth').send(request);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -65,7 +65,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/auth').send(request);
+      const response = await supertest(appFixture).post('/auth').send(request);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -74,7 +74,7 @@ describe('/auth', () => {
     it('returns 401 if user exists but password incorrect', async () => {
       // Arrange
       const email = createUniqueEmail();
-      await supertest(app)
+      await supertest(appFixture)
         .post('/user')
         .send({ email, password: validPassword } as CreateUserCommand);
       const request = {
@@ -83,7 +83,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/auth').send(request);
+      const response = await supertest(appFixture).post('/auth').send(request);
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -92,7 +92,7 @@ describe('/auth', () => {
     it('returns 200 if user exists and password correct', async () => {
       // Arrange
       const email = createUniqueEmail();
-      await supertest(app)
+      await supertest(appFixture)
         .post('/user')
         .send({ email, password: validPassword } as CreateUserCommand);
       const request = {
@@ -101,7 +101,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/auth').send(request);
+      const response = await supertest(appFixture).post('/auth').send(request);
       const body: ApiSuccessResponse<AuthToken> = response.body;
       const refreshToken = getRefreshToken(response);
 
@@ -115,7 +115,7 @@ describe('/auth', () => {
   describe('refreshToken should', () => {
     it('returns 401 if refresh token is not provided', async () => {
       // Act
-      const response = await supertest(app).get('/auth');
+      const response = await supertest(appFixture).get('/auth');
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -123,7 +123,7 @@ describe('/auth', () => {
     });
     it('returns 401 if refresh token is invalid', async () => {
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .get('/auth')
         .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=null`]);
 
@@ -137,7 +137,7 @@ describe('/auth', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .get('/auth')
         .set('Cookie', [
           `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
@@ -152,7 +152,7 @@ describe('/auth', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .get('/auth')
         .set('Cookie', [
           `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
@@ -170,14 +170,14 @@ describe('/auth', () => {
   describe('logout should', () => {
     it('returns 401 when accessToken does not exist', async () => {
       // Act
-      const response = await supertest(app).delete('/auth');
+      const response = await supertest(appFixture).delete('/auth');
 
       // Assert
       expect(response.statusCode).toBe(401);
     });
     it('returns 401 when accessToken is invalid', async () => {
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .delete('/auth')
         .auth('invalid-token', { type: 'bearer' });
 
@@ -190,7 +190,7 @@ describe('/auth', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .delete('/auth')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -202,7 +202,7 @@ describe('/auth', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .delete('/auth')
         .auth(authToken.accessToken, { type: 'bearer' });
       const refreshToken = getRefreshToken(response);

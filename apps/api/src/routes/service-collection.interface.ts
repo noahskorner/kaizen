@@ -30,6 +30,7 @@ import {
 import { UserController } from './user';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { HomeController } from './home.controller';
 
 export interface IServiceCollection {
   // Plaid
@@ -59,6 +60,7 @@ export interface IServiceCollection {
   createVirtualAccountService: ICreateVirtualAccountService;
   findVirtualAccountsService: IFindVirtualAccountsService;
   // Controllers
+  homeController: HomeController;
   userController: UserController;
   authController: AuthController;
   institutionController: InstitutionController;

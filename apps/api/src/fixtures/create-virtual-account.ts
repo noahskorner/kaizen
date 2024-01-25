@@ -1,12 +1,12 @@
 import { ApiSuccessResponse } from '@kaizen/core';
 import supertest from 'supertest';
-import { app } from '../app';
 import { createAndLoginUser } from './create-and-login-user';
 import {
   CreateVirtualAccountRequest,
   VirtualAccount,
   VirtualAccountFrequency
 } from '@kaizen/finance';
+import { appFixture } from '../app.fixture';
 
 export const createVirtualAccount = async () => {
   const loginUser = await createAndLoginUser();
@@ -17,7 +17,7 @@ export const createVirtualAccount = async () => {
     amount: 25,
     frequency: VirtualAccountFrequency.Weekly
   };
-  const response = await supertest(app)
+  const response = await supertest(appFixture)
     .post('/virtual-account')
     .send(request)
     .auth(loginUser.authToken.accessToken, { type: 'bearer' });

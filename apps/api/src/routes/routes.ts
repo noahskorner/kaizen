@@ -4,9 +4,9 @@ import { IServiceCollection } from './service-collection.interface';
 
 export const createRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
-  router.get('/', (_, res: Response) => {
-    return res.sendStatus(200);
-  });
+
+  // /
+  router.get('/', serviceCollection.homeController.find);
 
   // /user
   router.post('/user', serviceCollection.userController.create);

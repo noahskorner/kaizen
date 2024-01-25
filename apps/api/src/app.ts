@@ -2,22 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
-import { AccessToken } from '@kaizen/auth';
 import { serverEnvironment } from '@kaizen/env-server';
 import { IServiceCollection } from './routes/service-collection.interface';
 import { ServiceCollection } from './routes/service-collection';
 import { createRouter } from './routes/routes';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      user: AccessToken;
-    }
-  }
-}
-
-const createApp = (serviceCollection: IServiceCollection) => {
+export const createApp = (serviceCollection: IServiceCollection) => {
   const router = createRouter(serviceCollection);
   const app = express();
 

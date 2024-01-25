@@ -28,124 +28,149 @@ import { VirtualAccountController } from './finance';
 import { serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
+import { HomeController } from './home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 
-// Plaid
-const plaid =
-  serverEnvironment.NODE_ENV === 'TEST'
-    ? // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('../fixtures/mock-plaid-client').mockPlaidApi
-    : new PlaidApi(
-        new Configuration({
-          basePath: PlaidEnvironments.sandbox,
-          baseOptions: {
-            headers: {
-              'PLAID-CLIENT-ID': serverEnvironment.PLAID_CLIENT_ID,
-              'PLAID-SECRET': serverEnvironment.PLAID_SECRET
-            }
-          }
-        })
-      );
-
-// Prisma
-const prisma = new PrismaClient();
-
-// Repositories
-const createUserRepository = new CreateUserRepository(prisma);
-const findUserByEmailRepository = new FindUserByEmailRepository(prisma);
-const getUserRepository = new GetUserRepository(prisma);
-const createInstitutionRepository = new CreateInstitutionRepository(prisma);
-const findInstitutionsRepository = new FindInstitutionsRepository(prisma);
-const findTransactionsRepository = new FindTransactionsRepository(prisma);
-const createVirtualAccountRepository = new CreateVirtualAccountRepository(
-  prisma
-);
-const findVirtualAccountsRepository = new FindVirtualAccountsRepository(prisma);
-
-// Providers
-const financialProvider = new FinancialProvider(plaid);
-
-// Services
-const getUserService = new GetUserService(getUserRepository);
-const createUserService = new CreateUserService(
-  findUserByEmailRepository,
-  createUserRepository
-);
-const createLinkTokenService = new CreateLinkTokenService(
-  getUserRepository,
-  financialProvider
-);
-const loginService = new LoginService(findUserByEmailRepository);
-const refreshTokenService = new RefreshTokenService(getUserRepository);
-const createInstitutionService = new CreateInstitutionService(
-  createInstitutionRepository,
-  financialProvider
-);
-const findInstitutionsService = new FindInstitutionsService(
-  findInstitutionsRepository
-);
-const findTransactionsService = new FindTransactionsService(
-  findTransactionsRepository
-);
-const createVirtualAccountService = new CreateVirtualAccountService(
-  createVirtualAccountRepository
-);
-const findVirtualAccountsService = new FindVirtualAccountsService(
-  findVirtualAccountsRepository
-);
-
-// Controllers
-export const homeController = new HomeController();
-export const userController = new UserController(
-const userController = new UserController(
-  createUserService,
-  createLinkTokenService
-);
-const authController = new AuthController(loginService, refreshTokenService);
-const institutionController = new InstitutionController(
-  createInstitutionService,
-  findInstitutionsService
-);
-const transactionController = new TransactionController(
-  findTransactionsService
-);
-const virtualAccountController = new VirtualAccountController(
-  createVirtualAccountService,
-  findVirtualAccountsService
-);
-
-export const ServiceCollection: IServiceCollection = {
+export const createServiceCollection = (
+  mocks: Partial<IServiceCollection> = {}
+) => {
   // Plaid
-  plaid,
+  const plaid =
+    mocks.plaid ??
+    new PlaidApi(
+      new Configuration({
+        basePath: PlaidEnvironments.sandbox,
+        baseOptions: {
+          headers: {
+            'PLAID-CLIENT-ID': serverEnvironment.PLAID_CLIENT_ID,
+            'PLAID-SECRET': serverEnvironment.PLAID_SECRET
+          }
+        }
+      })
+    );
+
   // Prisma
-  prisma,
-  // Providers
-  financialProvider,
+  const prisma = mocks.prisma ?? new PrismaClient();
+
   // Repositories
-  createUserRepository,
-  findUserByEmailRepository,
-  getUserRepository,
-  createInstitutionRepository,
-  findInstitutionsRepository,
-  findTransactionsRepository,
-  createVirtualAccountRepository,
-  findVirtualAccountsRepository,
+  const createUserRepository =
+    mocks.createUserRepository ?? new CreateUserRepository(prisma);
+  const findUserByEmailRepository =
+    mocks.findUserByEmailRepository ?? new FindUserByEmailRepository(prisma);
+  const getUserRepository =
+    mocks.getUserRepository ?? new GetUserRepository(prisma);
+  const createInstitutionRepository =
+    mocks.createInstitutionRepository ??
+    new CreateInstitutionRepository(prisma);
+  const findInstitutionsRepository =
+    mocks.findInstitutionsRepository ?? new FindInstitutionsRepository(prisma);
+  const findTransactionsRepository =
+    mocks.findTransactionsRepository ?? new FindTransactionsRepository(prisma);
+  const createVirtualAccountRepository =
+    mocks.createVirtualAccountRepository ??
+    new CreateVirtualAccountRepository(prisma);
+  const findVirtualAccountsRepository =
+    mocks.findVirtualAccountsRepository ??
+    new FindVirtualAccountsRepository(prisma);
+
+  // Providers
+  const financialProvider =
+    mocks.financialProvider ?? new FinancialProvider(plaid);
+
   // Services
-  getUserService,
-  createUserService,
-  createLinkTokenService,
-  loginService,
-  refreshTokenService,
-  createInstitutionService,
-  findInstitutionsService,
-  findTransactionsService,
-  createVirtualAccountService,
-  findVirtualAccountsService,
+  const getUserService =
+    mocks.getUserService ?? new GetUserService(getUserRepository);
+  const createUserService =
+    mocks.createUserService ??
+    new CreateUserService(findUserByEmailRepository, createUserRepository);
+  const createLinkTokenService =
+    mocks.createLinkTokenService ??
+    new CreateLinkTokenService(getUserRepository, financialProvider);
+  const loginService =
+    mocks.loginService ?? new LoginService(findUserByEmailRepository);
+  const refreshTokenService =
+    mocks.refreshTokenService ?? new RefreshTokenService(getUserRepository);
+  const createInstitutionService =
+    mocks.createInstitutionService ??
+    new CreateInstitutionService(
+      createInstitutionRepository,
+      financialProvider
+    );
+  const findInstitutionsService =
+    mocks.findInstitutionsService ??
+    new FindInstitutionsService(findInstitutionsRepository);
+  const findTransactionsService =
+    mocks.findTransactionsService ??
+    new FindTransactionsService(findTransactionsRepository);
+  const createVirtualAccountService =
+    mocks.createVirtualAccountService ??
+    new CreateVirtualAccountService(createVirtualAccountRepository);
+  const findVirtualAccountsService =
+    mocks.findVirtualAccountsService ??
+    new FindVirtualAccountsService(findVirtualAccountsRepository);
+
   // Controllers
-  userController,
-  authController,
-  institutionController,
-  transactionController,
-  virtualAccountController
+  const homeController = mocks.homeController ?? new HomeController();
+  const userController =
+    mocks.userController ??
+    new UserController(createUserService, createLinkTokenService);
+  const authController =
+    mocks.authController ??
+    new AuthController(loginService, refreshTokenService);
+  const institutionController =
+    mocks.institutionController ??
+    new InstitutionController(
+      createInstitutionService,
+      findInstitutionsService
+    );
+  const transactionController =
+    mocks.transactionController ??
+    new TransactionController(findTransactionsService);
+  const virtualAccountController =
+    mocks.virtualAccountController ??
+    new VirtualAccountController(
+      createVirtualAccountService,
+      findVirtualAccountsService
+    );
+
+  const serviceCollection: IServiceCollection = {
+    // Plaid
+    plaid,
+    // Prisma
+    prisma,
+    // Providers
+    financialProvider,
+    // Repositories
+    createUserRepository,
+    findUserByEmailRepository,
+    getUserRepository,
+    createInstitutionRepository,
+    findInstitutionsRepository,
+    findTransactionsRepository,
+    createVirtualAccountRepository,
+    findVirtualAccountsRepository,
+    // Services
+    getUserService,
+    createUserService,
+    createLinkTokenService,
+    loginService,
+    refreshTokenService,
+    createInstitutionService,
+    findInstitutionsService,
+    findTransactionsService,
+    createVirtualAccountService,
+    findVirtualAccountsService,
+    // Controllers
+    homeController,
+    userController,
+    authController,
+    institutionController,
+    transactionController,
+    virtualAccountController
+  };
+
+  return serviceCollection;
 };
+
+export const ServiceCollection = createServiceCollection();

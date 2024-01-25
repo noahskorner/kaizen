@@ -1,6 +1,6 @@
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
-import { app } from '../../app';
+import { appFixture } from '../../app.fixture';
 import { createUniqueEmail } from '../../fixtures/create-unique-email';
 import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { v4 as uuid } from 'uuid';
@@ -12,7 +12,7 @@ describe('/user', () => {
   describe('create should', () => {
     it('returns 400 when request is null', async () => {
       // Act
-      const response = await supertest(app).post('/user').send();
+      const response = await supertest(appFixture).post('/user').send();
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -23,7 +23,7 @@ describe('/user', () => {
       const request = {};
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -36,7 +36,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -49,7 +49,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -63,7 +63,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -77,7 +77,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -91,7 +91,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -103,10 +103,10 @@ describe('/user', () => {
         email: createUniqueEmail(),
         password: validPassword
       };
-      await supertest(app).post('/user').send(request);
+      await supertest(appFixture).post('/user').send(request);
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -120,7 +120,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(app).post('/user').send(request);
+      const response = await supertest(appFixture).post('/user').send(request);
       const body: ApiSuccessResponse<User> = response.body;
 
       // Assert
@@ -131,7 +131,9 @@ describe('/user', () => {
   describe('createLinkToken should', () => {
     it('return 401 when user is not authenticated', async () => {
       // Act
-      const response = await supertest(app).post('/user/link-token').send();
+      const response = await supertest(appFixture)
+        .post('/user/link-token')
+        .send();
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -141,7 +143,7 @@ describe('/user', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(app)
+      const response = await supertest(appFixture)
         .post('/user/link-token')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body = response.body as ApiSuccessResponse<LinkToken>;

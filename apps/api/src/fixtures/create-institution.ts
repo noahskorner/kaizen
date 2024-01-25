@@ -1,8 +1,8 @@
 import { Institution, CreateInstitutionRequest } from '@kaizen/finance';
 import { createAndLoginUser } from './create-and-login-user';
 import supertest from 'supertest';
-import { app } from '../app';
 import { ApiSuccessResponse } from '@kaizen/core';
+import { appFixture } from '../app.fixture';
 
 export const createInstitution = async () => {
   const loginUser = await createAndLoginUser();
@@ -10,7 +10,7 @@ export const createInstitution = async () => {
     publicToken: 'TEST_PLAID_PUBLIC_TOKEN'
   };
 
-  const response = await supertest(app)
+  const response = await supertest(appFixture)
     .post('/institution')
     .send(request)
     .auth(loginUser.authToken.accessToken, { type: 'bearer' });
