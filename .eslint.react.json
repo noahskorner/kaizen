@@ -1,6 +1,6 @@
 {
   "extends": [
-    "./base.json",
+    "./.eslint.base.json",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
