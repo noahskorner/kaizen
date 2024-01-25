@@ -3,12 +3,14 @@ import { compare } from 'bcrypt';
 import { AuthService } from '../auth.service';
 import { AuthToken, ILoginService, LoginCommand } from '@kaizen/auth';
 import { IFindUserByEmailRepository } from '@kaizen/user';
+import { IServerEnvironment } from '@kaizen/env-server';
 
 export class LoginService extends AuthService implements ILoginService {
   constructor(
+    _environment: IServerEnvironment,
     private readonly _findUserByEmailRepository: IFindUserByEmailRepository
   ) {
-    super();
+    super(_environment);
   }
 
   public async login(command: LoginCommand): Promise<ApiResponse<AuthToken>> {
