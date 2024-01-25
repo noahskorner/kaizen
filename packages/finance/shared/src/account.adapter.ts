@@ -1,6 +1,8 @@
-import { Account, AccountRecord, AccountRecordType } from '@kaizen/finance';
-import { ExternalAccountType } from '@kaizen/core-server';
 import { AccountType } from 'plaid';
+import { Account } from './account';
+import { AccountRecord } from './account-record';
+import { AccountRecordType } from './account-record-type';
+import { ExternalAccountType } from './external-account-type';
 
 export class AccountAdapter {
   public static toAccount(accountRecord: AccountRecord): Account {

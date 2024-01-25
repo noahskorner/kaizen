@@ -2,10 +2,11 @@ import { ApiResponse, Errors } from '@kaizen/core';
 import {
   IGetUserRepository,
   LinkToken,
-  CreateLinkTokenCommand,
-  ICreateLinkTokenService
+  ICreateLinkTokenService,
+  CreateLinkTokenCommand
 } from '@kaizen/user';
-import { FinancialProvider, Service } from '@kaizen/core-server';
+import { Service } from '@kaizen/core-server';
+import { IFinancialProvider } from '@kaizen/finance';
 
 export class CreateLinkTokenService
   extends Service
@@ -13,7 +14,7 @@ export class CreateLinkTokenService
 {
   constructor(
     private readonly _getUserRepository: IGetUserRepository,
-    private readonly _financialProvider: FinancialProvider
+    private readonly _financialProvider: IFinancialProvider
   ) {
     super();
   }

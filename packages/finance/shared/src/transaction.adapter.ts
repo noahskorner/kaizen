@@ -1,9 +1,7 @@
-import { ExternalTransaction } from '@kaizen/core-server';
-import {
-  CreateTransactionQuery,
-  Transaction,
-  TransactionRecord
-} from '@kaizen/finance';
+import { CreateTransactionQuery } from './create-institution/create-transaction.query';
+import { ExternalTransaction } from './external-transaction';
+import { Transaction } from './transaction';
+import { TransactionRecord } from './transaction-record';
 
 export class TransactionAdapter {
   public static toTransaction(

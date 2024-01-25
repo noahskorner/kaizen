@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-export interface ClientEnvironment {
+export interface IClientEnvironment {
   NODE_ENV: 'DEVELOPMENT' | 'TEST';
   API_DOMAIN: string;
 }
@@ -18,7 +18,7 @@ if (API_DOMAIN == null) {
   );
 }
 
-export const clientEnvironment: ClientEnvironment = {
+export const clientEnvironment: IClientEnvironment = {
   NODE_ENV: NODE_ENV,
   API_DOMAIN: API_DOMAIN
 };

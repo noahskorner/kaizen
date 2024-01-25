@@ -1,36 +1,60 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate';
-import {
-  userController,
-  authController,
-  institutionController,
-  transactionController,
-  virtualAccountController,
-  homeController
-} from './service-collection';
+import { IServiceCollection } from './service-collection.interface';
 
-// Routes
-const router = Router();
-router.get('/', homeController.find);
+export const createRouter = (serviceCollection: IServiceCollection) => {
+  const router = Router();
 
-// /user
-router.post('/user', userController.create);
-router.post('/user/link-token', authenticate, userController.createLinkToken);
+  // /
+  router.get('/', serviceCollection.homeController.find);
 
-// /auth
-router.post('/auth', authController.login);
-router.get('/auth', authController.refreshToken);
-router.delete('/auth', authenticate, authController.logout);
+  // /user
+  router.post('/user', serviceCollection.userController.create);
+  router.post(
+    '/user/link-token',
+    authenticate(serviceCollection.environment),
+    serviceCollection.userController.createLinkToken
+  );
 
-// /institution
-router.post('/institution', authenticate, institutionController.create);
-router.get('/institution', authenticate, institutionController.find);
+  // /auth
+  router.post('/auth', serviceCollection.authController.login);
+  router.get('/auth', serviceCollection.authController.refreshToken);
+  router.delete(
+    '/auth',
+    authenticate(serviceCollection.environment),
+    serviceCollection.authController.logout
+  );
 
-// /transaction
-router.get('/transaction', authenticate, transactionController.find);
+  // /institution
+  router.post(
+    '/institution',
+    authenticate(serviceCollection.environment),
+    serviceCollection.institutionController.create
+  );
+  router.get(
+    '/institution',
+    authenticate(serviceCollection.environment),
+    serviceCollection.institutionController.find
+  );
 
-// /virtual-account
-router.post('/virtual-account', authenticate, virtualAccountController.create);
-router.get('/virtual-account', authenticate, virtualAccountController.find);
+  // /transaction
+  router.get(
+    '/transaction',
+    authenticate(serviceCollection.environment),
+    serviceCollection.transactionController.find
+  );
 
-export { router };
+  // /virtual-account
+  router.post(
+    '/virtual-account',
+    authenticate(serviceCollection.environment),
+    serviceCollection.virtualAccountController.create
+  );
+  router.get(
+    '/virtual-account',
+    authenticate(serviceCollection.environment),
+    serviceCollection.virtualAccountController.find
+  );
+
+  return router;
+};

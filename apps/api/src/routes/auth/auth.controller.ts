@@ -9,10 +9,11 @@ import {
   LoginRequest,
   RefreshTokenCommand
 } from '@kaizen/auth';
-import { serverEnvironment } from '@kaizen/env-server';
+import { IServerEnvironment } from '@kaizen/env-server';
 
 export class AuthController extends Controller {
   constructor(
+    private readonly _environment: IServerEnvironment,
     private readonly _loginService: ILoginService,
     private readonly _refreshTokenService: IRefreshTokenService
   ) {
@@ -55,8 +56,8 @@ export class AuthController extends Controller {
       domain: 'localhost',
       path: '/',
       secure:
-        serverEnvironment.NODE_ENV !== 'TEST' &&
-        serverEnvironment.NODE_ENV !== 'DEVELOPMENT',
+        this._environment.NODE_ENV !== 'TEST' &&
+        this._environment.NODE_ENV !== 'DEVELOPMENT',
       httpOnly: true,
       expires: this.getTokenExpirationDate(refreshToken)
     });

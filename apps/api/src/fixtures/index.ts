@@ -5,3 +5,5 @@ export * from './get-refresh-token';
 export * from './valid-password';
 export * from './create-virtual-account';
 export * from './expect-valid-date';
+export * from './mock-plaid-client';
+export * from './mock-transaction-sync-response';
