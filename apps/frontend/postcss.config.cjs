@@ -1,1 +1,1 @@
-module.exports = require('@kaizen/config/tailwind/postcss.config.js');
+module.exports = require('../../postcss.config');
