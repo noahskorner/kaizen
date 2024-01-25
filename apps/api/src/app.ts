@@ -2,10 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
-import { serverEnvironment } from '@kaizen/env-server';
 import { IServiceCollection } from './routes/service-collection.interface';
-import { ServiceCollection } from './routes/service-collection';
 import { createRouter } from './routes/routes';
+import { createServiceCollection } from './routes/service-collection';
 
 export const createApp = (serviceCollection: IServiceCollection) => {
   const router = createRouter(serviceCollection);
@@ -14,7 +13,7 @@ export const createApp = (serviceCollection: IServiceCollection) => {
   app.use(express.json());
   app.use(
     cors({
-      origin: [serverEnvironment.FRONTEND_DOMAIN],
+      origin: [serviceCollection.environment.FRONTEND_DOMAIN],
       credentials: true
     })
   );
@@ -25,4 +24,4 @@ export const createApp = (serviceCollection: IServiceCollection) => {
   return app;
 };
 
-export const app = createApp(ServiceCollection);
+export const app = createApp(createServiceCollection());

@@ -9,7 +9,7 @@ import { expectValidDate } from '../../../fixtures/expect-valid-date';
 import supertest from 'supertest';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import { expectError } from '../../../fixtures/expect-error';
-import { appFixture } from '../../../app.fixture';
+import { defaultAppFixture } from '../../../app.fixture';
 
 describe('/virtual-account', () => {
   describe('create should', () => {
@@ -22,7 +22,7 @@ describe('/virtual-account', () => {
       > = {};
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -40,7 +40,7 @@ describe('/virtual-account', () => {
       > = { name: ' ' };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -60,7 +60,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -81,7 +81,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -100,7 +100,7 @@ describe('/virtual-account', () => {
         };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -116,7 +116,7 @@ describe('/virtual-account', () => {
         { name: 'Test Virtual Account', balance: 0 };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -138,7 +138,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -157,7 +157,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -176,7 +176,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -196,7 +196,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -219,7 +219,7 @@ describe('/virtual-account', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get('/virtual-account')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -231,7 +231,7 @@ describe('/virtual-account', () => {
       const { authToken, virtualAccount } = await createVirtualAccount();
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get('/virtual-account')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<VirtualAccount[]> = response.body;

@@ -12,43 +12,47 @@ export const createRouter = (serviceCollection: IServiceCollection) => {
   router.post('/user', serviceCollection.userController.create);
   router.post(
     '/user/link-token',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.userController.createLinkToken
   );
 
   // /auth
   router.post('/auth', serviceCollection.authController.login);
   router.get('/auth', serviceCollection.authController.refreshToken);
-  router.delete('/auth', authenticate, serviceCollection.authController.logout);
+  router.delete(
+    '/auth',
+    authenticate(serviceCollection.environment),
+    serviceCollection.authController.logout
+  );
 
   // /institution
   router.post(
     '/institution',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.institutionController.create
   );
   router.get(
     '/institution',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.institutionController.find
   );
 
   // /transaction
   router.get(
     '/transaction',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.transactionController.find
   );
 
   // /virtual-account
   router.post(
     '/virtual-account',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.virtualAccountController.create
   );
   router.get(
     '/virtual-account',
-    authenticate,
+    authenticate(serviceCollection.environment),
     serviceCollection.virtualAccountController.find
   );
 

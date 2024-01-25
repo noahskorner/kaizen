@@ -4,9 +4,12 @@ import { validPassword } from './valid-password';
 import { AuthToken, LoginCommand } from '@kaizen/auth';
 import { CreateUserCommand, User } from '@kaizen/user';
 import { ApiSuccessResponse } from '@kaizen/core';
-import { appFixture } from '../app.fixture';
+import { defaultAppFixture as defaultAppFixture } from '../app.fixture';
+import { Application } from 'express';
 
-export const createAndLoginUser = async () => {
+export const createAndLoginUser = async (
+  appFixture: Application = defaultAppFixture
+) => {
   const email = createUniqueEmail();
   const userResponse = await supertest(appFixture)
     .post('/user')

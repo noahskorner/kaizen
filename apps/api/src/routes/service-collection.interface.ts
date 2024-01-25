@@ -28,11 +28,14 @@ import {
   VirtualAccountController
 } from './finance';
 import { UserController } from './user';
+import { HomeController } from './home.controller';
+import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
-import { HomeController } from './home.controller';
 
 export interface IServiceCollection {
+  // Environment
+  environment: IServerEnvironment;
   // Plaid
   plaid: PlaidApi;
   // Prisma

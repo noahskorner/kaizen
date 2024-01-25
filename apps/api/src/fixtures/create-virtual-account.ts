@@ -6,9 +6,12 @@ import {
   VirtualAccount,
   VirtualAccountFrequency
 } from '@kaizen/finance';
-import { appFixture } from '../app.fixture';
+import { defaultAppFixture } from '../app.fixture';
+import { Application } from 'express';
 
-export const createVirtualAccount = async () => {
+export const createVirtualAccount = async (
+  appFixture: Application = defaultAppFixture
+) => {
   const loginUser = await createAndLoginUser();
 
   const request: CreateVirtualAccountRequest = {

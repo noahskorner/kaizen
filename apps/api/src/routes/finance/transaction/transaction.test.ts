@@ -12,7 +12,7 @@ import {
   toSearchParams
 } from '@kaizen/core';
 import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
-import { appFixture } from '../../../app.fixture';
+import { defaultAppFixture } from '../../../app.fixture';
 
 describe('/transaction', () => {
   describe('find should', () => {
@@ -21,7 +21,7 @@ describe('/transaction', () => {
       const { authToken } = await createAndLoginUser();
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get('/transaction')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -37,7 +37,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -56,7 +56,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -73,7 +73,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -93,7 +93,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -112,7 +112,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(defaultAppFixture)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;

@@ -35,6 +35,9 @@ import { PrismaClient } from '@prisma/client';
 export const createServiceCollection = (
   mocks: Partial<IServiceCollection> = {}
 ) => {
+  // Environment
+  const environment = mocks.environment ?? serverEnvironment;
+
   // Plaid
   const plaid =
     mocks.plaid ??
@@ -88,9 +91,11 @@ export const createServiceCollection = (
     mocks.createLinkTokenService ??
     new CreateLinkTokenService(getUserRepository, financialProvider);
   const loginService =
-    mocks.loginService ?? new LoginService(findUserByEmailRepository);
+    mocks.loginService ??
+    new LoginService(environment, findUserByEmailRepository);
   const refreshTokenService =
-    mocks.refreshTokenService ?? new RefreshTokenService(getUserRepository);
+    mocks.refreshTokenService ??
+    new RefreshTokenService(environment, getUserRepository);
   const createInstitutionService =
     mocks.createInstitutionService ??
     new CreateInstitutionService(
@@ -117,7 +122,7 @@ export const createServiceCollection = (
     new UserController(createUserService, createLinkTokenService);
   const authController =
     mocks.authController ??
-    new AuthController(loginService, refreshTokenService);
+    new AuthController(environment, loginService, refreshTokenService);
   const institutionController =
     mocks.institutionController ??
     new InstitutionController(
@@ -135,6 +140,8 @@ export const createServiceCollection = (
     );
 
   const serviceCollection: IServiceCollection = {
+    // Environment
+    environment,
     // Plaid
     plaid,
     // Prisma
@@ -172,5 +179,3 @@ export const createServiceCollection = (
 
   return serviceCollection;
 };
-
-export const ServiceCollection = createServiceCollection();
