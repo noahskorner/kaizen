@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['../../../.eslint.react.json']
+  extends: ['../../../.eslintrc.react.json']
 };

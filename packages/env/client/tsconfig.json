@@ -1,5 +1,5 @@
 {
-  "extends": "@kaizen/config/typescript/vite.json",
+  "extends": "../../../tsconfig.vite.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {

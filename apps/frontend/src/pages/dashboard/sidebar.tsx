@@ -16,17 +16,17 @@ export const Sidebar = () => {
 
   return (
     <div className="fixed h-full">
-      <div className="bg-primary-800 flex h-full w-64 flex-col items-center justify-between p-4 text-neutral-600">
+      <div className="flex h-full w-64 flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600">
         <div className="flex w-full flex-col gap-y-4">
-          <div className="border-primary-700 flex items-center gap-x-3 border-b pb-4">
+          <div className="flex items-center gap-x-3 border-b border-primary-700 pb-4">
             <Avatar />
             <div className="flex flex-col gap-y-1">
               <h6 className="text-sm font-medium text-neutral-50">
                 Noah Korner
               </h6>
-              <div className="text-neutral-0 -ml-1 flex items-center">
+              <div className="-ml-1 flex items-center text-neutral-0">
                 <CoinsIcon />
-                <span className="text-neutral-0 text-xs">4,422</span>
+                <span className="text-xs text-neutral-0">4,422</span>
               </div>
             </div>
           </div>
