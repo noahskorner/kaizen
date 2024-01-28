@@ -1,18 +1,24 @@
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
-import { defaultAppFixture } from '../../app.fixture';
-import { createUniqueEmail } from '../../fixtures/create-unique-email';
-import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { v4 as uuid } from 'uuid';
-import { expectError } from '../../fixtures/expect-error';
-import { validPassword } from '../../fixtures/valid-password';
 import { CreateUserCommand, User, LinkToken } from '@kaizen/user';
+import { ServiceCollectionBuilder } from '../../service-collection.builder';
+import { buildApp } from '../../build-app';
+import {
+  defaultTestBed,
+  expectError,
+  createUniqueEmail,
+  validPassword,
+  MockPlaidApiBuilder,
+  mockLinkTokenCreateResponse,
+  createAndLoginUser
+} from '../../../test';
 
 describe('/user', () => {
   describe('create should', () => {
     it('returns 400 when request is null', async () => {
       // Act
-      const response = await supertest(defaultAppFixture).post('/user').send();
+      const response = await supertest(defaultTestBed).post('/user').send();
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -23,7 +29,7 @@ describe('/user', () => {
       const request = {};
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -38,7 +44,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -53,7 +59,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -69,7 +75,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -85,7 +91,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -101,7 +107,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -115,10 +121,10 @@ describe('/user', () => {
         email: createUniqueEmail(),
         password: validPassword
       };
-      await supertest(defaultAppFixture).post('/user').send(request);
+      await supertest(defaultTestBed).post('/user').send(request);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
 
@@ -134,7 +140,7 @@ describe('/user', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/user')
         .send(request);
       const body: ApiSuccessResponse<User> = response.body;
@@ -145,28 +151,36 @@ describe('/user', () => {
     });
   });
   describe('createLinkToken should', () => {
+    const mockPlaidApi = new MockPlaidApiBuilder()
+      .withLinkTokenCreate(mockLinkTokenCreateResponse)
+      .build();
+
+    const mockServiceCollection = new ServiceCollectionBuilder()
+      .withPlaidApi(mockPlaidApi)
+      .build();
+
+    const testBed = buildApp(mockServiceCollection);
+
     it('return 401 when user is not authenticated', async () => {
       // Act
-      const response = await supertest(defaultAppFixture)
-        .post('/user/link-token')
-        .send();
+      const response = await supertest(testBed).post('/user/link-token').send();
 
       // Assert
       expect(response.statusCode).toBe(401);
     });
     it('returns 201 and link token', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(testBed)
         .post('/user/link-token')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body = response.body as ApiSuccessResponse<LinkToken>;
 
       // Assert
       expect(response.statusCode).toBe(201);
-      expect(body.data.token).toBe('MOCK_LINK_TOKEN');
+      expect(body.data.token).toBe(mockLinkTokenCreateResponse.link_token);
     });
   });
 });

@@ -75,7 +75,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const request: AccountsGetRequest = {
         access_token: accessToken
       };
-      const response = await this._plaid.accountsGet(request);
+      const response = await this._plaid.accountsBalanceGet(request);
 
       return this.success(
         response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)

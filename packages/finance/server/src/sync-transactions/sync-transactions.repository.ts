@@ -28,7 +28,7 @@ export class SyncTransactionsRepository
   ): Promise<TransactionRecord> {
     return this._prisma.transactionRecord.update({
       where: { externalId: query.externalId },
-      data: query
+      data: { ...query, updatedAt: new Date() }
     });
   }
 

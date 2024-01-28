@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate';
-import { IServiceCollection } from './service-collection.interface';
+import { IServiceCollection } from '../service-collection.interface';
 
-export const createRouter = (serviceCollection: IServiceCollection) => {
+export const buildRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
 
   // /

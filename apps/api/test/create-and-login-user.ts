@@ -4,19 +4,16 @@ import { validPassword } from './valid-password';
 import { AuthToken, LoginCommand } from '@kaizen/auth';
 import { CreateUserCommand, User } from '@kaizen/user';
 import { ApiSuccessResponse } from '@kaizen/core';
-import { defaultAppFixture as defaultAppFixture } from '../app.fixture';
 import { Application } from 'express';
 
-export const createAndLoginUser = async (
-  appFixture: Application = defaultAppFixture
-) => {
+export const createAndLoginUser = async (testBed: Application) => {
   const email = createUniqueEmail();
-  const userResponse = await supertest(appFixture)
+  const userResponse = await supertest(testBed)
     .post('/user')
     .send({ email, password: validPassword } as CreateUserCommand);
   const userResponseBody: ApiSuccessResponse<User> = userResponse.body;
 
-  const authResponse = await supertest(appFixture)
+  const authResponse = await supertest(testBed)
     .post('/auth')
     .send({ email: email, password: validPassword } as LoginCommand);
   const authResponseBody: ApiSuccessResponse<AuthToken> = authResponse.body;

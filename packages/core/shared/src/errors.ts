@@ -77,5 +77,9 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
   [ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND]: {
     key: ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND,
     message: 'Institution not found.'
+  },
+  [ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND]: {
+    key: ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND,
+    message: 'Institution not found.'
   }
 };

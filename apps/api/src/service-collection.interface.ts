@@ -11,7 +11,8 @@ import {
   IFindTransactionsService,
   ICreateVirtualAccountService,
   IFindVirtualAccountsService,
-  ISyncInstitutionsService
+  ISyncAccountsService,
+  IGetAccountRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -22,14 +23,14 @@ import {
   ICreateLinkTokenService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
-import { AuthController } from './auth/auth.controller';
+import { AuthController } from './routes/auth/auth.controller';
 import {
   InstitutionController,
   TransactionController,
   VirtualAccountController
-} from './finance';
-import { UserController } from './user';
-import { HomeController } from './home.controller';
+} from './routes/finance';
+import { UserController } from './routes/user';
+import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
@@ -37,33 +38,40 @@ import { PrismaClient } from '@prisma/client';
 export interface IServiceCollection {
   // Environment
   environment: IServerEnvironment;
+
   // Plaid
   plaid: PlaidApi;
+
   // Prisma
   prisma: PrismaClient;
+
   // Providers
   financialProvider: IFinancialProvider;
+
   // Repositories
   createUserRepository: ICreateUserRepository;
   findUserByEmailRepository: IFindUserByEmailRepository;
   getUserRepository: IGetUserRepository;
+  getAccountRepository: IGetAccountRepository;
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
   createVirtualAccountRepository: ICreateVirtualAccountRepository;
   findVirtualAccountsRepository: IFindVirtualAccountsRepository;
+
   // Services
   getUserService: IGetUserService;
   createUserService: ICreateUserService;
   createLinkTokenService: ICreateLinkTokenService;
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
+  syncAccountsService: ISyncAccountsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
   createVirtualAccountService: ICreateVirtualAccountService;
   findVirtualAccountsService: IFindVirtualAccountsService;
-  syncInstitutionsService: ISyncInstitutionsService;
+
   // Controllers
   homeController: HomeController;
   userController: UserController;

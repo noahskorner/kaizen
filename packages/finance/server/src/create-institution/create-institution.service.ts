@@ -1,15 +1,13 @@
 import {
-  AccountAdapter,
-  CreateAccountQuery,
   CreateInstitutionCommand,
   CreateInstitutionQuery,
-  CreateTransactionQuery,
-  ExternalTransaction,
   ICreateInstitutionRepository,
   ICreateInstitutionService,
   IFinancialProvider,
+  ISyncAccountsService,
   Institution,
-  TransactionAdapter
+  InstitutionRecord,
+  SyncAccountsCommand
 } from '@kaizen/finance';
 import { ApiResponse, Errors } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
@@ -20,7 +18,8 @@ export class CreateInstitutionService
 {
   constructor(
     private readonly _createInstitutionRepository: ICreateInstitutionRepository,
-    private readonly _financialProvider: IFinancialProvider
+    private readonly _financialProvider: IFinancialProvider,
+    private readonly _syncAccountsService: ISyncAccountsService
   ) {
     super();
   }
@@ -33,19 +32,28 @@ export class CreateInstitutionService
     }
 
     try {
-      const response = await this.createInsitutions(command);
-      if (response.type == 'FAILURE') {
-        return this.failures(response.errors);
+      // Create the institution
+      const createInstitutionResponse = await this._create(command);
+      if (createInstitutionResponse.type == 'FAILURE') {
+        return this.failures(createInstitutionResponse.errors);
       }
 
-      const institutionRecord = await this._createInstitutionRepository.create(
-        response.data
-      );
+      // Sync it's accounts
+      const syncAccountsCommand: SyncAccountsCommand = {
+        userId: command.userId,
+        institutionIds: [createInstitutionResponse.data.id]
+      };
+      const syncAccountsResponse =
+        await this._syncAccountsService.sync(syncAccountsCommand);
+      if (syncAccountsResponse.type === 'FAILURE') {
+        return this.failures(syncAccountsResponse.errors);
+      }
 
+      // Return the institution and it's accounts
       const institution: Institution = {
-        id: institutionRecord.id,
-        userId: institutionRecord.userId,
-        accounts: institutionRecord.accounts.map(AccountAdapter.toAccount)
+        id: createInstitutionResponse.data.id,
+        userId: createInstitutionResponse.data.userId,
+        accounts: syncAccountsResponse.data
       };
       return this.success(institution);
     } catch (error) {
@@ -54,9 +62,9 @@ export class CreateInstitutionService
     }
   }
 
-  private async createInsitutions(
+  private async _create(
     command: CreateInstitutionCommand
-  ): Promise<ApiResponse<CreateInstitutionQuery>> {
+  ): Promise<ApiResponse<InstitutionRecord>> {
     const exchangeExternalPublicTokenResponse =
       await this._financialProvider.exchangeExternalPublicToken(
         command.publicToken
@@ -65,68 +73,14 @@ export class CreateInstitutionService
       return this.failures(exchangeExternalPublicTokenResponse.errors);
     }
 
-    const createAccountResponse = await this.createAccounts(
-      exchangeExternalPublicTokenResponse.data
-    );
-    if (createAccountResponse.type === 'FAILURE') {
-      return this.failures(createAccountResponse.errors);
-    }
-
     const createInstitutionQuery: CreateInstitutionQuery = {
       userId: command.userId,
-      plaidAccessToken: exchangeExternalPublicTokenResponse.data,
-      accounts: createAccountResponse.data
+      plaidAccessToken: exchangeExternalPublicTokenResponse.data
     };
-    return this.success(createInstitutionQuery);
-  }
-
-  private async createAccounts(
-    accessToken: string
-  ): Promise<ApiResponse<CreateAccountQuery[]>> {
-    const externalAccountsResponse =
-      await this._financialProvider.getExternalAccounts(accessToken);
-    if (externalAccountsResponse.type == 'FAILURE') {
-      return this.failures(externalAccountsResponse.errors);
-    }
-
-    // const syncExternalTransactionsResponse =
-    //   await this._financialProvider.syncExternalTransactions(accessToken);
-    // if (syncExternalTransactionsResponse.type === 'FAILURE') {
-    //   return this.failures(syncExternalTransactionsResponse.errors);
-    // }
-
-    const createAccountQueries = await Promise.all(
-      externalAccountsResponse.data.map(async (externalAccount) => {
-        const createAccountQuery: CreateAccountQuery = {
-          externalId: externalAccount.id,
-          current: externalAccount.current,
-          available: externalAccount.available,
-          currency: externalAccount.currency,
-          type: AccountAdapter.toAccountRecordType(externalAccount.type),
-          transactions: [] // TODO: Remove these from return type
-          // transactions: this.createTransactions(
-          //   externalAccount.id,
-          //   syncExternalTransactionsResponse.data.created.concat(
-          //     syncExternalTransactionsResponse.data.updated
-          //   )
-          // )
-        };
-
-        return createAccountQuery;
-      })
+    const institutionRecord = await this._createInstitutionRepository.create(
+      createInstitutionQuery
     );
-    return this.success(createAccountQueries);
-  }
 
-  private createTransactions(
-    externalAccountId: string,
-    externalTransactions: ExternalTransaction[]
-  ): CreateTransactionQuery[] {
-    return externalTransactions
-      .filter(
-        (externalTransaction) =>
-          externalTransaction.accountId === externalAccountId
-      )
-      .map(TransactionAdapter.toCreateTransactionQuery);
+    return this.success(institutionRecord);
   }
 }

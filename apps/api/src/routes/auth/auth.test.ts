@@ -1,23 +1,25 @@
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
 import supertest from 'supertest';
-import { createUniqueEmail } from '../../fixtures/create-unique-email';
-import { expectError } from '../../fixtures/expect-error';
-import { getRefreshToken } from '../../fixtures/get-refresh-token';
-import { validPassword } from '../../fixtures/valid-password';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
-import { createAndLoginUser } from '../../fixtures/create-and-login-user';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
 import { CreateUserCommand } from '@kaizen/user';
-import { defaultAppFixture } from '../../app.fixture';
-import { createApp } from '../../app';
 import { serverEnvironment } from '@kaizen/env-server';
-import { createServiceCollectionFixture } from '../service-collection.fixture';
+import { ServiceCollectionBuilder } from '../../service-collection.builder';
+import { buildApp } from '../../build-app';
+import {
+  defaultTestBed,
+  expectError,
+  createUniqueEmail,
+  validPassword,
+  getRefreshToken,
+  createAndLoginUser
+} from '../../../test';
 
 describe('/auth', () => {
   describe('login should', () => {
     it('returns 401 if request is empty', async () => {
       // Act
-      const response = await supertest(defaultAppFixture).post('/auth').send();
+      const response = await supertest(defaultTestBed).post('/auth').send();
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -31,7 +33,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/auth')
         .send(request);
 
@@ -46,7 +48,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/auth')
         .send(request);
 
@@ -61,7 +63,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/auth')
         .send(request);
 
@@ -72,7 +74,7 @@ describe('/auth', () => {
     it('returns 401 if user exists but password incorrect', async () => {
       // Arrange
       const email = createUniqueEmail();
-      await supertest(defaultAppFixture)
+      await supertest(defaultTestBed)
         .post('/user')
         .send({ email, password: validPassword } as CreateUserCommand);
       const request = {
@@ -81,7 +83,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/auth')
         .send(request);
 
@@ -92,7 +94,7 @@ describe('/auth', () => {
     it('returns 200 if user exists and password correct', async () => {
       // Arrange
       const email = createUniqueEmail();
-      await supertest(defaultAppFixture)
+      await supertest(defaultTestBed)
         .post('/user')
         .send({ email, password: validPassword } as CreateUserCommand);
       const request = {
@@ -101,7 +103,7 @@ describe('/auth', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .post('/auth')
         .send(request);
       const body: ApiSuccessResponse<AuthToken> = response.body;
@@ -117,7 +119,7 @@ describe('/auth', () => {
   describe('refreshToken should', () => {
     it('returns 401 if refreshToken is not provided', async () => {
       // Act
-      const response = await supertest(defaultAppFixture).get('/auth');
+      const response = await supertest(defaultTestBed).get('/auth');
 
       // Assert
       expect(response.statusCode).toBe(401);
@@ -125,7 +127,7 @@ describe('/auth', () => {
     });
     it('returns 401 if refreshToken is invalid', async () => {
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .get('/auth')
         .set('Cookie', [`${REFRESH_TOKEN_COOKIE_KEY}=null`]);
 
@@ -135,17 +137,17 @@ describe('/auth', () => {
     });
     it('returns 401 if refreshToken is expired', async () => {
       // Arrange
-      const serviceCollectionFixture = createServiceCollectionFixture({
-        environment: {
+      const mockServiceCollection = new ServiceCollectionBuilder()
+        .withEnvironment({
           ...serverEnvironment,
           REFRESH_TOKEN_EXPIRATION: '0s'
-        }
-      });
-      const appFixture = createApp(serviceCollectionFixture);
-      const { authToken } = await createAndLoginUser(appFixture);
+        })
+        .build();
+      const testBed = buildApp(mockServiceCollection);
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(testBed)
         .get('/auth')
         .set('Cookie', [
           `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
@@ -157,10 +159,10 @@ describe('/auth', () => {
     });
     it('returns 200 if refreshToken is valid', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .get('/auth')
         .set('Cookie', [
           `${REFRESH_TOKEN_COOKIE_KEY}=${authToken.refreshToken}`
@@ -178,14 +180,14 @@ describe('/auth', () => {
   describe('logout should', () => {
     it('returns 401 when accessToken does not exist', async () => {
       // Act
-      const response = await supertest(defaultAppFixture).delete('/auth');
+      const response = await supertest(defaultTestBed).delete('/auth');
 
       // Assert
       expect(response.statusCode).toBe(401);
     });
     it('returns 401 when accessToken is invalid', async () => {
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .delete('/auth')
         .auth('invalid-token', { type: 'bearer' });
 
@@ -194,17 +196,17 @@ describe('/auth', () => {
     });
     it('returns 401 when accessToken is expired', async () => {
       // Arrange
-      const serviceCollectionFixture = createServiceCollectionFixture({
-        environment: {
+      const mockServiceCollection = new ServiceCollectionBuilder()
+        .withEnvironment({
           ...serverEnvironment,
           ACCESS_TOKEN_EXPIRATION: '0s'
-        }
-      });
-      const appFixture = createApp(serviceCollectionFixture);
-      const { authToken } = await createAndLoginUser(appFixture);
+        })
+        .build();
+      const testBed = buildApp(mockServiceCollection);
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(appFixture)
+      const response = await supertest(testBed)
         .delete('/auth')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -213,10 +215,10 @@ describe('/auth', () => {
     });
     it('returns 200 when accessToken is valid', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(defaultTestBed)
         .delete('/auth')
         .auth(authToken.accessToken, { type: 'bearer' });
       const refreshToken = getRefreshToken(response);
