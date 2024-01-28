@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   Account,
@@ -13,7 +13,8 @@ import {
   ISyncAccountsRepository,
   ISyncAccountsService,
   InstitutionRecord,
-  SyncAccountsCommand
+  SyncAccountsCommand,
+  SyncAccountsResponse
 } from '@kaizen/finance';
 
 export class SyncAccountsService
@@ -31,7 +32,7 @@ export class SyncAccountsService
 
   public async sync(
     command: SyncAccountsCommand
-  ): Promise<ApiResponse<Account[]>> {
+  ): Promise<ApiResponse<SyncAccountsResponse>> {
     const findInstitutionsResponse =
       await this._findInstitutionRecords(command);
     if (findInstitutionsResponse.type == 'FAILURE') {
@@ -46,16 +47,9 @@ export class SyncAccountsService
         );
       })
     );
-    // TODO: Ignoring the failures for now
-    const accounts = syncAccountsResponses
-      .reduce((prev, curr) => {
-        if (curr.type == 'FAILURE') return prev;
 
-        return [...prev, ...curr.data];
-      }, new Array<AccountRecord>())
-      .map(AccountAdapter.toAccount);
-
-    return this.success(accounts);
+    const response = this._buildReponse(syncAccountsResponses);
+    return this.success(response);
   }
 
   private async _findInstitutionRecords(
@@ -75,11 +69,7 @@ export class SyncAccountsService
     const institutionRecordIds = institutionRecords.map(
       (institutionRecord) => institutionRecord.id
     );
-    if (
-      command.institutionIds.some(
-        (institutionId) => !institutionRecordIds.includes(institutionId)
-      )
-    ) {
+    if (!isArrayEqual(command.institutionIds, institutionRecordIds)) {
       return this.failure(Errors.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND);
     }
 
@@ -89,11 +79,14 @@ export class SyncAccountsService
   private async _sync(
     institutionId: string,
     accessToken: string
-  ): Promise<ApiResponse<AccountRecord[]>> {
+  ): Promise<InternalSyncAccountsResponse> {
     const externalAccountsResponse =
       await this._financialProvider.getExternalAccounts(accessToken);
     if (externalAccountsResponse.type == 'FAILURE') {
-      return this.failures(externalAccountsResponse.errors);
+      return {
+        institutionId,
+        response: this.failures(externalAccountsResponse.errors)
+      };
     }
 
     const accountRecords = await Promise.all(
@@ -122,6 +115,43 @@ export class SyncAccountsService
       })
     );
 
-    return this.success(accountRecords);
+    const response: InternalSyncAccountsResponse = {
+      institutionId,
+      response: this.success(accountRecords)
+    };
+    return response;
   }
+
+  private _buildReponse(
+    syncAccountsResponses: InternalSyncAccountsResponse[]
+  ): SyncAccountsResponse {
+    const initialValue: SyncAccountsResponse = {
+      succeeded: new Map<string, Account[]>(),
+      failed: []
+    };
+
+    return syncAccountsResponses.reduce((prev, curr) => {
+      if (curr.response.type === 'FAILURE') {
+        return {
+          ...prev,
+          failed: [...prev.failed, curr.institutionId]
+        };
+      }
+
+      return {
+        ...prev,
+        succeeded: prev.succeeded.set(
+          curr.institutionId,
+          curr.response.data.map((accountRecord) =>
+            AccountAdapter.toAccount(accountRecord)
+          )
+        )
+      };
+    }, initialValue);
+  }
+}
+
+interface InternalSyncAccountsResponse {
+  institutionId: string;
+  response: ApiResponse<AccountRecord[]>;
 }

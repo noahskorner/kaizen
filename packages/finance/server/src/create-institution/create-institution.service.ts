@@ -1,4 +1,5 @@
 import {
+  Account,
   CreateInstitutionCommand,
   CreateInstitutionQuery,
   ICreateInstitutionRepository,
@@ -6,6 +7,7 @@ import {
   IFinancialProvider,
   ISyncAccountsService,
   Institution,
+  InstitutionAdapter,
   InstitutionRecord,
   SyncAccountsCommand
 } from '@kaizen/finance';
@@ -37,24 +39,22 @@ export class CreateInstitutionService
       if (createInstitutionResponse.type == 'FAILURE') {
         return this.failures(createInstitutionResponse.errors);
       }
+      const institutionRecord = createInstitutionResponse.data;
 
       // Sync it's accounts
-      const syncAccountsCommand: SyncAccountsCommand = {
-        userId: command.userId,
-        institutionIds: [createInstitutionResponse.data.id]
-      };
-      const syncAccountsResponse =
-        await this._syncAccountsService.sync(syncAccountsCommand);
-      if (syncAccountsResponse.type === 'FAILURE') {
+      const syncAccountsResponse = await this._syncAccounts(institutionRecord);
+      if (syncAccountsResponse.type == 'FAILURE') {
         return this.failures(syncAccountsResponse.errors);
       }
+      const accounts = syncAccountsResponse.data;
+
+      // TODO: this._syncTransactionsService.sync();
 
       // Return the institution and it's accounts
-      const institution: Institution = {
-        id: createInstitutionResponse.data.id,
-        userId: createInstitutionResponse.data.userId,
-        accounts: syncAccountsResponse.data
-      };
+      const institution = InstitutionAdapter.toInstitution(
+        institutionRecord,
+        accounts
+      );
       return this.success(institution);
     } catch (error) {
       console.log(error);
@@ -82,5 +82,27 @@ export class CreateInstitutionService
     );
 
     return this.success(institutionRecord);
+  }
+
+  private async _syncAccounts(
+    institutionRecord: InstitutionRecord
+  ): Promise<ApiResponse<Account[]>> {
+    const syncAccountsCommand: SyncAccountsCommand = {
+      userId: institutionRecord.userId,
+      institutionIds: [institutionRecord.id]
+    };
+    const syncAccountsResponse =
+      await this._syncAccountsService.sync(syncAccountsCommand);
+    if (syncAccountsResponse.type === 'FAILURE') {
+      return this.failures(syncAccountsResponse.errors);
+    }
+
+    const accounts = syncAccountsResponse.data.succeeded.get(
+      institutionRecord.id
+    );
+    if (accounts == null) {
+      return this.failure(Errors.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS);
+    }
+    return this.success(accounts);
   }
 }

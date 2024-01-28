@@ -63,10 +63,10 @@ export class TransactionAdapter {
   }
 
   public static toDeleteTransactionQuery(
-    externalTransactionId: string
+    externalId: string
   ): DeleteTransactionQuery {
     const deleteTransactionQuery: DeleteTransactionQuery = {
-      externalTransactionId: externalTransactionId
+      externalId: externalId
     };
 
     return deleteTransactionQuery;

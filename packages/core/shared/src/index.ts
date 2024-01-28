@@ -5,3 +5,4 @@ export * from './api-response';
 export * from './paginated';
 export * from './to-search-params';
 export * from './has-error-for';
+export * from './is-array-equal';

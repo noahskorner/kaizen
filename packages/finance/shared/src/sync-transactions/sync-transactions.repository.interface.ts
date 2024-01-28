@@ -1,10 +1,6 @@
-import { TransactionRecord } from '../transaction-record';
-import { CreateTransactionQuery } from './create-transaction.query';
-import { DeleteTransactionQuery } from './delete-transaction.query';
-import { UpdateTransactionQuery } from './update-transaction.query';
+import { SyncTransactionsResult } from './sync-transacations.result';
+import { SyncTransactionsQuery } from './sync-transactions.query';
 
 export interface ISyncTransactionsRepository {
-  create(query: CreateTransactionQuery): Promise<TransactionRecord>;
-  update(query: UpdateTransactionQuery): Promise<TransactionRecord>;
-  delete(query: DeleteTransactionQuery): Promise<TransactionRecord>;
+  sync(query: SyncTransactionsQuery): Promise<SyncTransactionsResult>;
 }

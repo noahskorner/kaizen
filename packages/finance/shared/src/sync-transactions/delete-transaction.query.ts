@@ -1,3 +1,3 @@
 export interface DeleteTransactionQuery {
-  externalTransactionId: string;
+  externalId: string;
 }

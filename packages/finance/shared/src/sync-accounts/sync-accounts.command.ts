@@ -1,7 +1,5 @@
 export interface SyncAccountsCommand {
   userId: string;
-  /**
-   * List of institutionIds to sync. If not provided, all institutions will be synced.
-   */
+  /** List of institutions to sync. If not provided, all institution's accounts will be synced. */
   institutionIds?: string[];
 }

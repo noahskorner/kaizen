@@ -1,5 +1,5 @@
 export interface FindInstitutionsQuery {
   userId: string;
-  /** List of `institutionIds` to filter. If not provided, all will be returned. */
+  /** List of institutions to find. If not provided, all will be returned. */
   institutionIds?: string[];
 }

@@ -1,5 +1,6 @@
 export interface CreateTransactionQuery {
   externalId: string;
+  accountId: string;
   externalAccountId: string;
   amount: number;
   currency: string | null;

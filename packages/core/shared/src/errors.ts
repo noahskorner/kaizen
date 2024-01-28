@@ -46,6 +46,10 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
     key: ErrorKey.CREATE_LINK_TOKEN_USER_NOT_FOUND,
     message: 'User not found.'
   },
+  [ErrorKey.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS]: {
+    key: ErrorKey.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS,
+    message: 'Failed to created accounts for this institution.'
+  },
   [ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN]: {
     key: ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN,
     message: 'Must provide a valid plaidPublicToken.'
@@ -74,12 +78,16 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
     key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME,
     message: 'Must provide a valid virtual account name.'
   },
+  [ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND]: {
+    key: ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND,
+    message: 'Institution not found.'
+  },
   [ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND]: {
     key: ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND,
     message: 'Institution not found.'
   },
-  [ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND]: {
-    key: ErrorKey.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND,
-    message: 'Institution not found.'
+  [ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_UPDATED]: {
+    key: ErrorKey.SYNC_TRANSACTIONS_INSTITUTION_NOT_UPDATED,
+    message: 'Institution not updated.'
   }
 };

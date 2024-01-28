@@ -1,8 +1,10 @@
-import { Institution } from '../institution';
 import { Transaction } from '../transaction';
 
 export interface SyncTransactionsResponse {
-  institution: Institution;
+  /** A list of institutions whose transactions were successfully synced. */
+  succeeded: string[];
+  /** A list of institutions whose transactions failed to sync. */
+  failed: string[];
   created: Transaction[];
   updated: Transaction[];
   deleted: Transaction[];

@@ -1,17 +1,14 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   FindInstitutionsQuery,
-  GetInstitutionQuery,
   IFinancialProvider,
   IFindInstitutionsRepository,
-  IGetInstitutionRepository,
   ISyncTransactionsRepository,
   ISyncTransactionsService,
-  IUpdateInstitutionRepository,
   Institution,
   InstitutionAdapter,
-  SyncAllTransactionsCommand,
+  InstitutionRecord,
   SyncExternalTransactionsResponse,
   SyncTransactionsCommand,
   SyncTransactionsResponse,
@@ -25,62 +22,61 @@ export class SyncTransactionsService
 {
   constructor(
     private readonly _findInstitutionsRepository: IFindInstitutionsRepository,
-    private readonly _getInstitutionRepository: IGetInstitutionRepository,
     private readonly _financialProvider: IFinancialProvider,
-    private readonly _syncTransactionsRepository: ISyncTransactionsRepository,
-    private readonly _updateInstitutionRepository: IUpdateInstitutionRepository
+    private readonly _syncTransactionsRepository: ISyncTransactionsRepository
   ) {
     super();
   }
 
-  public async syncAll(
-    command: SyncAllTransactionsCommand
-  ): Promise<Array<ApiResponse<SyncTransactionsResponse>>> {
-    const query: FindInstitutionsQuery = {
-      userId: command.userId
-    };
-    const institutionRecords =
-      await this._findInstitutionsRepository.find(query);
+  public async sync(
+    command: SyncTransactionsCommand
+  ): Promise<ApiResponse<SyncTransactionsResponse>> {
+    const findInstitutionResponse = await this._findInstitutions(command);
+    if (findInstitutionResponse.type === 'FAILURE') {
+      return this.failures(findInstitutionResponse.errors);
+    }
 
-    return await Promise.all(
-      institutionRecords.map(async (institutionRecord) => {
-        return this._syncTransactions({
+    const syncTransactionResponses = await Promise.all(
+      findInstitutionResponse.data.map(async (institutionRecord) => {
+        return this._sync({
           institutionId: institutionRecord.id,
           plaidAccessToken: institutionRecord.plaidAccessToken,
           plaidCursor: institutionRecord.plaidCursor
         });
       })
     );
+
+    const response = this._buildResponse(syncTransactionResponses);
+    return this.success(response);
   }
 
-  public async sync(
+  private async _findInstitutions(
     command: SyncTransactionsCommand
-  ): Promise<ApiResponse<SyncTransactionsResponse>> {
-    const query: GetInstitutionQuery = {
+  ): Promise<ApiResponse<InstitutionRecord[]>> {
+    const query: FindInstitutionsQuery = {
       userId: command.userId,
-      institutionId: command.institutionId
+      institutionIds: command.institutionIds
     };
-    const institutionRecord = await this._getInstitutionRepository.get(query);
-    if (institutionRecord == null) {
-      return this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND);
+    const institutionRecords =
+      await this._findInstitutionsRepository.find(query);
+    if (command.institutionIds == null || command.institutionIds.length === 0) {
+      return this.success(institutionRecords);
     }
 
-    return this._syncTransactions({
-      institutionId: institutionRecord.id,
-      plaidAccessToken: institutionRecord.plaidAccessToken,
-      plaidCursor: institutionRecord.plaidCursor
-    });
+    const institutionRecordIds = institutionRecords.map(
+      (institutionRecord) => institutionRecord.id
+    );
+    if (!isArrayEqual(command.institutionIds, institutionRecordIds)) {
+      return this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND);
+    }
+    return this.success(institutionRecords);
   }
 
-  private async _syncTransactions({
+  private async _sync({
     institutionId,
     plaidAccessToken,
     plaidCursor
-  }: {
-    institutionId: string;
-    plaidAccessToken: string;
-    plaidCursor: string | null;
-  }): Promise<ApiResponse<SyncTransactionsResponse>> {
+  }: InternalSyncTransactionsCommand): Promise<InternalSyncTransactionsResponse> {
     // Initialize our pointers
     let hasMore = true;
     let cursor = plaidCursor;
@@ -91,23 +87,24 @@ export class SyncTransactionsService
 
     while (hasMore) {
       // Get a batch from the financial provider
-      const response = await this._financialProvider.syncExternalTransactions(
-        plaidAccessToken,
-        cursor
-      );
-      if (response.type === 'FAILURE') {
-        return response;
+      const syncExternalTransactionsResponse =
+        await this._financialProvider.syncExternalTransactions(
+          plaidAccessToken,
+          cursor
+        );
+      if (syncExternalTransactionsResponse.type === 'FAILURE') {
+        return { institutionId, response: syncExternalTransactionsResponse };
       }
 
       // Update our records in the database
       const updates = await this._handleDatabaseUpdates(
         institutionId,
-        response.data
+        syncExternalTransactionsResponse.data
       );
 
       // Update our pointers
-      hasMore = updates.hasMore;
-      cursor = updates.cursor;
+      hasMore = syncExternalTransactionsResponse.data.hasMore;
+      cursor = syncExternalTransactionsResponse.data.cursor;
       institution = updates.institution;
       created = created.concat(updates.created);
       updated = updated.concat(updates.updated);
@@ -115,60 +112,99 @@ export class SyncTransactionsService
     }
 
     if (institution == null) {
-      return this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND);
+      return {
+        institutionId,
+        response: this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND)
+      };
     }
-    const syncTransactionsResponse: SyncTransactionsResponse = {
-      institution: institution,
-      created: created,
-      updated: updated,
-      deleted: deleted
-    };
+
     // TODO: Emit event back up to client here
-    return this.success(syncTransactionsResponse);
+    return {
+      institutionId,
+      response: this.success({
+        created: created,
+        updated: updated,
+        deleted: deleted
+      })
+    };
   }
 
   private async _handleDatabaseUpdates(
     institutionId: string,
     response: SyncExternalTransactionsResponse
   ) {
-    const updateInstitutionPromise = this._updateInstitutionRepository.update({
-      institutionId: institutionId,
-      cursor: response.cursor
-    });
-    const createTransactionsPromise = Promise.all(
-      response.created
-        .map(TransactionAdapter.toCreateTransactionQuery)
-        .map((query) => this._syncTransactionsRepository.create(query))
+    const syncTransactionsQuery = {
+      updateInstitutionQuery: {
+        institutionId: institutionId,
+        cursor: response.cursor
+      },
+      createTransactionQueries: response.created.map(
+        TransactionAdapter.toCreateTransactionQuery
+      ),
+      updateTransactionQueries: response.updated.map(
+        TransactionAdapter.toUpdateTransactionQuery
+      ),
+      deleteTransactionQueries: response.deleted.map(
+        TransactionAdapter.toDeleteTransactionQuery
+      )
+    };
+
+    const syncTransactionsResult = await this._syncTransactionsRepository.sync(
+      syncTransactionsQuery
     );
-    const updateTransactionsPromise = Promise.all(
-      response.updated
-        .map(TransactionAdapter.toUpdateTransactionQuery)
-        .map((query) => this._syncTransactionsRepository.update(query))
-    );
-    const deleteTransactionsPromise = Promise.all(
-      response.deleted
-        .map(TransactionAdapter.toDeleteTransactionQuery)
-        .map((query) => this._syncTransactionsRepository.delete(query))
-    );
-    const [
-      institutionRecord,
-      createdTransactions,
-      updatedTransactions,
-      deletedTransactions
-    ] = await Promise.all([
-      updateInstitutionPromise,
-      createTransactionsPromise,
-      updateTransactionsPromise,
-      deleteTransactionsPromise
-    ]);
 
     return {
-      hasMore: response.hasMore,
-      cursor: response.cursor,
-      institution: InstitutionAdapter.toInstitution(institutionRecord),
-      created: createdTransactions.map(TransactionAdapter.toTransaction),
-      updated: updatedTransactions.map(TransactionAdapter.toTransaction),
-      deleted: deletedTransactions.map(TransactionAdapter.toTransaction)
+      institution: InstitutionAdapter.toInstitution(
+        syncTransactionsResult.updatedInstitutionRecord
+      ),
+      created: syncTransactionsResult.createdTransactionRecords.map(
+        TransactionAdapter.toTransaction
+      ),
+      updated: syncTransactionsResult.updatedTransactionRecords.map(
+        TransactionAdapter.toTransaction
+      ),
+      deleted: syncTransactionsResult.deletedTransactionRecords.map(
+        TransactionAdapter.toTransaction
+      )
     };
   }
+
+  private _buildResponse(
+    syncTransactionResponses: InternalSyncTransactionsResponse[]
+  ) {
+    const initialValue: SyncTransactionsResponse = {
+      succeeded: [],
+      failed: [],
+      created: [],
+      updated: [],
+      deleted: []
+    };
+    return syncTransactionResponses.reduce((prev, curr) => {
+      if (curr.response.type === 'FAILURE') {
+        return {
+          ...prev,
+          failed: [...prev.failed, curr.institutionId]
+        };
+      }
+
+      return {
+        ...prev,
+        succeeded: [...prev.succeeded, curr.institutionId],
+        created: [...prev.created, ...curr.response.data.created],
+        updated: [...prev.updated, ...curr.response.data.updated],
+        deleted: [...prev.deleted, ...curr.response.data.deleted]
+      };
+    }, initialValue);
+  }
+}
+
+interface InternalSyncTransactionsCommand {
+  institutionId: string;
+  plaidAccessToken: string;
+  plaidCursor: string | null;
+}
+
+interface InternalSyncTransactionsResponse {
+  institutionId: string;
+  response: ApiResponse<Omit<SyncTransactionsResponse, 'succeeded' | 'failed'>>;
 }

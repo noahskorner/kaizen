@@ -1,7 +1,9 @@
 import { ApiResponse } from '@kaizen/core';
 import { SyncAccountsCommand } from './sync-accounts.command';
-import { Account } from '../account';
+import { SyncAccountsResponse } from './sync-accounts.response';
 
 export interface ISyncAccountsService {
-  sync(command: SyncAccountsCommand): Promise<ApiResponse<Account[]>>;
+  sync(
+    command: SyncAccountsCommand
+  ): Promise<ApiResponse<SyncAccountsResponse>>;
 }
