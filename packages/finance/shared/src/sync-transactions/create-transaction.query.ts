@@ -1,12 +1,5 @@
-export interface CreateTransactionQuery {
-  externalId: string;
+import { UpdateTransactionQuery } from './update-transaction.query';
+
+export interface CreateTransactionQuery extends UpdateTransactionQuery {
   accountId: string;
-  externalAccountId: string;
-  amount: number;
-  currency: string | null;
-  date: Date | null;
-  name: string;
-  merchantName: string | null;
-  pending: boolean;
-  logoUrl: string | null;
 }

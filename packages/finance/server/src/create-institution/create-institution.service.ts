@@ -37,18 +37,16 @@ export class CreateInstitutionService
       // Create the institution
       const createInstitutionResponse = await this._create(command);
       if (createInstitutionResponse.type == 'FAILURE') {
-        return this.failures(createInstitutionResponse.errors);
+        return createInstitutionResponse;
       }
       const institutionRecord = createInstitutionResponse.data;
 
       // Sync it's accounts
       const syncAccountsResponse = await this._syncAccounts(institutionRecord);
       if (syncAccountsResponse.type == 'FAILURE') {
-        return this.failures(syncAccountsResponse.errors);
+        return syncAccountsResponse;
       }
       const accounts = syncAccountsResponse.data;
-
-      // TODO: this._syncTransactionsService.sync();
 
       // Return the institution and it's accounts
       const institution = InstitutionAdapter.toInstitution(
@@ -65,21 +63,19 @@ export class CreateInstitutionService
   private async _create(
     command: CreateInstitutionCommand
   ): Promise<ApiResponse<InstitutionRecord>> {
-    const exchangeExternalPublicTokenResponse =
-      await this._financialProvider.exchangeExternalPublicToken(
-        command.publicToken
-      );
-    if (exchangeExternalPublicTokenResponse.type == 'FAILURE') {
-      return this.failures(exchangeExternalPublicTokenResponse.errors);
+    const response = await this._financialProvider.exchangeExternalPublicToken(
+      command.publicToken
+    );
+    if (response.type == 'FAILURE') {
+      return response;
     }
 
-    const createInstitutionQuery: CreateInstitutionQuery = {
+    const query: CreateInstitutionQuery = {
       userId: command.userId,
-      plaidAccessToken: exchangeExternalPublicTokenResponse.data
+      plaidAccessToken: response.data
     };
-    const institutionRecord = await this._createInstitutionRepository.create(
-      createInstitutionQuery
-    );
+    const institutionRecord =
+      await this._createInstitutionRepository.create(query);
 
     return this.success(institutionRecord);
   }
@@ -87,19 +83,16 @@ export class CreateInstitutionService
   private async _syncAccounts(
     institutionRecord: InstitutionRecord
   ): Promise<ApiResponse<Account[]>> {
-    const syncAccountsCommand: SyncAccountsCommand = {
+    const command: SyncAccountsCommand = {
       userId: institutionRecord.userId,
       institutionIds: [institutionRecord.id]
     };
-    const syncAccountsResponse =
-      await this._syncAccountsService.sync(syncAccountsCommand);
-    if (syncAccountsResponse.type === 'FAILURE') {
-      return this.failures(syncAccountsResponse.errors);
+    const response = await this._syncAccountsService.sync(command);
+    if (response.type === 'FAILURE') {
+      return response;
     }
 
-    const accounts = syncAccountsResponse.data.succeeded.get(
-      institutionRecord.id
-    );
+    const accounts = response.data.succeeded.get(institutionRecord.id);
     if (accounts == null) {
       return this.failure(Errors.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS);
     }

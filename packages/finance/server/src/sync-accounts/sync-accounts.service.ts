@@ -12,9 +12,11 @@ import {
   IGetAccountRepository,
   ISyncAccountsRepository,
   ISyncAccountsService,
+  ISyncTransactionsService,
   InstitutionRecord,
   SyncAccountsCommand,
-  SyncAccountsResponse
+  SyncAccountsResponse,
+  SyncTransactionsCommand
 } from '@kaizen/finance';
 
 export class SyncAccountsService
@@ -25,7 +27,8 @@ export class SyncAccountsService
     private readonly _financialProvider: IFinancialProvider,
     private readonly _findInstitutionsRepository: IFindInstitutionsRepository,
     private readonly _getAccountRepository: IGetAccountRepository,
-    private readonly _syncAccountsRepository: ISyncAccountsRepository
+    private readonly _syncAccountsRepository: ISyncAccountsRepository,
+    private readonly _syncTransactionsService: ISyncTransactionsService
   ) {
     super();
   }
@@ -36,7 +39,7 @@ export class SyncAccountsService
     const findInstitutionsResponse =
       await this._findInstitutionRecords(command);
     if (findInstitutionsResponse.type == 'FAILURE') {
-      return this.failures(findInstitutionsResponse.errors);
+      return findInstitutionsResponse;
     }
 
     const syncAccountsResponses = await Promise.all(
@@ -47,6 +50,14 @@ export class SyncAccountsService
         );
       })
     );
+
+    // TODO: Don't await this. We should queue up a job and emit events to the client.
+    // This works for now though. Let's not do anything with the response just yet.
+    const syncTransactionsCommand: SyncTransactionsCommand = {
+      userId: command.userId,
+      institutionIds: command.institutionIds
+    };
+    await this._syncTransactionsService.sync(syncTransactionsCommand);
 
     const response = this._buildReponse(syncAccountsResponses);
     return this.success(response);
@@ -85,7 +96,7 @@ export class SyncAccountsService
     if (externalAccountsResponse.type == 'FAILURE') {
       return {
         institutionId,
-        response: this.failures(externalAccountsResponse.errors)
+        response: externalAccountsResponse
       };
     }
 

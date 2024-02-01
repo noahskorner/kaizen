@@ -28,9 +28,11 @@ export class TransactionAdapter {
   }
 
   public static toCreateTransactionQuery(
+    accountId: string,
     externalTransaction: ExternalTransaction
   ): CreateTransactionQuery {
     const createTransactionQuery: CreateTransactionQuery = {
+      accountId: accountId,
       externalId: externalTransaction.id,
       externalAccountId: externalTransaction.accountId,
       amount: externalTransaction.amount,

@@ -1,8 +1,12 @@
 import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
+  CreateTransactionQuery,
+  ExternalTransaction,
+  FindAccountsByExternalIdsQuery,
   FindInstitutionsQuery,
   IFinancialProvider,
+  IFindAccountsRepostiory,
   IFindInstitutionsRepository,
   ISyncTransactionsRepository,
   ISyncTransactionsService,
@@ -22,6 +26,7 @@ export class SyncTransactionsService
 {
   constructor(
     private readonly _findInstitutionsRepository: IFindInstitutionsRepository,
+    private readonly _findAccountsRepository: IFindAccountsRepostiory,
     private readonly _financialProvider: IFinancialProvider,
     private readonly _syncTransactionsRepository: ISyncTransactionsRepository
   ) {
@@ -33,7 +38,7 @@ export class SyncTransactionsService
   ): Promise<ApiResponse<SyncTransactionsResponse>> {
     const findInstitutionResponse = await this._findInstitutions(command);
     if (findInstitutionResponse.type === 'FAILURE') {
-      return this.failures(findInstitutionResponse.errors);
+      return findInstitutionResponse;
     }
 
     const syncTransactionResponses = await Promise.all(
@@ -97,18 +102,21 @@ export class SyncTransactionsService
       }
 
       // Update our records in the database
-      const updates = await this._handleDatabaseUpdates(
+      const response = await this._handleDatabaseUpdates(
         institutionId,
         syncExternalTransactionsResponse.data
       );
+      if (response.type === 'FAILURE') {
+        return { institutionId, response };
+      }
 
       // Update our pointers
       hasMore = syncExternalTransactionsResponse.data.hasMore;
       cursor = syncExternalTransactionsResponse.data.cursor;
-      institution = updates.institution;
-      created = created.concat(updates.created);
-      updated = updated.concat(updates.updated);
-      deleted = deleted.concat(updates.deleted);
+      institution = response.data.institution;
+      created = created.concat(response.data.created);
+      updated = updated.concat(response.data.updated);
+      deleted = deleted.concat(response.data.deleted);
     }
 
     if (institution == null) {
@@ -133,14 +141,18 @@ export class SyncTransactionsService
     institutionId: string,
     response: SyncExternalTransactionsResponse
   ) {
+    const createTransactionQueriesResponse =
+      await this._buildCreateTransactionQueries(response.created);
+    if (createTransactionQueriesResponse.type === 'FAILURE') {
+      return createTransactionQueriesResponse;
+    }
+
     const syncTransactionsQuery = {
       updateInstitutionQuery: {
         institutionId: institutionId,
         cursor: response.cursor
       },
-      createTransactionQueries: response.created.map(
-        TransactionAdapter.toCreateTransactionQuery
-      ),
+      createTransactionQueries: createTransactionQueriesResponse.data,
       updateTransactionQueries: response.updated.map(
         TransactionAdapter.toUpdateTransactionQuery
       ),
@@ -153,7 +165,7 @@ export class SyncTransactionsService
       syncTransactionsQuery
     );
 
-    return {
+    return this.success({
       institution: InstitutionAdapter.toInstitution(
         syncTransactionsResult.updatedInstitutionRecord
       ),
@@ -166,7 +178,46 @@ export class SyncTransactionsService
       deleted: syncTransactionsResult.deletedTransactionRecords.map(
         TransactionAdapter.toTransaction
       )
+    });
+  }
+
+  private async _buildCreateTransactionQueries(
+    externalTransactions: ExternalTransaction[]
+  ): Promise<ApiResponse<CreateTransactionQuery[]>> {
+    const query: FindAccountsByExternalIdsQuery = {
+      externalIds: [
+        ...new Set(
+          externalTransactions.map(
+            (externalTransaction) => externalTransaction.accountId
+          )
+        )
+      ]
     };
+
+    const accountRecords =
+      await this._findAccountsRepository.findByExternalId(query);
+    const accountIdMap = accountRecords.reduce((prev, curr) => {
+      return prev.set(curr.externalId, curr.id);
+    }, new Map<string, string>());
+
+    const queries: Array<CreateTransactionQuery | null> =
+      externalTransactions.map((externalTransaction) => {
+        const accountId = accountIdMap.get(externalTransaction.accountId);
+        if (accountId == null) {
+          return null;
+        }
+        return TransactionAdapter.toCreateTransactionQuery(
+          accountId,
+          externalTransaction
+        );
+      });
+
+    if (queries.some((query) => query === null)) {
+      return this.failure(Errors.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND);
+    }
+    return this.success(
+      queries.filter((query): query is CreateTransactionQuery => query !== null)
+    );
   }
 
   private _buildResponse(

@@ -34,7 +34,6 @@
 - [Infrastructure](./infrastructure/README.md)
 - [Package Management](./docs/packages.md)
 - [Plaid API](https://plaid.com/docs/)
-- [Project Backlog](./docs/project-backlog.md)
 
 - Complete transaction history feature?
 - Graph estimated retirement

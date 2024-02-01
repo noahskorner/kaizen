@@ -4,6 +4,7 @@ import {
   CreateVirtualAccountRepository,
   CreateVirtualAccountService,
   FinancialProvider,
+  FindAccountsRepository,
   FindInstitutionsRepository,
   FindInstitutionsService,
   FindTransactionsRepository,
@@ -12,7 +13,9 @@ import {
   FindVirtualAccountsService,
   GetAccountRepository,
   SyncAccountsRepository,
-  SyncAccountsService
+  SyncAccountsService,
+  SyncTransactionsRepository,
+  SyncTransactionsService
 } from '@kaizen/finance-server';
 import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
 import {
@@ -102,6 +105,8 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.findVirtualAccountsRepository ??
       new FindVirtualAccountsRepository(prisma);
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
+    const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
+    const findAccountsRepository = new FindAccountsRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -123,11 +128,18 @@ export class ServiceCollectionBuilder {
     const refreshTokenService =
       this._serviceCollection.refreshTokenService ??
       new RefreshTokenService(environment, getUserRepository);
+    const syncTransactionsService = new SyncTransactionsService(
+      findInstitutionsRepository,
+      findAccountsRepository,
+      financialProvider,
+      syncTransactionsRepository
+    );
     const syncAccountsService = new SyncAccountsService(
       financialProvider,
       findInstitutionsRepository,
       getAccountRepository,
-      syncAccountsRepository
+      syncAccountsRepository,
+      syncTransactionsService
     );
     const createInstitutionService =
       this._serviceCollection.createInstitutionService ??

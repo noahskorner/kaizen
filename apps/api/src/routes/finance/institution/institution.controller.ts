@@ -50,15 +50,4 @@ export class InstitutionController extends Controller {
       return this.internalServerError(res, response);
     } else return this.ok(res, response);
   });
-
-  // public sync = catchAsync(async (req: Request, res: Response) => {
-  //   const command: SyncInstitutionsCommand = {
-  //     userId: req.user.id
-  //   };
-  //   const response = await this._syncInstitutionsService.sync(command);
-
-  //   if (response.type === 'FAILURE') {
-  //     return this.internalServerError(res, response);
-  //   } else return this.ok(res, response);
-  // });
 }
