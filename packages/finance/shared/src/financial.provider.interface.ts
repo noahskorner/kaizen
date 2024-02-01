@@ -11,6 +11,7 @@ export interface IFinancialProvider {
     accessToken: string
   ) => Promise<ApiResponse<ExternalAccount[]>>;
   syncExternalTransactions(
-    accessToken: string
+    accessToken: string,
+    cursor: string | null
   ): Promise<ApiResponse<SyncExternalTransactionsResponse>>;
 }

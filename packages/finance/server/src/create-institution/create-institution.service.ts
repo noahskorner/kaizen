@@ -1,15 +1,15 @@
 import {
-  AccountAdapter,
-  CreateAccountQuery,
+  Account,
   CreateInstitutionCommand,
   CreateInstitutionQuery,
-  CreateTransactionQuery,
-  ExternalTransaction,
   ICreateInstitutionRepository,
   ICreateInstitutionService,
   IFinancialProvider,
+  ISyncAccountsService,
   Institution,
-  TransactionAdapter
+  InstitutionAdapter,
+  InstitutionRecord,
+  SyncAccountsCommand
 } from '@kaizen/finance';
 import { ApiResponse, Errors } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
@@ -20,7 +20,8 @@ export class CreateInstitutionService
 {
   constructor(
     private readonly _createInstitutionRepository: ICreateInstitutionRepository,
-    private readonly _financialProvider: IFinancialProvider
+    private readonly _financialProvider: IFinancialProvider,
+    private readonly _syncAccountsService: ISyncAccountsService
   ) {
     super();
   }
@@ -33,20 +34,25 @@ export class CreateInstitutionService
     }
 
     try {
-      const response = await this.buildCreateInstitutionQuery(command);
-      if (response.type == 'FAILURE') {
-        return this.failures(response.errors);
+      // Create the institution
+      const createInstitutionResponse = await this._create(command);
+      if (createInstitutionResponse.type == 'FAILURE') {
+        return createInstitutionResponse;
       }
+      const institutionRecord = createInstitutionResponse.data;
 
-      const institutionRecord = await this._createInstitutionRepository.create(
-        response.data
+      // Sync it's accounts
+      const syncAccountsResponse = await this._syncAccounts(institutionRecord);
+      if (syncAccountsResponse.type == 'FAILURE') {
+        return syncAccountsResponse;
+      }
+      const accounts = syncAccountsResponse.data;
+
+      // Return the institution and it's accounts
+      const institution = InstitutionAdapter.toInstitution(
+        institutionRecord,
+        accounts
       );
-
-      const institution: Institution = {
-        id: institutionRecord.id,
-        userId: institutionRecord.userId,
-        accounts: institutionRecord.accounts.map(AccountAdapter.toAccount)
-      };
       return this.success(institution);
     } catch (error) {
       console.log(error);
@@ -54,76 +60,42 @@ export class CreateInstitutionService
     }
   }
 
-  private async buildCreateInstitutionQuery(
+  private async _create(
     command: CreateInstitutionCommand
-  ): Promise<ApiResponse<CreateInstitutionQuery>> {
-    const exchangeExternalPublicTokenResponse =
-      await this._financialProvider.exchangeExternalPublicToken(
-        command.publicToken
-      );
-    if (exchangeExternalPublicTokenResponse.type == 'FAILURE') {
-      return this.failures(exchangeExternalPublicTokenResponse.errors);
-    }
-
-    const createAccountResponse = await this.buildCreateAccountQueries(
-      exchangeExternalPublicTokenResponse.data
+  ): Promise<ApiResponse<InstitutionRecord>> {
+    const response = await this._financialProvider.exchangeExternalPublicToken(
+      command.publicToken
     );
-    if (createAccountResponse.type === 'FAILURE') {
-      return this.failures(createAccountResponse.errors);
+    if (response.type == 'FAILURE') {
+      return response;
     }
 
-    const createInstitutionQuery: CreateInstitutionQuery = {
+    const query: CreateInstitutionQuery = {
       userId: command.userId,
-      plaidAccessToken: exchangeExternalPublicTokenResponse.data,
-      accounts: createAccountResponse.data
+      plaidAccessToken: response.data
     };
-    return this.success(createInstitutionQuery);
+    const institutionRecord =
+      await this._createInstitutionRepository.create(query);
+
+    return this.success(institutionRecord);
   }
 
-  private async buildCreateAccountQueries(
-    accessToken: string
-  ): Promise<ApiResponse<CreateAccountQuery[]>> {
-    const externalAccountsResponse =
-      await this._financialProvider.getExternalAccounts(accessToken);
-    if (externalAccountsResponse.type == 'FAILURE') {
-      return this.failures(externalAccountsResponse.errors);
+  private async _syncAccounts(
+    institutionRecord: InstitutionRecord
+  ): Promise<ApiResponse<Account[]>> {
+    const command: SyncAccountsCommand = {
+      userId: institutionRecord.userId,
+      institutionIds: [institutionRecord.id]
+    };
+    const response = await this._syncAccountsService.sync(command);
+    if (response.type === 'FAILURE') {
+      return response;
     }
 
-    const syncExternalTransactionsResponse =
-      await this._financialProvider.syncExternalTransactions(accessToken);
-    if (syncExternalTransactionsResponse.type === 'FAILURE') {
-      return this.failures(syncExternalTransactionsResponse.errors);
+    const accounts = response.data.succeeded.get(institutionRecord.id);
+    if (accounts == null) {
+      return this.failure(Errors.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS);
     }
-
-    const createAccountQueries = await Promise.all(
-      externalAccountsResponse.data.map(async (externalAccount) => {
-        const createAccountQuery: CreateAccountQuery = {
-          externalId: externalAccount.id,
-          current: externalAccount.current,
-          available: externalAccount.available,
-          currency: externalAccount.currency,
-          type: AccountAdapter.toAccountRecordType(externalAccount.type),
-          transactions: this.getTransactionQueries(
-            externalAccount.id,
-            syncExternalTransactionsResponse.data.added // TODO: Change to use the plaidClient.transactionsGet API instead.
-          )
-        };
-
-        return createAccountQuery;
-      })
-    );
-    return this.success(createAccountQueries);
-  }
-
-  private getTransactionQueries(
-    externalAccountId: string,
-    externalTransactions: ExternalTransaction[]
-  ): CreateTransactionQuery[] {
-    return externalTransactions
-      .filter(
-        (externalTransaction) =>
-          externalTransaction.accountId === externalAccountId
-      )
-      .map(TransactionAdapter.toCreateTransactionQuery);
+    return this.success(accounts);
   }
 }

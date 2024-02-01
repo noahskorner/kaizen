@@ -31,7 +31,7 @@ export class CreateLinkTokenService
       const response =
         await this._financialProvider.createExternalLinkToken(userId);
       if (response.type === 'FAILURE') {
-        return this.failures(response.errors);
+        return response;
       }
 
       return this.success({ token: response.data });

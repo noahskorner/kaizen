@@ -1,7 +1,9 @@
 import { ExternalTransaction } from './external-transaction';
 
 export interface SyncExternalTransactionsResponse {
-  added: ExternalTransaction[];
-  modified: ExternalTransaction[];
-  removed: ExternalTransaction[];
+  hasMore: boolean;
+  cursor: string;
+  created: ExternalTransaction[];
+  updated: ExternalTransaction[];
+  deleted: string[];
 }

@@ -45,6 +45,11 @@ export const TransactionsTable = () => {
           </div>
         );
       })}
+      <div className="flex w-full items-center justify-center border-y py-2">
+        <button className="text-sm text-blue-600 hover:underline">
+          Load more
+        </button>
+      </div>
     </div>
   );
 };

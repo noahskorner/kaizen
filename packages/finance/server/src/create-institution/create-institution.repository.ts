@@ -19,28 +19,6 @@ export class CreateInstitutionRepository
       }
     });
 
-    const accountRecords = await Promise.all(
-      query.accounts.map((createAccountQuery) => {
-        return this._prisma.accountRecord.create({
-          data: {
-            institutionId: institutionRecord.id,
-            ...createAccountQuery,
-            transactions: {
-              createMany: {
-                data: createAccountQuery.transactions
-              }
-            }
-          },
-          include: {
-            transactions: true
-          }
-        });
-      })
-    );
-
-    return {
-      ...institutionRecord,
-      accounts: accountRecords
-    };
+    return { ...institutionRecord, accounts: [] };
   }
 }

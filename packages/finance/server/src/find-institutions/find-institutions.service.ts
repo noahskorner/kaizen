@@ -25,7 +25,7 @@ export class FindInstitutionsService
       await this._findInstitutionRepository.find(command);
 
     const institutions: Institution[] = institutionRecords.map(
-      InstitutionAdapter.toInstitution
+      (institutionRecord) => InstitutionAdapter.toInstitution(institutionRecord)
     );
     return this.success(institutions);
   }

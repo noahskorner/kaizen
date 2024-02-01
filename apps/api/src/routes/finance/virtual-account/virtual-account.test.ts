@@ -3,26 +3,29 @@ import {
   VirtualAccount,
   VirtualAccountFrequency
 } from '@kaizen/finance';
-import { createAndLoginUser } from '../../../fixtures/create-and-login-user';
-import { createVirtualAccount } from '../../../fixtures/create-virtual-account';
-import { expectValidDate } from '../../../fixtures/expect-valid-date';
 import supertest from 'supertest';
 import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
-import { expectError } from '../../../fixtures/expect-error';
-import { defaultAppFixture } from '../../../app.fixture';
+import {
+  createAndLoginUser,
+  createVirtualAccount,
+  expectError,
+  expectValidDate
+} from '../../../../test';
+import { buildSut } from '../../../../test/test-bed.builder';
 
 describe('/virtual-account', () => {
   describe('create should', () => {
     it('returns 400 when name is not provided', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<
         CreateVirtualAccountRequest,
         'name' | 'balance' | 'amount' | 'frequency'
       > = {};
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -33,14 +36,15 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when name is empty string', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<
         CreateVirtualAccountRequest,
         'balance' | 'amount' | 'frequency'
       > = { name: ' ' };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -51,7 +55,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when balance is not provided', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<
         CreateVirtualAccountRequest,
         'balance' | 'amount' | 'frequency'
@@ -60,7 +65,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -71,7 +76,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when balance is not a number', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<
         CreateVirtualAccountRequest,
         'balance' | 'amount' | 'frequency'
@@ -81,7 +87,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -92,7 +98,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when balance is not a positive number', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<CreateVirtualAccountRequest, 'amount' | 'frequency'> =
         {
           name: 'Test Virtual Account',
@@ -100,7 +107,7 @@ describe('/virtual-account', () => {
         };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -111,12 +118,13 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when amount is not provided', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<CreateVirtualAccountRequest, 'amount' | 'frequency'> =
         { name: 'Test Virtual Account', balance: 0 };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -127,7 +135,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when amount is not a number', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<
         CreateVirtualAccountRequest,
         'amount' | 'frequency'
@@ -138,7 +147,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -149,7 +158,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when amount is not a positive number', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<CreateVirtualAccountRequest, 'frequency'> = {
         name: 'Test Virtual Account',
         balance: 0,
@@ -157,7 +167,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -168,7 +178,8 @@ describe('/virtual-account', () => {
     });
     it('returns 400 when frequency is not provided', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: Omit<CreateVirtualAccountRequest, 'frequency'> = {
         name: 'Test Virtual Account',
         balance: 0,
@@ -176,7 +187,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -187,7 +198,8 @@ describe('/virtual-account', () => {
     });
     it('returns 201 and created virtual account', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
       const request: CreateVirtualAccountRequest = {
         name: 'Test Virtual Account',
         balance: 7,
@@ -196,7 +208,7 @@ describe('/virtual-account', () => {
       };
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .post('/virtual-account')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -216,10 +228,11 @@ describe('/virtual-account', () => {
   describe('find should', () => {
     it('returns 200 and empty array when no virtual accounts exist', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser();
+      const { sut } = buildSut();
+      const { authToken } = await createAndLoginUser(sut);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .get('/virtual-account')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -228,10 +241,11 @@ describe('/virtual-account', () => {
     });
     it('returns 200 and created virtual account', async () => {
       // Arrange
-      const { authToken, virtualAccount } = await createVirtualAccount();
+      const { sut } = buildSut();
+      const { authToken, virtualAccount } = await createVirtualAccount(sut);
 
       // Act
-      const response = await supertest(defaultAppFixture)
+      const response = await supertest(sut)
         .get('/virtual-account')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<VirtualAccount[]> = response.body;

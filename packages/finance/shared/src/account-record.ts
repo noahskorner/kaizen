@@ -1,2 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-export type { AccountRecord } from '@prisma/client';
+import { AccountRecord as PrismaAccountRecord } from '@prisma/client';
+import { AccountRecordType } from './account-record-type';
+
+export type AccountRecord = Omit<PrismaAccountRecord, 'type'> & {
+  type: AccountRecordType;
+};

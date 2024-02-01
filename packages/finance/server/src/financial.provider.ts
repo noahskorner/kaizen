@@ -75,7 +75,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const request: AccountsGetRequest = {
         access_token: accessToken
       };
-      const response = await this._plaid.accountsGet(request);
+      const response = await this._plaid.accountsBalanceGet(request);
 
       return this.success(
         response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)
@@ -87,26 +87,34 @@ export class FinancialProvider extends Service implements IFinancialProvider {
   }
 
   public async syncExternalTransactions(
-    accessToken: string
+    accessToken: string,
+    cursor: string | null = null
   ): Promise<ApiResponse<SyncExternalTransactionsResponse>> {
     try {
       const request: TransactionsSyncRequest = {
-        access_token: accessToken
+        access_token: accessToken,
+        cursor: cursor ?? undefined
       };
-      const response = await this._plaid.transactionsSync(request);
+      const transactionsSyncReponse =
+        await this._plaid.transactionsSync(request);
 
-      const result: SyncExternalTransactionsResponse = {
-        added: response.data.added.map(
+      const response: SyncExternalTransactionsResponse = {
+        hasMore: transactionsSyncReponse.data.has_more,
+        cursor: transactionsSyncReponse.data.next_cursor,
+        created: transactionsSyncReponse.data.added.map(
           ExternalTransactionAdapter.toExternalTransaction
         ),
-        modified: response.data.modified.map(
+        updated: transactionsSyncReponse.data.modified.map(
           ExternalTransactionAdapter.toExternalTransaction
         ),
-        removed: [] // TODO: Handle removed transactions
+        deleted: transactionsSyncReponse.data.removed.reduce(
+          ExternalTransactionAdapter.toRemovedTransaction,
+          []
+        )
       };
-      return this.success(result);
+
+      return this.success(response);
     } catch (error) {
-      console.log(error);
       return this.failure(Errors.INTERNAL_SERVER_ERROR);
     }
   }
