@@ -37,6 +37,7 @@ import { IServiceCollection } from './service-collection.interface';
 import { HomeController } from './routes/home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { AccountController } from './routes/finance/institution/account';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -185,6 +186,9 @@ export class ServiceCollectionBuilder {
         createVirtualAccountService,
         findVirtualAccountsService
       );
+    const accountController =
+      this._serviceCollection.accountController ??
+      new AccountController(syncAccountsService);
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -223,7 +227,8 @@ export class ServiceCollectionBuilder {
       authController,
       institutionController,
       transactionController,
-      virtualAccountController
+      virtualAccountController,
+      accountController
     };
 
     return serviceCollection;

@@ -59,7 +59,7 @@ export class SyncAccountsService
     };
     await this._syncTransactionsService.sync(syncTransactionsCommand);
 
-    const response = this._buildReponse(syncAccountsResponses);
+    const response = this._buildResponse(syncAccountsResponses);
     return this.success(response);
   }
 
@@ -133,7 +133,7 @@ export class SyncAccountsService
     return response;
   }
 
-  private _buildReponse(
+  private _buildResponse(
     syncAccountsResponses: InternalSyncAccountsResponse[]
   ): SyncAccountsResponse {
     const initialValue: SyncAccountsResponse = {

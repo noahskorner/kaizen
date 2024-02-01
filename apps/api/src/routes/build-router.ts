@@ -43,6 +43,11 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     authenticate(serviceCollection.environment),
     serviceCollection.transactionController.find
   );
+  router.get(
+    '/transaction/account',
+    authenticate(serviceCollection.environment),
+    serviceCollection.accountController.sync
+  );
 
   // /virtual-account
   router.post(

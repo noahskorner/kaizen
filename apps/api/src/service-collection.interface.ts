@@ -34,6 +34,7 @@ import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { AccountController } from './routes/finance/institution/account';
 
 export interface IServiceCollection {
   // Environment
@@ -79,4 +80,5 @@ export interface IServiceCollection {
   institutionController: InstitutionController;
   transactionController: TransactionController;
   virtualAccountController: VirtualAccountController;
+  accountController: AccountController;
 }
