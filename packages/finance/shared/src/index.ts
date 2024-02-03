@@ -6,6 +6,7 @@ export * from './find-transactions';
 export * from './find-virtual-accounts';
 export * from './get-account';
 export * from './sync-accounts';
+export * from './sync-institutions';
 export * from './sync-transactions';
 export * from './account-record-type';
 export * from './account-record';

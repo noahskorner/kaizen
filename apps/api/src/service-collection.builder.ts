@@ -14,6 +14,7 @@ import {
   GetAccountRepository,
   SyncAccountsRepository,
   SyncAccountsService,
+  SyncInstitutionsService,
   SyncTransactionsRepository,
   SyncTransactionsService
 } from '@kaizen/finance-server';
@@ -45,6 +46,11 @@ export class ServiceCollectionBuilder {
     environment: IServerEnvironment
   ): ServiceCollectionBuilder {
     this._serviceCollection.environment = environment;
+    return this;
+  }
+
+  public withPrisma(prisma: PrismaClient) {
+    this._serviceCollection.prisma = prisma;
     return this;
   }
 
@@ -160,6 +166,9 @@ export class ServiceCollectionBuilder {
     const findVirtualAccountsService =
       this._serviceCollection.findVirtualAccountsService ??
       new FindVirtualAccountsService(findVirtualAccountsRepository);
+    const syncInstitutionsService =
+      this._serviceCollection.syncInstitutionsService ??
+      new SyncInstitutionsService(syncAccountsService);
 
     // Controllers
     const homeController =
@@ -174,7 +183,8 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.institutionController ??
       new InstitutionController(
         createInstitutionService,
-        findInstitutionsService
+        findInstitutionsService,
+        syncInstitutionsService
       );
     const transactionController =
       this._serviceCollection.transactionController ??
@@ -217,6 +227,7 @@ export class ServiceCollectionBuilder {
       findTransactionsService,
       createVirtualAccountService,
       findVirtualAccountsService,
+      syncInstitutionsService,
       // Controllers
       homeController,
       userController,

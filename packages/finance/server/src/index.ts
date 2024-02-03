@@ -5,6 +5,7 @@ export * from './find-institutions';
 export * from './find-transactions';
 export * from './find-virtual-accounts';
 export * from './get-account';
+export * from './sync-institutions';
 export * from './sync-accounts';
 export * from './sync-transactions';
 export * from './financial.provider';

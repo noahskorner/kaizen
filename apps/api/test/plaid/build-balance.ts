@@ -7,7 +7,7 @@ export const buildBalance = (
     available: 75,
     current: 100,
     limit: null,
-    iso_currency_code: null,
+    iso_currency_code: 'USD',
     unofficial_currency_code: null,
     ...overrides
   };

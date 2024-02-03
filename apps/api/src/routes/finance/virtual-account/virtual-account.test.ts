@@ -11,7 +11,7 @@ import {
   expectError,
   expectValidDate
 } from '../../../../test';
-import { buildSut } from '../../../../test/test-bed.builder';
+import { buildSut } from '../../../../test/build-sut';
 
 describe('/virtual-account', () => {
   describe('create should', () => {

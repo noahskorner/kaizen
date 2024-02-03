@@ -38,9 +38,7 @@ export class RefreshTokenService
         userId: refreshToken.id
       });
       if (user == null) {
-        throw new Error(
-          'Something went wrong. We found a valid token, but no user associated with it.'
-        );
+        return this.failure(Errors.REFRESH_TOKEN_INVALID);
       }
 
       const authToken: AuthToken = {

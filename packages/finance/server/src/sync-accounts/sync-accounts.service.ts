@@ -1,7 +1,6 @@
 import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
-  Account,
   AccountAdapter,
   AccountRecord,
   ExternalAccountAdapter,
@@ -13,6 +12,7 @@ import {
   ISyncAccountsRepository,
   ISyncAccountsService,
   ISyncTransactionsService,
+  InstitutionAdapter,
   InstitutionRecord,
   SyncAccountsCommand,
   SyncAccountsResponse,
@@ -42,8 +42,9 @@ export class SyncAccountsService
       return findInstitutionsResponse;
     }
 
+    const institutionRecords = findInstitutionsResponse.data;
     const syncAccountsResponses = await Promise.all(
-      findInstitutionsResponse.data.map((institutionRecord) => {
+      institutionRecords.map((institutionRecord) => {
         return this._sync(
           institutionRecord.id,
           institutionRecord.plaidAccessToken
@@ -59,7 +60,10 @@ export class SyncAccountsService
     };
     await this._syncTransactionsService.sync(syncTransactionsCommand);
 
-    const response = this._buildReponse(syncAccountsResponses);
+    const response = this._buildResponse(
+      institutionRecords,
+      syncAccountsResponses
+    );
     return this.success(response);
   }
 
@@ -133,11 +137,12 @@ export class SyncAccountsService
     return response;
   }
 
-  private _buildReponse(
+  private _buildResponse(
+    institutionRecords: InstitutionRecord[],
     syncAccountsResponses: InternalSyncAccountsResponse[]
   ): SyncAccountsResponse {
     const initialValue: SyncAccountsResponse = {
-      succeeded: new Map<string, Account[]>(),
+      succeeded: [],
       failed: []
     };
 
@@ -149,14 +154,22 @@ export class SyncAccountsService
         };
       }
 
+      const institutionRecord = institutionRecords.find(
+        (institutionRecord) => institutionRecord.id === curr.institutionId
+      );
+      if (institutionRecord == null) {
+        throw new Error(
+          'Institution record not found. This means we fucked up somehow.'
+        );
+      }
+      const institution = InstitutionAdapter.toInstitution(
+        institutionRecord,
+        curr.response.data.map(AccountAdapter.toAccount)
+      );
+
       return {
         ...prev,
-        succeeded: prev.succeeded.set(
-          curr.institutionId,
-          curr.response.data.map((accountRecord) =>
-            AccountAdapter.toAccount(accountRecord)
-          )
-        )
+        succeeded: [...prev.succeeded, institution]
       };
     }, initialValue);
   }

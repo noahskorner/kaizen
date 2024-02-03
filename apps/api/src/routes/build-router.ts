@@ -36,6 +36,11 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     authenticate(serviceCollection.environment),
     serviceCollection.institutionController.find
   );
+  router.put(
+    '/institution/sync',
+    authenticate(serviceCollection.environment),
+    serviceCollection.institutionController.sync
+  );
 
   // /transaction
   router.get(

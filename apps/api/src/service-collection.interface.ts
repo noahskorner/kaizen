@@ -12,7 +12,8 @@ import {
   ICreateVirtualAccountService,
   IFindVirtualAccountsService,
   ISyncAccountsService,
-  IGetAccountRepository
+  IGetAccountRepository,
+  ISyncInstitutionsService
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -66,6 +67,7 @@ export interface IServiceCollection {
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
   syncAccountsService: ISyncAccountsService;
+  syncInstitutionsService: ISyncInstitutionsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
