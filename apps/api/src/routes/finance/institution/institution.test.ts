@@ -17,6 +17,15 @@ import {
 import { buildSut } from '../../../../test/build-sut';
 import { AccountBase } from 'plaid';
 
+const expectAccountToBeExternal = (actual: Account, expected: AccountBase) => {
+  expect(actual.id).toBeDefined();
+  expect(actual.externalId).toBe(expected.account_id);
+  expect(actual.type).toBe(expected.type);
+  expect(actual.currency).toBe(expected.balances.iso_currency_code);
+  expect(actual.available).toBe(expected.balances.available);
+  expect(actual.current).toBe(expected.balances.current);
+};
+
 describe('/institution', () => {
   describe('create should', () => {
     it('returns 400 when no publicToken is provided', async () => {
@@ -74,20 +83,9 @@ describe('/institution', () => {
       expect(response.statusCode).toBe(201);
       expect(body.data.id).toBeDefined();
       expect(body.data.userId).toBe(user.id);
-      expect(body.data.accounts[0].externalId).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].account_id
-      );
-      expect(body.data.accounts[0].current).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.current
-      );
-      expect(body.data.accounts[0].available).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.available
-      );
-      expect(body.data.accounts[0].currency).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.iso_currency_code
-      );
-      expect(body.data.accounts[0].type).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].type
+      expectAccountToBeExternal(
+        body.data.accounts[0],
+        mockAccountsBalanceGetResponse.accounts[0]
       );
     });
   });
@@ -100,7 +98,7 @@ describe('/institution', () => {
       // Assert
       expect(response.statusCode).toBe(401);
     });
-    it('returns empty array when no institutions exist', async () => {
+    it('returns 200 and empty array when no institutions exist', async () => {
       // Arrange
       const { sut } = buildSut();
       const { authToken } = await createAndLoginUser(sut);
@@ -115,7 +113,7 @@ describe('/institution', () => {
       expect(response.statusCode).toBe(200);
       expect(body.data.length).toBe(0);
     });
-    it('returns list with created institution', async () => {
+    it('returns 200 and list with created institution', async () => {
       // Arrange
       const { sut, mockAccountsBalanceGetResponse } = buildSut();
       const { authToken, user, institution } = await createInstitution(sut);
@@ -131,25 +129,14 @@ describe('/institution', () => {
       expect(body.data.length).toBe(1);
       expect(body.data[0].id).toBe(institution.id);
       expect(body.data[0].userId).toBe(user.id);
-      expect(body.data[0].accounts[0].externalId).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].account_id
-      );
-      expect(body.data[0].accounts[0].current).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.current
-      );
-      expect(body.data[0].accounts[0].available).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.available
-      );
-      expect(body.data[0].accounts[0].currency).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].balances.iso_currency_code
-      );
-      expect(body.data[0].accounts[0].type).toBe(
-        mockAccountsBalanceGetResponse.accounts[0].type
+      expectAccountToBeExternal(
+        body.data[0].accounts[0],
+        mockAccountsBalanceGetResponse.accounts[0]
       );
     });
   });
   describe('sync should', () => {
-    it('returns empty array when no institutions exist', async () => {
+    it('returns 200 and empty array when no institutions exist', async () => {
       // Arrange
       const { sut } = buildSut();
       const { authToken } = await createAndLoginUser(sut);
@@ -165,7 +152,7 @@ describe('/institution', () => {
       expect(body.data.succeeded.length).toBe(0);
       expect(body.data.failed.length).toBe(0);
     });
-    it('returns created account when new accounts exist', async () => {
+    it('returns 200 and created account when new accounts exist', async () => {
       // Arrange
       const item = buildItem();
       const originalExternal = buildAccount({ item_id: item.item_id });
@@ -212,7 +199,7 @@ describe('/institution', () => {
         expectAccountToBeExternal(createdAccount, createdExternal);
       }
     });
-    it('returns updated account when new accounts exist', async () => {
+    it('returns 200 and updated account when new accounts exist', async () => {
       // Arrange
       const item = buildItem();
       const originalExternal = buildAccount({ item_id: item.item_id });
@@ -262,12 +249,3 @@ describe('/institution', () => {
     });
   });
 });
-
-const expectAccountToBeExternal = (actual: Account, expected: AccountBase) => {
-  expect(actual.id).toBeDefined();
-  expect(actual.externalId).toBe(expected.account_id);
-  expect(actual.type).toBe(expected.type);
-  expect(actual.currency).toBe(expected.balances.iso_currency_code);
-  expect(actual.available).toBe(expected.balances.available);
-  expect(actual.current).toBe(expected.balances.current);
-};

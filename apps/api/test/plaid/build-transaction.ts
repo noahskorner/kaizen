@@ -8,7 +8,10 @@ export const buildTransaction = (
     transaction_id: uuid(),
     account_id: uuid(),
     amount: 100,
-    iso_currency_code: null,
+    iso_currency_code: 'USD',
+    logo_url: uuid(),
+    merchant_name: uuid(),
+    name: uuid(),
     unofficial_currency_code: null,
     category: null,
     category_id: null,
@@ -23,7 +26,6 @@ export const buildTransaction = (
       lon: null,
       store_number: null
     },
-    name: '',
     payment_meta: {
       reference_number: null,
       ppd_id: null,
