@@ -13,6 +13,8 @@ import {
 import { ServiceCollectionBuilder } from '../src/service-collection.builder';
 import { buildApp } from '../src/build-app';
 import { Express } from 'express';
+// eslint-disable-next-line no-restricted-imports
+import { PrismaClient } from '@prisma/client';
 
 export interface BuildSutCommand {
   itemPublicTokenExchangeResponse: ItemPublicTokenExchangeResponse;
@@ -20,6 +22,8 @@ export interface BuildSutCommand {
   transactionSyncResponse: TransactionsSyncResponse;
   sut: Express;
 }
+
+const cachedPrismaClient = new PrismaClient();
 
 export const buildSut = (command?: Partial<BuildSutCommand>) => {
   const mockItemPublicTokenExchangeResponse =
@@ -38,6 +42,7 @@ export const buildSut = (command?: Partial<BuildSutCommand>) => {
     .build();
 
   const mockServiceCollection = new ServiceCollectionBuilder()
+    .withPrisma(cachedPrismaClient)
     .withPlaidApi(mockPlaidApi)
     .build();
 

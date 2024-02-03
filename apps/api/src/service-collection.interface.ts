@@ -12,7 +12,8 @@ import {
   ICreateVirtualAccountService,
   IFindVirtualAccountsService,
   ISyncAccountsService,
-  IGetAccountRepository
+  IGetAccountRepository,
+  ISyncInstitutionsService
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -34,7 +35,6 @@ import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
-import { AccountController } from './routes/finance/institution/account';
 
 export interface IServiceCollection {
   // Environment
@@ -67,6 +67,7 @@ export interface IServiceCollection {
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
   syncAccountsService: ISyncAccountsService;
+  syncInstitutionsService: ISyncInstitutionsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
@@ -80,5 +81,4 @@ export interface IServiceCollection {
   institutionController: InstitutionController;
   transactionController: TransactionController;
   virtualAccountController: VirtualAccountController;
-  accountController: AccountController;
 }

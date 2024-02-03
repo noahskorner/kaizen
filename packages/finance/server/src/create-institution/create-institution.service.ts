@@ -1,5 +1,4 @@
 import {
-  Account,
   CreateInstitutionCommand,
   CreateInstitutionQuery,
   ICreateInstitutionRepository,
@@ -7,7 +6,6 @@ import {
   IFinancialProvider,
   ISyncAccountsService,
   Institution,
-  InstitutionAdapter,
   InstitutionRecord,
   SyncAccountsCommand
 } from '@kaizen/finance';
@@ -42,17 +40,23 @@ export class CreateInstitutionService
       const institutionRecord = createInstitutionResponse.data;
 
       // Sync it's accounts
-      const syncAccountsResponse = await this._syncAccounts(institutionRecord);
-      if (syncAccountsResponse.type == 'FAILURE') {
+      const syncAccountsCommand: SyncAccountsCommand = {
+        userId: institutionRecord.userId,
+        institutionIds: [institutionRecord.id]
+      };
+      const syncAccountsResponse =
+        await this._syncAccountsService.sync(syncAccountsCommand);
+      if (syncAccountsResponse.type === 'FAILURE') {
         return syncAccountsResponse;
       }
-      const accounts = syncAccountsResponse.data;
 
       // Return the institution and it's accounts
-      const institution = InstitutionAdapter.toInstitution(
-        institutionRecord,
-        accounts
+      const institution = syncAccountsResponse.data.succeeded.find(
+        (institution) => institution.id === institutionRecord.id
       );
+      if (institution == null) {
+        return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      }
       return this.success(institution);
     } catch (error) {
       console.log(error);
@@ -78,24 +82,5 @@ export class CreateInstitutionService
       await this._createInstitutionRepository.create(query);
 
     return this.success(institutionRecord);
-  }
-
-  private async _syncAccounts(
-    institutionRecord: InstitutionRecord
-  ): Promise<ApiResponse<Account[]>> {
-    const command: SyncAccountsCommand = {
-      userId: institutionRecord.userId,
-      institutionIds: [institutionRecord.id]
-    };
-    const response = await this._syncAccountsService.sync(command);
-    if (response.type === 'FAILURE') {
-      return response;
-    }
-
-    const accounts = response.data.succeeded.get(institutionRecord.id);
-    if (accounts == null) {
-      return this.failure(Errors.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS);
-    }
-    return this.success(accounts);
   }
 }

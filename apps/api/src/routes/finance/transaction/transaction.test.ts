@@ -19,7 +19,7 @@ import {
   buildItem,
   buildItemPublicTokenExchangeResponse
 } from '../../../../test';
-import { buildSut } from '../../../../test/test-bed.builder';
+import { buildSut } from '../../../../test/build-sut';
 
 describe('/transaction', () => {
   describe('find should', () => {
