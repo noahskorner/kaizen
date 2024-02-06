@@ -450,5 +450,120 @@ describe('/transaction', () => {
       expect(response.status).toBe(200);
       expect(body.data.hits.length).toBe(0);
     });
+    it('returns 400 when start date not valid', async () => {
+      // Arrange
+      const { sut } = buildSut();
+      const { authToken } = await createInstitution(sut);
+      const request: FindTransactionsRequest = {
+        page: 1,
+        startDate: 'invalid'
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+
+      // Asserts
+      expect(response.status).toBe(400);
+      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE);
+    });
+    it('returns 400 when end date not valid', async () => {
+      // Arrange
+      const { sut } = buildSut();
+      const { authToken } = await createInstitution(sut);
+      const request: FindTransactionsRequest = {
+        page: 1,
+        endDate: 'invalid'
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+
+      // Asserts
+      expect(response.status).toBe(400);
+      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE);
+    });
+    it('returns 400 when end date after start date', async () => {
+      // Arrange
+      const { sut } = buildSut();
+      const { authToken } = await createInstitution(sut);
+
+      // Build request
+      const pageSize = 1;
+      const request: FindTransactionsRequest = {
+        page: 1,
+        pageSize: pageSize,
+        startDate: new Date(1998, 7, 30, 0, 0, 0, 1).toISOString(),
+        endDate: new Date(1998, 7, 30, 0, 0, 0, 0).toISOString()
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+
+      // Asserts
+      expect(response.status).toBe(400);
+      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME);
+    });
+    it('returns 200 and transactions between start and end date', async () => {
+      // Arrange
+      const mockItem = buildItem();
+      const mockAccount = buildAccount({
+        item_id: mockItem.item_id
+      });
+      const excludedStartTransaction = buildTransaction({
+        account_id: mockAccount.account_id,
+        authorized_datetime: new Date(1998, 7, 29).toISOString()
+      });
+      const expectedTransaction = buildTransaction({
+        account_id: mockAccount.account_id,
+        authorized_datetime: new Date(1998, 7, 30).toISOString()
+      });
+      const excludedEndTransaction = buildTransaction({
+        account_id: mockAccount.account_id,
+        authorized_datetime: new Date(1998, 7, 31).toISOString()
+      });
+      const { sut } = buildSut({
+        itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
+          item_id: mockItem.item_id
+        }),
+        accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
+          accounts: [mockAccount]
+        }),
+        transactionSyncResponse: buildTransactionsSyncResponse({
+          added: [
+            excludedStartTransaction,
+            expectedTransaction,
+            excludedEndTransaction
+          ]
+        })
+      });
+      const { authToken } = await createInstitution(sut);
+
+      // Build request
+      const pageSize = 1;
+      const request: FindTransactionsRequest = {
+        page: 1,
+        pageSize: pageSize,
+        startDate: new Date(1998, 7, 30, 0, 0, 0, 0).toISOString(),
+        endDate: new Date(1998, 7, 30, 23, 59, 59, 999).toISOString()
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
+
+      // Asserts
+      expect(response.status).toBe(200);
+      expect(body.data.total).toBe(1);
+      expect(body.data.hits.length).toBe(1);
+      expectTransactionToBeExternal(body.data.hits[0], expectedTransaction);
+    });
   });
 });

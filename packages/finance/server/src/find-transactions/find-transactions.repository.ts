@@ -14,6 +14,10 @@ export class FindTransactionsRepository
     query: FindTransactionsQuery
   ): Promise<Paginated<TransactionRecord>> {
     const where = {
+      date: {
+        gte: query.startDate,
+        lte: query.endDate
+      },
       account: {
         institution: {
           userId: query.userId
