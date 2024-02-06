@@ -61,7 +61,7 @@ export const CreateUserForm = ({
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
+    <div className="flex w-full max-w-sm flex-col gap-y-6 p-4">
       <form
         onSubmit={submitRegisterForm}
         className="flex w-full flex-col gap-y-2">

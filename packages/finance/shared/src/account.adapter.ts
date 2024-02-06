@@ -22,6 +22,8 @@ export class AccountAdapter {
     switch (type) {
       case AccountRecordType.Credit:
         return AccountType.Credit;
+      case AccountRecordType.Brokerage:
+        return AccountType.Brokerage;
       case AccountRecordType.Depository:
         return AccountType.Depository;
       case AccountRecordType.Investment:

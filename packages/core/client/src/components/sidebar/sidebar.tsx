@@ -1,22 +1,24 @@
-import { useAuthStore } from '@kaizen/auth-client';
-import { useNavigate } from 'react-router-dom';
-import { paths } from '../routes';
+import { paths } from '../../../../../../apps/frontend/src/pages/routes';
 import { SidebarButton } from './sidebar-link';
-import { BankNotesIcon, CoinsIcon, LogoutIcon } from '@kaizen/core-client';
+import {
+  BankNotesIcon,
+  CoinsIcon,
+  LogoutIcon,
+  useSidebarStore
+} from '@kaizen/core-client';
 import { Avatar } from './avatar';
 
-export const Sidebar = () => {
-  const navigate = useNavigate();
-  const authStore = useAuthStore();
+export interface SidebarProps {
+  onLogoutClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
 
-  const onLogoutClick = () => {
-    authStore.logout();
-    navigate(paths.home);
-  };
+export const Sidebar = ({ onLogoutClick }: SidebarProps) => {
+  const { show } = useSidebarStore();
 
   return (
     <div className="fixed h-full">
-      <div className="flex h-full w-64 flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600">
+      <div
+        className={`${show ? 'flex' : 'hidden md:flex'} h-full w-full flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600 md:w-64`}>
         <div className="flex w-full flex-col gap-y-4">
           <div className="flex items-center gap-x-3 border-b border-primary-700 pb-4">
             <Avatar />
