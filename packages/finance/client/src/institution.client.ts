@@ -1,5 +1,9 @@
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
-import { CreateInstitutionRequest, Institution } from '@kaizen/finance';
+import {
+  CreateInstitutionRequest,
+  Institution,
+  SyncInstitutionsResponse
+} from '@kaizen/finance';
 import { ApiResponse } from '@kaizen/core';
 
 export const InstitutionClient = {
@@ -13,6 +17,13 @@ export const InstitutionClient = {
   find: () => {
     return handleAxiosRequest(() => {
       return ApiClient.get<ApiResponse<Institution[]>>('/institution');
+    });
+  },
+  sync: () => {
+    return handleAxiosRequest(() => {
+      return ApiClient.put<ApiResponse<SyncInstitutionsResponse>>(
+        '/institution/sync'
+      );
     });
   }
 };

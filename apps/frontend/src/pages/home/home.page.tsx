@@ -17,13 +17,13 @@ export const HomePage = () => {
   return (
     <div className="flex flex-col gap-y-8 p-4">
       <div className="flex flex-col gap-2">
-        {Object.keys(paths).map((key) => {
-          return (
-            <Button key={key} to={paths[key]}>
-              {paths[key]}
-            </Button>
-          );
-        })}
+        <Button to={'/'}>/</Button>
+        <Button to={'/login?email=noahskorner@gmail.com&password=12345678a$'}>
+          /login
+        </Button>
+        <Button to={'/register'}>/register</Button>
+        <Button to={'/dashboard'}>/dashboard</Button>
+        <Button to={'/dashboard/finance'}>/dashboard/finance</Button>
         {authStore.authenticated && (
           <Button id={HOME_PAGE_LOGOUT_BUTTON_ID} onClick={onLogoutClick}>
             logout

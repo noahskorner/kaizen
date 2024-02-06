@@ -10,15 +10,22 @@ const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
 
 interface LoginFormProps {
   registerHref: string;
+  email?: string;
+  password?: string;
   onLoginSuccess: () => void;
 }
 
-export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
+export const LoginForm = ({
+  email: initialEmail,
+  password: initialPassword,
+  registerHref,
+  onLoginSuccess
+}: LoginFormProps) => {
   const { addFailureToast } = useToastStore();
   const { login } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(initialEmail ?? '');
+  const [password, setPassword] = useState(initialPassword ?? '');
 
   const onSubmitLoginForm = async (
     event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
@@ -52,7 +59,7 @@ export const LoginForm = ({ registerHref, onLoginSuccess }: LoginFormProps) => {
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-y-6 px-4">
+    <div className="flex w-full max-w-sm flex-col gap-y-6 p-4">
       <form
         onSubmit={onSubmitLoginForm}
         className="flex w-full flex-col gap-y-2">

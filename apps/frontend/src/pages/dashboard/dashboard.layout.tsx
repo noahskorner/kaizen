@@ -1,10 +1,16 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Sidebar } from './sidebar';
-import { AuthRoute } from '@kaizen/auth-client';
+import { AuthRoute, useAuthStore } from '@kaizen/auth-client';
 import { paths } from '../routes';
+import { Sidebar } from '@kaizen/core-client';
 
 export const DashboardLayout = () => {
   const navigate = useNavigate();
+  const authStore = useAuthStore();
+
+  const onLogoutClick = () => {
+    authStore.logout();
+    navigate(paths.home);
+  };
 
   const onUnauthenticated = () => {
     navigate(paths.login);
@@ -13,8 +19,8 @@ export const DashboardLayout = () => {
   return (
     <AuthRoute onUnauthenticated={onUnauthenticated}>
       <div className="flex h-screen">
-        <Sidebar />
-        <div className="ml-64 w-full p-2">
+        <Sidebar onLogoutClick={onLogoutClick} />
+        <div className="w-full p-2 md:ml-64">
           <Outlet />
         </div>
       </div>

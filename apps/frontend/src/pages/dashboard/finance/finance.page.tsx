@@ -5,7 +5,6 @@ import {
   TransactionsTable,
   VirtualAccountClient,
   formatCurrency,
-  groupAccountsByType,
   useInstitutionStore,
   useVirtualAccountStore
 } from '@kaizen/finance-client';
@@ -13,12 +12,13 @@ import { PlaidLink } from './plaid-link';
 import { CreateVirtualAccountModal } from './create-virtual-account-modal';
 import { toVirtualAccountItems } from './to-virtual-account-items';
 import { AccountType } from '@kaizen/finance';
+import { Button, useToastStore } from '@kaizen/core-client';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
-  const { institutions, setInstitutions } = useInstitutionStore();
+  const { setInstitutions, accountGroups, networth } = useInstitutionStore();
   const { virtualAccounts, setVirtualAccounts } = useVirtualAccountStore();
-  const accountGroups = groupAccountsByType(institutions);
+  const { addFailureToast } = useToastStore();
 
   useEffect(() => {
     const createLinkToken = async () => {
@@ -55,9 +55,23 @@ export const FinancePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onSyncClick = async () => {
+    const response = await InstitutionClient.sync();
+    if (response.type === 'FAILURE') {
+      addFailureToast(response.errors);
+      return;
+    }
+
+    setInstitutions(response.data.succeeded);
+  };
+
   return (
     <div>
       <div className="flex flex-col gap-y-2">
+        <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
+          {formatCurrency(networth, 'USD')}
+        </h3>
+        <Button onClick={onSyncClick}>Sync</Button>
         {linkToken && <PlaidLink linkToken={linkToken} />}
 
         {Object.keys(accountGroups).map((accountType) => {
