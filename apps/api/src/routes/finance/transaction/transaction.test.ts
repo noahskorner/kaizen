@@ -32,7 +32,13 @@ const expectTransactionToBeExternal = (
   expect(transaction.externalAccountId).toBe(external.account_id);
   expect(transaction.amount).toBe(external.amount);
   expect(transaction.currency).toBe(external.iso_currency_code);
-  expect(transaction.date).toBe(external.authorized_datetime);
+  if (external.authorized_date != null) {
+    expect(new Date(transaction.date!).toISOString()).toBe(
+      external.authorized_date
+    );
+  } else {
+    expect(new Date(transaction.date!).toISOString()).toBe(external.date);
+  }
   expect(transaction.name).toBe(external.name);
   expect(transaction.merchantName).toBe(external.merchant_name);
   expect(transaction.pending).toBe(external.pending);
@@ -185,7 +191,7 @@ describe('/transaction', () => {
         }
       });
     });
-    it('returns 200 and transactions ordered by authorizedDate', async () => {
+    it('returns 200 and transactions ordered by date', async () => {
       // Arrange
       const mockItem = buildItem();
       const mockAccount = buildAccount({
@@ -194,7 +200,7 @@ describe('/transaction', () => {
       const mockTransactions = range(16).map((index) =>
         buildTransaction({
           account_id: mockAccount.account_id,
-          date: new Date(1998, 1, index + 1).toISOString()
+          authorized_date: new Date(1998, 1, index + 1).toISOString()
         })
       );
       const { sut } = buildSut({
@@ -241,6 +247,86 @@ describe('/transaction', () => {
           expectTransactionToBeExternal(transaction, external);
         }
       });
+    });
+    it('returns 200 and transaction with authorized date', async () => {
+      // Arrange
+      const mockItem = buildItem();
+      const mockAccount = buildAccount({
+        item_id: mockItem.item_id
+      });
+      const mockTransaction = buildTransaction({
+        account_id: mockAccount.account_id,
+        authorized_date: new Date(1998, 1, 1).toISOString(),
+        date: new Date(1998, 1, 2).toISOString()
+      });
+      const { sut } = buildSut({
+        itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
+          item_id: mockItem.item_id
+        }),
+        accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
+          accounts: [mockAccount]
+        }),
+        transactionSyncResponse: buildTransactionsSyncResponse({
+          added: [mockTransaction]
+        })
+      });
+      const { authToken } = await createInstitution(sut);
+      const request: FindTransactionsRequest = {
+        page: 1,
+        pageSize: 15
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
+
+      // Asserts
+      expect(response.status).toBe(200);
+      expect(body.data.total).toBe(1);
+      expect(body.data.hits.length).toBe(1);
+      expectTransactionToBeExternal(body.data.hits[0], mockTransaction);
+    });
+    it('returns 200 and transaction with date when authorized date is null', async () => {
+      // Arrange
+      const mockItem = buildItem();
+      const mockAccount = buildAccount({
+        item_id: mockItem.item_id
+      });
+      const mockTransaction = buildTransaction({
+        account_id: mockAccount.account_id,
+        authorized_date: null,
+        date: new Date(1998, 1, 2).toISOString()
+      });
+      const { sut } = buildSut({
+        itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
+          item_id: mockItem.item_id
+        }),
+        accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
+          accounts: [mockAccount]
+        }),
+        transactionSyncResponse: buildTransactionsSyncResponse({
+          added: [mockTransaction]
+        })
+      });
+      const { authToken } = await createInstitution(sut);
+      const request: FindTransactionsRequest = {
+        page: 1,
+        pageSize: 15
+      };
+
+      // Act
+      const response = await supertest(sut)
+        .get(`/transaction?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
+
+      // Asserts
+      expect(response.status).toBe(200);
+      expect(body.data.total).toBe(1);
+      expect(body.data.hits.length).toBe(1);
+      expectTransactionToBeExternal(body.data.hits[0], mockTransaction);
     });
     it('returns 200 and created transactions after sync', async () => {
       // Arrange
@@ -517,15 +603,15 @@ describe('/transaction', () => {
       });
       const excludedStartTransaction = buildTransaction({
         account_id: mockAccount.account_id,
-        authorized_datetime: new Date(1998, 7, 29).toISOString()
+        authorized_date: new Date(1998, 7, 29).toISOString()
       });
       const expectedTransaction = buildTransaction({
         account_id: mockAccount.account_id,
-        authorized_datetime: new Date(1998, 7, 30).toISOString()
+        authorized_date: new Date(1998, 7, 30).toISOString()
       });
       const excludedEndTransaction = buildTransaction({
         account_id: mockAccount.account_id,
-        authorized_datetime: new Date(1998, 7, 31).toISOString()
+        authorized_date: new Date(1998, 7, 31).toISOString()
       });
       const { sut } = buildSut({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
