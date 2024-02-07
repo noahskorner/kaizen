@@ -1,5 +1,5 @@
 import './transactions-table.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TransactionClient } from './transaction.client';
 import { formatCurrency } from './format-currency';
 import { FindTransactionsRequest } from '@kaizen/finance';
@@ -7,26 +7,36 @@ import { useTransactionStore } from './use-transaction-store';
 
 export const TransactionsTable = () => {
   const { transactions, setTransactions } = useTransactionStore();
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const loadTransactions = async () => {
-      const request: FindTransactionsRequest = {
-        page: page
-      };
-      const response = await TransactionClient.find(request);
-      if (response.type === 'SUCCESS') {
-        setTransactions([...transactions, ...response.data.hits]);
+      const transactions = [];
+      let hasMore = true;
+      let page = 1;
+
+      while (hasMore) {
+        const request: FindTransactionsRequest = {
+          page: page,
+          startDate: new Date(7, 30, 1998).toISOString(),
+          endDate: new Date().toISOString()
+        };
+        const response = await TransactionClient.find(request);
+        if (response.type === 'SUCCESS') {
+          transactions.push(...response.data.hits);
+          hasMore = transactions.length < response.data.total;
+          page++;
+        } else {
+          console.error(response);
+          break;
+        }
       }
+
+      setTransactions(transactions);
     };
 
     loadTransactions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  const onLoadMoreClick = () => {
-    setPage((prev) => prev + 1);
-  };
+  }, []);
 
   return (
     <div>
@@ -56,13 +66,6 @@ export const TransactionsTable = () => {
           </div>
         );
       })}
-      <div className="flex w-full items-center justify-center border-y py-2">
-        <button
-          onClick={onLoadMoreClick}
-          className="text-sm text-blue-600 hover:underline">
-          Load more
-        </button>
-      </div>
     </div>
   );
 };
