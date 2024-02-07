@@ -19,7 +19,9 @@ export class TransactionController extends Controller {
       page: parseInt(req.query.page as string),
       pageSize: req.query.pageSize
         ? parseInt(req.query.pageSize as string)
-        : undefined
+        : undefined,
+      startDate: req.query.startDate as string | undefined,
+      endDate: req.query.endDate as string | undefined
     };
 
     const response = await this.findTransactionsService.find({
@@ -30,7 +32,10 @@ export class TransactionController extends Controller {
     if (response.type == 'FAILURE') {
       if (
         hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE) ||
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE)
+        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE) ||
+        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE) ||
+        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE) ||
+        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME)
       ) {
         return this.badRequest(res, response);
       }

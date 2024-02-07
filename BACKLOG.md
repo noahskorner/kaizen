@@ -5,3 +5,5 @@
 - [ ] Setup ws server/ syncTransactions() async
 - [ ] Api routes into a file
 - [ ] Localization
+- [ ] Background jobs
+- [ ] Organization / Role / ACL based authorization

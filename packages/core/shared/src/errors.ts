@@ -62,6 +62,20 @@ export const Errors: Record<Partial<ErrorKey>, ApiError> = {
     key: ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE,
     message: 'The page size you provided is invalid.'
   },
+  [ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE]: {
+    key: ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE,
+    message:
+      'The start date you provided is invalid. It must be in ISO 8601 format.'
+  },
+  [ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE]: {
+    key: ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE,
+    message:
+      'The end date you provided is invalid. It must be in ISO 8601 format.'
+  },
+  [ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME]: {
+    key: ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME,
+    message: 'The end date you provided is before the start date.'
+  },
   [ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT]: {
     key: ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT,
     message: 'Must provide a valid amount.'

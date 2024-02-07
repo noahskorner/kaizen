@@ -80,7 +80,8 @@ export class ServiceCollectionBuilder {
       );
 
     // Prisma
-    const prisma = this._serviceCollection.prisma ?? new PrismaClient();
+    const prisma =
+      this._serviceCollection.prisma ?? new PrismaClient({ log: ['query'] });
 
     // Repositories
     const createUserRepository =

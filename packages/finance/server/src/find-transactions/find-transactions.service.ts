@@ -36,7 +36,9 @@ export class FindTransactionsService
       await this._findTransactionsRepository.find({
         userId: command.userId,
         page: command.page,
-        pageSize: command.pageSize ?? DEFAULT_PAGE_SIZE
+        pageSize: command.pageSize ?? DEFAULT_PAGE_SIZE,
+        startDate: command.startDate,
+        endDate: command.endDate
       });
 
     const response = {
@@ -59,6 +61,23 @@ export class FindTransactionsService
 
     if (command.pageSize != null && isNaN(command.pageSize)) {
       errors.push(Errors.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
+    }
+
+    const validStartDate =
+      command.startDate == null || !isNaN(Date.parse(command.startDate));
+    if (!validStartDate) {
+      errors.push(Errors.FIND_TRANSACTIONS_INVALID_START_DATE);
+    }
+
+    if (command.endDate != null) {
+      if (isNaN(Date.parse(command.endDate))) {
+        errors.push(Errors.FIND_TRANSACTIONS_INVALID_END_DATE);
+      } else if (
+        validStartDate &&
+        Date.parse(command.endDate) < Date.parse(command.startDate!)
+      ) {
+        errors.push(Errors.FIND_TRANSACTIONS_INVALID_TIMEFRAME);
+      }
     }
 
     return errors;
