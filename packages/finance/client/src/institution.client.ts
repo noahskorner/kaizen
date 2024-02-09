@@ -4,24 +4,27 @@ import {
   Institution,
   SyncInstitutionsResponse
 } from '@kaizen/finance';
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 
 export const InstitutionClient = {
   create: (
     request: CreateInstitutionRequest
-  ): Promise<ApiResponse<Institution>> => {
+  ): Promise<ServiceResponse<Institution>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.post<ApiResponse<Institution>>('/institution', request);
+      return ApiClient.post<ServiceResponse<Institution>>(
+        '/institution',
+        request
+      );
     });
   },
   find: () => {
     return handleAxiosRequest(() => {
-      return ApiClient.get<ApiResponse<Institution[]>>('/institution');
+      return ApiClient.get<ServiceResponse<Institution[]>>('/institution');
     });
   },
   sync: () => {
     return handleAxiosRequest(() => {
-      return ApiClient.put<ApiResponse<SyncInstitutionsResponse>>(
+      return ApiClient.put<ServiceResponse<SyncInstitutionsResponse>>(
         '/institution/sync'
       );
     });

@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ServiceResponse, Errors } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import {
   CreateUserValidator,
@@ -18,7 +18,9 @@ export class CreateUserService extends Service implements ICreateUserService {
     super();
   }
 
-  public async create(command: CreateUserCommand): Promise<ApiResponse<User>> {
+  public async create(
+    command: CreateUserCommand
+  ): Promise<ServiceResponse<User>> {
     const errors = CreateUserValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);

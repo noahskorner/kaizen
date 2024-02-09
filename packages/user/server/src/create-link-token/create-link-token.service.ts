@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ServiceResponse, Errors } from '@kaizen/core';
 import {
   IGetUserRepository,
   LinkToken,
@@ -21,7 +21,7 @@ export class CreateLinkTokenService
 
   public async create({
     userId
-  }: CreateLinkTokenCommand): Promise<ApiResponse<LinkToken>> {
+  }: CreateLinkTokenCommand): Promise<ServiceResponse<LinkToken>> {
     try {
       const user = await this._getUserRepository.get({ userId });
       if (user == null) {

@@ -1,4 +1,4 @@
-import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   AccountAdapter,
@@ -35,7 +35,7 @@ export class SyncAccountsService
 
   public async sync(
     command: SyncAccountsCommand
-  ): Promise<ApiResponse<SyncAccountsResponse>> {
+  ): Promise<ServiceResponse<SyncAccountsResponse>> {
     const findInstitutionsResponse =
       await this._findInstitutionRecords(command);
     if (findInstitutionsResponse.type == 'FAILURE') {
@@ -69,7 +69,7 @@ export class SyncAccountsService
 
   private async _findInstitutionRecords(
     command: SyncAccountsCommand
-  ): Promise<ApiResponse<InstitutionRecord[]>> {
+  ): Promise<ServiceResponse<InstitutionRecord[]>> {
     const query: FindInstitutionsQuery = {
       userId: command.userId,
       institutionIds: command.institutionIds
@@ -84,8 +84,16 @@ export class SyncAccountsService
     const institutionRecordIds = institutionRecords.map(
       (institutionRecord) => institutionRecord.id
     );
-    if (!isArrayEqual(command.institutionIds, institutionRecordIds)) {
-      return this.failure(Errors.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND);
+    const missingInstitutionIds = command.institutionIds.filter(
+      (institutionId) => !institutionRecordIds.includes(institutionId)
+    );
+    if (missingInstitutionIds.length > 0) {
+      return this.failure({
+        code: ErrorCode.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND,
+        params: {
+          instiutionIds: missingInstitutionIds
+        }
+      });
     }
 
     return this.success(institutionRecords);
@@ -177,5 +185,5 @@ export class SyncAccountsService
 
 interface InternalSyncAccountsResponse {
   institutionId: string;
-  response: ApiResponse<AccountRecord[]>;
+  response: ServiceResponse<AccountRecord[]>;
 }

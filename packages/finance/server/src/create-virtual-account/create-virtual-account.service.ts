@@ -1,5 +1,5 @@
 import { Service } from '@kaizen/core-server';
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 import {
   CreateVirtualAccountValidator,
   ICreateVirtualAccountRepository,
@@ -21,7 +21,7 @@ export class CreateVirtualAccountService
 
   public async create(
     command: CreateVirtualAccountCommand
-  ): Promise<ApiResponse<VirtualAccount>> {
+  ): Promise<ServiceResponse<VirtualAccount>> {
     const errors = CreateVirtualAccountValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);

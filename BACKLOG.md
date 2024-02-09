@@ -1,6 +1,6 @@
 # Project Backlog
 
-- [ ] Seperate ServiceResponse and ApiResponse objects
+- [ ] Seperate ServiceResponse and ServiceResponse objects
 - [ ] Abstract Controller logic
 - [ ] Setup ws server/ syncTransactions() async
 - [ ] Api routes into a file

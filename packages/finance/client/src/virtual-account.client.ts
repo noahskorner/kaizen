@@ -1,21 +1,23 @@
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 import { CreateVirtualAccountRequest, VirtualAccount } from '@kaizen/finance';
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 
 export const VirtualAccountClient = {
   create: (
     request: CreateVirtualAccountRequest
-  ): Promise<ApiResponse<VirtualAccount>> => {
+  ): Promise<ServiceResponse<VirtualAccount>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.post<ApiResponse<VirtualAccount>>(
+      return ApiClient.post<ServiceResponse<VirtualAccount>>(
         '/virtual-account',
         request
       );
     });
   },
-  find: (): Promise<ApiResponse<VirtualAccount[]>> => {
+  find: (): Promise<ServiceResponse<VirtualAccount[]>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.get<ApiResponse<VirtualAccount[]>>('/virtual-account');
+      return ApiClient.get<ServiceResponse<VirtualAccount[]>>(
+        '/virtual-account'
+      );
     });
   }
 };

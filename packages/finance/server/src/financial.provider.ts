@@ -7,7 +7,7 @@ import {
   Products,
   TransactionsSyncRequest
 } from 'plaid';
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ServiceResponse, Errors } from '@kaizen/core';
 import {
   ExternalAccount,
   ExternalAccountAdapter,
@@ -24,7 +24,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
 
   public async createExternalLinkToken(
     userId: string
-  ): Promise<ApiResponse<string>> {
+  ): Promise<ServiceResponse<string>> {
     try {
       const request: LinkTokenCreateRequest = {
         user: {
@@ -50,7 +50,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
 
   public async exchangeExternalPublicToken(
     publicToken: string
-  ): Promise<ApiResponse<string>> {
+  ): Promise<ServiceResponse<string>> {
     try {
       const request: ItemPublicTokenExchangeRequest = {
         public_token: publicToken
@@ -70,7 +70,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
 
   public async getExternalAccounts(
     accessToken: string
-  ): Promise<ApiResponse<ExternalAccount[]>> {
+  ): Promise<ServiceResponse<ExternalAccount[]>> {
     try {
       const request: AccountsGetRequest = {
         access_token: accessToken
@@ -89,7 +89,7 @@ export class FinancialProvider extends Service implements IFinancialProvider {
   public async syncExternalTransactions(
     accessToken: string,
     cursor: string | null = null
-  ): Promise<ApiResponse<SyncExternalTransactionsResponse>> {
+  ): Promise<ServiceResponse<SyncExternalTransactionsResponse>> {
     try {
       const request: TransactionsSyncRequest = {
         access_token: accessToken,

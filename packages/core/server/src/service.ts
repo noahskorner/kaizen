@@ -1,13 +1,13 @@
 import {
-  ApiError,
-  ApiFailureResponse,
-  ApiResponse,
-  ApiSuccessResponse
+  ServiceError,
+  ServiceFailureResponse,
+  ServiceResponse,
+  ServiceSuccessResponse
 } from '@kaizen/core';
 
 export abstract class Service {
-  protected success<T>(data: T): ApiSuccessResponse<T> {
-    const response: ApiSuccessResponse<T> = {
+  protected success<T>(data: T): ServiceSuccessResponse<T> {
+    const response: ServiceSuccessResponse<T> = {
       type: 'SUCCESS',
       data: data
     };
@@ -15,8 +15,8 @@ export abstract class Service {
     return response;
   }
 
-  protected failure(error: ApiError): ApiFailureResponse {
-    const response: ApiFailureResponse = {
+  protected failure(error: ServiceError): ServiceFailureResponse {
+    const response: ServiceFailureResponse = {
       type: 'FAILURE',
       errors: [error]
     };
@@ -24,8 +24,8 @@ export abstract class Service {
     return response;
   }
 
-  protected failures(errors: ApiError[]): ApiFailureResponse {
-    const response: ApiFailureResponse = {
+  protected failures(errors: ServiceError[]): ServiceFailureResponse {
+    const response: ServiceFailureResponse = {
       type: 'FAILURE',
       errors: errors
     };
@@ -37,22 +37,22 @@ export abstract class Service {
     return email.toLowerCase();
   }
 
-  protected getFailures<T>(responses: ApiResponse<T>[]): ApiError[] {
+  protected getFailures<T>(responses: ServiceResponse<T>[]): ServiceError[] {
     return responses
       .filter(
-        (response): response is ApiFailureResponse =>
+        (response): response is ServiceFailureResponse =>
           response.type === 'FAILURE'
       )
-      .map((response: ApiFailureResponse) => response.errors)
+      .map((response: ServiceFailureResponse) => response.errors)
       .flat();
   }
 
-  protected getSuccesses<T>(responses: ApiResponse<T>[]): T[] {
+  protected getSuccesses<T>(responses: ServiceResponse<T>[]): T[] {
     return responses
       .filter(
-        (response): response is ApiSuccessResponse<T> =>
+        (response): response is ServiceSuccessResponse<T> =>
           response.type === 'SUCCESS'
       )
-      .map((response: ApiSuccessResponse<T>) => response.data);
+      .map((response: ServiceSuccessResponse<T>) => response.data);
   }
 }

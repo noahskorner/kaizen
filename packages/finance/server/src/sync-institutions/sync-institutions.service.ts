@@ -1,4 +1,4 @@
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   ISyncAccountsService,
@@ -18,7 +18,7 @@ export class SyncInstitutionsService
 
   public async sync(
     command: SyncInstitutionsCommand
-  ): Promise<ApiResponse<SyncInstitutionsResponse>> {
+  ): Promise<ServiceResponse<SyncInstitutionsResponse>> {
     const accountSyncCommand: SyncAccountsCommand = {
       userId: command.userId
     };

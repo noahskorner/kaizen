@@ -1,6 +1,9 @@
-import { ApiFailureResponse } from './api-response';
-import { ErrorKey } from './error-key';
+import { ServiceFailureResponse } from './service.response';
+import { ErrorCode } from './error-code';
 
-export const hasErrorFor = (response: ApiFailureResponse, error: ErrorKey) => {
-  return response.errors.some((e) => e.key === error);
+export const hasErrorFor = (
+  response: ServiceFailureResponse,
+  error: ErrorCode
+) => {
+  return response.errors.some((e) => e.code === error);
 };

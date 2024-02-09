@@ -1,6 +1,6 @@
 import {
   ApiFailureResponse,
-  ApiResponse,
+  ServiceResponse,
   ApiSuccessResponse,
   Errors
 } from '@kaizen/core';
@@ -17,8 +17,8 @@ export const DEFAULT_API_FAILURE_RESPONSE: ApiFailureResponse = {
 };
 
 export const handleAxiosRequest = async <T>(
-  request: () => Promise<AxiosResponse<ApiResponse<T>>>
-): Promise<ApiResponse<T>> => {
+  request: () => Promise<AxiosResponse<ServiceResponse<T>>>
+): Promise<ServiceResponse<T>> => {
   try {
     const response = await request();
 
