@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import {
   IGetUserRepository,
   LinkToken,
@@ -21,23 +21,21 @@ export class CreateLinkTokenService
 
   public async create({
     userId
-  }: CreateLinkTokenCommand): Promise<ApiResponse<LinkToken>> {
-    try {
-      const user = await this._getUserRepository.get({ userId });
-      if (user == null) {
-        return this.failure(Errors.CREATE_LINK_TOKEN_USER_NOT_FOUND);
-      }
-
-      const response =
-        await this._financialProvider.createExternalLinkToken(userId);
-      if (response.type === 'FAILURE') {
-        return response;
-      }
-
-      return this.success({ token: response.data });
-    } catch (error) {
-      console.log(error);
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+  }: CreateLinkTokenCommand): Promise<ServiceResponse<LinkToken>> {
+    const user = await this._getUserRepository.get({ userId });
+    if (user == null) {
+      return this.failure({
+        code: ErrorCode.CREATE_LINK_TOKEN_USER_NOT_FOUND,
+        params: { userId }
+      });
     }
+
+    const response =
+      await this._financialProvider.createExternalLinkToken(userId);
+    if (response.type === 'FAILURE') {
+      return response;
+    }
+
+    return this.success({ token: response.data });
   }
 }

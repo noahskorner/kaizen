@@ -1,5 +1,5 @@
 import { Service } from '@kaizen/core-server';
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 import {
   FindVirtualAccountsCommand,
   IFindVirtualAccountsRepository,
@@ -20,7 +20,7 @@ export class FindVirtualAccountsService
 
   public async find(
     command: FindVirtualAccountsCommand
-  ): Promise<ApiResponse<VirtualAccount[]>> {
+  ): Promise<ServiceResponse<VirtualAccount[]>> {
     const virtualAccountRecords =
       await this._findVirtualAccountsRepository.find(command);
     const virtualAccounts = virtualAccountRecords.map(

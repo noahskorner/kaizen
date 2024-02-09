@@ -1,43 +1,61 @@
+import { ErrorCode, ServiceError } from '@kaizen/core';
 import { CreateUserRequest } from './create-user.request';
-import { ApiError, Errors } from '@kaizen/core';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export class CreateUserValidator {
-  public static validate(command: CreateUserRequest): ApiError[] {
+  public static validate(command: CreateUserRequest): ServiceError[] {
     return [
       ...CreateUserValidator.validateEmail(command.email),
       ...CreateUserValidator.validatePassword(command.password)
     ];
   }
 
-  public static validateEmail(email: string): ApiError[] {
-    const errors: ApiError[] = [];
+  public static validateEmail(email: string): ServiceError[] {
+    const errors: ServiceError[] = [];
 
     if (email == null) {
-      errors.push(Errors.CREATE_USER_INVALID_EMAIL);
+      errors.push({
+        code: ErrorCode.CREATE_USER_INVALID_EMAIL,
+        params: { email }
+      });
     }
     if (!emailRegex.test(email)) {
-      errors.push(Errors.CREATE_USER_INVALID_EMAIL);
+      errors.push({
+        code: ErrorCode.CREATE_USER_INVALID_EMAIL,
+        params: { email }
+      });
     }
 
     return errors;
   }
 
-  public static validatePassword(password: string): ApiError[] {
-    const errors: ApiError[] = [];
+  public static validatePassword(password: string): ServiceError[] {
+    const errors: ServiceError[] = [];
 
     if (password == null) {
-      errors.push(Errors.CREATE_USER_INVALID_PASSWORD);
+      errors.push({
+        code: ErrorCode.CREATE_USER_INVALID_PASSWORD,
+        params: { password }
+      });
     } else {
       if (password.length < 8) {
-        errors.push(Errors.CREATE_USER_PASSWORD_TOO_SHORT);
+        errors.push({
+          code: ErrorCode.CREATE_USER_PASSWORD_TOO_SHORT,
+          params: { password }
+        });
       }
       if (!/\d/.test(password)) {
-        errors.push(Errors.CREATE_USER_PASSWORD_NO_NUMBER);
+        errors.push({
+          code: ErrorCode.CREATE_USER_PASSWORD_NO_NUMBER,
+          params: { password }
+        });
       }
       if (!/[!@#$%^&*]/.test(password)) {
-        errors.push(Errors.CREATE_USER_PASSWORD_NO_SYMBOL);
+        errors.push({
+          code: ErrorCode.CREATE_USER_PASSWORD_NO_SYMBOL,
+          params: { password }
+        });
       }
     }
 

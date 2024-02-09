@@ -4,6 +4,7 @@ import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
 import { UserClient } from '.';
 import { Link } from 'react-router-dom';
+import { ServiceErrorAdapter } from '@kaizen/core/src/service-error.adapter';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -27,8 +28,12 @@ export const CreateUserForm = ({
   const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const emailErrors = CreateUserValidator.validateEmail(email);
-    const passwordErrors = CreateUserValidator.validatePassword(password);
+    const emailErrors = CreateUserValidator.validateEmail(email).map(
+      ServiceErrorAdapter.toApiError
+    );
+    const passwordErrors = CreateUserValidator.validatePassword(password).map(
+      ServiceErrorAdapter.toApiError
+    );
     if (emailErrors.length > 0 || passwordErrors.length > 0) {
       setEmailErrors(emailErrors);
       setPasswordErrors(passwordErrors);
@@ -52,12 +57,20 @@ export const CreateUserForm = ({
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
-    setEmailErrors(CreateUserValidator.validateEmail(event.target.value));
+    setEmailErrors(
+      CreateUserValidator.validateEmail(event.target.value).map(
+        ServiceErrorAdapter.toApiError
+      )
+    );
   };
 
   const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-    setPasswordErrors(CreateUserValidator.validatePassword(event.target.value));
+    setPasswordErrors(
+      CreateUserValidator.validatePassword(event.target.value).map(
+        ServiceErrorAdapter.toApiError
+      )
+    );
   };
 
   return (

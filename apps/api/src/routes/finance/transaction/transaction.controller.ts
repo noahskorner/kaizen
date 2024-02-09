@@ -5,7 +5,7 @@ import {
   FindTransactionsRequest,
   IFindTransactionsService
 } from '@kaizen/finance';
-import { ErrorKey, hasErrorFor } from '@kaizen/core';
+import { ErrorCode, hasErrorFor } from '@kaizen/core';
 
 export class TransactionController extends Controller {
   constructor(
@@ -31,11 +31,11 @@ export class TransactionController extends Controller {
 
     if (response.type == 'FAILURE') {
       if (
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE) ||
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE) ||
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE) ||
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE) ||
-        hasErrorFor(response, ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME)
+        hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE) ||
+        hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE) ||
+        hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE) ||
+        hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE) ||
+        hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME)
       ) {
         return this.badRequest(res, response);
       }

@@ -9,7 +9,7 @@ import {
   InstitutionRecord,
   SyncAccountsCommand
 } from '@kaizen/finance';
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ServiceResponse, ErrorCode } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 
 export class CreateInstitutionService
@@ -26,47 +26,49 @@ export class CreateInstitutionService
 
   public async create(
     command: CreateInstitutionCommand
-  ): Promise<ApiResponse<Institution>> {
+  ): Promise<ServiceResponse<Institution>> {
     if (command.publicToken == null || command.publicToken === '') {
-      return this.failure(Errors.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
+      return this.failure({
+        code: ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN,
+        params: {
+          plaidPublicToken: command.publicToken
+        }
+      });
     }
 
-    try {
-      // Create the institution
-      const createInstitutionResponse = await this._create(command);
-      if (createInstitutionResponse.type == 'FAILURE') {
-        return createInstitutionResponse;
-      }
-      const institutionRecord = createInstitutionResponse.data;
-
-      // Sync it's accounts
-      const syncAccountsCommand: SyncAccountsCommand = {
-        userId: institutionRecord.userId,
-        institutionIds: [institutionRecord.id]
-      };
-      const syncAccountsResponse =
-        await this._syncAccountsService.sync(syncAccountsCommand);
-      if (syncAccountsResponse.type === 'FAILURE') {
-        return syncAccountsResponse;
-      }
-
-      // Return the institution and it's accounts
-      const institution = syncAccountsResponse.data.succeeded.find(
-        (institution) => institution.id === institutionRecord.id
-      );
-      if (institution == null) {
-        return this.failure(Errors.INTERNAL_SERVER_ERROR);
-      }
-      return this.success(institution);
-    } catch (error) {
-      console.log(error);
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+    // Create the institution
+    const createInstitutionResponse = await this._create(command);
+    if (createInstitutionResponse.type == 'FAILURE') {
+      return createInstitutionResponse;
     }
+    const institutionRecord = createInstitutionResponse.data;
+
+    // Sync it's accounts
+    const syncAccountsCommand: SyncAccountsCommand = {
+      userId: institutionRecord.userId,
+      institutionIds: [institutionRecord.id]
+    };
+    const syncAccountsResponse =
+      await this._syncAccountsService.sync(syncAccountsCommand);
+    if (syncAccountsResponse.type === 'FAILURE') {
+      return syncAccountsResponse;
+    }
+
+    // Return the institution and it's accounts
+    const institution = syncAccountsResponse.data.succeeded.find(
+      (institution) => institution.id === institutionRecord.id
+    );
+    if (institution == null) {
+      return this.failure({
+        code: ErrorCode.CREATE_INSTITUTION_FAILED_TO_SYNC_ACCOUNTS
+      });
+    }
+    return this.success(institution);
   }
 
   private async _create(
     command: CreateInstitutionCommand
-  ): Promise<ApiResponse<InstitutionRecord>> {
+  ): Promise<ServiceResponse<InstitutionRecord>> {
     const response = await this._financialProvider.exchangeExternalPublicToken(
       command.publicToken
     );

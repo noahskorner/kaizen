@@ -5,7 +5,7 @@ import {
   SyncInstitutionsResponse,
   Account
 } from '@kaizen/finance';
-import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import {
   buildAccount,
   buildAccountsBalanceGetResponse,
@@ -40,7 +40,10 @@ describe('/institution', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
+      expectError(
+        response,
+        ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN
+      );
     });
     it('returns 400 when publicToken is empty string', async () => {
       // Arrange
@@ -58,7 +61,10 @@ describe('/institution', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN);
+      expectError(
+        response,
+        ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN
+      );
     });
     it('returns 201 and created institution', async () => {
       // Arrange

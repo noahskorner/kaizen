@@ -1,6 +1,6 @@
-import { ErrorKey } from './error-key';
+import { ErrorCode } from './error-code';
 
 export interface ApiError {
-  key: ErrorKey;
+  code: ErrorCode;
   message: string;
 }

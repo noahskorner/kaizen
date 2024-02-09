@@ -1,8 +1,8 @@
 import {
   ApiFailureResponse,
-  ApiResponse,
   ApiSuccessResponse,
-  Errors
+  ApiResponse,
+  ErrorCode
 } from '@kaizen/core';
 import { AxiosError, AxiosResponse } from 'axios';
 
@@ -13,7 +13,13 @@ export const DEFAULT_API_SUCCESS_RESPONSE: ApiSuccessResponse<null> = {
 
 export const DEFAULT_API_FAILURE_RESPONSE: ApiFailureResponse = {
   type: 'FAILURE',
-  errors: [Errors.INTERNAL_SERVER_ERROR]
+  errors: [
+    // TODO: LOCALIZATION
+    {
+      code: ErrorCode.INTERNAL_SERVER_ERROR,
+      message: ErrorCode.INTERNAL_SERVER_ERROR
+    }
+  ]
 };
 
 export const handleAxiosRequest = async <T>(

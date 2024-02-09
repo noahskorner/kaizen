@@ -1,4 +1,4 @@
-import { ApiResponse, Errors, isArrayEqual } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   CreateTransactionQuery,
@@ -35,7 +35,7 @@ export class SyncTransactionsService
 
   public async sync(
     command: SyncTransactionsCommand
-  ): Promise<ApiResponse<SyncTransactionsResponse>> {
+  ): Promise<ServiceResponse<SyncTransactionsResponse>> {
     const findInstitutionResponse = await this._findInstitutions(command);
     if (findInstitutionResponse.type === 'FAILURE') {
       return findInstitutionResponse;
@@ -57,7 +57,7 @@ export class SyncTransactionsService
 
   private async _findInstitutions(
     command: SyncTransactionsCommand
-  ): Promise<ApiResponse<InstitutionRecord[]>> {
+  ): Promise<ServiceResponse<InstitutionRecord[]>> {
     const query: FindInstitutionsQuery = {
       userId: command.userId,
       institutionIds: command.institutionIds
@@ -71,8 +71,14 @@ export class SyncTransactionsService
     const institutionRecordIds = institutionRecords.map(
       (institutionRecord) => institutionRecord.id
     );
-    if (!isArrayEqual(command.institutionIds, institutionRecordIds)) {
-      return this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND);
+    const missingInstitutionIds = command.institutionIds.filter(
+      (institutionId) => !institutionRecordIds.includes(institutionId)
+    );
+    if (missingInstitutionIds.length > 0) {
+      return this.failure({
+        code: ErrorCode.SYNC_TRANSACTIONS_INSTITUTIONS_NOT_FOUND,
+        params: { institutionIds: missingInstitutionIds }
+      });
     }
     return this.success(institutionRecords);
   }
@@ -122,7 +128,12 @@ export class SyncTransactionsService
     if (institution == null) {
       return {
         institutionId,
-        response: this.failure(Errors.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND)
+        response: this.failure({
+          code: ErrorCode.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND,
+          params: {
+            institutionId
+          }
+        })
       };
     }
 
@@ -183,7 +194,7 @@ export class SyncTransactionsService
 
   private async _buildCreateTransactionQueries(
     externalTransactions: ExternalTransaction[]
-  ): Promise<ApiResponse<CreateTransactionQuery[]>> {
+  ): Promise<ServiceResponse<CreateTransactionQuery[]>> {
     const query: FindAccountsByExternalIdsQuery = {
       externalIds: [
         ...new Set(
@@ -200,24 +211,42 @@ export class SyncTransactionsService
       return prev.set(curr.externalId, curr.id);
     }, new Map<string, string>());
 
-    const queries: Array<CreateTransactionQuery | null> =
-      externalTransactions.map((externalTransaction) => {
+    const { queries, missingAccountIds } = externalTransactions.reduce(
+      (prev, externalTransaction) => {
         const accountId = accountIdMap.get(externalTransaction.accountId);
         if (accountId == null) {
-          return null;
+          return {
+            queries: prev.queries,
+            missingAccountIds: [
+              ...prev.missingAccountIds,
+              externalTransaction.accountId
+            ]
+          };
         }
-        return TransactionAdapter.toCreateTransactionQuery(
+
+        const currQuery = TransactionAdapter.toCreateTransactionQuery(
           accountId,
           externalTransaction
         );
-      });
 
-    if (queries.some((query) => query === null)) {
-      return this.failure(Errors.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND);
-    }
-    return this.success(
-      queries.filter((query): query is CreateTransactionQuery => query !== null)
+        return {
+          queries: [...prev.queries, currQuery],
+          missingAccountIds: prev.missingAccountIds
+        };
+      },
+      {
+        queries: [] as Array<CreateTransactionQuery>,
+        missingAccountIds: [] as string[]
+      }
     );
+
+    if (missingAccountIds.length > 0) {
+      return this.failure({
+        code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND,
+        params: { accountIds: missingAccountIds }
+      });
+    }
+    return this.success(queries);
   }
 
   private _buildResponse(
@@ -257,5 +286,7 @@ interface InternalSyncTransactionsCommand {
 
 interface InternalSyncTransactionsResponse {
   institutionId: string;
-  response: ApiResponse<Omit<SyncTransactionsResponse, 'succeeded' | 'failed'>>;
+  response: ServiceResponse<
+    Omit<SyncTransactionsResponse, 'succeeded' | 'failed'>
+  >;
 }

@@ -17,6 +17,7 @@ import {
   VirtualAccountClient,
   useVirtualAccountStore
 } from '@kaizen/finance-client';
+import { ServiceErrorAdapter } from '@kaizen/core/src/service-error.adapter';
 
 export const NAME_INPUT_ID = 'name-input';
 export const STARTING_BALANCE_INPUT_ID = 'starting-balance-input';
@@ -39,30 +40,32 @@ export const CreateVirtualAccountModal = () => {
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
-    setNameErrors(
-      CreateVirtualAccountValidator.validateName(event.target.value)
+    const errors = CreateVirtualAccountValidator.validateName(
+      event.target.value
     );
+    setNameErrors(errors.map(ServiceErrorAdapter.toApiError));
   };
 
   const onBalanceChange = (event: ChangeEvent<HTMLInputElement>) => {
     setBalance(event.target.valueAsNumber);
-    setBalanceErrors(
-      CreateVirtualAccountValidator.validateBalance(event.target.valueAsNumber)
+    const errors = CreateVirtualAccountValidator.validateBalance(
+      event.target.valueAsNumber
     );
+    setBalanceErrors(errors.map(ServiceErrorAdapter.toApiError));
   };
 
   const onAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.valueAsNumber);
-    setAmountErrors(
-      CreateVirtualAccountValidator.validateAmount(event.target.valueAsNumber)
+    const errors = CreateVirtualAccountValidator.validateAmount(
+      event.target.valueAsNumber
     );
+    setAmountErrors(errors.map(ServiceErrorAdapter.toApiError));
   };
 
   const onFrequencyChange = (values: string[]) => {
     setFrequency(values[0] as VirtualAccountFrequency);
-    setFrequencyErrors(
-      CreateVirtualAccountValidator.validateFrequency(values[0])
-    );
+    const errors = CreateVirtualAccountValidator.validateFrequency(values[0]);
+    setFrequencyErrors(errors.map(ServiceErrorAdapter.toApiError));
   };
 
   const onSubmit = async (
@@ -92,16 +95,21 @@ export const CreateVirtualAccountModal = () => {
   };
 
   const validateForm = () => {
-    const nameErrors = CreateVirtualAccountValidator.validateName(name);
+    const nameErrors = CreateVirtualAccountValidator.validateName(name).map(
+      ServiceErrorAdapter.toApiError
+    );
     setNameErrors(nameErrors);
-    const balanceErrors =
-      CreateVirtualAccountValidator.validateBalance(balance);
+    const balanceErrors = CreateVirtualAccountValidator.validateBalance(
+      balance
+    ).map(ServiceErrorAdapter.toApiError);
     setBalanceErrors(balanceErrors);
-    const amountErrors = CreateVirtualAccountValidator.validateAmount(amount);
+    const amountErrors = CreateVirtualAccountValidator.validateAmount(
+      amount
+    ).map(ServiceErrorAdapter.toApiError);
     setAmountErrors(amountErrors);
     const frequencyErrors = CreateVirtualAccountValidator.validateFrequency(
       frequency as unknown as string
-    );
+    ).map(ServiceErrorAdapter.toApiError);
     setFrequencyErrors(frequencyErrors);
 
     return (

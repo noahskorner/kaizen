@@ -1,17 +1,17 @@
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 import { ExternalAccount } from './external-account';
 import { SyncExternalTransactionsResponse } from './sync-external-transactions-response';
 
 export interface IFinancialProvider {
-  createExternalLinkToken: (userId: string) => Promise<ApiResponse<string>>;
+  createExternalLinkToken: (userId: string) => Promise<ServiceResponse<string>>;
   exchangeExternalPublicToken: (
     publicToken: string
-  ) => Promise<ApiResponse<string>>;
+  ) => Promise<ServiceResponse<string>>;
   getExternalAccounts: (
     accessToken: string
-  ) => Promise<ApiResponse<ExternalAccount[]>>;
+  ) => Promise<ServiceResponse<ExternalAccount[]>>;
   syncExternalTransactions(
     accessToken: string,
     cursor: string | null
-  ): Promise<ApiResponse<SyncExternalTransactionsResponse>>;
+  ): Promise<ServiceResponse<SyncExternalTransactionsResponse>>;
 }

@@ -9,7 +9,7 @@ import {
   ISyncInstitutionsService,
   SyncInstitutionsCommand
 } from '@kaizen/finance';
-import { ErrorKey, hasErrorFor } from '@kaizen/core';
+import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import { Controller } from '../../controller';
 
 export class InstitutionController extends Controller {
@@ -33,7 +33,7 @@ export class InstitutionController extends Controller {
       if (
         hasErrorFor(
           response,
-          ErrorKey.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN
+          ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN
         )
       ) {
         return this.badRequest(res, response);

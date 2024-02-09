@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import {
   ApiSuccessResponse,
   DEFAULT_PAGE_SIZE,
-  ErrorKey,
+  ErrorCode,
   Paginated,
   range,
   toSearchParams
@@ -59,7 +59,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE);
     });
     it('returns 400 when page not valid', async () => {
       // Arrange
@@ -76,7 +76,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE);
     });
     it('returns 400 when pageSize not valid', async () => {
       // Arrange
@@ -96,7 +96,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
     });
     it('returns 200 and default page size when no page size provided', async () => {
       // Arrange
@@ -552,7 +552,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_START_DATE);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE);
     });
     it('returns 400 when end date not valid', async () => {
       // Arrange
@@ -570,7 +570,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_END_DATE);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE);
     });
     it('returns 400 when end date after start date', async () => {
       // Arrange
@@ -593,7 +593,7 @@ describe('/transaction', () => {
 
       // Asserts
       expect(response.status).toBe(400);
-      expectError(response, ErrorKey.FIND_TRANSACTIONS_INVALID_TIMEFRAME);
+      expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME);
     });
     it('returns 200 and transactions between start and end date', async () => {
       // Arrange

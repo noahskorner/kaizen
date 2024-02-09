@@ -5,7 +5,7 @@ import {
   Institution,
   InstitutionAdapter
 } from '@kaizen/finance';
-import { ApiResponse } from '@kaizen/core';
+import { ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 
 export class FindInstitutionsService
@@ -20,7 +20,7 @@ export class FindInstitutionsService
 
   public async find(
     command: FindInstitutionsCommand
-  ): Promise<ApiResponse<Institution[]>> {
+  ): Promise<ServiceResponse<Institution[]>> {
     const institutionRecords =
       await this._findInstitutionRepository.find(command);
 

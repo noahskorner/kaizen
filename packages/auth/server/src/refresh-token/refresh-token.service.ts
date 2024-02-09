@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ServiceResponse, ErrorCode } from '@kaizen/core';
 import { AuthService } from '../auth.service';
 import { IServerEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
@@ -23,9 +23,9 @@ export class RefreshTokenService
 
   public async refreshToken(
     command: RefreshTokenCommand
-  ): Promise<ApiResponse<AuthToken>> {
+  ): Promise<ServiceResponse<AuthToken>> {
     if (command.token == null || command.token === '') {
-      return this.failure(Errors.REFRESH_TOKEN_INVALID);
+      return this.failure({ code: ErrorCode.REFRESH_TOKEN_INVALID });
     }
 
     try {
@@ -38,7 +38,7 @@ export class RefreshTokenService
         userId: refreshToken.id
       });
       if (user == null) {
-        return this.failure(Errors.REFRESH_TOKEN_INVALID);
+        return this.failure({ code: ErrorCode.REFRESH_TOKEN_INVALID });
       }
 
       const authToken: AuthToken = {
@@ -54,10 +54,15 @@ export class RefreshTokenService
       return this.success(authToken);
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        return this.failure(Errors.REFRESH_TOKEN_EXPIRED);
+        return this.failure({
+          code: ErrorCode.REFRESH_TOKEN_EXPIRED,
+          params: {
+            expiredAt: error.expiredAt.toISOString()
+          }
+        });
       }
 
-      return this.failure(Errors.REFRESH_TOKEN_INVALID);
+      return this.failure({ code: ErrorCode.REFRESH_TOKEN_INVALID });
     }
   }
 }

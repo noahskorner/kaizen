@@ -1,9 +1,9 @@
 import {
-  ApiError,
-  ApiResponse,
+  ServiceResponse,
   DEFAULT_PAGE_SIZE,
-  Errors,
-  Paginated
+  Paginated,
+  ServiceError,
+  ErrorCode
 } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
@@ -26,7 +26,7 @@ export class FindTransactionsService
 
   public async find(
     command: FindTransactionsCommand
-  ): Promise<ApiResponse<Paginated<Transaction>>> {
+  ): Promise<ServiceResponse<Paginated<Transaction>>> {
     const errors = this.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
@@ -51,32 +51,61 @@ export class FindTransactionsService
   }
 
   private validate(command: FindTransactionsCommand) {
-    const errors: ApiError[] = [];
+    const errors: ServiceError[] = [];
 
     if (isNaN(command.page)) {
-      errors.push(Errors.FIND_TRANSACTIONS_INVALID_PAGE);
+      errors.push({
+        code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE,
+        params: { page: command.page }
+      });
     } else if (command.page <= 0) {
-      errors.push(Errors.FIND_TRANSACTIONS_INVALID_PAGE);
+      errors.push({
+        code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE,
+        params: {
+          page: command.page
+        }
+      });
     }
 
     if (command.pageSize != null && isNaN(command.pageSize)) {
-      errors.push(Errors.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
+      errors.push({
+        code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE,
+        params: {
+          pageSize: command.pageSize
+        }
+      });
     }
 
     const validStartDate =
       command.startDate == null || !isNaN(Date.parse(command.startDate));
     if (!validStartDate) {
-      errors.push(Errors.FIND_TRANSACTIONS_INVALID_START_DATE);
+      errors.push({
+        code: ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE,
+        params: {
+          startDate: command.startDate
+        }
+      });
     }
 
     if (command.endDate != null) {
       if (isNaN(Date.parse(command.endDate))) {
-        errors.push(Errors.FIND_TRANSACTIONS_INVALID_END_DATE);
+        errors.push({
+          code: ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE,
+          params: {
+            endDate: command.endDate
+          }
+        });
       } else if (
         validStartDate &&
         Date.parse(command.endDate) < Date.parse(command.startDate!)
       ) {
-        errors.push(Errors.FIND_TRANSACTIONS_INVALID_TIMEFRAME);
+        errors.push({
+          code: ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME,
+          params: {
+            startDate: command.startDate,
+            endDate: command.endDate
+          }
+        });
       }
     }
 

@@ -4,7 +4,7 @@ import {
   VirtualAccountFrequency
 } from '@kaizen/finance';
 import supertest from 'supertest';
-import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import {
   createAndLoginUser,
   createVirtualAccount,
@@ -32,7 +32,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME);
     });
     it('returns 400 when name is empty string', async () => {
       // Arrange
@@ -51,7 +51,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME);
     });
     it('returns 400 when balance is not provided', async () => {
       // Arrange
@@ -72,7 +72,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
     });
     it('returns 400 when balance is not a number', async () => {
       // Arrange
@@ -94,7 +94,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
     });
     it('returns 400 when balance is not a positive number', async () => {
       // Arrange
@@ -114,7 +114,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE);
     });
     it('returns 400 when amount is not provided', async () => {
       // Arrange
@@ -131,7 +131,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
     });
     it('returns 400 when amount is not a number', async () => {
       // Arrange
@@ -154,7 +154,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
     });
     it('returns 400 when amount is not a positive number', async () => {
       // Arrange
@@ -174,7 +174,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT);
     });
     it('returns 400 when frequency is not provided', async () => {
       // Arrange
@@ -194,7 +194,7 @@ describe('/virtual-account', () => {
 
       // Assert
       expect(response.status).toEqual(400);
-      expectError(response, ErrorKey.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY);
+      expectError(response, ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY);
     });
     it('returns 201 and created virtual account', async () => {
       // Arrange

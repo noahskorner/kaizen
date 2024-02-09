@@ -1,4 +1,4 @@
-import { ApiResponse, Errors } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { compare } from 'bcrypt';
 import { AuthService } from '../auth.service';
 import { AuthToken, ILoginService, LoginCommand } from '@kaizen/auth';
@@ -13,9 +13,13 @@ export class LoginService extends AuthService implements ILoginService {
     super(_environment);
   }
 
-  public async login(command: LoginCommand): Promise<ApiResponse<AuthToken>> {
+  public async login(
+    command: LoginCommand
+  ): Promise<ServiceResponse<AuthToken>> {
     if (command.email == null || command.password == null) {
-      return this.failure(Errors.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      return this.failure({
+        code: ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD
+      });
     }
 
     const normalizedEmail = this.normalizeEmail(command.email);
@@ -24,12 +28,16 @@ export class LoginService extends AuthService implements ILoginService {
     });
 
     if (userRecord == null) {
-      return this.failure(Errors.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      return this.failure({
+        code: ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD
+      });
     }
 
     const passwordMatch = await compare(command.password, userRecord.password);
     if (!passwordMatch) {
-      return this.failure(Errors.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      return this.failure({
+        code: ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD
+      });
     }
 
     const authToken: AuthToken = {
