@@ -1,4 +1,4 @@
-import { ServiceResponse, Errors } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { genSalt, hash } from 'bcrypt';
 import {
   CreateUserValidator,
@@ -31,7 +31,10 @@ export class CreateUserService extends Service implements ICreateUserService {
       normalizedEmail: normalizedEmail
     });
     if (existingUser != null) {
-      return this.failure(Errors.CREATE_USER_EMAIL_ALREADY_EXISTS);
+      return this.failure({
+        code: ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS,
+        params: { email: command.email }
+      });
     }
 
     const hashedPassword = await this.hashPassword(command.password);

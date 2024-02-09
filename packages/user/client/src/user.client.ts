@@ -1,16 +1,16 @@
-import { ServiceResponse } from '@kaizen/core';
+import { ApiResponse } from '@kaizen/core';
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 import { CreateUserRequest, LinkToken, User } from '@kaizen/user';
 
 export const UserClient = {
-  create: (request: CreateUserRequest): Promise<ServiceResponse<User>> => {
+  create: (request: CreateUserRequest): Promise<ApiResponse<User>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.post<ServiceResponse<User>>('/user', request);
+      return ApiClient.post<ApiResponse<User>>('/user', request);
     });
   },
-  createLinkToken: (): Promise<ServiceResponse<LinkToken>> => {
+  createLinkToken: (): Promise<ApiResponse<LinkToken>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.post<ServiceResponse<LinkToken>>('/user/link-token');
+      return ApiClient.post<ApiResponse<LinkToken>>('/user/link-token');
     });
   }
 };

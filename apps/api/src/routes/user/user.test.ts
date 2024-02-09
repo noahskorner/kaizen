@@ -1,4 +1,4 @@
-import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import supertest from 'supertest';
 import { v4 as uuid } from 'uuid';
 import { CreateUserCommand, User, LinkToken } from '@kaizen/user';
@@ -22,7 +22,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_INVALID_EMAIL);
+      expectError(response, ErrorCode.CREATE_USER_INVALID_EMAIL);
     });
     it('returns 400 when request is empty', async () => {
       // Arrange
@@ -35,7 +35,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_INVALID_EMAIL);
+      expectError(response, ErrorCode.CREATE_USER_INVALID_EMAIL);
     });
     it('returns 400 when email is not valid', async () => {
       // Arrange
@@ -50,7 +50,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_INVALID_EMAIL);
+      expectError(response, ErrorCode.CREATE_USER_INVALID_EMAIL);
     });
     it('returns 400 when password not provided', async () => {
       // Arrange
@@ -65,7 +65,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_INVALID_PASSWORD);
+      expectError(response, ErrorCode.CREATE_USER_INVALID_PASSWORD);
     });
     it('returns 400 when password not long enough', async () => {
       // Arrange
@@ -81,7 +81,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_PASSWORD_TOO_SHORT);
+      expectError(response, ErrorCode.CREATE_USER_PASSWORD_TOO_SHORT);
     });
     it('returns 400 when password has no numbers', async () => {
       // Arrange
@@ -97,7 +97,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_PASSWORD_NO_NUMBER);
+      expectError(response, ErrorCode.CREATE_USER_PASSWORD_NO_NUMBER);
     });
     it('returns 400 when password has no symbols', async () => {
       // Arrange
@@ -113,7 +113,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_PASSWORD_NO_SYMBOL);
+      expectError(response, ErrorCode.CREATE_USER_PASSWORD_NO_SYMBOL);
     });
     it('returns 400 when email already exists', async () => {
       // Arrange
@@ -130,7 +130,7 @@ describe('/user', () => {
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorKey.CREATE_USER_EMAIL_ALREADY_EXISTS);
+      expectError(response, ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS);
     });
     it('returns 201 and user with normalized email', async () => {
       // Arrange

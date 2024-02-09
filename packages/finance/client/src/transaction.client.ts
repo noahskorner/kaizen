@@ -1,13 +1,13 @@
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
-import { ServiceResponse, Paginated, toSearchParams } from '@kaizen/core';
+import { Paginated, toSearchParams, ApiResponse } from '@kaizen/core';
 
 export const TransactionClient = {
   find: (
     request: FindTransactionsRequest
-  ): Promise<ServiceResponse<Paginated<Transaction>>> => {
+  ): Promise<ApiResponse<Paginated<Transaction>>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.get<ServiceResponse<Paginated<Transaction>>>(
+      return ApiClient.get<ApiResponse<Paginated<Transaction>>>(
         `/transaction?${toSearchParams(request)}`
       );
     });

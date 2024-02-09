@@ -1,4 +1,4 @@
-import { ErrorCode, ServiceResponse, isArrayEqual } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   CreateTransactionQuery,
@@ -211,24 +211,42 @@ export class SyncTransactionsService
       return prev.set(curr.externalId, curr.id);
     }, new Map<string, string>());
 
-    const queries: Array<CreateTransactionQuery | null> =
-      externalTransactions.map((externalTransaction) => {
+    const { queries, missingAccountIds } = externalTransactions.reduce(
+      (prev, externalTransaction) => {
         const accountId = accountIdMap.get(externalTransaction.accountId);
         if (accountId == null) {
-          return null;
+          return {
+            queries: prev.queries,
+            missingAccountIds: [
+              ...prev.missingAccountIds,
+              externalTransaction.accountId
+            ]
+          };
         }
-        return TransactionAdapter.toCreateTransactionQuery(
+
+        const currQuery = TransactionAdapter.toCreateTransactionQuery(
           accountId,
           externalTransaction
         );
-      });
 
-    if (queries.some((query) => query === null)) {
-      return this.failure(Errors.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND);
-    }
-    return this.success(
-      queries.filter((query): query is CreateTransactionQuery => query !== null)
+        return {
+          queries: [...prev.queries, currQuery],
+          missingAccountIds: prev.missingAccountIds
+        };
+      },
+      {
+        queries: [] as Array<CreateTransactionQuery>,
+        missingAccountIds: [] as string[]
+      }
     );
+
+    if (missingAccountIds.length > 0) {
+      return this.failure({
+        code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND,
+        params: { accountIds: missingAccountIds }
+      });
+    }
+    return this.success(queries);
   }
 
   private _buildResponse(

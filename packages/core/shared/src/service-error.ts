@@ -99,10 +99,110 @@ interface SyncTransactionsInstitutionNotFound {
   };
 }
 
+interface SyncTransactionsAccountsNotFound {
+  code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND;
+  params: {
+    accountIds: string[];
+  };
+}
+
 interface SyncTransactionsAccountNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND;
   params: {
     accountId: string;
+  };
+}
+
+interface FinancialProviderLinkTokenCreateError {
+  code: ErrorCode.FINANCIAL_PROVIDER_LINK_TOKEN_CREATE;
+  params: {
+    userId: string;
+    response?: unknown;
+    error?: unknown;
+  };
+}
+
+interface FinancialProviderExchangePublicTokenError {
+  code: ErrorCode.FINANCIAL_PROVIDER_EXCHANGE_PUBLIC_TOKEN;
+  params: {
+    publicToken: string;
+    response?: unknown;
+    error?: unknown;
+  };
+}
+
+interface FinancialProviderGetExternalAccountsError {
+  code: ErrorCode.FINANCIAL_PROVIDER_GET_EXTERNAL_ACCOUNTS;
+  params: {
+    accessToken: string;
+    response?: unknown;
+    error?: unknown;
+  };
+}
+
+interface FinancialProviderSyncExternalTransactionsError {
+  code: ErrorCode.FINANCIAL_PROVIDER_SYNC_EXTERNAL_TRANSACTIONS;
+  params: {
+    accessToken: string;
+    cursor: string | null;
+    response?: unknown;
+    error?: unknown;
+  };
+}
+
+interface CreateLinkTokenUserNotFoundError {
+  code: ErrorCode.CREATE_LINK_TOKEN_USER_NOT_FOUND;
+  params: {
+    userId: string;
+  };
+}
+
+interface CreateUserInvalidEmailError {
+  code: ErrorCode.CREATE_USER_INVALID_EMAIL;
+  params: {
+    email: string;
+  };
+}
+
+interface CreateUserInvalidPasswordError {
+  code: ErrorCode.CREATE_USER_INVALID_PASSWORD;
+  params: {
+    password: string;
+  };
+}
+
+interface CreateUserPasswordTooShortError {
+  code: ErrorCode.CREATE_USER_PASSWORD_TOO_SHORT;
+  params: {
+    password: string;
+  };
+}
+
+interface CreateUserPasswordNoNumberError {
+  code: ErrorCode.CREATE_USER_PASSWORD_NO_NUMBER;
+  params: {
+    password: string;
+  };
+}
+
+interface CreateUserPasswordNoSymbolError {
+  code: ErrorCode.CREATE_USER_PASSWORD_NO_SYMBOL;
+  params: {
+    password: string;
+  };
+}
+
+interface CreateUserEmailAlreadyExistsError {
+  code: ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS;
+  params: {
+    email: string;
+  };
+}
+
+interface GetUserNotFoundError {
+  code: ErrorCode.GET_USER_NOT_FOUND;
+  params: {
+    userId: string;
   };
 }
 
@@ -124,6 +224,19 @@ interface BaseError {
     | ErrorCode.SYNC_TRANSACTIONS_INSTITUTIONS_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND
+    | ErrorCode.FINANCIAL_PROVIDER_LINK_TOKEN_CREATE
+    | ErrorCode.FINANCIAL_PROVIDER_EXCHANGE_PUBLIC_TOKEN
+    | ErrorCode.FINANCIAL_PROVIDER_GET_EXTERNAL_ACCOUNTS
+    | ErrorCode.FINANCIAL_PROVIDER_SYNC_EXTERNAL_TRANSACTIONS
+    | ErrorCode.CREATE_LINK_TOKEN_USER_NOT_FOUND
+    | ErrorCode.CREATE_USER_INVALID_EMAIL
+    | ErrorCode.CREATE_USER_INVALID_PASSWORD
+    | ErrorCode.CREATE_USER_PASSWORD_TOO_SHORT
+    | ErrorCode.CREATE_USER_PASSWORD_NO_NUMBER
+    | ErrorCode.CREATE_USER_PASSWORD_NO_SYMBOL
+    | ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS
+    | ErrorCode.GET_USER_NOT_FOUND
+    | ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND
   >;
   params?: never;
 }
@@ -144,4 +257,17 @@ export type ServiceError =
   | SyncAccountsIntitutionNotFoundError
   | SyncTransactionsInstitutionsNotFound
   | SyncTransactionsInstitutionNotFound
-  | SyncTransactionsAccountNotFound;
+  | SyncTransactionsAccountNotFound
+  | FinancialProviderLinkTokenCreateError
+  | FinancialProviderExchangePublicTokenError
+  | FinancialProviderGetExternalAccountsError
+  | FinancialProviderSyncExternalTransactionsError
+  | CreateLinkTokenUserNotFoundError
+  | CreateUserInvalidEmailError
+  | CreateUserInvalidPasswordError
+  | CreateUserPasswordTooShortError
+  | CreateUserPasswordNoNumberError
+  | CreateUserPasswordNoSymbolError
+  | CreateUserEmailAlreadyExistsError
+  | GetUserNotFoundError
+  | SyncTransactionsAccountsNotFound;

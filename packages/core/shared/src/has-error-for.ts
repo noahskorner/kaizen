@@ -1,4 +1,4 @@
-import { ServiceFailureResponse } from './service.response';
+import { ServiceFailureResponse } from './service-response';
 import { ErrorCode } from './error-code';
 
 export const hasErrorFor = (

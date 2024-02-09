@@ -7,7 +7,7 @@ import {
   Products,
   TransactionsSyncRequest
 } from 'plaid';
-import { ServiceResponse, Errors } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import {
   ExternalAccount,
   ExternalAccountAdapter,
@@ -38,13 +38,19 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const response = await this._plaid.linkTokenCreate(request);
 
       if (response.status !== 200) {
-        return this.failure(Errors.INTERNAL_SERVER_ERROR);
+        return this.failure({
+          code: ErrorCode.FINANCIAL_PROVIDER_LINK_TOKEN_CREATE,
+          params: { userId, response }
+        });
       }
 
       return this.success(response.data.link_token);
     } catch (error) {
       console.log(error);
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      return this.failure({
+        code: ErrorCode.FINANCIAL_PROVIDER_LINK_TOKEN_CREATE,
+        params: { userId, error }
+      });
     }
   }
 
@@ -58,13 +64,19 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       const response = await this._plaid.itemPublicTokenExchange(request);
 
       if (response.status !== 200) {
-        return this.failure(Errors.INTERNAL_SERVER_ERROR);
+        return this.failure({
+          code: ErrorCode.FINANCIAL_PROVIDER_EXCHANGE_PUBLIC_TOKEN,
+          params: { publicToken, response }
+        });
       }
 
       return this.success(response.data.access_token);
     } catch (error) {
       console.log(error);
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      return this.failure({
+        code: ErrorCode.FINANCIAL_PROVIDER_EXCHANGE_PUBLIC_TOKEN,
+        params: { publicToken, error }
+      });
     }
   }
 
@@ -77,12 +89,22 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       };
       const response = await this._plaid.accountsBalanceGet(request);
 
+      if (response.status !== 200) {
+        return this.failure({
+          code: ErrorCode.FINANCIAL_PROVIDER_GET_EXTERNAL_ACCOUNTS,
+          params: { accessToken, response }
+        });
+      }
+
       return this.success(
         response.data.accounts.map(ExternalAccountAdapter.toExternalAccount)
       );
     } catch (error) {
       console.log(error);
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      return this.failure({
+        code: ErrorCode.FINANCIAL_PROVIDER_GET_EXTERNAL_ACCOUNTS,
+        params: { accessToken, error }
+      });
     }
   }
 
@@ -97,6 +119,13 @@ export class FinancialProvider extends Service implements IFinancialProvider {
       };
       const transactionsSyncReponse =
         await this._plaid.transactionsSync(request);
+
+      if (transactionsSyncReponse.status !== 200) {
+        return this.failure({
+          code: ErrorCode.FINANCIAL_PROVIDER_SYNC_EXTERNAL_TRANSACTIONS,
+          params: { accessToken, cursor, response: transactionsSyncReponse }
+        });
+      }
 
       const response: SyncExternalTransactionsResponse = {
         hasMore: transactionsSyncReponse.data.has_more,
@@ -115,7 +144,11 @@ export class FinancialProvider extends Service implements IFinancialProvider {
 
       return this.success(response);
     } catch (error) {
-      return this.failure(Errors.INTERNAL_SERVER_ERROR);
+      console.log(error);
+      return this.failure({
+        code: ErrorCode.FINANCIAL_PROVIDER_SYNC_EXTERNAL_TRANSACTIONS,
+        params: { accessToken, cursor, error }
+      });
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ApiSuccessResponse, ErrorKey } from '@kaizen/core';
+import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import supertest from 'supertest';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
@@ -23,7 +23,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      expectError(response, ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
     });
     it('returns 401 if email or password is empty', async () => {
       // Arrange
@@ -39,7 +39,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      expectError(response, ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
     });
     it('returns 401 if user does not exist', async () => {
       // Arrange
@@ -54,7 +54,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      expectError(response, ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
     });
     it('returns 401 if user exists but password not provided', async () => {
       // Arrange
@@ -69,7 +69,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      expectError(response, ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
     });
     it('returns 401 if user exists but password incorrect', async () => {
       // Arrange
@@ -89,7 +89,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
+      expectError(response, ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD);
     });
     it('returns 200 if user exists and password correct', async () => {
       // Arrange
@@ -123,7 +123,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.REFRESH_TOKEN_INVALID);
+      expectError(response, ErrorCode.REFRESH_TOKEN_INVALID);
     });
     it('returns 401 if refreshToken is invalid', async () => {
       // Act
@@ -133,7 +133,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.REFRESH_TOKEN_INVALID);
+      expectError(response, ErrorCode.REFRESH_TOKEN_INVALID);
     });
     it('returns 401 if refreshToken is expired', async () => {
       // Arrange
@@ -155,7 +155,7 @@ describe('/auth', () => {
 
       // Assert
       expect(response.statusCode).toBe(401);
-      expectError(response, ErrorKey.REFRESH_TOKEN_EXPIRED);
+      expectError(response, ErrorCode.REFRESH_TOKEN_EXPIRED);
     });
     it('returns 200 if refreshToken is valid', async () => {
       // Arrange

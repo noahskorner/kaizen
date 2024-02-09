@@ -1,5 +1,5 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
-import { ServiceResponse } from '@kaizen/core';
+import { ApiResponse } from '@kaizen/core';
 import {
   ApiClient,
   handleAxiosRequest,
@@ -19,9 +19,9 @@ const setAccessToken = (accessToken: string) => {
 };
 
 export const AuthClient = {
-  login: async (request: LoginRequest): Promise<ServiceResponse<AuthToken>> => {
+  login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
     const response = await handleAxiosRequest(() => {
-      return ApiClient.post<ServiceResponse<AuthToken>>('/auth', request);
+      return ApiClient.post<ApiResponse<AuthToken>>('/auth', request);
     });
 
     if (response.type === 'FAILURE') {
@@ -31,14 +31,14 @@ export const AuthClient = {
     setAccessToken(response.data.accessToken);
     return response;
   },
-  logout: async (): Promise<ServiceResponse<null>> => {
+  logout: async (): Promise<ApiResponse<null>> => {
     ApiClient.delete<void>('/auth'); // Intentionally not awaiting this request
     delete ApiClient.defaults.headers.common['Authorization'];
     return Promise.resolve(DEFAULT_API_SUCCESS_RESPONSE);
   },
-  refreshToken: async (): Promise<ServiceResponse<AuthToken>> => {
+  refreshToken: async (): Promise<ApiResponse<AuthToken>> => {
     const response = await handleAxiosRequest(() => {
-      return ApiClient.get<ServiceResponse<AuthToken>>('/auth');
+      return ApiClient.get<ApiResponse<AuthToken>>('/auth');
     });
     if (response.type === 'FAILURE') return response;
 
