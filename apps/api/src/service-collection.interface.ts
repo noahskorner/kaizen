@@ -4,13 +4,9 @@ import {
   ICreateInstitutionRepository,
   IFindInstitutionsRepository,
   IFindTransactionsRepository,
-  ICreateVirtualAccountRepository,
-  IFindVirtualAccountsRepository,
   ICreateInstitutionService,
   IFindInstitutionsService,
   IFindTransactionsService,
-  ICreateVirtualAccountService,
-  IFindVirtualAccountsService,
   ISyncAccountsService,
   IGetAccountRepository,
   ISyncInstitutionsService
@@ -25,11 +21,7 @@ import {
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { AuthController } from './routes/auth/auth.controller';
-import {
-  InstitutionController,
-  TransactionController,
-  VirtualAccountController
-} from './routes/finance';
+import { InstitutionController, TransactionController } from './routes/finance';
 import { UserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
@@ -57,8 +49,6 @@ export interface IServiceCollection {
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
-  createVirtualAccountRepository: ICreateVirtualAccountRepository;
-  findVirtualAccountsRepository: IFindVirtualAccountsRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -71,8 +61,6 @@ export interface IServiceCollection {
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
-  createVirtualAccountService: ICreateVirtualAccountService;
-  findVirtualAccountsService: IFindVirtualAccountsService;
 
   // Controllers
   homeController: HomeController;
@@ -80,5 +68,4 @@ export interface IServiceCollection {
   authController: AuthController;
   institutionController: InstitutionController;
   transactionController: TransactionController;
-  virtualAccountController: VirtualAccountController;
 }

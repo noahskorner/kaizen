@@ -49,17 +49,5 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     serviceCollection.transactionController.find
   );
 
-  // /virtual-account
-  router.post(
-    '/virtual-account',
-    authenticate(serviceCollection.environment),
-    serviceCollection.virtualAccountController.create
-  );
-  router.get(
-    '/virtual-account',
-    authenticate(serviceCollection.environment),
-    serviceCollection.virtualAccountController.find
-  );
-
   return router;
 };

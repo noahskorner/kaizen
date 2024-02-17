@@ -4,6 +4,4 @@ export * from './account-group';
 export * from './transaction.client';
 export * from './transactions-table';
 export * from './format-currency';
-export * from './virtual-account.client';
-export * from './use-virtual-account-store';
 export * from './use-transaction-store';

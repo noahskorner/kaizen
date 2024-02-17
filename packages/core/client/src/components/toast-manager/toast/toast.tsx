@@ -35,8 +35,8 @@ export const Toast = ({
       onClick={() => removeToast(id)}
       className="bounce-in-from-top flex w-full cursor-pointer flex-col items-stretch gap-y-2 rounded-md border border-neutral-100 bg-neutral-0 shadow md:max-w-md">
       <div className="flex h-full w-full items-stretch">
-        <div className="flex-grow-1 ml-2 w-4 bg-red-300"></div>
-        <div className="h-full w-full p-2">
+        <div className="flex-grow-1 -my-[1px] ml-2 w-4  bg-red-500"></div>
+        <div className="flex h-full w-full flex-col gap-y-2 p-4">
           <h6 className="font-semibold">{title}</h6>
           <p className="text-sm text-neutral-600">{message}</p>
         </div>

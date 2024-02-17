@@ -3,21 +3,15 @@ import { UserClient } from '@kaizen/user-client';
 import {
   InstitutionClient,
   TransactionsTable,
-  VirtualAccountClient,
   formatCurrency,
-  useInstitutionStore,
-  useVirtualAccountStore
+  useInstitutionStore
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
-import { CreateVirtualAccountModal } from './create-virtual-account-modal';
-import { toVirtualAccountItems } from './to-virtual-account-items';
-import { AccountType } from '@kaizen/finance';
 import { Button, useToastStore } from '@kaizen/core-client';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const { setInstitutions, accountGroups, networth } = useInstitutionStore();
-  const { virtualAccounts, setVirtualAccounts } = useVirtualAccountStore();
   const { addFailureToast } = useToastStore();
 
   useEffect(() => {
@@ -40,18 +34,6 @@ export const FinancePage = () => {
     };
 
     loadInstitutions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const loadVirtualAccounts = async () => {
-      const response = await VirtualAccountClient.find();
-      if (response.type === 'SUCCESS') {
-        setVirtualAccounts(response.data);
-      }
-    };
-
-    loadVirtualAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,33 +66,6 @@ export const FinancePage = () => {
                 <h6>{accountType}</h6>
                 <span className="font-normal text-neutral-500">
                   {formatCurrency(accountGroup.current, 'USD')}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-        <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
-          Virtual Accounts
-        </h3>
-        <CreateVirtualAccountModal />
-        {toVirtualAccountItems(
-          virtualAccounts,
-          accountGroups[AccountType.Depository]?.current ?? 0
-        ).map((virtualAccount) => {
-          return (
-            <div key={virtualAccount.id}>
-              <div
-                className={`${
-                  virtualAccount.name === 'Savings'
-                    ? ' bg-neutral-100 font-medium text-neutral-600'
-                    : 'bg-neutral-50 hover:bg-neutral-100 '
-                } font-lg flex w-full items-center justify-between rounded-lg p-4 font-semibold capitalize`}>
-                <h6>{virtualAccount.name}</h6>
-                <span className="font-normal text-neutral-500">
-                  {formatCurrency(
-                    virtualAccount.balance,
-                    virtualAccount.currency
-                  )}
                 </span>
               </div>
             </div>
