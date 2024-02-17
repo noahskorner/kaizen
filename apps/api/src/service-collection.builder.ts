@@ -1,16 +1,12 @@
 import {
   CreateInstitutionRepository,
   CreateInstitutionService,
-  CreateVirtualAccountRepository,
-  CreateVirtualAccountService,
   FinancialProvider,
   FindAccountsRepository,
   FindInstitutionsRepository,
   FindInstitutionsService,
   FindTransactionsRepository,
   FindTransactionsService,
-  FindVirtualAccountsRepository,
-  FindVirtualAccountsService,
   GetAccountRepository,
   SyncAccountsRepository,
   SyncAccountsService,
@@ -31,7 +27,6 @@ import { AuthController } from './routes/auth/auth.controller';
 import { UserController } from './routes/user/user.controller';
 import { InstitutionController } from './routes/finance/institution/institution.controller';
 import { TransactionController } from './routes/finance/transaction/transaction.controller';
-import { VirtualAccountController } from './routes/finance';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -104,12 +99,6 @@ export class ServiceCollectionBuilder {
     const findTransactionsRepository =
       this._serviceCollection.findTransactionsRepository ??
       new FindTransactionsRepository(prisma);
-    const createVirtualAccountRepository =
-      this._serviceCollection.createVirtualAccountRepository ??
-      new CreateVirtualAccountRepository(prisma);
-    const findVirtualAccountsRepository =
-      this._serviceCollection.findVirtualAccountsRepository ??
-      new FindVirtualAccountsRepository(prisma);
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
     const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
     const findAccountsRepository = new FindAccountsRepository(prisma);
@@ -160,12 +149,6 @@ export class ServiceCollectionBuilder {
     const findTransactionsService =
       this._serviceCollection.findTransactionsService ??
       new FindTransactionsService(findTransactionsRepository);
-    const createVirtualAccountService =
-      this._serviceCollection.createVirtualAccountService ??
-      new CreateVirtualAccountService(createVirtualAccountRepository);
-    const findVirtualAccountsService =
-      this._serviceCollection.findVirtualAccountsService ??
-      new FindVirtualAccountsService(findVirtualAccountsRepository);
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService);
@@ -189,12 +172,6 @@ export class ServiceCollectionBuilder {
     const transactionController =
       this._serviceCollection.transactionController ??
       new TransactionController(findTransactionsService);
-    const virtualAccountController =
-      this._serviceCollection.virtualAccountController ??
-      new VirtualAccountController(
-        createVirtualAccountService,
-        findVirtualAccountsService
-      );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -213,8 +190,6 @@ export class ServiceCollectionBuilder {
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
-      createVirtualAccountRepository,
-      findVirtualAccountsRepository,
       // Services
       getUserService,
       createUserService,
@@ -225,16 +200,13 @@ export class ServiceCollectionBuilder {
       createInstitutionService,
       findInstitutionsService,
       findTransactionsService,
-      createVirtualAccountService,
-      findVirtualAccountsService,
       syncInstitutionsService,
       // Controllers
       homeController,
       userController,
       authController,
       institutionController,
-      transactionController,
-      virtualAccountController
+      transactionController
     };
 
     return serviceCollection;

@@ -1,4 +1,4 @@
-import { Institution } from '../institution';
+import { Institution } from '../../institution/institution';
 
 export interface SyncAccountsResponse {
   /** A map of institutions and accounts that were successfully synced. */

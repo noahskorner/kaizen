@@ -1,5 +1,5 @@
-import { Account } from './account';
-import { AccountAdapter } from './account.adapter';
+import { Account } from '../account/account';
+import { AccountAdapter } from '../account/account.adapter';
 import { Institution } from './institution';
 import { InstitutionRecord } from './institution-record';
 
