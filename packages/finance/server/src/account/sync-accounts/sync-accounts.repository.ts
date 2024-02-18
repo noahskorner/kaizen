@@ -22,8 +22,7 @@ export class SyncAccountsRepository
         id: query.id
       },
       data: {
-        ...query,
-        updatedAt: new Date()
+        ...query
       }
     });
   }

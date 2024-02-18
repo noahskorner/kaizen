@@ -60,7 +60,7 @@ export const TransactionsTable = () => {
               }`}>
               {formatCurrency(
                 transaction.amount,
-                transaction.currency ?? 'USD'
+                transaction.isoCurrencyCode ?? 'USD'
               )}
             </div>
           </div>

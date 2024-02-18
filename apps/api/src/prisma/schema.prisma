@@ -11,27 +11,28 @@ datasource db {
 }
 
 model UserRecord {
-  id              String                 @id @default(uuid())
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @default(now()) @updatedAt
-  email           String                 @unique
-  password        String
-  institutions    InstitutionRecord[]
-  virtualAccounts VirtualAccountRecord[]
+  id           String              @id @default(uuid())
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt
+  email        String              @unique
+  password     String
+  institutions InstitutionRecord[]
+  transactions TransactionRecord[]
 
   @@index([email])
   @@map("user")
 }
 
 model InstitutionRecord {
-  id               String          @id @default(uuid())
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @default(now()) @updatedAt
+  id               String              @id @default(uuid())
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @default(now()) @updatedAt
   plaidAccessToken String
-  plaidCursor      String?         @map("plaidTransactionCursor")
+  plaidCursor      String?             @map("plaidCursor")
   userId           String
-  user             UserRecord      @relation(fields: [userId], references: [id])
+  user             UserRecord          @relation(fields: [userId], references: [id])
   accounts         AccountRecord[]
+  transactions     TransactionRecord[]
 
   @@map("institution")
 }
@@ -61,42 +62,93 @@ model AccountRecord {
   @@map("account")
 }
 
+enum TransactionPaymentChannelRecord {
+  Online
+  InStore
+  Other
+}
+
+enum TransactionCodeRecord {
+  Adjustment
+  Atm
+  BankCharge
+  BillPayment
+  Cash
+  Cashback
+  Cheque
+  DirectDebit
+  Interest
+  Purchase
+  StandingOrder
+  Transfer
+  Null
+}
+
 model TransactionRecord {
-  id                String        @id @default(uuid())
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @default(now()) @updatedAt
-  externalId        String        @unique
-  accountId         String
-  account           AccountRecord @relation(fields: [accountId], references: [id])
-  externalAccountId String
-  amount            Float
-  currency          String?
-  date              DateTime?
-  name              String
-  merchantName      String?
-  pending           Boolean
-  logoUrl           String?
+  id                     String                          @id @default(uuid()) @map("id")
+  createdAt              DateTime                        @default(now()) @map("created_at")
+  updatedAt              DateTime                        @default(now()) @updatedAt @map("updated_at")
+  userId                 String                          @map("user_id")
+  user                   UserRecord                      @relation(fields: [userId], references: [id])
+  institutionId          String                          @map("institution_id")
+  institution            InstitutionRecord               @relation(fields: [institutionId], references: [id])
+  accountId              String                          @map("account_id")
+  account                AccountRecord                   @relation(fields: [accountId], references: [id])
+  externalId             String                          @unique @map("external_id")
+  externalAccountId      String                          @map("external_account_id")
+  amount                 Float                           @map("amount")
+  isoCurrencyCode        String?                         @map("iso_currency_code")
+  unofficialCurrencyCode String?                         @map("unofficial_currency_code")
+  checkNumber            String?                         @map("check_number")
+  date                   DateTime                        @map("date")
+  locationId             String                          @map("location_id")
+  location               LocationRecord                  @relation(fields: [locationId], references: [id])
+  name                   String?                         @map("name")
+  merchantName           String?                         @map("merchant_name")
+  originalDescription    String?                         @map("original_description")
+  pending                Boolean                         @default(false) @map("pending")
+  pendingTransactionId   String?                         @map("pending_transaction_id")
+  accountOwner           String?                         @map("account_owner")
+  logoUrl                String?                         @map("logo_url")
+  website                String?                         @map("website")
+  authorizedDate         DateTime?                       @map("authorized_date")
+  authorizedDatetime     DateTime?                       @map("authorized_datetime")
+  datetime               DateTime?                       @map("datetime")
+  paymentChannel         TransactionPaymentChannelRecord @default(Other) @map("payment_channel")
+  categoryId             String?                         @map("category_id")
+  category               CategoryRecord?                 @relation(fields: [categoryId], references: [id])
+  code                   TransactionCodeRecord?          @default(Null) @map("code")
+  categoryIconUrl        String?                         @map("category_icon_url")
+  merchantEntityId       String?                         @map("merchant_entity_id")
 
   @@map("transaction")
 }
 
-enum VirtualAccountRecordFrequency {
-  Weekly
-  Biweekly
-  Monthly
+model LocationRecord {
+  id           String              @id @default(uuid()) @map("id")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
+  transactions TransactionRecord[]
+  address      String?             @map("address")
+  city         String?             @map("city")
+  region       String?             @map("region")
+  postalCode   String?             @map("postal_code")
+  country      String?             @map("country")
+  lat          Float?              @map("lat")
+  lon          Float?              @map("lon")
+  storeNumber  String?             @map("store_number")
+
+  @@map("location")
 }
 
-model VirtualAccountRecord {
-  id        String                        @id @default(uuid())
-  createdAt DateTime                      @default(now())
-  updatedAt DateTime                      @default(now()) @updatedAt
-  userId    String
-  user      UserRecord                    @relation(fields: [userId], references: [id])
-  name      String
-  balance   Float
-  amount    Float
-  currency  String
-  frequency VirtualAccountRecordFrequency @default(Monthly)
+model CategoryRecord {
+  id              String              @id @default(uuid()) @map("id")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @default(now()) @updatedAt @map("updated_at")
+  primary         String              @map("primary")
+  detailed        String              @map("detailed")
+  confidenceLevel String?             @map("confidence_level")
+  transactions    TransactionRecord[]
 
-  @@map("virtualAccount")
+  @@map("category")
 }

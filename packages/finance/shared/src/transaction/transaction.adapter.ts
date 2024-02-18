@@ -1,76 +1,136 @@
-import { CreateTransactionQuery } from './sync-transactions/create-transaction.query';
-import { ExternalTransaction } from './external-transaction';
+import { Category } from './category';
+import { CategoryRecord } from './category-record';
+import { Location } from './location';
+import { LocationRecord } from './location-record';
 import { Transaction } from './transaction';
+import { TransactionCode } from './transaction-code';
+import { TransactionCodeRecord } from './transaction-code-record';
+import { TransactionPaymentChannel } from './transaction-payment-channel';
+import { TransactionPaymentChannelRecord } from './transaction-payment-channel-record';
 import { TransactionRecord } from './transaction-record';
-import {
-  DeleteTransactionQuery,
-  UpdateTransactionQuery
-} from './sync-transactions';
 
 export class TransactionAdapter {
   public static toTransaction(
     transactionRecord: TransactionRecord
   ): Transaction {
     const transaction: Transaction = {
+      location: TransactionAdapter.toLocation(transactionRecord.location),
+      category: TransactionAdapter.toCategory(transactionRecord.category),
+      paymentChannel: TransactionAdapter.toPaymentChannel(
+        transactionRecord.paymentChannel
+      ),
+      code: TransactionAdapter.toTransactionCode(transactionRecord.code),
       id: transactionRecord.id,
-      externalId: transactionRecord.externalId,
+      userId: transactionRecord.userId,
+      institutionId: transactionRecord.institutionId,
       accountId: transactionRecord.accountId,
+      externalId: transactionRecord.externalId,
       externalAccountId: transactionRecord.externalAccountId,
       amount: transactionRecord.amount,
-      currency: transactionRecord.currency,
-      date: transactionRecord.date,
+      isoCurrencyCode: transactionRecord.isoCurrencyCode,
+      unofficialCurrencyCode: transactionRecord.unofficialCurrencyCode,
+      checkNumber: transactionRecord.checkNumber,
+      date: transactionRecord.date.toISOString(),
       name: transactionRecord.name,
       merchantName: transactionRecord.merchantName,
+      originalDescription: transactionRecord.originalDescription,
       pending: transactionRecord.pending,
-      logoUrl: transactionRecord.logoUrl
+      pendingTransactionId: transactionRecord.pendingTransactionId,
+      accountOwner: transactionRecord.accountOwner,
+      logoUrl: transactionRecord.logoUrl,
+      website: transactionRecord.website,
+      authorizedDate: transactionRecord.authorizedDate
+        ? transactionRecord.authorizedDate.toISOString()
+        : null,
+      authorizedDatetime: transactionRecord.authorizedDatetime
+        ? transactionRecord.authorizedDatetime.toISOString()
+        : null,
+      datetime: transactionRecord.datetime
+        ? transactionRecord.datetime.toISOString()
+        : null,
+      categoryIconUrl: transactionRecord.categoryIconUrl,
+      merchantEntityId: transactionRecord.merchantEntityId
     };
     return transaction;
   }
 
-  public static toCreateTransactionQuery(
-    accountId: string,
-    externalTransaction: ExternalTransaction
-  ): CreateTransactionQuery {
-    const createTransactionQuery: CreateTransactionQuery = {
-      accountId: accountId,
-      externalId: externalTransaction.id,
-      externalAccountId: externalTransaction.accountId,
-      amount: externalTransaction.amount,
-      currency: externalTransaction.currency,
-      date: externalTransaction.date,
-      name: externalTransaction.name,
-      merchantName: externalTransaction.merchantName,
-      pending: externalTransaction.pending,
-      logoUrl: externalTransaction.logoUrl
+  private static toLocation(record: LocationRecord): Location {
+    const location: Location = {
+      id: record.id,
+      address: record.address,
+      city: record.city,
+      region: record.region,
+      postalCode: record.postalCode,
+      country: record.country,
+      lat: record.lat,
+      lon: record.lon,
+      storeNumber: record.storeNumber
     };
-    return createTransactionQuery;
+
+    return location;
   }
 
-  public static toUpdateTransactionQuery(
-    externalTransaction: ExternalTransaction
-  ): UpdateTransactionQuery {
-    const updateTransactionQuery: UpdateTransactionQuery = {
-      externalId: externalTransaction.id,
-      externalAccountId: externalTransaction.accountId,
-      amount: externalTransaction.amount,
-      currency: externalTransaction.currency,
-      date: externalTransaction.date,
-      name: externalTransaction.name,
-      merchantName: externalTransaction.merchantName,
-      pending: externalTransaction.pending,
-      logoUrl: externalTransaction.logoUrl
+  private static toCategory(record: CategoryRecord | null): Category | null {
+    if (record == null) return null;
+
+    const category: Category = {
+      id: record.id,
+      primary: record.primary,
+      detailed: record.detailed,
+      confidenceLevel: record.confidenceLevel
     };
 
-    return updateTransactionQuery;
+    return category;
   }
 
-  public static toDeleteTransactionQuery(
-    externalId: string
-  ): DeleteTransactionQuery {
-    const deleteTransactionQuery: DeleteTransactionQuery = {
-      externalId: externalId
-    };
+  private static toTransactionCode(
+    code: TransactionCodeRecord | null
+  ): TransactionCode | null {
+    if (code == null) return null;
+    switch (code) {
+      case TransactionCodeRecord.Adjustment:
+        return TransactionCode.Adjustment;
+      case TransactionCodeRecord.Atm:
+        return TransactionCode.Atm;
+      case TransactionCodeRecord.BankCharge:
+        return TransactionCode.BankCharge;
+      case TransactionCodeRecord.BillPayment:
+        return TransactionCode.BillPayment;
+      case TransactionCodeRecord.Cash:
+        return TransactionCode.Cash;
+      case TransactionCodeRecord.Cashback:
+        return TransactionCode.Cashback;
+      case TransactionCodeRecord.Cheque:
+        return TransactionCode.Cheque;
+      case TransactionCodeRecord.DirectDebit:
+        return TransactionCode.DirectDebit;
+      case TransactionCodeRecord.Interest:
+        return TransactionCode.Interest;
+      case TransactionCodeRecord.Purchase:
+        return TransactionCode.Purchase;
+      case TransactionCodeRecord.StandingOrder:
+        return TransactionCode.StandingOrder;
+      case TransactionCodeRecord.Transfer:
+        return TransactionCode.Transfer;
+      case TransactionCodeRecord.Null:
+        return TransactionCode.Null;
+      default:
+        return TransactionCode.Null;
+    }
+  }
 
-    return deleteTransactionQuery;
+  private static toPaymentChannel(
+    paymentChannel: TransactionPaymentChannelRecord
+  ): TransactionPaymentChannel {
+    switch (paymentChannel) {
+      case TransactionPaymentChannelRecord.Online:
+        return TransactionPaymentChannel.Online;
+      case TransactionPaymentChannelRecord.InStore:
+        return TransactionPaymentChannel.InStore;
+      case TransactionPaymentChannelRecord.Other:
+        return TransactionPaymentChannel.Other;
+      default:
+        return TransactionPaymentChannel.Other;
+    }
   }
 }

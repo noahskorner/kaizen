@@ -102,7 +102,7 @@ interface SyncTransactionsInstitutionNotFound {
 interface SyncTransactionsAccountsNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND;
   params: {
-    accountIds: string[];
+    externalAccountIds: string[];
   };
 }
 
@@ -206,6 +206,13 @@ interface GetUserNotFoundError {
   };
 }
 
+interface SyncTransactionsTransactionsNotFoundError {
+  code: ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND;
+  params: {
+    externalTransactionIds: string[];
+  };
+}
+
 interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -237,6 +244,7 @@ interface BaseError {
     | ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS
     | ErrorCode.GET_USER_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND
+    | ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND
   >;
   params?: never;
 }
@@ -270,4 +278,5 @@ export type ServiceError =
   | CreateUserPasswordNoSymbolError
   | CreateUserEmailAlreadyExistsError
   | GetUserNotFoundError
-  | SyncTransactionsAccountsNotFound;
+  | SyncTransactionsAccountsNotFound
+  | SyncTransactionsTransactionsNotFoundError;
