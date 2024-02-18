@@ -1,9 +1,7 @@
-import {
-  ExternalLocation,
-  ExternalTransaction,
-  ExternalTransactionCode,
-  ExternalTransactionPaymentChannel
-} from './external-transaction';
+import { ExternalLocation } from './external-location';
+import { ExternalTransaction } from './external-transaction';
+import { ExternalTransactionCode } from './external-transaction-code';
+import { ExternalTransactionPaymentChannel } from './external-transaction-payment-channel';
 import {
   CreateLocationQuery,
   CreateTransactionQuery,
