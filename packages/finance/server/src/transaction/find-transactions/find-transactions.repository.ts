@@ -18,15 +18,15 @@ export class FindTransactionsRepository
         gte: query.startDate,
         lte: query.endDate
       },
-      account: {
-        institution: {
-          userId: query.userId
-        }
-      }
+      userId: query.userId
     };
 
     const [transactionRecords, total] = await Promise.all([
       this._prisma.transactionRecord.findMany({
+        include: {
+          category: true,
+          location: true
+        },
         where: where,
         orderBy: {
           date: 'desc'

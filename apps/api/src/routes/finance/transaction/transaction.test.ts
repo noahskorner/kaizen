@@ -7,7 +7,12 @@ import {
   range,
   toSearchParams
 } from '@kaizen/core';
-import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
+import {
+  Category,
+  FindTransactionsRequest,
+  Location,
+  Transaction
+} from '@kaizen/finance';
 import { createAndLoginUser } from '../../../../test/create-and-login-user';
 import {
   expectError,
@@ -20,29 +25,91 @@ import {
   buildItemPublicTokenExchangeResponse
 } from '../../../../test';
 import { buildSut } from '../../../../test/build-sut';
-import { Transaction as PlaidTransaction } from 'plaid';
+import {
+  Transaction as PlaidTransaction,
+  Location as PlaidLocation,
+  PersonalFinanceCategory as PlaidCategory
+} from 'plaid';
+
+const expectLocationToBeExternal = (
+  location: Location,
+  external: PlaidLocation
+) => {
+  expect(location.id).toBeDefined();
+  expect(location.address).toBe(external.address);
+  expect(location.city).toBe(external.city);
+  expect(location.region).toBe(external.region);
+  expect(location.postalCode).toBe(external.postal_code);
+  expect(location.country).toBe(external.country);
+  expect(location.lat).toBe(external.lat);
+  expect(location.lon).toBe(external.lon);
+  expect(location.storeNumber).toBe(external.store_number);
+};
+
+const expectCategoryToBeExternal = (
+  category: Category | null,
+  external: PlaidCategory | null
+) => {
+  if (category == null || external == null) {
+    expect(category).toBeNull();
+    expect(external).toBeNull();
+  }
+
+  if (category != null && external != null) {
+    expect(category.id).toBeDefined();
+    expect(category.primary).toBe(external.primary);
+    expect(category.detailed).toBe(external.detailed);
+    expect(category.confidenceLevel).toBe(external.confidence_level);
+  }
+};
 
 const expectTransactionToBeExternal = (
   transaction: Transaction,
   external: PlaidTransaction
 ) => {
   expect(transaction.id).toBeDefined();
-  expect(transaction.externalId).toBe(external.transaction_id);
+  expect(transaction.userId).toBeDefined();
+  expect(transaction.institutionId).toBeDefined();
   expect(transaction.accountId).toBeDefined();
+  expect(transaction.externalId).toBe(external.transaction_id);
   expect(transaction.externalAccountId).toBe(external.account_id);
+  expectLocationToBeExternal(transaction.location, external.location);
+  expectCategoryToBeExternal(
+    transaction.category,
+    external.personal_finance_category ?? null
+  );
   expect(transaction.amount).toBe(external.amount);
-  expect(transaction.currency).toBe(external.iso_currency_code);
-  if (external.authorized_date != null) {
-    expect(new Date(transaction.date!).toISOString()).toBe(
-      external.authorized_date
-    );
-  } else {
-    expect(new Date(transaction.date!).toISOString()).toBe(external.date);
-  }
+  expect(transaction.isoCurrencyCode).toBe(external.iso_currency_code);
+  expect(transaction.unofficialCurrencyCode).toBe(
+    external.unofficial_currency_code
+  );
+  expect(transaction.checkNumber).toBe(external.check_number);
+  expect(transaction.date).toBe(new Date(external.date).toISOString());
   expect(transaction.name).toBe(external.name);
   expect(transaction.merchantName).toBe(external.merchant_name);
+  expect(transaction.originalDescription).toBe(external.original_description);
   expect(transaction.pending).toBe(external.pending);
+  expect(transaction.pendingTransactionId).toBe(
+    external.pending_transaction_id
+  );
+  expect(transaction.accountOwner).toBe(external.account_owner);
   expect(transaction.logoUrl).toBe(external.logo_url);
+  expect(transaction.website).toBe(external.website);
+  if (external.authorized_date == null) {
+    expect(transaction.authorizedDate).toBeNull();
+  } else {
+    expect(transaction.authorizedDate).toBe(
+      new Date(external.authorized_date).toISOString()
+    );
+  }
+  expect(transaction.authorizedDatetime).toBe(external.authorized_datetime);
+  expect(transaction.datetime).toBe(external.datetime);
+  expect(transaction.paymentChannel).toBe(external.payment_channel);
+  expect(transaction.code).toBe(external.transaction_code);
+  expect(transaction.categoryIconUrl).toBe(
+    external.personal_finance_category_icon_url
+  );
+  expect(transaction.merchantEntityId).toBe(external.merchant_entity_id);
 };
 
 describe('/transaction', () => {
@@ -200,7 +267,7 @@ describe('/transaction', () => {
       const mockTransactions = range(16).map((index) =>
         buildTransaction({
           account_id: mockAccount.account_id,
-          authorized_date: new Date(1998, 1, index + 1).toISOString()
+          date: new Date(1998, 1, index + 1).toISOString()
         })
       );
       const { sut } = buildSut({
@@ -247,86 +314,6 @@ describe('/transaction', () => {
           expectTransactionToBeExternal(transaction, external);
         }
       });
-    });
-    it('returns 200 and transaction with authorized date', async () => {
-      // Arrange
-      const mockItem = buildItem();
-      const mockAccount = buildAccount({
-        item_id: mockItem.item_id
-      });
-      const mockTransaction = buildTransaction({
-        account_id: mockAccount.account_id,
-        authorized_date: new Date(1998, 1, 1).toISOString(),
-        date: new Date(1998, 1, 2).toISOString()
-      });
-      const { sut } = buildSut({
-        itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
-          item_id: mockItem.item_id
-        }),
-        accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
-          accounts: [mockAccount]
-        }),
-        transactionSyncResponse: buildTransactionsSyncResponse({
-          added: [mockTransaction]
-        })
-      });
-      const { authToken } = await createInstitution(sut);
-      const request: FindTransactionsRequest = {
-        page: 1,
-        pageSize: 15
-      };
-
-      // Act
-      const response = await supertest(sut)
-        .get(`/transaction?${toSearchParams(request)}`)
-        .auth(authToken.accessToken, { type: 'bearer' });
-      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
-
-      // Asserts
-      expect(response.status).toBe(200);
-      expect(body.data.total).toBe(1);
-      expect(body.data.hits.length).toBe(1);
-      expectTransactionToBeExternal(body.data.hits[0], mockTransaction);
-    });
-    it('returns 200 and transaction with date when authorized date is null', async () => {
-      // Arrange
-      const mockItem = buildItem();
-      const mockAccount = buildAccount({
-        item_id: mockItem.item_id
-      });
-      const mockTransaction = buildTransaction({
-        account_id: mockAccount.account_id,
-        authorized_date: null,
-        date: new Date(1998, 1, 2).toISOString()
-      });
-      const { sut } = buildSut({
-        itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
-          item_id: mockItem.item_id
-        }),
-        accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
-          accounts: [mockAccount]
-        }),
-        transactionSyncResponse: buildTransactionsSyncResponse({
-          added: [mockTransaction]
-        })
-      });
-      const { authToken } = await createInstitution(sut);
-      const request: FindTransactionsRequest = {
-        page: 1,
-        pageSize: 15
-      };
-
-      // Act
-      const response = await supertest(sut)
-        .get(`/transaction?${toSearchParams(request)}`)
-        .auth(authToken.accessToken, { type: 'bearer' });
-      const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
-
-      // Asserts
-      expect(response.status).toBe(200);
-      expect(body.data.total).toBe(1);
-      expect(body.data.hits.length).toBe(1);
-      expectTransactionToBeExternal(body.data.hits[0], mockTransaction);
     });
     it('returns 200 and created transactions after sync', async () => {
       // Arrange
@@ -429,16 +416,10 @@ describe('/transaction', () => {
       const { authToken } = await createInstitution(sut);
 
       // Sync institutions
-      const updatedExternal = {
-        ...originalExternal,
-        amount: 7,
-        currency: 'EUR',
-        date: new Date().toISOString(),
-        name: 'Busch Light',
-        merchantName: 'Hyvee Wine & Spirits',
-        pending: false,
-        logoUrl: 'rickroll.gif'
-      };
+      const updatedExternal = buildTransaction({
+        account_id: originalExternal.account_id,
+        transaction_id: originalExternal.transaction_id
+      });
       sut = buildSut({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
@@ -607,11 +588,11 @@ describe('/transaction', () => {
       });
       const expectedTransaction = buildTransaction({
         account_id: mockAccount.account_id,
-        authorized_date: new Date(1998, 7, 30).toISOString()
+        date: new Date(1998, 7, 30).toISOString()
       });
       const excludedEndTransaction = buildTransaction({
         account_id: mockAccount.account_id,
-        authorized_date: new Date(1998, 7, 31).toISOString()
+        date: new Date(1998, 7, 31).toISOString()
       });
       const { sut } = buildSut({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({

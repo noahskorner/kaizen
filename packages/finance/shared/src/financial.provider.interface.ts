@@ -1,6 +1,6 @@
 import { ServiceResponse } from '@kaizen/core';
 import { ExternalAccount } from './account/external-account';
-import { SyncExternalTransactionsResponse } from './transaction/sync-external-transactions-response';
+import { SyncExternalTransactionsResponse } from './transaction/sync-transactions/sync-external-transactions-response';
 
 export interface IFinancialProvider {
   createExternalLinkToken: (userId: string) => Promise<ServiceResponse<string>>;

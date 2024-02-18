@@ -1,4 +1,4 @@
-import { ExternalTransaction } from './external-transaction';
+import { ExternalTransaction } from '../external-transaction';
 
 export interface SyncExternalTransactionsResponse {
   hasMore: boolean;

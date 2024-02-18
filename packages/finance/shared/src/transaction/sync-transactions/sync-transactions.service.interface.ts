@@ -1,6 +1,6 @@
 import { ServiceResponse } from '@kaizen/core';
 import { SyncTransactionsCommand } from './sync-transactions.command';
-import { SyncTransactionsResponse } from './sync-transactions.response';
+import { SyncTransactionsResponse } from './sync-transactions-response';
 
 export interface ISyncTransactionsService {
   sync(

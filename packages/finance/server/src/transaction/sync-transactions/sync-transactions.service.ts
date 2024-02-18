@@ -1,7 +1,9 @@
 import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
+  CategoryRecord,
   CreateTransactionQuery,
+  ExternalCategory,
   ExternalTransaction,
   FindAccountsByExternalIdsQuery,
   FindInstitutionsQuery,
@@ -17,7 +19,9 @@ import {
   SyncTransactionsCommand,
   SyncTransactionsResponse,
   Transaction,
-  TransactionAdapter
+  TransactionAdapter,
+  TransactionRecordAdapter,
+  UpdateTransactionQuery
 } from '@kaizen/finance';
 
 export class SyncTransactionsService
@@ -44,6 +48,7 @@ export class SyncTransactionsService
     const syncTransactionResponses = await Promise.all(
       findInstitutionResponse.data.map(async (institutionRecord) => {
         return this._sync({
+          userId: command.userId,
           institutionId: institutionRecord.id,
           plaidAccessToken: institutionRecord.plaidAccessToken,
           plaidCursor: institutionRecord.plaidCursor
@@ -84,10 +89,11 @@ export class SyncTransactionsService
   }
 
   private async _sync({
+    userId,
     institutionId,
     plaidAccessToken,
     plaidCursor
-  }: InternalSyncTransactionsCommand): Promise<InternalSyncTransactionsResponse> {
+  }: _SyncTransactionsCommand): Promise<_SyncTransactionsResponse> {
     // Initialize our pointers
     let hasMore = true;
     let cursor = plaidCursor;
@@ -108,10 +114,11 @@ export class SyncTransactionsService
       }
 
       // Update our records in the database
-      const response = await this._handleDatabaseUpdates(
+      const response = await this._handleDatabaseUpdates({
+        userId,
         institutionId,
-        syncExternalTransactionsResponse.data
-      );
+        response: syncExternalTransactionsResponse.data
+      });
       if (response.type === 'FAILURE') {
         return { institutionId, response };
       }
@@ -125,6 +132,7 @@ export class SyncTransactionsService
       deleted = deleted.concat(response.data.deleted);
     }
 
+    // This should never happen
     if (institution == null) {
       return {
         institutionId,
@@ -148,14 +156,25 @@ export class SyncTransactionsService
     };
   }
 
-  private async _handleDatabaseUpdates(
-    institutionId: string,
-    response: SyncExternalTransactionsResponse
-  ) {
+  private async _handleDatabaseUpdates({
+    userId,
+    institutionId,
+    response
+  }: _HandleDatabaseUpdatesCommand) {
     const createTransactionQueriesResponse =
-      await this._buildCreateTransactionQueries(response.created);
+      await this._buildCreateTransactionQueries({
+        userId,
+        institutionId,
+        externalTransactions: response.created
+      });
     if (createTransactionQueriesResponse.type === 'FAILURE') {
       return createTransactionQueriesResponse;
+    }
+
+    const updateTransactionQueriesResponse =
+      await this._buildUpdateTransactionQueries(response.updated);
+    if (updateTransactionQueriesResponse.type === 'FAILURE') {
+      return updateTransactionQueriesResponse;
     }
 
     const syncTransactionsQuery = {
@@ -164,93 +183,141 @@ export class SyncTransactionsService
         cursor: response.cursor
       },
       createTransactionQueries: createTransactionQueriesResponse.data,
-      updateTransactionQueries: response.updated.map(
-        TransactionAdapter.toUpdateTransactionQuery
-      ),
+      updateTransactionQueries: updateTransactionQueriesResponse.data,
       deleteTransactionQueries: response.deleted.map(
-        TransactionAdapter.toDeleteTransactionQuery
+        TransactionRecordAdapter.toDeleteTransactionQuery
       )
     };
-
-    const syncTransactionsResult = await this._syncTransactionsRepository.sync(
-      syncTransactionsQuery
-    );
+    const syncTransactionsResponse =
+      await this._syncTransactionsRepository.sync(syncTransactionsQuery);
 
     return this.success({
       institution: InstitutionAdapter.toInstitution(
-        syncTransactionsResult.updatedInstitutionRecord
+        syncTransactionsResponse.updatedInstitutionRecord
       ),
-      created: syncTransactionsResult.createdTransactionRecords.map(
+      created: syncTransactionsResponse.createdTransactionRecords.map(
         TransactionAdapter.toTransaction
       ),
-      updated: syncTransactionsResult.updatedTransactionRecords.map(
+      updated: syncTransactionsResponse.updatedTransactionRecords.map(
         TransactionAdapter.toTransaction
       ),
-      deleted: syncTransactionsResult.deletedTransactionRecords.map(
+      deleted: syncTransactionsResponse.deletedTransactionRecords.map(
         TransactionAdapter.toTransaction
       )
     });
   }
 
-  private async _buildCreateTransactionQueries(
-    externalTransactions: ExternalTransaction[]
-  ): Promise<ServiceResponse<CreateTransactionQuery[]>> {
+  private async _buildCreateTransactionQueries({
+    userId,
+    institutionId,
+    externalTransactions
+  }: _BuildCreateTransactionQueriesCommand): Promise<
+    ServiceResponse<CreateTransactionQuery[]>
+  > {
+    // Find the existing accounts
     const query: FindAccountsByExternalIdsQuery = {
       externalIds: [
         ...new Set(
           externalTransactions.map(
-            (externalTransaction) => externalTransaction.accountId
+            (externalTransaction) => externalTransaction.externalAccountId
           )
         )
       ]
     };
-
     const accountRecords =
       await this._findAccountsRepository.findByExternalId(query);
     const accountIdMap = accountRecords.reduce((prev, curr) => {
       return prev.set(curr.externalId, curr.id);
     }, new Map<string, string>());
 
-    const { queries, missingAccountIds } = externalTransactions.reduce(
-      (prev, externalTransaction) => {
-        const accountId = accountIdMap.get(externalTransaction.accountId);
-        if (accountId == null) {
-          return {
-            queries: prev.queries,
-            missingAccountIds: [
-              ...prev.missingAccountIds,
-              externalTransaction.accountId
-            ]
-          };
-        }
+    // Build the create transaction queries
+    const missingAccountIds: string[] = [];
+    const queries: CreateTransactionQuery[] = [];
+    for (const externalTransaction of externalTransactions) {
+      const accountId = accountIdMap.get(externalTransaction.externalAccountId);
 
-        const currQuery = TransactionAdapter.toCreateTransactionQuery(
-          accountId,
-          externalTransaction
-        );
-
-        return {
-          queries: [...prev.queries, currQuery],
-          missingAccountIds: prev.missingAccountIds
-        };
-      },
-      {
-        queries: [] as Array<CreateTransactionQuery>,
-        missingAccountIds: [] as string[]
+      // This means the account was not created. This should not happen.
+      if (accountId == null) {
+        missingAccountIds.push(externalTransaction.externalAccountId);
+        continue;
       }
-    );
+
+      // Get or create the category (if applicable)
+      const categoryId = externalTransaction.category
+        ? (
+            await this._syncTransactionsRepository.getOrCreateCategory({
+              primary: externalTransaction.category.primary,
+              detailed: externalTransaction.category.detailed,
+              confidenceLevel: externalTransaction.category.confidenceLevel
+            })
+          ).id
+        : null;
+
+      // Map to the database query
+      queries.push(
+        TransactionRecordAdapter.toCreateTransactionQuery({
+          userId,
+          institutionId,
+          accountId,
+          externalTransaction,
+          categoryId
+        })
+      );
+    }
 
     if (missingAccountIds.length > 0) {
       return this.failure({
         code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND,
-        params: { accountIds: missingAccountIds }
+        params: { externalAccountIds: missingAccountIds }
+      });
+    }
+    return this.success(queries);
+  }
+
+  private async _buildUpdateTransactionQueries(
+    externalTransactions: ExternalTransaction[]
+  ): Promise<ServiceResponse<UpdateTransactionQuery[]>> {
+    // Build the update transaction queries
+    const missingTransactionIds: string[] = [];
+    const queries: UpdateTransactionQuery[] = [];
+    for (const externalTransaction of externalTransactions) {
+      // Find the existing transaction
+      const transaction =
+        await this._syncTransactionsRepository.getByExternalId(
+          externalTransaction.externalId
+        );
+      if (transaction === null) {
+        missingTransactionIds.push(externalTransaction.externalId);
+        continue;
+      }
+
+      const categoryId = await this._syncCategory(
+        transaction.category,
+        externalTransaction.category
+      );
+
+      // Map to the database query
+      queries.push(
+        TransactionRecordAdapter.toUpdateTransactionQuery({
+          id: transaction.id,
+          externalTransaction,
+          locationId: transaction.locationId,
+          categoryId: categoryId
+        })
+      );
+    }
+
+    if (missingTransactionIds.length > 0) {
+      return this.failure({
+        code: ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND,
+        params: { externalTransactionIds: missingTransactionIds }
       });
     }
     return this.success(queries);
   }
 
   private _buildResponse(
-    syncTransactionResponses: InternalSyncTransactionsResponse[]
+    syncTransactionResponses: _SyncTransactionsResponse[]
   ) {
     const initialValue: SyncTransactionsResponse = {
       succeeded: [],
@@ -276,17 +343,58 @@ export class SyncTransactionsService
       };
     }, initialValue);
   }
+
+  private async _syncCategory(
+    record: CategoryRecord | null,
+    external: ExternalCategory | null
+  ): Promise<string | null> {
+    // This record no longer has a category, let's disconnect it
+    if (external == null) {
+      return null;
+    }
+
+    // This record already has the same category, let's keep it
+    if (
+      record?.primary === external.primary &&
+      record?.detailed === external.detailed &&
+      record?.confidenceLevel === external.confidenceLevel
+    ) {
+      return record.id;
+    }
+
+    // This record has a different category, let's update it
+    const categoryRecord =
+      await this._syncTransactionsRepository.getOrCreateCategory({
+        primary: external.primary,
+        detailed: external.detailed,
+        confidenceLevel: external.confidenceLevel
+      });
+    return categoryRecord.id;
+  }
 }
 
-interface InternalSyncTransactionsCommand {
+interface _SyncTransactionsCommand {
+  userId: string;
   institutionId: string;
   plaidAccessToken: string;
   plaidCursor: string | null;
 }
 
-interface InternalSyncTransactionsResponse {
+interface _SyncTransactionsResponse {
   institutionId: string;
   response: ServiceResponse<
     Omit<SyncTransactionsResponse, 'succeeded' | 'failed'>
   >;
+}
+
+interface _HandleDatabaseUpdatesCommand {
+  userId: string;
+  institutionId: string;
+  response: SyncExternalTransactionsResponse;
+}
+
+interface _BuildCreateTransactionQueriesCommand {
+  userId: string;
+  institutionId: string;
+  externalTransactions: ExternalTransaction[];
 }
