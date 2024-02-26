@@ -4,13 +4,16 @@ import {
   InstitutionClient,
   TransactionsTable,
   formatCurrency,
-  useInstitutionStore
+  useInstitutionStore,
+  useTransactionStore
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
 import { Button, useToastStore } from '@kaizen/core-client';
+import { Chart } from 'react-google-charts';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
+  const { transactionsByCategoryPie } = useTransactionStore();
   const { setInstitutions, accountGroups, networth } = useInstitutionStore();
   const { addFailureToast } = useToastStore();
 
@@ -53,9 +56,22 @@ export const FinancePage = () => {
         <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
           {formatCurrency(networth, 'USD')}
         </h3>
+        <div className="">
+          <Chart
+            chartType="PieChart"
+            data={transactionsByCategoryPie}
+            width="100%"
+            height="400px"
+            options={{
+              legend: 'none',
+              is3D: true,
+              colors: ['#00a18c', '#058071', '#0a655c', '#0e534c', '#00312e']
+            }}
+            legendToggle
+          />
+        </div>
         <Button onClick={onSyncClick}>Sync</Button>
         {linkToken && <PlaidLink linkToken={linkToken} />}
-
         {Object.keys(accountGroups).map((accountType) => {
           const accountGroup = accountGroups[accountType];
           return (

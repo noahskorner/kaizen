@@ -26,6 +26,7 @@
     "@kaizen/finance": "*",
     "@kaizen/user-client": "*",
     "react": "^18.2.0",
+    "react-google-charts": "^4.0.1",
     "react-plaid-link": "^3.5.1",
     "react-router-dom": "^6.19.0",
     "uuid": "^9.0.1"

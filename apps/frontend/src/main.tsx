@@ -8,9 +8,7 @@ import { routes } from './pages/routes';
 const router = createBrowserRouter(Object.values(routes));
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <GlobalLayout>
-      <RouterProvider router={router} />
-    </GlobalLayout>
-  </React.StrictMode>
+  <GlobalLayout>
+    <RouterProvider router={router} />
+  </GlobalLayout>
 );
