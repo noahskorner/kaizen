@@ -5,9 +5,11 @@ import { DashboardLayout } from './dashboard/dashboard.layout';
 import { FinancePage } from './dashboard/finance/finance.page';
 import { DashboardPage } from './dashboard/dashboard.page';
 import { RouteObject } from 'react-router-dom';
+import { LandingPage } from './landing';
 
 export const paths: Record<string, string> = {
   home: '/',
+  landing: '/landing',
   login: '/login',
   register: '/register',
   dashboard: '/dashboard',
@@ -16,6 +18,7 @@ export const paths: Record<string, string> = {
 
 export const routes: RouteObject[] = [
   { path: paths.home, element: <HomePage /> },
+  { path: paths.landing, element: <LandingPage /> },
   { path: paths.login, element: <LoginPage /> },
   { path: paths.register, element: <RegisterPage /> },
   {

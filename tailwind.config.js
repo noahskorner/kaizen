@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       fontFamily: {
         primary: ['Inter', 'sans-serif'],
-        secondary: ['Roboto Mono', 'monospace']
+        secondary: ['Merriweather', 'serif']
       },
       colors: {
         neutral: {
@@ -40,7 +40,11 @@ module.exports = {
           900: '#0e534c',
           950: '#00312e'
         }
-      }
+      },
+      backgroundImage: () => ({
+        'circle-gradient':
+          'radial-gradient(circle at top right, var(--tw-gradient-stops))'
+      })
     }
   },
   plugins: []
