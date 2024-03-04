@@ -18,6 +18,7 @@ export const HomePage = () => {
     <div className="flex flex-col gap-y-8 p-4">
       <div className="flex flex-col gap-2">
         <Button to={'/'}>/</Button>
+        <Button to={'/landing'}>/landing</Button>
         <Button to={'/login?email=noahskorner@gmail.com&password=12345678a$'}>
           /login
         </Button>
