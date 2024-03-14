@@ -1,0 +1,22 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+  height: 50%;
+}
+
+.content:nth-child(even) {
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.content__info {
+  @apply flex h-full w-1/2 flex-col justify-center gap-y-8 bg-zinc-200 p-8;
+}
+
+.content__info:nth-child(even) {
+  @apply items-end;
+}
+
+.content__info:nth-child(even) {
+  @apply items-start;
+}

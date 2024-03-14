@@ -1,7 +1,10 @@
+import './landing.page.css';
+import content from './content.json';
+
 export const LandingPage = () => {
   return (
     <div>
-      <div className="bg-circle-gradient flex h-[90vh] w-full flex-col items-center from-blue-600 to-slate-900">
+      <div className="flex h-[90vh] w-full flex-col items-center bg-circle-gradient from-blue-600 to-slate-900">
         <nav className="flex h-36 w-full items-center justify-between bg-gradient-to-b from-slate-950 via-blue-950 to-transparent px-4 pb-8">
           <div className="w-1/3"></div>
           <div className="hidden lg:flex">
@@ -35,36 +38,28 @@ export const LandingPage = () => {
               </p>
             </div>
           </div>
-          <div className="h-full w-full"></div>
+          <div className="flex h-full w-full items-center justify-center"></div>
         </div>
       </div>
-      {/* <div className="h-[7vh] w-full bg-white"></div>
-      <div className="grid h-[90vh] w-full grid-cols-2 grid-rows-2 bg-zinc-200">
-        <div className="bg-circle-gradient from-blue-950 via-slate-900 to-slate-900"></div>
-        <div className="m-16 flex flex-col items-center justify-center gap-y-8 bg-zinc-200">
-          <h3 className="font-secondary text-4xl font-semibold">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptas
-            est repellat amet id perspiciatis reiciendis odit. Rem corrupti fuga
-            eveniet!
-          </p>
-        </div>
-        <div className="m-16 flex flex-col items-center justify-center gap-y-8 bg-zinc-200">
-          <h3 className="font-secondary text-4xl font-semibold">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit,
-            odio.
-          </h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Necessitatibus sunt inventore veritatis laboriosam cupiditate
-            reprehenderit. Fugit unde laudantium consectetur consequatur.
-          </p>
-        </div>
-        <div className="bg-circle-gradient from-slate-900 via-slate-900 to-blue-950"></div>
+      <div className="h-[7vh] w-full bg-white"></div>
+      <div className="h-[90vh] w-full">
+        {content.map(({ title, subtitle }, index) => {
+          return (
+            <div key={index} className="content">
+              <div className="h-full w-1/2 bg-circle-gradient from-blue-950 via-slate-900 to-slate-900"></div>
+              <div className="content__info flex">
+                <div className="flex w-1/2 flex-col gap-y-4">
+                  <h3 className="font-secondary text-6xl font-semibold">
+                    {title}
+                  </h3>
+                  <p className="text-lg leading-loose">{subtitle}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
-      <footer className="h-[20vh] w-full bg-gradient-to-r from-slate-900 to-blue-600"></footer> */}
+      {/* <footer className="h-[20vh] w-full bg-gradient-to-r from-slate-900 to-blue-600"></footer> */}
     </div>
   );
 };

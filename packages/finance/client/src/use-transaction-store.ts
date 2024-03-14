@@ -10,7 +10,7 @@ const initialState: Omit<TransactionStore, 'setTransactions'> = {
   transactions: []
 };
 
-export const useTransactionStore = create<TransactionStore>((set) => ({
+const _useTransactionStore = create<TransactionStore>((set) => ({
   ...initialState,
   setTransactions: (transactions: Transaction[]) => {
     return set(() => {
@@ -20,3 +20,9 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
     });
   }
 }));
+
+export const useTransactionStore = () => {
+  const transactionStore = _useTransactionStore();
+
+  return { ...transactionStore };
+};

@@ -50,6 +50,13 @@ export const FinancePage = () => {
   return (
     <div>
       <div className="flex flex-col gap-y-2">
+        <div className="flex w-full flex-col">
+          <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
+            Retirement
+          </h3>
+          - graph a this interest rate and this amount of money, you will have
+          this
+        </div>
         <h3 className="my-4 w-full border-b border-b-neutral-100 text-lg font-bold">
           {formatCurrency(networth, 'USD')}
         </h3>

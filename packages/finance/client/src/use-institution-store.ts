@@ -81,6 +81,26 @@ export const useInstitutionStore = () => {
     >
   );
 
+  /* Caclulcate by AccountType
+    Investment: 
+    Calculate the sum of all accounts with type Investment to find the principle.
+    Then, find out the (mean/median) interest rate across all accounts historically (r).
+    Find out the estimated value of the investment in v years (v). 
+    Credit = 'credit',
+    Calculate the sum of all accounts with type Credit to find the principle.
+    Median interest rate across all accounts historically (r).
+
+    Depository = 'depository',
+    Loan = 'loan',
+    Brokerage = 'brokerage',
+    Other = 'other'
+  */
+  const retirement = institutionStore.institutions.filter((institution) =>
+    institution.accounts.some((account) =>
+      [AccountType.Brokerage, AccountType.Investment].includes(account.type)
+    )
+  );
+
   return {
     ...institutionStore,
     networth,

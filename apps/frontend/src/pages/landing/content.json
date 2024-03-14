@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Human-Driven Design",
+    "subtitle": "Empower users to shape their own experience through rigorous user testing and iterative development, ensuring that their feedback is at the core of every decision made. By prioritizing user involvement, you guarantee a truly user-centric approach that resonates with your audience on a deeper level."
+  },
+  {
+    "title": "Test-Driven Development",
+    "subtitle": "Build with confidence by implementing comprehensive E2E testing and API integration coverage from the outset. By adopting a testing-first approach, you not only ensure functionality and reliability but also minimize errors, creating a solid foundation for your development endeavors."
+  },
+  {
+    "title": "Impactful AI and Machine Learning",
+    "subtitle": "Implement AI and machine learning technologies to deliver tangible benefits and enhance user experiences. By driving innovation with data and unlocking insights, you pave the way for transformative solutions that elevate your initiatives to new heights."
+  },
+  {
+    "title": "Vertical Slice Architecture",
+    "subtitle": "Construct features incrementally from the ground up, leveraging vertical slice architecture to ensure scalability and efficiency. By focusing on feature-centric construction, you enable seamless scalability and adaptable growth, laying the groundwork for a robust and flexible system."
+  },
+  {
+    "title": "Continuous Integration / Continuous Deployment",
+    "subtitle": "Streamline development processes through automated integration and deployment, ensuring rapid and reliable delivery of updates and features."
+  },
+  {
+    "title": "Infrastructure as Code",
+    "subtitle": "Automate infrastructure management to streamline operations and enhance scalability, empowering your organization to easily scale and manage resources. By leveraging code-based infrastructure, you ensure efficient deployment and management, adapting seamlessly to evolving needs."
+  }
+]
