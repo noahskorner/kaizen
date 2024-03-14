@@ -8,7 +8,7 @@
 //     email: string;
 //     password: string;
 //   };
-}
+// }
 
 // const hashPassword = async (password: string): Promise<string> => {
 //   const salt = await genSalt();
