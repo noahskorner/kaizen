@@ -1,6 +1,5 @@
 export * from './build-account';
 export * from './build-accounts-balance-get-response';
-export * from './build-balance';
 export * from './build-item';
 export * from './build-transaction';
 export * from './build-transactions-sync-response';

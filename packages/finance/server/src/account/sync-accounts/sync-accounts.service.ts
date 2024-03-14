@@ -3,7 +3,7 @@ import { Service } from '@kaizen/core-server';
 import {
   AccountAdapter,
   AccountRecord,
-  ExternalAccountAdapter,
+  AccountRecordAdapter,
   FindInstitutionsQuery,
   GetAccountByExternalIdQuery,
   IFinancialProvider,
@@ -115,22 +115,21 @@ export class SyncAccountsService
     const accountRecords = await Promise.all(
       externalAccountsResponse.data.map(async (externalAccount) => {
         const getAccountQuery: GetAccountByExternalIdQuery = {
-          externalAccountId: externalAccount.id
+          externalAccountId: externalAccount.externalAccountId
         };
         const existingAccountRecord =
           await this._getAccountRepository.getByExternalId(getAccountQuery);
 
         if (existingAccountRecord != null) {
-          const updateAccountQuery =
-            ExternalAccountAdapter.toUpdateAccountQuery(
-              existingAccountRecord.institutionId,
-              existingAccountRecord.id,
-              externalAccount
-            );
+          const updateAccountQuery = AccountRecordAdapter.toUpdateAccountQuery(
+            existingAccountRecord.institutionId,
+            existingAccountRecord.id,
+            externalAccount
+          );
           return this._syncAccountsRepository.update(updateAccountQuery);
         }
 
-        const createAccountQuery = ExternalAccountAdapter.toCreateAccountQuery(
+        const createAccountQuery = AccountRecordAdapter.toCreateAccountQuery(
           institutionId,
           externalAccount
         );

@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User
 model UserRecord {
   id           String              @id @default(uuid())
   createdAt    DateTime            @default(now())
@@ -23,6 +24,7 @@ model UserRecord {
   @@map("user")
 }
 
+// Institution
 model InstitutionRecord {
   id               String              @id @default(uuid())
   createdAt        DateTime            @default(now())
@@ -37,6 +39,7 @@ model InstitutionRecord {
   @@map("institution")
 }
 
+// Account
 enum AccountRecordType {
   Investment
   Credit
@@ -46,22 +49,118 @@ enum AccountRecordType {
   Other
 }
 
+enum AccountRecordSubtype {
+  Plan401a
+  Plan401k
+  Plan403B
+  Plan457b
+  Plan529
+  Brokerage
+  CashIsa
+  CryptoExchange
+  EducationSavingsAccount
+  Ebt
+  FixedAnnuity
+  Gic
+  HealthReimbursementArrangement
+  Hsa
+  Isa
+  Ira
+  Lif
+  LifeInsurance
+  Lira
+  Lrif
+  Lrsp
+  NonCustodialWallet
+  NonTaxableBrokerageAccount
+  Other
+  OtherInsurance
+  OtherAnnuity
+  Prif
+  Rdsp
+  Resp
+  Rlif
+  Rrif
+  Pension
+  ProfitSharingPlan
+  Retirement
+  Roth
+  Roth401k
+  Rrsp
+  SepIra
+  SimpleIra
+  Sipp
+  StockPlan
+  ThriftSavingsPlan
+  Tfsa
+  Trust
+  Ugma
+  Utma
+  VariableAnnuity
+  CreditCard
+  Paypal
+  Cd
+  Checking
+  Savings
+  MoneyMarket
+  Prepaid
+  Auto
+  Business
+  Commercial
+  Construction
+  Consumer
+  HomeEquity
+  Loan
+  Mortgage
+  Overdraft
+  LineOfCredit
+  Student
+  CashManagement
+  Keogh
+  MutualFund
+  Recurring
+  Rewards
+  SafeDeposit
+  Sarsep
+  Payroll
+  Null
+}
+
+enum AccountRecordVerificationStatus {
+  AutomaticallyVerified
+  PendingAutomaticVerification
+  PendingManualVerification
+  ManuallyVerified
+  VerificationExpired
+  VerificationFailed
+  DatabaseMatched
+}
+
 model AccountRecord {
-  id            String              @id @default(uuid())
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @default(now()) @updatedAt
-  externalId    String              @unique
-  type          AccountRecordType   @default(Other)
-  institutionId String
-  institution   InstitutionRecord   @relation(fields: [institutionId], references: [id])
-  current       Float
-  available     Float
-  currency      String?
-  transactions  TransactionRecord[]
+  id                     String                           @id @default(uuid()) @map("id")
+  createdAt              DateTime                         @default(now()) @map("created_at")
+  updatedAt              DateTime                         @default(now()) @updatedAt @map("updated_at")
+  institutionId          String                           @map("institution_id")
+  institution            InstitutionRecord                @relation(fields: [institutionId], references: [id])
+  transactions           TransactionRecord[]
+  externalId             String                           @unique @map("external_id")
+  available              Float?                           @map("available")
+  current                Float?                           @map("current")
+  limit                  Float?                           @map("limit")
+  isoCurrencyCode        String?                          @map("iso_currency_code")
+  unofficialCurrencyCode String?                          @map("unofficial_currency_code")
+  externalUpdatedAt      DateTime?                        @map("external_updated_at")
+  mask                   String?                          @map("mask")
+  name                   String                           @map("name")
+  officialName           String?                          @map("official_name")
+  type                   AccountRecordType                @default(Other) @map("type")
+  subtype                AccountRecordSubtype?            @map("subtype")
+  verificationStatus     AccountRecordVerificationStatus? @map("verification_status")
 
   @@map("account")
 }
 
+// Transaction
 enum TransactionPaymentChannelRecord {
   Online
   InStore

@@ -2,6 +2,12 @@
 CREATE TYPE "AccountRecordType" AS ENUM ('Investment', 'Credit', 'Depository', 'Loan', 'Brokerage', 'Other');
 
 -- CreateEnum
+CREATE TYPE "AccountRecordSubtype" AS ENUM ('Plan401a', 'Plan401k', 'Plan403B', 'Plan457b', 'Plan529', 'Brokerage', 'CashIsa', 'CryptoExchange', 'EducationSavingsAccount', 'Ebt', 'FixedAnnuity', 'Gic', 'HealthReimbursementArrangement', 'Hsa', 'Isa', 'Ira', 'Lif', 'LifeInsurance', 'Lira', 'Lrif', 'Lrsp', 'NonCustodialWallet', 'NonTaxableBrokerageAccount', 'Other', 'OtherInsurance', 'OtherAnnuity', 'Prif', 'Rdsp', 'Resp', 'Rlif', 'Rrif', 'Pension', 'ProfitSharingPlan', 'Retirement', 'Roth', 'Roth401k', 'Rrsp', 'SepIra', 'SimpleIra', 'Sipp', 'StockPlan', 'ThriftSavingsPlan', 'Tfsa', 'Trust', 'Ugma', 'Utma', 'VariableAnnuity', 'CreditCard', 'Paypal', 'Cd', 'Checking', 'Savings', 'MoneyMarket', 'Prepaid', 'Auto', 'Business', 'Commercial', 'Construction', 'Consumer', 'HomeEquity', 'Loan', 'Mortgage', 'Overdraft', 'LineOfCredit', 'Student', 'CashManagement', 'Keogh', 'MutualFund', 'Recurring', 'Rewards', 'SafeDeposit', 'Sarsep', 'Payroll', 'Null');
+
+-- CreateEnum
+CREATE TYPE "AccountRecordVerificationStatus" AS ENUM ('AutomaticallyVerified', 'PendingAutomaticVerification', 'PendingManualVerification', 'ManuallyVerified', 'VerificationExpired', 'VerificationFailed', 'DatabaseMatched');
+
+-- CreateEnum
 CREATE TYPE "TransactionPaymentChannelRecord" AS ENUM ('Online', 'InStore', 'Other');
 
 -- CreateEnum
@@ -33,14 +39,22 @@ CREATE TABLE "institution" (
 -- CreateTable
 CREATE TABLE "account" (
     "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "externalId" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "institution_id" TEXT NOT NULL,
+    "external_id" TEXT NOT NULL,
+    "available" DOUBLE PRECISION,
+    "current" DOUBLE PRECISION,
+    "limit" DOUBLE PRECISION,
+    "iso_currency_code" TEXT,
+    "unofficial_currency_code" TEXT,
+    "external_updated_at" TIMESTAMP(3),
+    "mask" TEXT,
+    "name" TEXT NOT NULL,
+    "official_name" TEXT,
     "type" "AccountRecordType" NOT NULL DEFAULT 'Other',
-    "institutionId" TEXT NOT NULL,
-    "current" DOUBLE PRECISION NOT NULL,
-    "available" DOUBLE PRECISION NOT NULL,
-    "currency" TEXT,
+    "subtype" "AccountRecordSubtype",
+    "verification_status" "AccountRecordVerificationStatus",
 
     CONSTRAINT "account_pkey" PRIMARY KEY ("id")
 );
@@ -117,7 +131,7 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 CREATE INDEX "user_email_idx" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "account_externalId_key" ON "account"("externalId");
+CREATE UNIQUE INDEX "account_external_id_key" ON "account"("external_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "transaction_external_id_key" ON "transaction"("external_id");
@@ -126,7 +140,7 @@ CREATE UNIQUE INDEX "transaction_external_id_key" ON "transaction"("external_id"
 ALTER TABLE "institution" ADD CONSTRAINT "institution_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "account" ADD CONSTRAINT "account_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "institution"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "account" ADD CONSTRAINT "account_institution_id_fkey" FOREIGN KEY ("institution_id") REFERENCES "institution"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

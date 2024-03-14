@@ -47,11 +47,11 @@ export const useInstitutionStore = () => {
             AccountType.Investment
           ].includes(curr.type)
         ) {
-          return prev + curr.current;
+          return prev + (curr.current ?? 0);
         }
 
         if ([AccountType.Credit].includes(curr.type)) {
-          return prev - curr.current;
+          return prev - (curr.current ?? 0);
         }
 
         return prev;
@@ -69,8 +69,8 @@ export const useInstitutionStore = () => {
             accounts: []
           };
         }
-        acc[account.type].available += account.available;
-        acc[account.type].current += account.current;
+        acc[account.type].available += account.available ?? 0;
+        acc[account.type].current += account.current ?? 0;
         acc[account.type].accounts.push(account);
       });
       return acc;
