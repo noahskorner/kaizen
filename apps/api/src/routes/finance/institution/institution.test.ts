@@ -19,11 +19,24 @@ import { AccountBase } from 'plaid';
 
 const expectAccountToBeExternal = (actual: Account, expected: AccountBase) => {
   expect(actual.id).toBeDefined();
-  expect(actual.externalId).toBe(expected.account_id);
-  expect(actual.type).toBe(expected.type);
-  expect(actual.currency).toBe(expected.balances.iso_currency_code);
-  expect(actual.available).toBe(expected.balances.available);
-  expect(actual.current).toBe(expected.balances.current);
+  expect(actual.institutionId).toBeDefined();
+  expect(expected.account_id).toBe(actual.externalId);
+  expect(expected.balances.available).toBe(actual.available);
+  expect(expected.balances.current).toBe(actual.current);
+  expect(expected.balances.limit).toBe(actual.limit);
+  expect(expected.balances.iso_currency_code).toBe(actual.isoCurrencyCode);
+  expect(expected.balances.unofficial_currency_code).toBe(
+    actual.unofficialCurrencyCode
+  );
+  expect(expected.balances.last_updated_datetime).toBe(
+    actual.externalUpdatedAt
+  );
+  expect(expected.mask).toBe(actual.mask);
+  expect(expected.name).toBe(actual.name);
+  expect(expected.official_name).toBe(actual.officialName);
+  expect(expected.type).toBe(actual.type);
+  expect(expected.subtype).toBe(actual.subtype);
+  expect(expected.verification_status).toBe(actual.verificationStatus);
 };
 
 describe('/institution', () => {
