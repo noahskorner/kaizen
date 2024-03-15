@@ -34,6 +34,7 @@ import { HomeController } from './routes/home.controller';
 import { serviceEventBus as defaultServiceEventBus } from './events';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { IServiceEventBus } from '@kaizen/core-server';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -52,6 +53,11 @@ export class ServiceCollectionBuilder {
 
   public withPlaidApi(plaidApi: PlaidApi) {
     this._serviceCollection.plaid = plaidApi;
+    return this;
+  }
+
+  public withEventBus(serviceEventBus: IServiceEventBus) {
+    this._serviceCollection.serviceEventBus = serviceEventBus;
     return this;
   }
 

@@ -2,7 +2,7 @@ import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import supertest from 'supertest';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
-import { CreateUserCommand } from '@kaizen/user';
+import { CreateUserCommand, User } from '@kaizen/user';
 import { serverEnvironment } from '@kaizen/env-server';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
 import { buildApp } from '../../build-app';
@@ -14,6 +14,7 @@ import {
   getRefreshToken,
   createAndLoginUser
 } from '../../../test';
+import { ServiceEventBus, ServiceEventType } from '@kaizen/core-server';
 
 describe('/auth', () => {
   describe('login should', () => {
@@ -76,7 +77,7 @@ describe('/auth', () => {
       const email = createUniqueEmail();
       await supertest(defaultTestBed)
         .post('/user')
-        .send({ email, password: validPassword } as CreateUserCommand);
+        .send({ email, password: validPassword } satisfies CreateUserCommand);
       const request = {
         email: email,
         password: 'incorrect-password'
@@ -96,7 +97,7 @@ describe('/auth', () => {
       const email = createUniqueEmail();
       await supertest(defaultTestBed)
         .post('/user')
-        .send({ email, password: validPassword } as CreateUserCommand);
+        .send({ email, password: validPassword } satisfies CreateUserCommand);
       const request = {
         email: email,
         password: validPassword
@@ -114,6 +115,37 @@ describe('/auth', () => {
       expect(body.data.accessToken).toBeDefined();
       expect(body.data.refreshToken).toBeDefined();
       expect(body.data.refreshToken).toBe(refreshToken);
+    });
+    it('emits a login success event', async () => {
+      // Arrange
+      const serviceEventBus = new ServiceEventBus();
+      const serviceEventBusSpy = jest.spyOn(serviceEventBus, 'publish');
+      const serviceCollection = new ServiceCollectionBuilder()
+        .withEventBus(serviceEventBus)
+        .build();
+      const testBed = buildApp(serviceCollection);
+
+      const email = createUniqueEmail();
+      const user = (
+        await supertest(testBed)
+          .post('/user')
+          .send({ email, password: validPassword } satisfies CreateUserCommand)
+      ).body.data as User;
+      const request = {
+        email: email,
+        password: validPassword
+      };
+
+      // Act
+      await supertest(testBed).post('/auth').send(request);
+
+      // Assert
+      expect(serviceEventBusSpy).toHaveBeenCalledWith({
+        type: ServiceEventType.LOGIN,
+        payload: {
+          userId: user.id
+        }
+      });
     });
   });
   describe('refreshToken should', () => {
