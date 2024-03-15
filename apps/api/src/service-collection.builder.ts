@@ -31,6 +31,7 @@ import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
 import { HomeController } from './routes/home.controller';
+import { serviceEventBus as defaultServiceEventBus } from './events';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 
@@ -58,6 +59,10 @@ export class ServiceCollectionBuilder {
     // Environment
     const environment =
       this._serviceCollection.environment ?? serverEnvironment;
+
+    // Service Events
+    const serviceEventBus =
+      this._serviceCollection.serviceEventBus ?? defaultServiceEventBus;
 
     // Plaid
     const plaid =
@@ -119,7 +124,7 @@ export class ServiceCollectionBuilder {
       new CreateLinkTokenService(getUserRepository, financialProvider);
     const loginService =
       this._serviceCollection.loginService ??
-      new LoginService(environment, findUserByEmailRepository);
+      new LoginService(environment, findUserByEmailRepository, serviceEventBus);
     const refreshTokenService =
       this._serviceCollection.refreshTokenService ??
       new RefreshTokenService(environment, getUserRepository);
@@ -176,6 +181,8 @@ export class ServiceCollectionBuilder {
     const serviceCollection: IServiceCollection = {
       // Environment
       environment,
+      // Events
+      serviceEventBus,
       // Plaid
       plaid,
       // Prisma

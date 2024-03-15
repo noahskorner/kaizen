@@ -27,10 +27,14 @@ import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { IServiceEventBus } from '@kaizen/core-server';
 
 export interface IServiceCollection {
   // Environment
   environment: IServerEnvironment;
+
+  // Events
+  serviceEventBus: IServiceEventBus;
 
   // Plaid
   plaid: PlaidApi;
