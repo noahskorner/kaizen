@@ -255,12 +255,25 @@ model CategoryRecord {
 
 // Wallet
 model WalletRecord {
-  id        String     @id @default(uuid()) @map("id")
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at")
-  userId    String     @unique @map("user_id")
-  user      UserRecord @relation(fields: [userId], references: [id])
-  balance   Int        @default(0) @map("balance")
+  id           String                    @id @default(uuid()) @map("id")
+  createdAt    DateTime                  @default(now()) @map("created_at")
+  updatedAt    DateTime                  @default(now()) @updatedAt @map("updated_at")
+  userId       String                    @unique @map("user_id")
+  user         UserRecord                @relation(fields: [userId], references: [id])
+  balance      Int                       @default(0) @map("balance")
+  transactions WalletTransactionRecord[]
 
   @@map("wallet")
+}
+
+model WalletTransactionRecord {
+  id            String       @id @default(uuid()) @map("id")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at")
+  transactionId String       @unique @map("transaction_id")
+  walletId      String       @map("wallet_id")
+  wallet        WalletRecord @relation(fields: [walletId], references: [id])
+  amount        Int          @map("amount")
+
+  @@map("wallet_transaction")
 }

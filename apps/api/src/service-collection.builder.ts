@@ -37,7 +37,9 @@ import { IServiceEventBus, ServiceEventBus } from '@kaizen/core-server';
 import {
   CreateWalletRepository,
   CreateWalletService,
-  GetWalletRepository
+  GetWalletRepository,
+  UpdateWalletRepository,
+  UpdateWalletService
 } from '@kaizen/wallet-server';
 
 export class ServiceCollectionBuilder {
@@ -119,6 +121,7 @@ export class ServiceCollectionBuilder {
     const findAccountsRepository = new FindAccountsRepository(prisma);
     const getWalletRepository = new GetWalletRepository(prisma);
     const createWalletRepository = new CreateWalletRepository(prisma);
+    const updateWalletRepository = new UpdateWalletRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -177,6 +180,10 @@ export class ServiceCollectionBuilder {
       getWalletRepository,
       createWalletRepository
     );
+    const updateWalletService = new UpdateWalletService(
+      getWalletRepository,
+      updateWalletRepository
+    );
 
     // Controllers
     const homeController =
@@ -219,6 +226,7 @@ export class ServiceCollectionBuilder {
       findTransactionsRepository,
       getWalletRepository,
       createWalletRepository,
+      updateWalletRepository,
       // Services
       getUserService,
       createUserService,
@@ -231,6 +239,7 @@ export class ServiceCollectionBuilder {
       findTransactionsService,
       syncInstitutionsService,
       createWalletService,
+      updateWalletService,
       // Controllers
       homeController,
       userController,
@@ -238,8 +247,6 @@ export class ServiceCollectionBuilder {
       institutionController,
       transactionController
     };
-
-    // Subscribe to events
 
     return serviceCollection;
   }

@@ -227,6 +227,49 @@ export interface CreateWalletAlreadyExistsError {
   };
 }
 
+export interface UpdateWalletNotFoundError {
+  code: ErrorCode.UPDATE_WALLET_NOT_FOUND;
+  params: {
+    userId: string;
+  };
+}
+
+export interface UpdateWalletMustProvideUniqueTransactionIdError {
+  code: ErrorCode.UPDATE_WALLET_MUST_PROVIDE_UNIQUE_TRANSACTION_ID;
+  params: {
+    userId: string;
+    transactionId: unknown;
+  };
+}
+
+export interface UpdateWalletMustProvideAmountError {
+  code: ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT;
+  params: {
+    userId: string;
+    transactionId: string;
+    amount: unknown;
+  };
+}
+
+export interface UpdateWalletTransactionAlreadyExistsError {
+  code: ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS;
+  params: {
+    walletId: string;
+    transactionId: string;
+    amount: number;
+  };
+}
+
+export interface UpdateWalletNotEnoughFundsError {
+  code: ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS;
+  params: {
+    walletId: string;
+    transactionId: string;
+    amount: number;
+    balance: number;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -259,8 +302,12 @@ export interface BaseError {
     | ErrorCode.GET_USER_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND
-    | ErrorCode.CREATE_WALLET_MUST_PROVIDE_USER_ID
     | ErrorCode.CREATE_WALLET_ALREADY_EXISTS_FOR_USER
+    | ErrorCode.UPDATE_WALLET_NOT_FOUND
+    | ErrorCode.UPDATE_WALLET_MUST_PROVIDE_UNIQUE_TRANSACTION_ID
+    | ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT
+    | ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS
+    | ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS
   >;
   params?: never;
 }
@@ -297,4 +344,9 @@ export type ServiceError =
   | SyncTransactionsAccountsNotFound
   | SyncTransactionsTransactionsNotFoundError
   | CreateWalletMustProvideUserIdError
-  | CreateWalletAlreadyExistsError;
+  | CreateWalletAlreadyExistsError
+  | UpdateWalletNotFoundError
+  | UpdateWalletMustProvideUniqueTransactionIdError
+  | UpdateWalletMustProvideAmountError
+  | UpdateWalletTransactionAlreadyExistsError
+  | UpdateWalletNotEnoughFundsError;
