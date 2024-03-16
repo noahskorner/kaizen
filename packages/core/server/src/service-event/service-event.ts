@@ -7,4 +7,11 @@ export interface CreateUserSuccessEvent {
   };
 }
 
-export type ServiceEvent = CreateUserSuccessEvent;
+export interface LoginSuccessEvent {
+  type: ServiceEventType.LOGIN_SUCCESS;
+  payload: {
+    userId: string;
+  };
+}
+
+export type ServiceEvent = CreateUserSuccessEvent | LoginSuccessEvent;

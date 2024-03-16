@@ -4,7 +4,11 @@ import { AuthService } from '../auth.service';
 import { AuthToken, ILoginService, LoginCommand } from '@kaizen/auth';
 import { IFindUserByEmailRepository } from '@kaizen/user';
 import { IServerEnvironment } from '@kaizen/env-server';
-import { IServiceEventBus } from '@kaizen/core-server';
+import {
+  IServiceEventBus,
+  LoginSuccessEvent,
+  ServiceEventType
+} from '@kaizen/core-server';
 
 export class LoginService extends AuthService implements ILoginService {
   constructor(
@@ -41,6 +45,14 @@ export class LoginService extends AuthService implements ILoginService {
         code: ErrorCode.LOGIN_INCORECT_EMAIL_OR_PASSWORD
       });
     }
+
+    const event: LoginSuccessEvent = {
+      type: ServiceEventType.LOGIN_SUCCESS,
+      payload: {
+        userId: userRecord.id
+      }
+    };
+    this._serviceEventBus.publish(event);
 
     const authToken: AuthToken = {
       accessToken: this.createAccessToken(userRecord),
