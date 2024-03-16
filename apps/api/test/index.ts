@@ -2,7 +2,6 @@ export * from './plaid';
 export * from './create-and-login-user';
 export * from './create-institution';
 export * from './create-unique-email';
-export * from './create-virtual-account';
 export * from './default-test-bed';
 export * from './expect-error';
 export * from './expect-valid-date';

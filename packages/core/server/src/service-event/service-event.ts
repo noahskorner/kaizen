@@ -1,10 +1,10 @@
 import { ServiceEventType } from './service-event-type';
 
-export interface LoginSuccessEvent {
-  type: ServiceEventType.LOGIN;
+export interface CreateUserSuccessEvent {
+  type: ServiceEventType.CREATE_USER_SUCCESS;
   payload: {
     userId: string;
   };
 }
 
-export type ServiceEvent = LoginSuccessEvent;
+export type ServiceEvent = CreateUserSuccessEvent;

@@ -4,7 +4,7 @@ import { validPassword } from './valid-password';
 import { AuthToken, LoginCommand } from '@kaizen/auth';
 import { CreateUserCommand, User } from '@kaizen/user';
 import { ApiSuccessResponse } from '@kaizen/core';
-import { Application } from 'express';
+import { Application } from '../src/app-builder';
 
 export const createAndLoginUser = async (testBed: Application) => {
   const email = createUniqueEmail();

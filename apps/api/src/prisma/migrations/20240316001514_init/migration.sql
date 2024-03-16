@@ -16,8 +16,8 @@ CREATE TYPE "TransactionCodeRecord" AS ENUM ('Adjustment', 'Atm', 'BankCharge', 
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
 
@@ -124,6 +124,17 @@ CREATE TABLE "category" (
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "wallet" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "user_id" TEXT NOT NULL,
+    "balance" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "wallet_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
@@ -135,6 +146,9 @@ CREATE UNIQUE INDEX "account_external_id_key" ON "account"("external_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "transaction_external_id_key" ON "transaction"("external_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "wallet_user_id_key" ON "wallet"("user_id");
 
 -- AddForeignKey
 ALTER TABLE "institution" ADD CONSTRAINT "institution_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -156,3 +170,6 @@ ALTER TABLE "transaction" ADD CONSTRAINT "transaction_location_id_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "wallet" ADD CONSTRAINT "wallet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

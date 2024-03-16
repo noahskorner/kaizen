@@ -2,10 +2,10 @@ import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import supertest from 'supertest';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
-import { CreateUserCommand, User } from '@kaizen/user';
+import { CreateUserCommand } from '@kaizen/user';
 import { serverEnvironment } from '@kaizen/env-server';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
-import { buildApp } from '../../build-app';
+import { AppBuilder } from '../../app-builder';
 import {
   defaultTestBed,
   expectError,
@@ -14,7 +14,6 @@ import {
   getRefreshToken,
   createAndLoginUser
 } from '../../../test';
-import { ServiceEventBus, ServiceEventType } from '@kaizen/core-server';
 
 describe('/auth', () => {
   describe('login should', () => {
@@ -116,37 +115,6 @@ describe('/auth', () => {
       expect(body.data.refreshToken).toBeDefined();
       expect(body.data.refreshToken).toBe(refreshToken);
     });
-    it('emits a login success event', async () => {
-      // Arrange
-      const serviceEventBus = new ServiceEventBus();
-      const serviceEventBusSpy = jest.spyOn(serviceEventBus, 'publish');
-      const serviceCollection = new ServiceCollectionBuilder()
-        .withEventBus(serviceEventBus)
-        .build();
-      const testBed = buildApp(serviceCollection);
-
-      const email = createUniqueEmail();
-      const user = (
-        await supertest(testBed)
-          .post('/user')
-          .send({ email, password: validPassword } satisfies CreateUserCommand)
-      ).body.data as User;
-      const request = {
-        email: email,
-        password: validPassword
-      };
-
-      // Act
-      await supertest(testBed).post('/auth').send(request);
-
-      // Assert
-      expect(serviceEventBusSpy).toHaveBeenCalledWith({
-        type: ServiceEventType.LOGIN,
-        payload: {
-          userId: user.id
-        }
-      });
-    });
   });
   describe('refreshToken should', () => {
     it('returns 401 if refreshToken is not provided', async () => {
@@ -175,7 +143,9 @@ describe('/auth', () => {
           REFRESH_TOKEN_EXPIRATION: '0s'
         })
         .build();
-      const testBed = buildApp(mockServiceCollection);
+      const testBed = new AppBuilder()
+        .withServiceCollection(mockServiceCollection)
+        .build();
       const { authToken } = await createAndLoginUser(testBed);
 
       // Act
@@ -234,7 +204,9 @@ describe('/auth', () => {
           ACCESS_TOKEN_EXPIRATION: '0s'
         })
         .build();
-      const testBed = buildApp(mockServiceCollection);
+      const testBed = new AppBuilder()
+        .withServiceCollection(mockServiceCollection)
+        .build();
       const { authToken } = await createAndLoginUser(testBed);
 
       // Act

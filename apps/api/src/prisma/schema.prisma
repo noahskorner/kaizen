@@ -17,7 +17,6 @@ model UserRecord {
   updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
   email        String              @unique @map("email")
   password     String              @map("password")
-  walletId     String              @map("wallet_id")
   institutions InstitutionRecord[]
   transactions TransactionRecord[]
   wallet       WalletRecord?

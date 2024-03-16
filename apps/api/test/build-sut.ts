@@ -11,7 +11,7 @@ import {
   mockLinkTokenCreateResponse
 } from './plaid';
 import { ServiceCollectionBuilder } from '../src/service-collection.builder';
-import { buildApp } from '../src/build-app';
+import { AppBuilder } from '../src/app-builder';
 import { Express } from 'express';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
@@ -46,7 +46,10 @@ export const buildSut = (command?: Partial<BuildSutCommand>) => {
     .withPlaidApi(mockPlaidApi)
     .build();
 
-  const sut = buildApp(mockServiceCollection);
+  const sut = new AppBuilder()
+    .withServiceCollection(mockServiceCollection)
+    .build();
+  mockServiceCollection;
 
   return {
     mockItemPublicTokenExchangeResponse,
