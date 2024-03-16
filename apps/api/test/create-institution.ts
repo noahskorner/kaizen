@@ -2,7 +2,7 @@ import { Institution, CreateInstitutionRequest } from '@kaizen/finance';
 import { createAndLoginUser } from './create-and-login-user';
 import supertest from 'supertest';
 import { ApiSuccessResponse } from '@kaizen/core';
-import { Application } from '../src/app-builder';
+import { Application } from 'express';
 
 export const createInstitution = async (testBed: Application) => {
   const loginUser = await createAndLoginUser(testBed);

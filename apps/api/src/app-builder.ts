@@ -6,10 +6,6 @@ import { IServiceCollection } from './service-collection.interface';
 import { buildRouter } from './routes/build-router';
 import { ServiceEventListener, ServiceEventType } from '@kaizen/core-server';
 
-export type Application = Express.Application & {
-  serviceCollection: IServiceCollection;
-};
-
 export class AppBuilder {
   private _serviceCollection: IServiceCollection | null = null;
 
@@ -41,7 +37,7 @@ export class AppBuilder {
     return this;
   }
 
-  build(): Application {
+  build() {
     if (this._serviceCollection == null) {
       throw new Error(
         `The service collection must be instanstiated before we can build the application. 
@@ -64,6 +60,6 @@ export class AppBuilder {
     app.use(router);
     app.use(errorHandler);
 
-    return app satisfies Application;
+    return app;
   }
 }
