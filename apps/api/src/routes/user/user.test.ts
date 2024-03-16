@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import { v4 as uuid } from 'uuid';
 import { CreateUserCommand, User, LinkToken } from '@kaizen/user';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
-import { buildApp } from '../../build-app';
+import { AppBuilder } from '../../app-builder';
 import {
   defaultTestBed,
   expectError,
@@ -13,6 +13,9 @@ import {
   mockLinkTokenCreateResponse,
   createAndLoginUser
 } from '../../../test';
+import { CreateUserSuccessEvent, ServiceEventType } from '@kaizen/core-server';
+// import '../../../src/index';
+// import { CreateUserSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
 describe('/user', () => {
   describe('create should', () => {
@@ -149,6 +152,31 @@ describe('/user', () => {
       expect(response.statusCode).toBe(201);
       expect(body.data.email).toBe(request.email.toLowerCase());
     });
+    it('emits create user success event', async () => {
+      // Arrange
+      jest.spyOn(defaultTestBed.serviceCollection.serviceEventBus, 'publish');
+      const request: CreateUserCommand = {
+        email: `${uuid()}-UPPERcase@test.com`,
+        password: validPassword
+      };
+
+      // Act
+      const response = await supertest(defaultTestBed)
+        .post('/user')
+        .send(request);
+      const body: ApiSuccessResponse<User> = response.body;
+      const event: CreateUserSuccessEvent = {
+        type: ServiceEventType.CREATE_USER_SUCCESS,
+        payload: {
+          userId: body.data.id
+        }
+      };
+
+      // Assert
+      expect(
+        defaultTestBed.serviceCollection.serviceEventBus.publish
+      ).toHaveBeenCalledWith(event);
+    });
   });
   describe('createLinkToken should', () => {
     const mockPlaidApi = new MockPlaidApiBuilder()
@@ -159,7 +187,9 @@ describe('/user', () => {
       .withPlaidApi(mockPlaidApi)
       .build();
 
-    const testBed = buildApp(mockServiceCollection);
+    const testBed = new AppBuilder()
+      .withServiceCollection(mockServiceCollection)
+      .build();
 
     it('return 401 when user is not authenticated', async () => {
       // Act

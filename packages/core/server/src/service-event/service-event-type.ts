@@ -1,3 +1,3 @@
 export enum ServiceEventType {
-  LOGIN = 'LOGIN'
+  CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS'
 }

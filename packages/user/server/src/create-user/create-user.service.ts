@@ -8,12 +8,18 @@ import {
   User,
   CreateUserCommand
 } from '@kaizen/user';
-import { Service } from '@kaizen/core-server';
+import {
+  CreateUserSuccessEvent,
+  IServiceEventBus,
+  Service,
+  ServiceEventType
+} from '@kaizen/core-server';
 
 export class CreateUserService extends Service implements ICreateUserService {
   constructor(
     private readonly _findUserByEmailRepository: IFindUserByEmailRepository,
-    private readonly _createUserRepository: ICreateUserRepository
+    private readonly _createUserRepository: ICreateUserRepository,
+    private readonly _serviceEventBus: IServiceEventBus
   ) {
     super();
   }
@@ -42,6 +48,14 @@ export class CreateUserService extends Service implements ICreateUserService {
       normalizedEmail,
       hashedPassword
     });
+
+    const event: CreateUserSuccessEvent = {
+      type: ServiceEventType.CREATE_USER_SUCCESS,
+      payload: {
+        userId: userRecord.id
+      }
+    };
+    this._serviceEventBus.publish(event);
 
     const user: User = {
       id: userRecord.id,

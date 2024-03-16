@@ -1,5 +1,5 @@
 import { AccessToken } from '@kaizen/auth';
-import { IServiceCollection } from './service-collection.interface';
+import { IServiceCollection } from '../src/service-collection.interface';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
