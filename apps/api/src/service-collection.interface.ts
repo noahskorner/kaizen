@@ -31,8 +31,10 @@ import { IServiceEventBus } from '@kaizen/core-server';
 import {
   ICreateWalletRepository,
   ICreateWalletService,
-  IGetWalletRepository
-} from '../../../packages/wallet/shared/src';
+  IGetWalletRepository,
+  IUpdateWalletRepository,
+  IUpdateWalletService
+} from '@kaizen/wallet';
 
 export interface IServiceCollection {
   // Environment
@@ -60,6 +62,7 @@ export interface IServiceCollection {
   findTransactionsRepository: IFindTransactionsRepository;
   getWalletRepository: IGetWalletRepository;
   createWalletRepository: ICreateWalletRepository;
+  updateWalletRepository: IUpdateWalletRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -73,6 +76,7 @@ export interface IServiceCollection {
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
   createWalletService: ICreateWalletService;
+  updateWalletService: IUpdateWalletService;
 
   // Controllers
   homeController: HomeController;
