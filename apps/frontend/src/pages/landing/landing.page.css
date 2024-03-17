@@ -1,0 +1,7 @@
+.content__item {
+  @apply flex h-[33vh] flex-col justify-between lg:flex-row;
+}
+
+.content__item:nth-child(even) {
+  @apply lg:flex-row-reverse;
+}
