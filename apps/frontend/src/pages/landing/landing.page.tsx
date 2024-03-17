@@ -31,7 +31,7 @@ export const LandingPage = () => {
 
   return (
     <div>
-      <div className="bg-circle-gradient flex min-h-screen w-full flex-col items-center from-blue-600 to-slate-900">
+      <div className="flex min-h-screen w-full flex-col items-center bg-circle-gradient from-blue-600 to-slate-900">
         <nav className="flex h-36 w-full items-center justify-between bg-gradient-to-b from-slate-950 via-blue-950 to-transparent p-8">
           <div className="w-1/3"></div>
           <div className="hidden lg:flex">
