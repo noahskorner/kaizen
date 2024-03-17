@@ -95,11 +95,11 @@ export const useInstitutionStore = () => {
     Brokerage = 'brokerage',
     Other = 'other'
   */
-  const retirement = institutionStore.institutions.filter((institution) =>
-    institution.accounts.some((account) =>
-      [AccountType.Brokerage, AccountType.Investment].includes(account.type)
-    )
-  );
+  // const retirement = institutionStore.institutions.filter((institution) =>
+  //   institution.accounts.some((account) =>
+  //     [AccountType.Brokerage, AccountType.Investment].includes(account.type)
+  //   )
+  // );
 
   return {
     ...institutionStore,
