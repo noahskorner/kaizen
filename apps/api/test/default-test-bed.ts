@@ -1,11 +1,13 @@
 import { MockPlaidApiBuilder } from './plaid/mock-plaid-api.builder';
 import { ServiceCollectionBuilder } from '../src/service-collection.builder';
-import { buildApp } from '../src/build-app';
+import { AppBuilder } from '../src/app-builder';
 
 const mockPlaidApi = new MockPlaidApiBuilder().build();
 
-const mockServiceCollection = new ServiceCollectionBuilder()
+export const defaultTestServiceCollection = new ServiceCollectionBuilder()
   .withPlaidApi(mockPlaidApi)
   .build();
 
-export const defaultTestBed = buildApp(mockServiceCollection);
+export const defaultTestBed = new AppBuilder()
+  .withServiceCollection(defaultTestServiceCollection)
+  .build();

@@ -2,10 +2,10 @@ import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import supertest from 'supertest';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 import { AuthToken, LoginRequest } from '@kaizen/auth';
-import { CreateUserCommand } from '@kaizen/user';
+import { CreateUserCommand, User } from '@kaizen/user';
 import { serverEnvironment } from '@kaizen/env-server';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
-import { buildApp } from '../../build-app';
+import { AppBuilder } from '../../app-builder';
 import {
   defaultTestBed,
   expectError,
@@ -14,6 +14,7 @@ import {
   getRefreshToken,
   createAndLoginUser
 } from '../../../test';
+import { LoginSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
 describe('/auth', () => {
   describe('login should', () => {
@@ -76,7 +77,7 @@ describe('/auth', () => {
       const email = createUniqueEmail();
       await supertest(defaultTestBed)
         .post('/user')
-        .send({ email, password: validPassword } as CreateUserCommand);
+        .send({ email, password: validPassword } satisfies CreateUserCommand);
       const request = {
         email: email,
         password: 'incorrect-password'
@@ -96,7 +97,7 @@ describe('/auth', () => {
       const email = createUniqueEmail();
       await supertest(defaultTestBed)
         .post('/user')
-        .send({ email, password: validPassword } as CreateUserCommand);
+        .send({ email, password: validPassword } satisfies CreateUserCommand);
       const request = {
         email: email,
         password: validPassword
@@ -114,6 +115,35 @@ describe('/auth', () => {
       expect(body.data.accessToken).toBeDefined();
       expect(body.data.refreshToken).toBeDefined();
       expect(body.data.refreshToken).toBe(refreshToken);
+    });
+    it('emits a login success event', async () => {
+      // Arrange
+      const spy = jest.spyOn(
+        defaultTestBed.serviceCollection.serviceEventBus,
+        'publish'
+      );
+      const email = createUniqueEmail();
+      const user: User = (
+        await supertest(defaultTestBed)
+          .post('/user')
+          .send({ email, password: validPassword } satisfies CreateUserCommand)
+      ).body.data;
+      const request = {
+        email: email,
+        password: validPassword
+      };
+      const expected: LoginSuccessEvent = {
+        type: ServiceEventType.LOGIN_SUCCESS,
+        payload: {
+          userId: user.id
+        }
+      };
+
+      // Act
+      await supertest(defaultTestBed).post('/auth').send(request);
+
+      // Assert
+      expect(spy).toHaveBeenCalledWith(expected);
     });
   });
   describe('refreshToken should', () => {
@@ -143,7 +173,9 @@ describe('/auth', () => {
           REFRESH_TOKEN_EXPIRATION: '0s'
         })
         .build();
-      const testBed = buildApp(mockServiceCollection);
+      const testBed = new AppBuilder()
+        .withServiceCollection(mockServiceCollection)
+        .build();
       const { authToken } = await createAndLoginUser(testBed);
 
       // Act
@@ -202,7 +234,9 @@ describe('/auth', () => {
           ACCESS_TOKEN_EXPIRATION: '0s'
         })
         .build();
-      const testBed = buildApp(mockServiceCollection);
+      const testBed = new AppBuilder()
+        .withServiceCollection(mockServiceCollection)
+        .build();
       const { authToken } = await createAndLoginUser(testBed);
 
       // Act

@@ -33,6 +33,14 @@ import { IServiceCollection } from './service-collection.interface';
 import { HomeController } from './routes/home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { IServiceEventBus, ServiceEventBus } from '@kaizen/core-server';
+import {
+  CreateWalletRepository,
+  CreateWalletService,
+  GetWalletRepository,
+  UpdateWalletRepository,
+  UpdateWalletService
+} from '@kaizen/wallet-server';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -54,10 +62,19 @@ export class ServiceCollectionBuilder {
     return this;
   }
 
+  public withEventBus(serviceEventBus: IServiceEventBus) {
+    this._serviceCollection.serviceEventBus = serviceEventBus;
+    return this;
+  }
+
   public build(): IServiceCollection {
     // Environment
     const environment =
       this._serviceCollection.environment ?? serverEnvironment;
+
+    // Events
+    const serviceEventBus =
+      this._serviceCollection.serviceEventBus ?? new ServiceEventBus();
 
     // Plaid
     const plaid =
@@ -102,6 +119,9 @@ export class ServiceCollectionBuilder {
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
     const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
     const findAccountsRepository = new FindAccountsRepository(prisma);
+    const getWalletRepository = new GetWalletRepository(prisma);
+    const createWalletRepository = new CreateWalletRepository(prisma);
+    const updateWalletRepository = new UpdateWalletRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -113,13 +133,17 @@ export class ServiceCollectionBuilder {
       new GetUserService(getUserRepository);
     const createUserService =
       this._serviceCollection.createUserService ??
-      new CreateUserService(findUserByEmailRepository, createUserRepository);
+      new CreateUserService(
+        findUserByEmailRepository,
+        createUserRepository,
+        serviceEventBus
+      );
     const createLinkTokenService =
       this._serviceCollection.createLinkTokenService ??
       new CreateLinkTokenService(getUserRepository, financialProvider);
     const loginService =
       this._serviceCollection.loginService ??
-      new LoginService(environment, findUserByEmailRepository);
+      new LoginService(environment, findUserByEmailRepository, serviceEventBus);
     const refreshTokenService =
       this._serviceCollection.refreshTokenService ??
       new RefreshTokenService(environment, getUserRepository);
@@ -152,6 +176,14 @@ export class ServiceCollectionBuilder {
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService);
+    const createWalletService = new CreateWalletService(
+      getWalletRepository,
+      createWalletRepository
+    );
+    const updateWalletService = new UpdateWalletService(
+      getWalletRepository,
+      updateWalletRepository
+    );
 
     // Controllers
     const homeController =
@@ -176,6 +208,8 @@ export class ServiceCollectionBuilder {
     const serviceCollection: IServiceCollection = {
       // Environment
       environment,
+      // Events
+      serviceEventBus,
       // Plaid
       plaid,
       // Prisma
@@ -190,6 +224,9 @@ export class ServiceCollectionBuilder {
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
+      getWalletRepository,
+      createWalletRepository,
+      updateWalletRepository,
       // Services
       getUserService,
       createUserService,
@@ -201,6 +238,8 @@ export class ServiceCollectionBuilder {
       findInstitutionsService,
       findTransactionsService,
       syncInstitutionsService,
+      createWalletService,
+      updateWalletService,
       // Controllers
       homeController,
       userController,

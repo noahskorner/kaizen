@@ -27,10 +27,21 @@ import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { IServiceEventBus } from '@kaizen/core-server';
+import {
+  ICreateWalletRepository,
+  ICreateWalletService,
+  IGetWalletRepository,
+  IUpdateWalletRepository,
+  IUpdateWalletService
+} from '@kaizen/wallet';
 
 export interface IServiceCollection {
   // Environment
   environment: IServerEnvironment;
+
+  // Events
+  serviceEventBus: IServiceEventBus;
 
   // Plaid
   plaid: PlaidApi;
@@ -49,6 +60,9 @@ export interface IServiceCollection {
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
+  getWalletRepository: IGetWalletRepository;
+  createWalletRepository: ICreateWalletRepository;
+  updateWalletRepository: IUpdateWalletRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -61,6 +75,8 @@ export interface IServiceCollection {
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
+  createWalletService: ICreateWalletService;
+  updateWalletService: IUpdateWalletService;
 
   // Controllers
   homeController: HomeController;

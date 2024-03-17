@@ -5,7 +5,6 @@ import {
   AccountBaseVerificationStatusEnum
 } from 'plaid';
 import { v4 as uuid } from 'uuid';
-import { getRandomEnum } from '../get-random-enum';
 
 export const buildAccount = (
   overrides: Partial<AccountBase> = {}
@@ -23,9 +22,10 @@ export const buildAccount = (
     mask: uuid(),
     name: uuid(),
     official_name: uuid(),
-    type: getRandomEnum(AccountType),
-    subtype: getRandomEnum(AccountSubtype),
-    verification_status: getRandomEnum(AccountBaseVerificationStatusEnum),
+    type: AccountType.Credit,
+    subtype: AccountSubtype.Auto,
+    verification_status:
+      AccountBaseVerificationStatusEnum.AutomaticallyVerified,
     persistent_account_id: uuid(),
     ...overrides
   };

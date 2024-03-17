@@ -1,11 +1,11 @@
 # Kaizen
 
+- [Project Backlog](https://team-eqahxbb7pkwq.atlassian.net/jira/software/projects/KAI/boards/1)
+
 ## Prerequisites
 
-- Volta
-  - https://docs.volta.sh/guide/getting-started
-- Docker Desktop
-  - https://docs.docker.com/desktop/install
+- [Volta](https://docs.volta.sh/guide/getting-started)
+- [Docker Desktop](https://docs.volta.sh/guide/getting-started)
 
 ## Getting Started
 

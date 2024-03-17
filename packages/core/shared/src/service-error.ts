@@ -1,76 +1,76 @@
 import { ErrorCode } from './error-code';
 
-interface RefreshTokenExpiredError {
+export interface RefreshTokenExpiredError {
   code: ErrorCode.REFRESH_TOKEN_EXPIRED;
   params: {
     expiredAt: string;
   };
 }
 
-interface CreateAccountInvalidPlaidPublicTokenError {
+export interface CreateAccountInvalidPlaidPublicTokenError {
   code: ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN;
   params: {
     plaidPublicToken: string;
   };
 }
 
-interface CreateVirtualAccountInvalidNameError {
+export interface CreateVirtualAccountInvalidNameError {
   code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME;
   params: {
     name: string;
   };
 }
 
-interface CreateVirtualAccountInvalidBalanceError {
+export interface CreateVirtualAccountInvalidBalanceError {
   code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE;
   params: {
     balance: number;
   };
 }
 
-interface CreateVirtualAccountInvalidAmountError {
+export interface CreateVirtualAccountInvalidAmountError {
   code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT;
   params: {
     amount: number;
   };
 }
 
-interface CreateVirtualAccountInvalidFrequencyError {
+export interface CreateVirtualAccountInvalidFrequencyError {
   code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY;
   params: {
     frequency: number;
   };
 }
 
-interface FindTransactionsInvalidPageError {
+export interface FindTransactionsInvalidPageError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE;
   params: {
     page: number;
   };
 }
 
-interface FindTransactionsInvalidPageSizeError {
+export interface FindTransactionsInvalidPageSizeError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE;
   params: {
     pageSize: number;
   };
 }
 
-interface FindTransactionsInvalidStartDateSizeError {
+export interface FindTransactionsInvalidStartDateSizeError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE;
   params: {
     startDate?: string;
   };
 }
 
-interface FindTransactionsInvalidEndDateSizeError {
+export interface FindTransactionsInvalidEndDateSizeError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE;
   params: {
     endDate?: string;
   };
 }
 
-interface FindTransactionsInvalidInvalidTimeframeSizeError {
+export interface FindTransactionsInvalidInvalidTimeframeSizeError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME;
   params: {
     startDate?: string;
@@ -78,42 +78,42 @@ interface FindTransactionsInvalidInvalidTimeframeSizeError {
   };
 }
 
-interface SyncAccountsIntitutionNotFoundError {
+export interface SyncAccountsIntitutionNotFoundError {
   code: ErrorCode.SYNC_ACCOUNTS_INSTITUTION_NOT_FOUND;
   params: {
     instiutionIds: string[];
   };
 }
 
-interface SyncTransactionsInstitutionsNotFound {
+export interface SyncTransactionsInstitutionsNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_INSTITUTIONS_NOT_FOUND;
   params: {
     institutionIds: string[];
   };
 }
 
-interface SyncTransactionsInstitutionNotFound {
+export interface SyncTransactionsInstitutionNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_INSTITUTION_NOT_FOUND;
   params: {
     institutionId: string;
   };
 }
 
-interface SyncTransactionsAccountsNotFound {
+export interface SyncTransactionsAccountsNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND;
   params: {
     externalAccountIds: string[];
   };
 }
 
-interface SyncTransactionsAccountNotFound {
+export interface SyncTransactionsAccountNotFound {
   code: ErrorCode.SYNC_TRANSACTIONS_ACCOUNT_NOT_FOUND;
   params: {
     accountId: string;
   };
 }
 
-interface FinancialProviderLinkTokenCreateError {
+export interface FinancialProviderLinkTokenCreateError {
   code: ErrorCode.FINANCIAL_PROVIDER_LINK_TOKEN_CREATE;
   params: {
     userId: string;
@@ -122,7 +122,7 @@ interface FinancialProviderLinkTokenCreateError {
   };
 }
 
-interface FinancialProviderExchangePublicTokenError {
+export interface FinancialProviderExchangePublicTokenError {
   code: ErrorCode.FINANCIAL_PROVIDER_EXCHANGE_PUBLIC_TOKEN;
   params: {
     publicToken: string;
@@ -131,7 +131,7 @@ interface FinancialProviderExchangePublicTokenError {
   };
 }
 
-interface FinancialProviderGetExternalAccountsError {
+export interface FinancialProviderGetExternalAccountsError {
   code: ErrorCode.FINANCIAL_PROVIDER_GET_EXTERNAL_ACCOUNTS;
   params: {
     accessToken: string;
@@ -140,7 +140,7 @@ interface FinancialProviderGetExternalAccountsError {
   };
 }
 
-interface FinancialProviderSyncExternalTransactionsError {
+export interface FinancialProviderSyncExternalTransactionsError {
   code: ErrorCode.FINANCIAL_PROVIDER_SYNC_EXTERNAL_TRANSACTIONS;
   params: {
     accessToken: string;
@@ -150,70 +150,126 @@ interface FinancialProviderSyncExternalTransactionsError {
   };
 }
 
-interface CreateLinkTokenUserNotFoundError {
+export interface CreateLinkTokenUserNotFoundError {
   code: ErrorCode.CREATE_LINK_TOKEN_USER_NOT_FOUND;
   params: {
     userId: string;
   };
 }
 
-interface CreateUserInvalidEmailError {
+export interface CreateUserInvalidEmailError {
   code: ErrorCode.CREATE_USER_INVALID_EMAIL;
   params: {
     email: string;
   };
 }
 
-interface CreateUserInvalidPasswordError {
+export interface CreateUserInvalidPasswordError {
   code: ErrorCode.CREATE_USER_INVALID_PASSWORD;
   params: {
     password: string;
   };
 }
 
-interface CreateUserPasswordTooShortError {
+export interface CreateUserPasswordTooShortError {
   code: ErrorCode.CREATE_USER_PASSWORD_TOO_SHORT;
   params: {
     password: string;
   };
 }
 
-interface CreateUserPasswordNoNumberError {
+export interface CreateUserPasswordNoNumberError {
   code: ErrorCode.CREATE_USER_PASSWORD_NO_NUMBER;
   params: {
     password: string;
   };
 }
 
-interface CreateUserPasswordNoSymbolError {
+export interface CreateUserPasswordNoSymbolError {
   code: ErrorCode.CREATE_USER_PASSWORD_NO_SYMBOL;
   params: {
     password: string;
   };
 }
 
-interface CreateUserEmailAlreadyExistsError {
+export interface CreateUserEmailAlreadyExistsError {
   code: ErrorCode.CREATE_USER_EMAIL_ALREADY_EXISTS;
   params: {
     email: string;
   };
 }
 
-interface GetUserNotFoundError {
+export interface GetUserNotFoundError {
   code: ErrorCode.GET_USER_NOT_FOUND;
   params: {
     userId: string;
   };
 }
 
-interface SyncTransactionsTransactionsNotFoundError {
+export interface SyncTransactionsTransactionsNotFoundError {
   code: ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND;
   params: {
     externalTransactionIds: string[];
   };
 }
 
-interface BaseError {
+export interface CreateWalletMustProvideUserIdError {
+  code: ErrorCode.CREATE_WALLET_MUST_PROVIDE_USER_ID;
+  params: {
+    userId: string;
+  };
+}
+
+export interface CreateWalletAlreadyExistsError {
+  code: ErrorCode.CREATE_WALLET_ALREADY_EXISTS_FOR_USER;
+  params: {
+    userId: string;
+  };
+}
+
+export interface UpdateWalletNotFoundError {
+  code: ErrorCode.UPDATE_WALLET_NOT_FOUND;
+  params: {
+    userId: string;
+  };
+}
+
+export interface UpdateWalletMustProvideUniqueTransactionIdError {
+  code: ErrorCode.UPDATE_WALLET_MUST_PROVIDE_UNIQUE_TRANSACTION_ID;
+  params: {
+    userId: string;
+    transactionId: unknown;
+  };
+}
+
+export interface UpdateWalletMustProvideAmountError {
+  code: ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT;
+  params: {
+    userId: string;
+    transactionId: string;
+    amount: unknown;
+  };
+}
+
+export interface UpdateWalletTransactionAlreadyExistsError {
+  code: ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS;
+  params: {
+    walletId: string;
+    transactionId: string;
+    amount: number;
+  };
+}
+
+export interface UpdateWalletNotEnoughFundsError {
+  code: ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS;
+  params: {
+    walletId: string;
+    transactionId: string;
+    amount: number;
+  };
+}
+
+export interface BaseError {
   code: Exclude<
     ErrorCode,
     | ErrorCode.REFRESH_TOKEN_EXPIRED
@@ -245,6 +301,12 @@ interface BaseError {
     | ErrorCode.GET_USER_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_ACCOUNTS_NOT_FOUND
     | ErrorCode.SYNC_TRANSACTIONS_TRANSACTIONS_NOT_FOUND
+    | ErrorCode.CREATE_WALLET_ALREADY_EXISTS_FOR_USER
+    | ErrorCode.UPDATE_WALLET_NOT_FOUND
+    | ErrorCode.UPDATE_WALLET_MUST_PROVIDE_UNIQUE_TRANSACTION_ID
+    | ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT
+    | ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS
+    | ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS
   >;
   params?: never;
 }
@@ -279,4 +341,11 @@ export type ServiceError =
   | CreateUserEmailAlreadyExistsError
   | GetUserNotFoundError
   | SyncTransactionsAccountsNotFound
-  | SyncTransactionsTransactionsNotFoundError;
+  | SyncTransactionsTransactionsNotFoundError
+  | CreateWalletMustProvideUserIdError
+  | CreateWalletAlreadyExistsError
+  | UpdateWalletNotFoundError
+  | UpdateWalletMustProvideUniqueTransactionIdError
+  | UpdateWalletMustProvideAmountError
+  | UpdateWalletTransactionAlreadyExistsError
+  | UpdateWalletNotEnoughFundsError;

@@ -1,6 +1,3 @@
-// import dotenv from 'dotenv';
-// dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
-
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
@@ -18,7 +15,7 @@ export default {
 
   // Automatically clear mock calls, instances and results before every test
   clearMocks: true,
-  testTimeout: 30000
+  testTimeout: 30000,
 
   // Indicates whether the coverage information should be collected while executing the test
   // collectCoverage: false,
@@ -64,7 +61,6 @@ export default {
   // globalTeardown: undefined,
 
   // A set of global variables that need to be available in all test environments
-  // globals: {},
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: "50%",
@@ -131,7 +127,7 @@ export default {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: ['./jest.setup.ts']
+  setupFiles: ['./jest.setup.ts']
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
