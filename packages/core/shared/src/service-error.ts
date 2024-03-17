@@ -266,7 +266,6 @@ export interface UpdateWalletNotEnoughFundsError {
     walletId: string;
     transactionId: string;
     amount: number;
-    balance: number;
   };
 }
 
