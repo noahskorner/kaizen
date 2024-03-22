@@ -1,4 +1,4 @@
-import { createUser, defaultTestBed } from '../../../test';
+import { buildTestBed, createUser } from '../../../test';
 import { CreateWalletCommand } from '@kaizen/wallet';
 import { ErrorCode } from '@kaizen/core';
 
@@ -6,10 +6,12 @@ describe('CreateWalletService', () => {
   describe('create should', () => {
     it(`return ${ErrorCode.CREATE_WALLET_MUST_PROVIDE_USER_ID} when userId is not provided`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.createWalletService;
+      const { serviceCollection } = buildTestBed();
 
       // Act
-      const response = await sut.create({} as CreateWalletCommand);
+      const response = await serviceCollection.createWalletService.create(
+        {} as CreateWalletCommand
+      );
 
       // Assert
       expect(response.type).toBe('FAILURE');
@@ -21,14 +23,15 @@ describe('CreateWalletService', () => {
     });
     it(`return created wallet`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.createWalletService;
-      const user = await createUser(defaultTestBed);
+      const { testBed, serviceCollection } = buildTestBed();
+      const user = await createUser(testBed);
       const command: CreateWalletCommand = {
         userId: user.id
       };
 
       // Act
-      const response = await sut.create(command);
+      const response =
+        await serviceCollection.createWalletService.create(command);
 
       // Assert
       expect(response.type).toBe('SUCCESS');
@@ -40,15 +43,16 @@ describe('CreateWalletService', () => {
     });
     it(`return ${ErrorCode.CREATE_WALLET_ALREADY_EXISTS_FOR_USER} when creating two wallets for the same user`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.createWalletService;
-      const user = await createUser(defaultTestBed);
+      const { testBed, serviceCollection } = buildTestBed();
+      const user = await createUser(testBed);
       const command: CreateWalletCommand = {
         userId: user.id
       };
 
       // Act
-      await sut.create(command);
-      const response = await sut.create(command);
+      await serviceCollection.createWalletService.create(command);
+      const response =
+        await serviceCollection.createWalletService.create(command);
 
       // Assert
       expect(response.type).toBe('FAILURE');

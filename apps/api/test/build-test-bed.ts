@@ -15,6 +15,7 @@ import { AppBuilder } from '../src/app-builder';
 import { Express } from 'express';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
+import { ServiceEventBusBuilder } from '@kaizen/core-server';
 
 export interface BuildSutCommand {
   itemPublicTokenExchangeResponse: ItemPublicTokenExchangeResponse;
@@ -25,7 +26,7 @@ export interface BuildSutCommand {
 
 const cachedPrismaClient = new PrismaClient();
 
-export const buildSut = (command?: Partial<BuildSutCommand>) => {
+export const buildTestBed = (command?: Partial<BuildSutCommand>) => {
   const mockItemPublicTokenExchangeResponse =
     command?.itemPublicTokenExchangeResponse ??
     buildItemPublicTokenExchangeResponse();
@@ -41,20 +42,24 @@ export const buildSut = (command?: Partial<BuildSutCommand>) => {
     .withTransactionsSync(mockTransactionSyncResponse)
     .build();
 
-  const mockServiceCollection = new ServiceCollectionBuilder()
+  const serviceEventBus = new ServiceEventBusBuilder().build();
+
+  const serviceCollection = new ServiceCollectionBuilder()
     .withPrisma(cachedPrismaClient)
     .withPlaidApi(mockPlaidApi)
+    .withEventBus(serviceEventBus)
     .build();
 
-  const sut = new AppBuilder()
-    .withServiceCollection(mockServiceCollection)
+  const testBed = new AppBuilder()
+    .withServiceCollection(serviceCollection)
     .build();
-  mockServiceCollection;
 
   return {
     mockItemPublicTokenExchangeResponse,
     mockAccountsBalanceGetResponse,
     mockTransactionSyncResponse,
-    sut
+    serviceEventBus,
+    serviceCollection,
+    testBed
   };
 };

@@ -4,7 +4,6 @@ import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
 import { IServiceCollection } from './service-collection.interface';
 import { buildRouter } from './routes/build-router';
-import { ServiceEventListener, ServiceEventType } from '@kaizen/core-server';
 
 export class AppBuilder {
   private _serviceCollection: IServiceCollection | null = null;
@@ -15,32 +14,10 @@ export class AppBuilder {
     return this;
   }
 
-  withListeners(
-    listeners: Partial<Record<ServiceEventType, ServiceEventListener[]>>
-  ) {
-    if (this._serviceCollection == null) {
-      throw new Error(
-        `The service collection must be instanstiated before we can add listeners. 
-        Did you forget to call withServiceCollection()?`
-      );
-    }
-
-    Object.entries(listeners).forEach(([type, listeners]) => {
-      listeners.forEach((listener) => {
-        this._serviceCollection!.serviceEventBus.subscribe(
-          type as ServiceEventType,
-          listener
-        );
-      });
-    });
-
-    return this;
-  }
-
   build() {
     if (this._serviceCollection == null) {
       throw new Error(
-        `The service collection must be instanstiated before we can build the application. 
+        `The service collection must be instanstiated before we can build the application.
         Did you forget to call withServiceCollection()?`
       );
     }
@@ -48,7 +25,6 @@ export class AppBuilder {
     const router = buildRouter(this._serviceCollection);
 
     const app = express();
-    app.serviceCollection = this._serviceCollection;
     app.use(express.json());
     app.use(
       cors({

@@ -1,4 +1,4 @@
-export * from './build-sut';
+export * from './build-test-bed';
 export * from './create-and-login-user';
 export * from './create-institution';
 export * from './create-unique-email';

@@ -11,11 +11,10 @@ import {
   validPassword,
   MockPlaidApiBuilder,
   mockLinkTokenCreateResponse,
-  createAndLoginUser
+  createAndLoginUser,
+  buildTestBed
 } from '../../../test';
 import { CreateUserSuccessEvent, ServiceEventType } from '@kaizen/core-server';
-// import '../../../src/index';
-// import { CreateUserSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
 describe('/user', () => {
   describe('create should', () => {
@@ -154,16 +153,15 @@ describe('/user', () => {
     });
     it('emits create user success event', async () => {
       // Arrange
-      jest.spyOn(defaultTestBed.serviceCollection.serviceEventBus, 'publish');
+      const { testBed, serviceCollection } = buildTestBed();
+      jest.spyOn(serviceCollection.serviceEventBus, 'publish');
       const request: CreateUserCommand = {
         email: `${uuid()}-UPPERcase@test.com`,
         password: validPassword
       };
 
       // Act
-      const response = await supertest(defaultTestBed)
-        .post('/user')
-        .send(request);
+      const response = await supertest(testBed).post('/user').send(request);
       const body: ApiSuccessResponse<User> = response.body;
       const event: CreateUserSuccessEvent = {
         type: ServiceEventType.CREATE_USER_SUCCESS,
@@ -173,9 +171,9 @@ describe('/user', () => {
       };
 
       // Assert
-      expect(
-        defaultTestBed.serviceCollection.serviceEventBus.publish
-      ).toHaveBeenCalledWith(event);
+      expect(serviceCollection.serviceEventBus.publish).toHaveBeenCalledWith(
+        event
+      );
     });
   });
   describe('createLinkToken should', () => {

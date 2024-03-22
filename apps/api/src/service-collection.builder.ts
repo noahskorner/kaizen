@@ -33,14 +33,24 @@ import { IServiceCollection } from './service-collection.interface';
 import { HomeController } from './routes/home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
-import { IServiceEventBus, ServiceEventBus } from '@kaizen/core-server';
+import {
+  CreateUserSuccessEvent,
+  IServiceEventBus,
+  LoginSuccessEvent,
+  ServiceEventBusBuilder,
+  ServiceEventType
+} from '@kaizen/core-server';
 import {
   CreateWalletRepository,
   CreateWalletService,
   GetWalletRepository,
+  GetWalletService,
   UpdateWalletRepository,
   UpdateWalletService
 } from '@kaizen/wallet-server';
+import { UpdateWalletCommand } from '@kaizen/wallet';
+import { v4 as uuid } from 'uuid';
+import { GetWalletController } from './routes/wallet';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -74,7 +84,28 @@ export class ServiceCollectionBuilder {
 
     // Events
     const serviceEventBus =
-      this._serviceCollection.serviceEventBus ?? new ServiceEventBus();
+      this._serviceCollection.serviceEventBus ??
+      new ServiceEventBusBuilder()
+        // When a user is created, create a wallet for them
+        .withHandler(
+          ServiceEventType.CREATE_USER_SUCCESS,
+          async (event: CreateUserSuccessEvent) => {
+            await serviceCollection.createWalletService.create(event.payload);
+          }
+        )
+        // When a user logs in, give them 10 coins
+        .withHandler(
+          ServiceEventType.LOGIN_SUCCESS,
+          async (event: LoginSuccessEvent) => {
+            const command: UpdateWalletCommand = {
+              userId: event.payload.userId,
+              transactionId: uuid(),
+              amount: 10
+            };
+            await serviceCollection.updateWalletService.update(command);
+          }
+        )
+        .build();
 
     // Plaid
     const plaid =
@@ -184,6 +215,7 @@ export class ServiceCollectionBuilder {
       getWalletRepository,
       updateWalletRepository
     );
+    const getWalletService = new GetWalletService(getWalletRepository);
 
     // Controllers
     const homeController =
@@ -204,6 +236,7 @@ export class ServiceCollectionBuilder {
     const transactionController =
       this._serviceCollection.transactionController ??
       new TransactionController(findTransactionsService);
+    const getWalletController = new GetWalletController(getWalletService);
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -240,12 +273,14 @@ export class ServiceCollectionBuilder {
       syncInstitutionsService,
       createWalletService,
       updateWalletService,
+      getWalletService,
       // Controllers
       homeController,
       userController,
       authController,
       institutionController,
-      transactionController
+      transactionController,
+      getWalletController
     };
 
     return serviceCollection;

@@ -49,5 +49,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     serviceCollection.transactionController.find
   );
 
+  // /wallet
+  router.get(
+    '/wallet/user/:userId',
+    authenticate(serviceCollection.environment),
+    serviceCollection.getWalletController.get
+  );
+
   return router;
 };

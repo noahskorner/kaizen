@@ -12,7 +12,8 @@ import {
   createUniqueEmail,
   validPassword,
   getRefreshToken,
-  createAndLoginUser
+  createAndLoginUser,
+  buildTestBed
 } from '../../../test';
 import { LoginSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
@@ -118,13 +119,11 @@ describe('/auth', () => {
     });
     it('emits a login success event', async () => {
       // Arrange
-      const spy = jest.spyOn(
-        defaultTestBed.serviceCollection.serviceEventBus,
-        'publish'
-      );
+      const { serviceEventBus, testBed } = buildTestBed();
+      const spy = jest.spyOn(serviceEventBus, 'publish');
       const email = createUniqueEmail();
       const user: User = (
-        await supertest(defaultTestBed)
+        await supertest(testBed)
           .post('/user')
           .send({ email, password: validPassword } satisfies CreateUserCommand)
       ).body.data;
@@ -140,7 +139,7 @@ describe('/auth', () => {
       };
 
       // Act
-      await supertest(defaultTestBed).post('/auth').send(request);
+      await supertest(testBed).post('/auth').send(request);
 
       // Assert
       expect(spy).toHaveBeenCalledWith(expected);

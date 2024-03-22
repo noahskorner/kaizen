@@ -23,10 +23,22 @@ export abstract class Controller {
     return res.status(401).json(ServiceResponseAdapter.toApiResponse(response));
   }
 
+  protected forbidden(res: Response, response?: ServiceFailureResponse) {
+    if (response == null) return res.sendStatus(403);
+
+    return res.status(403).json(ServiceResponseAdapter.toApiResponse(response));
+  }
+
   protected ok<T>(res: Response, response?: ServiceSuccessResponse<T>) {
     if (response == null) return res.sendStatus(200);
 
     return res.status(200).json(ServiceResponseAdapter.toApiResponse(response));
+  }
+
+  protected notFound(res: Response, response?: ServiceFailureResponse) {
+    if (response == null) return res.sendStatus(404);
+
+    return res.status(404).json(ServiceResponseAdapter.toApiResponse(response));
   }
 
   protected internalServerError(
