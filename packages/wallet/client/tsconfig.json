@@ -1,8 +1,8 @@
 {
-  "extends": "../../../tsconfig.base.json",
+  "extends": "../../../tsconfig.react.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "outDir": "../../../dist/packages/wallet/server"
+    "outDir": "../../../dist/packages/wallet/client"
   }
 }

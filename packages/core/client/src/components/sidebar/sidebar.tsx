@@ -1,4 +1,3 @@
-import { paths } from '../../../../../../apps/frontend/src/pages/routes';
 import { SidebarButton } from './sidebar-link';
 import {
   BankNotesIcon,
@@ -7,13 +6,17 @@ import {
   useSidebarStore
 } from '@kaizen/core-client';
 import { Avatar } from './avatar';
+import { selectWallet } from '@kaizen/wallet-client';
+import { useSelector } from 'react-redux';
 
 export interface SidebarProps {
+  financeHref: string;
   onLogoutClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export const Sidebar = ({ onLogoutClick }: SidebarProps) => {
+export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
   const { show } = useSidebarStore();
+  const wallet = useSelector(selectWallet);
 
   return (
     <div className="fixed h-full">
@@ -28,7 +31,11 @@ export const Sidebar = ({ onLogoutClick }: SidebarProps) => {
               </h6>
               <div className="-ml-1 flex items-center text-neutral-0">
                 <CoinsIcon />
-                <span className="text-xs text-neutral-0">4,422</span>
+                {wallet && (
+                  <span className="text-xs text-neutral-0">
+                    {wallet.balance}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -37,7 +44,7 @@ export const Sidebar = ({ onLogoutClick }: SidebarProps) => {
             <p className="mb-2 text-xs text-neutral-100">Dashboards</p>
             <SidebarButton
               icon={<BankNotesIcon />}
-              href={paths.finance}
+              href={financeHref}
               label="Finances"
             />
           </div>
