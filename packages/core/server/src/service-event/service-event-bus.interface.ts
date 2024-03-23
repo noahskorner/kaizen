@@ -1,8 +1,13 @@
 import { ServiceEvent } from './service-event';
-import { ServiceEventListener } from './service-event-listener';
+import { ServiceEventHandler } from './service-event-handlers';
 import { ServiceEventType } from './service-event-type';
 
 export interface IServiceEventBus {
-  subscribe(type: ServiceEventType, listener: ServiceEventListener): void;
-  publish(event: ServiceEvent): void;
+  subscribe: <T extends ServiceEventType>(
+    serviceEventType: T,
+    handler: ServiceEventHandler<T>
+  ) => Promise<void>;
+  publish: <T extends ServiceEventType>(
+    serviceEvent: Extract<ServiceEvent, { type: T }>
+  ) => Promise<void>;
 }

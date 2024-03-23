@@ -14,7 +14,7 @@ import {
   createInstitution,
   expectError
 } from '../../../../test';
-import { buildSut } from '../../../../test/build-sut';
+import { buildTestBed } from '../../../../test/build-test-bed';
 import { AccountBase } from 'plaid';
 
 const expectAccountToBeExternal = (actual: Account, expected: AccountBase) => {
@@ -43,11 +43,11 @@ describe('/institution', () => {
   describe('create should', () => {
     it('returns 400 when no publicToken is provided', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .post('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -60,14 +60,14 @@ describe('/institution', () => {
     });
     it('returns 400 when publicToken is empty string', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
       const request: CreateInstitutionRequest = {
         publicToken: ''
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .post('/institution')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -84,15 +84,15 @@ describe('/institution', () => {
       const {
         mockItemPublicTokenExchangeResponse,
         mockAccountsBalanceGetResponse,
-        sut
-      } = buildSut();
-      const { authToken, user } = await createAndLoginUser(sut);
+        testBed
+      } = buildTestBed();
+      const { authToken, user } = await createAndLoginUser(testBed);
       const request: CreateInstitutionRequest = {
         publicToken: mockItemPublicTokenExchangeResponse.access_token
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .post('/institution')
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
@@ -111,19 +111,19 @@ describe('/institution', () => {
   describe('find should', () => {
     it('returns 401 when user is not logged in', async () => {
       // Act
-      const { sut } = buildSut();
-      const response = await supertest(sut).get('/institution');
+      const { testBed } = buildTestBed();
+      const response = await supertest(testBed).get('/institution');
 
       // Assert
       expect(response.statusCode).toBe(401);
     });
     it('returns 200 and empty array when no institutions exist', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Institution[]> = response.body;
@@ -134,11 +134,11 @@ describe('/institution', () => {
     });
     it('returns 200 and list with created institution', async () => {
       // Arrange
-      const { sut, mockAccountsBalanceGetResponse } = buildSut();
-      const { authToken, user, institution } = await createInstitution(sut);
+      const { testBed, mockAccountsBalanceGetResponse } = buildTestBed();
+      const { authToken, user, institution } = await createInstitution(testBed);
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get('/institution')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Institution[]> = response.body;
@@ -157,11 +157,11 @@ describe('/institution', () => {
   describe('sync should', () => {
     it('returns 200 and empty array when no institutions exist', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<SyncInstitutionsResponse> = response.body;
@@ -179,20 +179,20 @@ describe('/institution', () => {
         accounts: [originalExternal],
         item
       });
-      let { sut } = buildSut({
+      let { testBed } = buildTestBed({
         accountsBalanceGetResponse: accountsBalanceGetResponse
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
       const createdExternal = buildAccount({ item_id: item.item_id });
-      sut = buildSut({
+      testBed = buildTestBed({
         accountsBalanceGetResponse: {
           ...accountsBalanceGetResponse,
           accounts: [originalExternal, createdExternal]
         }
-      }).sut;
+      }).testBed;
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<SyncInstitutionsResponse> = response.body;
@@ -226,10 +226,10 @@ describe('/institution', () => {
         accounts: [originalExternal],
         item
       });
-      let { sut } = buildSut({
+      let { testBed } = buildTestBed({
         accountsBalanceGetResponse: accountsBalanceGetResponse
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
       const updatedExternal: AccountBase = {
         ...originalExternal,
         balances: {
@@ -239,15 +239,15 @@ describe('/institution', () => {
           iso_currency_code: 'EUR'
         }
       };
-      sut = buildSut({
+      testBed = buildTestBed({
         accountsBalanceGetResponse: {
           ...accountsBalanceGetResponse,
           accounts: [updatedExternal]
         }
-      }).sut;
+      }).testBed;
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<SyncInstitutionsResponse> = response.body;

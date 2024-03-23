@@ -1,22 +1,39 @@
 import { ServiceEvent } from './service-event';
-import { ServiceEventListener } from './service-event-listener';
+import { IServiceEventBus } from './service-event-bus.interface';
+import {
+  ServiceEventHandler,
+  ServiceEventHandlers
+} from './service-event-handlers';
 import { ServiceEventType } from './service-event-type';
 
-export class ServiceEventBus {
-  private listeners: Partial<Record<ServiceEventType, ServiceEventListener[]>> =
-    {};
+export class ServiceEventBus implements IServiceEventBus {
+  private handlers: Partial<ServiceEventHandlers> = {};
 
-  public subscribe(type: ServiceEventType, listener: ServiceEventListener) {
-    if (!this.listeners[type]) {
-      this.listeners[type] = [];
+  public async subscribe<T extends ServiceEventType>(
+    serviceEventType: T,
+    handler: ServiceEventHandler<T>
+  ): Promise<void> {
+    if (!(serviceEventType in this.handlers)) {
+      this.handlers[serviceEventType] = [];
     }
-    this.listeners[type]!.push(listener);
+
+    this.handlers[serviceEventType]!.push(handler);
+    return Promise.resolve();
   }
 
-  public publish(event: ServiceEvent) {
-    const listensers = this.listeners[event.type] ?? [];
-    for (const listenser of listensers) {
-      listenser(event);
+  public async publish<T extends ServiceEventType>(
+    serviceEvent: Extract<ServiceEvent, { type: T }>
+  ): Promise<void> {
+    if (!(serviceEvent.type in this.handlers)) {
+      return Promise.resolve();
     }
+
+    const handlers = this.handlers[
+      serviceEvent.type
+    ]! as ServiceEventHandler<T>[];
+    for (const handler of handlers) {
+      await handler(serviceEvent);
+    }
+    return Promise.resolve();
   }
 }

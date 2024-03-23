@@ -25,9 +25,13 @@
     "@kaizen/core-client": "*",
     "@kaizen/finance": "*",
     "@kaizen/user-client": "*",
+    "@kaizen/wallet": "*",
+    "@kaizen/wallet-client": "*",
     "react": "^18.2.0",
     "react-plaid-link": "^3.5.1",
     "react-router-dom": "^6.19.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "react-redux": "^9.1.0",
+    "@reduxjs/toolkit": "^2.2.2"
   }
 }

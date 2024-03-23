@@ -1,5 +1,5 @@
 {
-  "name": "@kaizen/auth-client",
+  "name": "@kaizen/wallet-client",
   "version": "0.0.0",
   "main": "src/index.ts",
   "volta": {
@@ -13,12 +13,12 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@kaizen/auth": "*",
     "@kaizen/core": "*",
     "@kaizen/core-client": "*",
-    "jwt-decode": "^4.0.0",
+    "@kaizen/wallet": "*",
+    "@reduxjs/toolkit": "^2.2.2",
     "react": "^18.2.0",
-    "react-router-dom": "^6.19.0",
-    "zustand": "^4.4.6"
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^6.19.0"
   }
 }

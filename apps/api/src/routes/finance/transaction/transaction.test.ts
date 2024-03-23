@@ -24,7 +24,7 @@ import {
   buildItem,
   buildItemPublicTokenExchangeResponse
 } from '../../../../test';
-import { buildSut } from '../../../../test/build-sut';
+import { buildTestBed } from '../../../../test/build-test-bed';
 import {
   Transaction as PlaidTransaction,
   Location as PlaidLocation,
@@ -116,11 +116,11 @@ describe('/transaction', () => {
   describe('find should', () => {
     it('returns 400 when page not provided', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get('/transaction')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -130,14 +130,14 @@ describe('/transaction', () => {
     });
     it('returns 400 when page not valid', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
       const request: FindTransactionsRequest = {
         page: 0
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -147,8 +147,8 @@ describe('/transaction', () => {
     });
     it('returns 400 when pageSize not valid', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createAndLoginUser(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createAndLoginUser(testBed);
       const request: Omit<FindTransactionsRequest, 'pageSize'> & {
         pageSize: null;
       } = {
@@ -157,7 +157,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -174,7 +174,7 @@ describe('/transaction', () => {
       const mockTransactions = range(11).map(() =>
         buildTransaction({ account_id: mockAccount.account_id })
       );
-      const { sut } = buildSut({
+      const { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -185,13 +185,13 @@ describe('/transaction', () => {
           added: mockTransactions
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
       const request: FindTransactionsRequest = {
         page: 1
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -219,7 +219,7 @@ describe('/transaction', () => {
       const mockTransactions = range(11).map(() =>
         buildTransaction({ account_id: mockAccount.account_id })
       );
-      const { sut } = buildSut({
+      const { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -230,7 +230,7 @@ describe('/transaction', () => {
           added: mockTransactions
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
       const pageSize = 7;
       const request: FindTransactionsRequest = {
         page: 1,
@@ -238,7 +238,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -270,7 +270,7 @@ describe('/transaction', () => {
           date: new Date(1998, 1, index + 1).toISOString()
         })
       );
-      const { sut } = buildSut({
+      const { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -281,14 +281,14 @@ describe('/transaction', () => {
           added: mockTransactions
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
       const request: FindTransactionsRequest = {
         page: 1,
         pageSize: 15
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -326,7 +326,7 @@ describe('/transaction', () => {
       const originalExternal = buildTransaction({
         account_id: mockAccount.account_id
       });
-      let { sut } = buildSut({
+      let { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -337,13 +337,13 @@ describe('/transaction', () => {
           added: [originalExternal]
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
 
       // Sync institutions
       const createdExternal = buildTransaction({
         account_id: mockAccount.account_id
       });
-      sut = buildSut({
+      testBed = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -353,8 +353,8 @@ describe('/transaction', () => {
         transactionSyncResponse: buildTransactionsSyncResponse({
           added: [createdExternal]
         })
-      }).sut;
-      await supertest(sut)
+      }).testBed;
+      await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -366,7 +366,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -402,7 +402,7 @@ describe('/transaction', () => {
       const originalExternal = buildTransaction({
         account_id: mockAccount.account_id
       });
-      let { sut } = buildSut({
+      let { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -413,14 +413,14 @@ describe('/transaction', () => {
           added: [originalExternal]
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
 
       // Sync institutions
       const updatedExternal = buildTransaction({
         account_id: originalExternal.account_id,
         transaction_id: originalExternal.transaction_id
       });
-      sut = buildSut({
+      testBed = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -430,8 +430,8 @@ describe('/transaction', () => {
         transactionSyncResponse: buildTransactionsSyncResponse({
           modified: [updatedExternal]
         })
-      }).sut;
-      await supertest(sut)
+      }).testBed;
+      await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -443,7 +443,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -471,7 +471,7 @@ describe('/transaction', () => {
       const originalExternal = buildTransaction({
         account_id: mockAccount.account_id
       });
-      let { sut } = buildSut({
+      let { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -482,10 +482,10 @@ describe('/transaction', () => {
           added: [originalExternal]
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
 
       // Sync institutions
-      sut = buildSut({
+      testBed = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -495,8 +495,8 @@ describe('/transaction', () => {
         transactionSyncResponse: buildTransactionsSyncResponse({
           removed: [{ transaction_id: originalExternal.transaction_id }]
         })
-      }).sut;
-      await supertest(sut)
+      }).testBed;
+      await supertest(testBed)
         .put('/institution/sync')
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -508,7 +508,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;
@@ -519,15 +519,15 @@ describe('/transaction', () => {
     });
     it('returns 400 when start date not valid', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createInstitution(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createInstitution(testBed);
       const request: FindTransactionsRequest = {
         page: 1,
         startDate: 'invalid'
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -537,15 +537,15 @@ describe('/transaction', () => {
     });
     it('returns 400 when end date not valid', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createInstitution(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createInstitution(testBed);
       const request: FindTransactionsRequest = {
         page: 1,
         endDate: 'invalid'
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -555,8 +555,8 @@ describe('/transaction', () => {
     });
     it('returns 400 when end date after start date', async () => {
       // Arrange
-      const { sut } = buildSut();
-      const { authToken } = await createInstitution(sut);
+      const { testBed } = buildTestBed();
+      const { authToken } = await createInstitution(testBed);
 
       // Build request
       const pageSize = 1;
@@ -568,7 +568,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -594,7 +594,7 @@ describe('/transaction', () => {
         account_id: mockAccount.account_id,
         date: new Date(1998, 7, 31).toISOString()
       });
-      const { sut } = buildSut({
+      const { testBed } = buildTestBed({
         itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
           item_id: mockItem.item_id
         }),
@@ -609,7 +609,7 @@ describe('/transaction', () => {
           ]
         })
       });
-      const { authToken } = await createInstitution(sut);
+      const { authToken } = await createInstitution(testBed);
 
       // Build request
       const pageSize = 1;
@@ -621,7 +621,7 @@ describe('/transaction', () => {
       };
 
       // Act
-      const response = await supertest(sut)
+      const response = await supertest(testBed)
         .get(`/transaction?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
       const body: ApiSuccessResponse<Paginated<Transaction>> = response.body;

@@ -3,6 +3,6 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "outDir": "../../../dist/packages/auth/shared"
+    "outDir": "../../../dist/packages/wallet/shared"
   }
 }

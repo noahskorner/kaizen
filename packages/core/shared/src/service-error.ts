@@ -269,6 +269,17 @@ export interface UpdateWalletNotEnoughFundsError {
   };
 }
 
+export interface GetWalletNotFoundError {
+  code: ErrorCode.GET_WALLET_NOT_FOUND;
+  params: {
+    userId: string;
+  };
+}
+
+export interface GetWalletNotYourWalletError {
+  code: ErrorCode.GET_WALLET_NOT_YOUR_WALLET;
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -307,6 +318,8 @@ export interface BaseError {
     | ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT
     | ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS
     | ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS
+    | ErrorCode.GET_WALLET_NOT_FOUND
+    | ErrorCode.GET_WALLET_NOT_YOUR_WALLET
   >;
   params?: never;
 }
@@ -348,4 +361,6 @@ export type ServiceError =
   | UpdateWalletMustProvideUniqueTransactionIdError
   | UpdateWalletMustProvideAmountError
   | UpdateWalletTransactionAlreadyExistsError
-  | UpdateWalletNotEnoughFundsError;
+  | UpdateWalletNotEnoughFundsError
+  | GetWalletNotFoundError
+  | GetWalletNotYourWalletError;

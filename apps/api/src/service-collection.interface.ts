@@ -32,9 +32,11 @@ import {
   ICreateWalletRepository,
   ICreateWalletService,
   IGetWalletRepository,
+  IGetWalletService,
   IUpdateWalletRepository,
   IUpdateWalletService
 } from '@kaizen/wallet';
+import { GetWalletController } from './routes/wallet';
 
 export interface IServiceCollection {
   // Environment
@@ -77,6 +79,7 @@ export interface IServiceCollection {
   findTransactionsService: IFindTransactionsService;
   createWalletService: ICreateWalletService;
   updateWalletService: IUpdateWalletService;
+  getWalletService: IGetWalletService;
 
   // Controllers
   homeController: HomeController;
@@ -84,4 +87,5 @@ export interface IServiceCollection {
   authController: AuthController;
   institutionController: InstitutionController;
   transactionController: TransactionController;
+  getWalletController: GetWalletController;
 }

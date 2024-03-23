@@ -1,10 +1,14 @@
 import { CreateWalletCommand } from '@kaizen/wallet';
 import { Application } from 'express';
 import { createUser } from './create-user';
+import { IServiceCollection } from '../src/service-collection.interface';
 
-export const createWallet = async (testBed: Application) => {
+export const createWallet = async (
+  serviceCollection: IServiceCollection,
+  testBed: Application
+) => {
   const user = await createUser(testBed);
-  const response = await testBed.serviceCollection.createWalletService.create({
+  const response = await serviceCollection.createWalletService.create({
     userId: user.id
   } satisfies CreateWalletCommand);
 

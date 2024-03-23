@@ -1,17 +1,19 @@
 import { ErrorCode } from '@kaizen/core';
-import { defaultTestBed } from '../../../test/default-test-bed';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { createWallet } from '../../../test/create-wallet';
+import { buildTestBed } from '../../../test/build-test-bed';
 
 describe('UpdateWalletService', () => {
   describe('update should', () => {
     it(`return ${ErrorCode.UPDATE_WALLET_MUST_PROVIDE_UNIQUE_TRANSACTION_ID} when transactionId is empty`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
+      const { serviceCollection } = buildTestBed();
 
       // Act
-      const response = await sut.update({} as UpdateWalletCommand);
+      const response = await serviceCollection.updateWalletService.update(
+        {} as UpdateWalletCommand
+      );
 
       // Assert
       expect(response.type).toBe('FAILURE');
@@ -23,10 +25,10 @@ describe('UpdateWalletService', () => {
     });
     it(`return ${ErrorCode.UPDATE_WALLET_MUST_PROVIDE_AMOUNT} when amount is empty`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
+      const { serviceCollection } = buildTestBed();
 
       // Act
-      const response = await sut.update({
+      const response = await serviceCollection.updateWalletService.update({
         transactionId: uuid()
       } as UpdateWalletCommand);
 
@@ -40,10 +42,10 @@ describe('UpdateWalletService', () => {
     });
     it(`return ${ErrorCode.UPDATE_WALLET_NOT_FOUND} when wallet does not exist`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
+      const { serviceCollection } = buildTestBed();
 
       // Act
-      const response = await sut.update({
+      const response = await serviceCollection.updateWalletService.update({
         userId: uuid(),
         transactionId: uuid(),
         amount: 100
@@ -59,8 +61,9 @@ describe('UpdateWalletService', () => {
     });
     it(`return ${ErrorCode.UPDATE_WALLET_TRANSACTION_ALREADY_EXISTS} when transaction already exists`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
-      const { user } = await createWallet(defaultTestBed);
+      const { testBed, serviceCollection } = buildTestBed();
+
+      const { user } = await createWallet(serviceCollection, testBed);
       const command: UpdateWalletCommand = {
         userId: user.id,
         transactionId: uuid(),
@@ -68,8 +71,9 @@ describe('UpdateWalletService', () => {
       };
 
       // Act
-      await sut.update(command);
-      const response = await sut.update(command);
+      await serviceCollection.updateWalletService.update(command);
+      const response =
+        await serviceCollection.updateWalletService.update(command);
 
       // Assert
       expect(response.type).toBe('FAILURE');
@@ -81,8 +85,8 @@ describe('UpdateWalletService', () => {
     });
     it(`return ${ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS} when wallet does not have enough funds`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
-      const { user } = await createWallet(defaultTestBed);
+      const { serviceCollection, testBed } = buildTestBed();
+      const { user } = await createWallet(serviceCollection, testBed);
       const command: UpdateWalletCommand = {
         userId: user.id,
         transactionId: uuid(),
@@ -90,7 +94,8 @@ describe('UpdateWalletService', () => {
       };
 
       // Act
-      const response = await sut.update(command);
+      const response =
+        await serviceCollection.updateWalletService.update(command);
 
       // Assert
       expect(response.type).toBe('FAILURE');
@@ -102,24 +107,24 @@ describe('UpdateWalletService', () => {
     });
     it(`return ${ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS} when wallet does not have enough funds after multiple transactions`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
-      const { user, wallet } = await createWallet(defaultTestBed);
+      const { serviceCollection, testBed } = buildTestBed();
+      const { user, wallet } = await createWallet(serviceCollection, testBed);
       // Give the wallet a starting balance of 1
       const command: UpdateWalletCommand = {
         userId: user.id,
         transactionId: uuid(),
         amount: 1
       };
-      await sut.update(command);
+      await serviceCollection.updateWalletService.update(command);
 
       // Act
       const response = await Promise.all([
-        sut.update({
+        serviceCollection.updateWalletService.update({
           userId: user.id,
           transactionId: uuid(),
           amount: -1
         } satisfies UpdateWalletCommand),
-        sut.update({
+        serviceCollection.updateWalletService.update({
           userId: user.id,
           transactionId: uuid(),
           amount: -1
@@ -144,8 +149,8 @@ describe('UpdateWalletService', () => {
     });
     it(`return the updated wallet`, async () => {
       // Arrange
-      const sut = defaultTestBed.serviceCollection.updateWalletService;
-      const { user, wallet } = await createWallet(defaultTestBed);
+      const { serviceCollection, testBed } = buildTestBed();
+      const { user, wallet } = await createWallet(serviceCollection, testBed);
       const command: UpdateWalletCommand = {
         userId: user.id,
         transactionId: uuid(),
@@ -153,7 +158,8 @@ describe('UpdateWalletService', () => {
       };
 
       // Act
-      const response = await sut.update(command);
+      const response =
+        await serviceCollection.updateWalletService.update(command);
 
       // Assert
       expect(response.type).toBe('SUCCESS');
