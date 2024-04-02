@@ -8,24 +8,11 @@ import {
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
 import { Button, useToastStore } from '@kaizen/core-client';
-import { useDispatch } from 'react-redux';
-import {
-  WalletAction,
-  WalletClient,
-  loadWallet,
-  loadWalletFailure,
-  loadWalletSuccess
-} from '@kaizen/wallet-client';
-import { useAuthStore } from '@kaizen/auth-client';
-import { GetWalletByUserIdRequest } from '@kaizen/wallet';
-import { Dispatch } from '@reduxjs/toolkit';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const { setInstitutions, accountGroups, networth } = useInstitutionStore();
   const { addFailureToast } = useToastStore();
-  const { id } = useAuthStore();
-  const dispatch: Dispatch<WalletAction> = useDispatch();
 
   useEffect(() => {
     const createLinkToken = async () => {
@@ -49,24 +36,6 @@ export const FinancePage = () => {
     loadInstitutions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // TODO: Move effects once zustand is removed
-  useEffect(() => {
-    const loadWalletWhenUserLogsInEffect = async () => {
-      if (id.length > 0) {
-        dispatch(loadWallet());
-        const request: GetWalletByUserIdRequest = { userId: id };
-        const response = await WalletClient.getByUserId(request);
-        if (response.type === 'SUCCESS') {
-          dispatch(loadWalletSuccess(response.data));
-        } else {
-          dispatch(loadWalletFailure());
-        }
-      }
-    };
-
-    loadWalletWhenUserLogsInEffect();
-  }, [dispatch, id]);
 
   const onSyncClick = async () => {
     const response = await InstitutionClient.sync();

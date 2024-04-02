@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { useAuthStore } from './use-auth-store';
-import { AuthClient } from './auth.client';
+import { selectAuthenticated, selectLoading } from './auth.selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { refreshToken } from './auth.effects';
+import { AuthDispatch } from '.';
 
 export interface AuthRouteProps {
   children: React.ReactNode;
@@ -8,26 +10,20 @@ export interface AuthRouteProps {
 }
 
 export const AuthRoute = ({ children, onUnauthenticated }: AuthRouteProps) => {
-  const { loading, authenticated, login, setLoading } = useAuthStore();
+  const loading = useSelector(selectLoading);
+  const authenticated = useSelector(selectAuthenticated);
+  const dispatch = useDispatch<AuthDispatch>();
 
   useEffect(() => {
-    const refreshToken = async () => {
-      const response = await AuthClient.refreshToken();
-      if (response.type === 'SUCCESS') {
-        login(response.data.accessToken);
-      }
-      setLoading(false);
-    };
-
-    refreshToken();
-  }, [login, setLoading]);
+    dispatch(refreshToken());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!loading && !authenticated) {
       onUnauthenticated();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated, loading]);
+  }, [authenticated, loading, onUnauthenticated]);
 
   return loading ? <></> : children;
 };

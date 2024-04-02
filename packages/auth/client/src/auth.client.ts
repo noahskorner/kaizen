@@ -5,18 +5,6 @@ import {
   handleAxiosRequest,
   DEFAULT_API_SUCCESS_RESPONSE
 } from '@kaizen/core-client';
-import { jwtDecode } from 'jwt-decode';
-
-const setAccessToken = (accessToken: string) => {
-  ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-  const { exp } = jwtDecode<{ exp: number }>(accessToken);
-  const ms = Math.abs(new Date().getTime() - new Date(exp * 1000).getTime());
-  setTimeout(() => {
-    console.log('Refreshing token...');
-    AuthClient.refreshToken();
-  }, ms);
-};
 
 export const AuthClient = {
   login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
@@ -28,12 +16,12 @@ export const AuthClient = {
       return response;
     }
 
-    setAccessToken(response.data.accessToken);
+    setAccessTokenHeader(response.data.accessToken);
     return response;
   },
   logout: async (): Promise<ApiResponse<null>> => {
+    removeAccessTokenHeader();
     ApiClient.delete<void>('/auth'); // Intentionally not awaiting this request
-    delete ApiClient.defaults.headers.common['Authorization'];
     return Promise.resolve(DEFAULT_API_SUCCESS_RESPONSE);
   },
   refreshToken: async (): Promise<ApiResponse<AuthToken>> => {
@@ -42,7 +30,16 @@ export const AuthClient = {
     });
     if (response.type === 'FAILURE') return response;
 
-    setAccessToken(response.data.accessToken);
+    setAccessTokenHeader(response.data.accessToken);
     return response;
   }
+};
+
+// TODO: Move this to a secure cookie instead of a header
+const setAccessTokenHeader = (accessToken: string) => {
+  ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+};
+
+const removeAccessTokenHeader = () => {
+  delete ApiClient.defaults.headers.common['Authorization'];
 };
