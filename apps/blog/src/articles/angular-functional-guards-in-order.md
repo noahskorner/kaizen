@@ -1,5 +1,4 @@
 ---
-slug: 'angular-functional-guards-in-order'
 title: 'Safeguard Your Angular App: Learn the Secrets of Running Functional Guards in Order!'
 author: 'Noah Korner'
 preview: 'Recently, my team ran into a niche problem with Angular guards. We had a set of route guards that had to run in a specific order, and different combinations of guards that needed to run.'

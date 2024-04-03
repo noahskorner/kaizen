@@ -1,5 +1,4 @@
 ---
-slug: 'ai-powered-database-queries'
 title: 'Automating My Daily Tasks: How AI Helped Me Eliminate My Job'
 author: 'Noah Korner'
 date: '2024-02-02'

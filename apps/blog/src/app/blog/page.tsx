@@ -5,7 +5,6 @@ import matter from 'gray-matter';
 import path from 'path';
 
 export interface ArticleMeta {
-  slug: string;
   title: string;
   preview: string;
   author: string;
@@ -18,7 +17,7 @@ const ARTICLES = fs.readdirSync(ARTICLE_DIRECTORY).map((article) => {
   const { content, data } = matter(fs.readFileSync(articlePath, 'utf8'));
   const meta: ArticleMeta = data as ArticleMeta;
 
-  return { meta, content };
+  return { slug: article.replace('.md', ''), meta, content };
 });
 
 const formatDate = (iso: string) => {
@@ -63,7 +62,7 @@ export default function Blog() {
                 );
               })}
             </div>
-            <Link href={`/blog/${ARTICLES[0].meta.slug}`}>
+            <Link href={`/blog/${ARTICLES[0].slug}`}>
               <h2
                 className={`${merriweather.className} text-4xl font-extrabold hover:underline`}>
                 {ARTICLES[0].meta.title}
@@ -77,7 +76,7 @@ export default function Blog() {
           </div>
         </div>
         {ARTICLES.slice(1).map((article) => (
-          <div key={article.meta.slug} className="flex flex-col gap-y-4">
+          <div key={article.slug} className="flex flex-col gap-y-4">
             <div className="flex gap-1">
               {article.meta.tags.map((tag, index) => {
                 return (
@@ -89,7 +88,7 @@ export default function Blog() {
                 );
               })}
             </div>
-            <Link href={`/blog/${article.meta.slug}`}>
+            <Link href={`/blog/${article.slug}`}>
               <h2
                 className={`${merriweather.className} text-2xl font-bold hover:underline`}>
                 {article.meta.title}
