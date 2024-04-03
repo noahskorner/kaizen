@@ -3,6 +3,9 @@ import { merriweather } from '../fonts';
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
+import Tag from '../../components/tag';
+import Image from 'next/image';
+import articleImage from '../../../public/article-image.jpg';
 
 export interface ArticleMeta {
   title: string;
@@ -47,19 +50,16 @@ const formatDate = (iso: string) => {
 export default function Blog() {
   return (
     <div className="hw-full flex justify-center">
-      <div className="flex w-full max-w-7xl flex-col gap-8 p-8 text-slate-900">
-        <div className="flex h-[24rem] w-full items-stretch gap-8">
-          <div className="h-full w-1/2 flex-1 rounded-lg bg-indigo-950"></div>
-          <div className="flex h-full w-1/2 flex-1 flex-col justify-center gap-y-4">
+      <div className="flex w-full max-w-7xl flex-col gap-4 p-4 text-slate-900 md:gap-8 md:p-8">
+        <div className="flex w-full flex-col items-stretch gap-8 md:flex-row">
+          <Image
+            className="h-full max-h-[24rem] w-full flex-1 rounded-lg object-cover object-left-top md:w-1/2"
+            src={articleImage}
+            alt={'Featured article'}></Image>
+          <div className="flex h-full w-full flex-1 flex-col justify-center gap-y-4 md:w-1/2">
             <div className="flex gap-1">
               {ARTICLES[0].meta.tags.map((tag, index) => {
-                return (
-                  <span
-                    key={index}
-                    className="rounded-full bg-indigo-700 px-3 py-1 text-sm text-white">
-                    {tag}
-                  </span>
-                );
+                return <Tag key={index}>{tag}</Tag>;
               })}
             </div>
             <Link href={`/blog/${ARTICLES[0].slug}`}>
@@ -71,7 +71,7 @@ export default function Blog() {
             <p>{ARTICLES[0].meta.preview}</p>
             <div className="text-sm text-slate-600">
               <span>{formatDate(ARTICLES[0].meta.date)}</span>&nbsp;|&nbsp;
-              <span>3 min read</span>
+              <span>{ARTICLES[0].meta.author}</span>
             </div>
           </div>
         </div>
@@ -79,13 +79,7 @@ export default function Blog() {
           <div key={article.slug} className="flex flex-col gap-y-4">
             <div className="flex gap-1">
               {article.meta.tags.map((tag, index) => {
-                return (
-                  <span
-                    key={index}
-                    className="rounded-full bg-indigo-700 px-3 py-1 text-sm text-white">
-                    {tag}
-                  </span>
-                );
+                return <Tag key={index}>{tag}</Tag>;
               })}
             </div>
             <Link href={`/blog/${article.slug}`}>
@@ -97,7 +91,7 @@ export default function Blog() {
             <p>{article.meta.preview}</p>
             <div className="text-sm text-slate-600">
               <span>{formatDate(article.meta.date)}</span>&nbsp;|&nbsp;
-              <span>3 min read</span>
+              <span>{article.meta.author}</span>
             </div>
           </div>
         ))}
