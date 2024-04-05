@@ -1,8 +1,7 @@
 // import { FormEvent } from 'react';
-import { merriweather } from './fonts';
-import './page.css';
+import styles from './index.module.css';
 
-export default function Home() {
+export default function HomePage() {
   // const [name, setName] = useState('');
   // const [email, setEmail] = useState('');
   // const [message, setMessage] = useState('');
@@ -34,13 +33,13 @@ export default function Home() {
   // };
 
   return (
-    <div className="bg flex h-full w-full flex-1 flex-col items-center bg-slate-950">
+    <div
+      className={`${styles.bg} flex h-full w-full flex-1 flex-col items-center bg-slate-950`}>
       <div className="flex w-full flex-grow flex-col items-center gap-y-16 px-4 pb-32 2xl:flex-row 2xl:px-16">
         <div className="flex w-full flex-col items-center justify-center 2xl:items-end">
           <div className="flex w-full flex-col gap-y-8">
-            <h1
-              className={`${merriweather.className} text-3xl font-semibold leading-snug text-white 2xl:text-5xl 2xl:leading-snug`}>
-              We are not consultants. We are architects.
+            <h1 className="font-secondary text-3xl font-semibold leading-snug text-white 2xl:text-5xl 2xl:leading-snug">
+              We&apos;re not consultants. We&apos;re architects.
             </h1>
             <p className="textmd text-gray-300">
               We prioritize&nbsp;
@@ -75,8 +74,7 @@ export default function Home() {
         <div className="flex w-full items-center justify-center">
           <div className="w-full max-w-xl rounded bg-slate-50 p-8 shadow-lg">
             <form className="flex w-full flex-col">
-              <h2
-                className={`${merriweather.className} mb-8 text-3xl font-semibold leading-snug text-gray-900`}>
+              <h2 className="mb-8 font-secondary text-3xl font-semibold leading-snug text-gray-900">
                 How can we help?
               </h2>
               <div className="mb-5">

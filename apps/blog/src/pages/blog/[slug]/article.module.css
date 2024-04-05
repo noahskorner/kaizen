@@ -1,0 +1,27 @@
+.markdown-container h1 {
+  @apply font-secondary my-4 text-4xl font-extrabold;
+}
+
+.markdown-container h2 {
+  @apply font-secondary my-4 text-3xl font-extrabold;
+}
+
+.markdown-container code {
+  @apply bg-gray-100;
+}
+
+.markdown-container pre code {
+  @apply block;
+}
+
+.markdown-container th {
+  @apply text-left;
+}
+
+.markdown-container a {
+  @apply text-blue-600 hover:underline;
+}
+
+.markdown-container blockquote p {
+  @apply block bg-gray-100;
+}
