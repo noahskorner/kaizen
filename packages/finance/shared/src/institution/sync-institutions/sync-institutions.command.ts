@@ -1,3 +1,3 @@
-export interface SyncInstitutionsCommand {
-  userId: string;
-}
+import { SyncInstitutionsRequest } from './sync-institutions.request';
+
+export interface SyncInstitutionsCommand extends SyncInstitutionsRequest {}

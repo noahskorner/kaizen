@@ -15,7 +15,8 @@ export const AuthRoute = ({ children, onUnauthenticated }: AuthRouteProps) => {
   const dispatch = useDispatch<AuthDispatch>();
 
   useEffect(() => {
-    if (!loading || authenticated) return;
+    if (authenticated) return;
+
     dispatch(refreshToken());
   }, [authenticated, dispatch, loading]);
 

@@ -1,4 +1,4 @@
-import { AuthState } from './auth.state';
+import { AuthState } from './auth.store';
 
 export const selectLoading = (store: AuthState): boolean => {
   return store.auth.loading;

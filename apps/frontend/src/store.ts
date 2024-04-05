@@ -10,10 +10,12 @@ import {
 import createSagaMiddleware from 'redux-saga';
 import { call, fork, put, race, take } from 'redux-saga/effects';
 import { GetWalletByUserIdRequest } from '@kaizen/wallet';
+import { institutionReducers } from '@kaizen/finance-client';
 
 const rootReducer = combineReducers({
   wallet: walletReducers,
-  auth: authReducers
+  auth: authReducers,
+  institution: institutionReducers
 });
 
 const middleware = createSagaMiddleware();

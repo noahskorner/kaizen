@@ -2,7 +2,6 @@ import { usePlaidLink } from 'react-plaid-link';
 import {
   InstitutionClient,
   TransactionClient,
-  useInstitutionStore,
   useTransactionStore
 } from '@kaizen/finance-client';
 import { CreateInstitutionRequest } from '@kaizen/finance';
