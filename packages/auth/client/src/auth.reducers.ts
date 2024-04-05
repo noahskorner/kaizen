@@ -4,7 +4,6 @@ import {
   LOGIN_FAILURE,
   LOGIN_SUCCESS,
   LOGOUT,
-  REFRESH_TOKEN,
   REFRESH_TOKEN_FAILURE,
   REFRESH_TOKEN_SUCCESS
 } from './auth.actions';
@@ -36,12 +35,6 @@ export const authReducers = (
     case LOGIN_FAILURE:
       return {
         loading: false,
-        id: null,
-        email: null
-      };
-    case REFRESH_TOKEN:
-      return {
-        loading: true,
         id: null,
         email: null
       };

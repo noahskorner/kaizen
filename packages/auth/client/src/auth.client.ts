@@ -1,10 +1,6 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
 import { ApiResponse } from '@kaizen/core';
-import {
-  ApiClient,
-  handleAxiosRequest,
-  DEFAULT_API_SUCCESS_RESPONSE
-} from '@kaizen/core-client';
+import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 
 export const AuthClient = {
   login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
@@ -20,9 +16,12 @@ export const AuthClient = {
     return response;
   },
   logout: async (): Promise<ApiResponse<null>> => {
+    const response = await handleAxiosRequest(() => {
+      return ApiClient.delete<ApiResponse<null>>('/auth');
+    });
+
     removeAccessTokenHeader();
-    ApiClient.delete<void>('/auth'); // Intentionally not awaiting this request
-    return Promise.resolve(DEFAULT_API_SUCCESS_RESPONSE);
+    return response;
   },
   refreshToken: async (): Promise<ApiResponse<AuthToken>> => {
     const response = await handleAxiosRequest(() => {
@@ -35,7 +34,6 @@ export const AuthClient = {
   }
 };
 
-// TODO: Move this to a secure cookie instead of a header
 const setAccessTokenHeader = (accessToken: string) => {
   ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 };

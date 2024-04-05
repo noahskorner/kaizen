@@ -15,9 +15,9 @@ export const AuthRoute = ({ children, onUnauthenticated }: AuthRouteProps) => {
   const dispatch = useDispatch<AuthDispatch>();
 
   useEffect(() => {
+    if (!loading || authenticated) return;
     dispatch(refreshToken());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [authenticated, dispatch, loading]);
 
   useEffect(() => {
     if (!loading && !authenticated) {
@@ -25,5 +25,5 @@ export const AuthRoute = ({ children, onUnauthenticated }: AuthRouteProps) => {
     }
   }, [authenticated, loading, onUnauthenticated]);
 
-  return loading ? <></> : children;
+  return loading ? null : children;
 };

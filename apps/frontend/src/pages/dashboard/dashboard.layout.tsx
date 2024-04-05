@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { AuthRoute, logoutAction, AuthDispatch } from '@kaizen/auth-client';
+import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
 import { paths } from '../routes';
 import { Sidebar } from '@kaizen/core-client';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ export const DashboardLayout = () => {
   const navigate = useNavigate();
 
   const onLogoutClick = () => {
-    dispatch(logoutAction());
+    dispatch(logout());
     navigate(paths.home);
   };
 
