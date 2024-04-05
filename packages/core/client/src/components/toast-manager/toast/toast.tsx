@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { ToastDispatch } from '../toast.store';
 import './toast.css';
-import { useToastStore } from '../use-toast-store';
-
-export const DEFAULT_TOAST_DURATION = 5000;
+import { deleteToastAction } from '../toast.actions';
 
 export interface ToastProps {
   id: string;
@@ -11,28 +10,16 @@ export interface ToastProps {
   duration?: number;
 }
 
-export const Toast = ({
-  id,
-  title,
-  message,
-  duration = DEFAULT_TOAST_DURATION
-}: ToastProps) => {
-  const { removeToast } = useToastStore();
+export const Toast = ({ id, title, message }: ToastProps) => {
+  const dispatch = useDispatch<ToastDispatch>();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      removeToast(id);
-    }, duration);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onToastClick = () => {
+    dispatch(deleteToastAction(id));
+  };
 
   return (
     <div
-      onClick={() => removeToast(id)}
+      onClick={onToastClick}
       className="bounce-in-from-top flex w-full cursor-pointer flex-col items-stretch gap-y-2 rounded-md border border-neutral-100 bg-neutral-0 shadow md:max-w-md">
       <div className="flex h-full w-full items-stretch">
         <div className="flex-grow-1 -my-[1px] ml-2 w-4  bg-red-500"></div>

@@ -1,56 +1,25 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { loadWallet, walletReducers } from '@kaizen/wallet-client';
-import {
-  LOGIN_SUCCESS,
-  LoginSuccessAction,
-  REFRESH_TOKEN_SUCCESS,
-  RefreshTokenSuccessAction,
-  authReducers
-} from '@kaizen/auth-client';
-import createSagaMiddleware from 'redux-saga';
-import { call, fork, put, race, take } from 'redux-saga/effects';
-import { GetWalletByUserIdRequest } from '@kaizen/wallet';
-import { institutionReducers, loadInstitutions } from '@kaizen/finance-client';
+import { walletReducers } from '@kaizen/wallet-client';
+import { authReducers } from '@kaizen/auth-client';
+import { institutionReducers } from '@kaizen/finance-client';
+import { toastReducers } from '@kaizen/core-client';
+import { effects } from './effects';
+import { onLoginFailureDisplayToast } from './effects/on-login-failure-display-toast';
+import { onLoginLoadInstitutions } from './effects/on-login-load-institutions';
+import { onLoginLoadWallet } from './effects/on-login-load-wallet';
 
 const rootReducer = combineReducers({
   wallet: walletReducers,
   auth: authReducers,
-  institution: institutionReducers
+  institution: institutionReducers,
+  toast: toastReducers
 });
-
-const middleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([middleware])
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([effects])
 });
 
-function* onLoginLoadWallet(
-  action: RefreshTokenSuccessAction | LoginSuccessAction
-) {
-  const request: GetWalletByUserIdRequest = { userId: action.payload.id };
-  yield put(loadWallet(request));
-}
-
-function* onLoginLoadInstitutions() {
-  yield put(loadInstitutions());
-}
-
-function* saga() {
-  yield fork(function* () {
-    const result: {
-      refreshTokenSuccess?: RefreshTokenSuccessAction;
-      loginSuccess?: LoginSuccessAction;
-    } = yield race({
-      refreshTokenSuccess: take(REFRESH_TOKEN_SUCCESS),
-      loginSuccess: take(LOGIN_SUCCESS)
-    });
-
-    const action = result.refreshTokenSuccess || result.loginSuccess;
-    yield call(onLoginLoadWallet, action!);
-    yield call(onLoginLoadInstitutions);
-  });
-}
-
-middleware.run(saga);
+effects.run(onLoginFailureDisplayToast);
+effects.run(onLoginLoadWallet);
+effects.run(onLoginLoadInstitutions);
