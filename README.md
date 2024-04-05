@@ -29,8 +29,14 @@
 
 ## Documentation
 
-- [Continuous Integration / Continous Deployment](./docs/ci-cd.md)
+- [Architecture](./docs/architecture.md)
 - [Database](./docs/database.md)
+- [Server](./docs/server.md)
+  - [Plaid API](https://plaid.com/docs/)
+- [Client](./docs/client.md)
+- [Authentication](./docs/authentication.md)
+- [Continuous Integration / Continuous Deployment](./docs/ci-cd.md)
 - [Infrastructure](./infrastructure/README.md)
 - [Package Management](./docs/packages.md)
-- [Plaid API](https://plaid.com/docs/)
+- CLI to generate packages
+- CLI to generate features within packages
