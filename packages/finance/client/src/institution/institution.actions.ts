@@ -77,10 +77,40 @@ export const syncInstitutionsFailureAction = (
   };
 };
 
+export const CREATE_INSTITUTION_SUCCESS = 'CREATE_INSTITUTION_SUCCESS';
+export interface CreateInstitutionSuccessAction {
+  type: typeof CREATE_INSTITUTION_SUCCESS;
+  payload: Institution;
+}
+export const createInstitutionSuccessAction = (
+  institution: Institution
+): CreateInstitutionSuccessAction => {
+  return {
+    type: CREATE_INSTITUTION_SUCCESS,
+    payload: institution
+  };
+};
+
+export const CREATE_INSTITUTION_FAILURE = 'CREATE_INSTITUTION_FAILURE';
+export interface CreateInstitutionFailureAction {
+  type: typeof CREATE_INSTITUTION_FAILURE;
+  payload: ApiError[];
+}
+export const createInstitutionFailureAction = (
+  errors: ApiError[]
+): CreateInstitutionFailureAction => {
+  return {
+    type: CREATE_INSTITUTION_FAILURE,
+    payload: errors
+  };
+};
+
 export type InstitutionAction =
   | LoadInstitutionsAction
   | LoadInstitutionsSuccessAction
   | LoadInstitutionsFailureAction
   | SyncInstitutionsAction
   | SyncInstitutionsSuccessAction
-  | SyncInstitutionsFailureAction;
+  | SyncInstitutionsFailureAction
+  | CreateInstitutionSuccessAction
+  | CreateInstitutionFailureAction;

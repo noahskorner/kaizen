@@ -1,6 +1,8 @@
-import { InstitutionClient } from '../institution.client';
+import { InstitutionClient } from './institution.client';
 import { InstitutionDispatch } from './institution.store';
 import {
+  createInstitutionFailureAction,
+  createInstitutionSuccessAction,
   loadInstitutionsAction,
   loadInstitutionsFailureAction,
   loadInstitutionsSuccessAction,
@@ -8,6 +10,7 @@ import {
   syncInstitutionsFailureAction,
   syncInstitutionsSuccessAction
 } from './institution.actions';
+import { CreateInstitutionRequest } from '@kaizen/finance';
 
 export const loadInstitutions = () => {
   return async (dispatch: InstitutionDispatch) => {
@@ -30,5 +33,15 @@ export const syncInstitutions = () => {
       return dispatch(syncInstitutionsFailureAction(response.errors));
 
     return dispatch(syncInstitutionsSuccessAction(response.data));
+  };
+};
+
+export const createInstitution = (request: CreateInstitutionRequest) => {
+  return async (dispatch: InstitutionDispatch) => {
+    const response = await InstitutionClient.create(request);
+    if (response.type === 'FAILURE')
+      return dispatch(createInstitutionFailureAction(response.errors));
+
+    return dispatch(createInstitutionSuccessAction(response.data));
   };
 };

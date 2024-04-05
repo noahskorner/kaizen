@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { AccountType } from '@kaizen/finance';
-import { AccountGroup } from '../account-group';
+import { AccountGroup } from './account-group';
 import { InstitutionState } from './institution.store';
 
 export type AccountGroupMap = { [K in AccountType]: AccountGroup };

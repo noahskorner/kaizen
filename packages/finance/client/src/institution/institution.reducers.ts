@@ -1,6 +1,7 @@
 import { Institution } from '@kaizen/finance';
 import { InstitutionStore } from './institution.store';
 import {
+  CREATE_INSTITUTION_SUCCESS,
   InstitutionAction,
   LOAD_INSTITUTIONS,
   LOAD_INSTITUTIONS_FAILURE,
@@ -49,6 +50,11 @@ export const institutionReducers = (
       return {
         loading: false,
         institutions: state.institutions
+      };
+    case CREATE_INSTITUTION_SUCCESS:
+      return {
+        loading: false,
+        institutions: [...state.institutions, action.payload]
       };
     default:
       return state;
