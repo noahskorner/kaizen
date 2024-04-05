@@ -25,7 +25,7 @@ export const syncInstitutions = () => {
   return async (dispatch: InstitutionDispatch) => {
     dispatch(syncInstitutionsAction());
 
-    const response = await InstitutionClient.find();
+    const response = await InstitutionClient.sync();
     if (response.type === 'FAILURE')
       return dispatch(syncInstitutionsFailureAction(response.errors));
 

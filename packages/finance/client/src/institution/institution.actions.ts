@@ -1,5 +1,5 @@
 import { ApiError } from '@kaizen/core';
-import { Institution } from '@kaizen/finance';
+import { Institution, SyncInstitutionsResponse } from '@kaizen/finance';
 
 export const LOAD_INSTITUTIONS = 'LOAD_INSTITUTIONS';
 export interface LoadInstitutionsAction {
@@ -55,11 +55,11 @@ export interface SyncInstitutionsSuccessAction {
   payload: Institution[];
 }
 export const syncInstitutionsSuccessAction = (
-  institutions: Institution[]
+  response: SyncInstitutionsResponse
 ): SyncInstitutionsSuccessAction => {
   return {
     type: SYNC_INSTITUTIONS_SUCCESS,
-    payload: institutions
+    payload: response.succeeded
   };
 };
 

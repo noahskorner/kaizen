@@ -10,7 +10,7 @@ import {
 import createSagaMiddleware from 'redux-saga';
 import { call, fork, put, race, take } from 'redux-saga/effects';
 import { GetWalletByUserIdRequest } from '@kaizen/wallet';
-import { institutionReducers } from '@kaizen/finance-client';
+import { institutionReducers, loadInstitutions } from '@kaizen/finance-client';
 
 const rootReducer = combineReducers({
   wallet: walletReducers,
@@ -26,11 +26,15 @@ export const store = configureStore({
     getDefaultMiddleware().concat([middleware])
 });
 
-function* onRefreshTokenLoadWallet(
+function* onLoginLoadWallet(
   action: RefreshTokenSuccessAction | LoginSuccessAction
 ) {
   const request: GetWalletByUserIdRequest = { userId: action.payload.id };
   yield put(loadWallet(request));
+}
+
+function* onLoginLoadInstitutions() {
+  yield put(loadInstitutions());
 }
 
 function* saga() {
@@ -44,7 +48,8 @@ function* saga() {
     });
 
     const action = result.refreshTokenSuccess || result.loginSuccess;
-    yield call(onRefreshTokenLoadWallet, action!);
+    yield call(onLoginLoadWallet, action!);
+    yield call(onLoginLoadInstitutions);
   });
 }
 
