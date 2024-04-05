@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './globals.css';
@@ -10,11 +10,11 @@ import { store } from './store';
 const router = createBrowserRouter(Object.values(routes));
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <GlobalLayout>
-        <RouterProvider router={router} />
-      </GlobalLayout>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <GlobalLayout>
+      <RouterProvider router={router} />
+    </GlobalLayout>
+  </Provider>
+  // </React.StrictMode>
 );

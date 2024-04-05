@@ -1,10 +1,11 @@
+import { ApiError } from '@kaizen/core';
 import { Wallet } from '@kaizen/wallet';
 
 export const LOAD_WALLET = 'LOAD_WALLET';
 export interface LoadWalletAction {
   type: typeof LOAD_WALLET;
 }
-export const loadWallet = (): LoadWalletAction => {
+export const loadWalletAction = (): LoadWalletAction => {
   return {
     type: LOAD_WALLET
   };
@@ -15,7 +16,9 @@ export interface LoadWalletSuccessAction {
   type: typeof LOAD_WALLET_SUCCESS;
   payload: Wallet;
 }
-export const loadWalletSuccess = (wallet: Wallet): LoadWalletSuccessAction => {
+export const loadWalletSuccessAction = (
+  wallet: Wallet
+): LoadWalletSuccessAction => {
   return {
     type: LOAD_WALLET_SUCCESS,
     payload: wallet
@@ -25,10 +28,14 @@ export const loadWalletSuccess = (wallet: Wallet): LoadWalletSuccessAction => {
 export const LOAD_WALLET_FAILURE = 'LOAD_WALLET_FAILURE';
 export interface LoadWalletFailureAction {
   type: typeof LOAD_WALLET_FAILURE;
+  payload: Array<ApiError>;
 }
-export const loadWalletFailure = (): LoadWalletFailureAction => {
+export const loadWalletFailureAction = (
+  errors: Array<ApiError>
+): LoadWalletFailureAction => {
   return {
-    type: LOAD_WALLET_FAILURE
+    type: LOAD_WALLET_FAILURE,
+    payload: errors
   };
 };
 

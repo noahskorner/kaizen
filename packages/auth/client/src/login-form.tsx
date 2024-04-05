@@ -1,9 +1,10 @@
-import { TextInput, Button, useToastStore } from '@kaizen/core-client';
+import { TextInput, Button } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
-import { AuthClient } from '.';
 import { LoginRequest } from '@kaizen/auth';
-import { useAuthStore } from './use-auth-store';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from './auth.effects';
+import { AuthDispatch } from '.';
 
 const LOGIN_FORM_EMAIL_INPUT_ID = 'login-form-email-input';
 const LOGIN_FORM_PASSWORD_INPUT_ID = 'login-form-password-input';
@@ -21,11 +22,10 @@ export const LoginForm = ({
   registerHref,
   onLoginSuccess
 }: LoginFormProps) => {
-  const { addFailureToast } = useToastStore();
-  const { login } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState(initialEmail ?? '');
   const [password, setPassword] = useState(initialPassword ?? '');
+  const dispatch = useDispatch<AuthDispatch>();
 
   const onSubmitLoginForm = async (
     event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
@@ -38,13 +38,7 @@ export const LoginForm = ({
         email: email,
         password: password
       };
-      const response = await AuthClient.login(request);
-      if (response.type === 'SUCCESS') {
-        login(response.data.accessToken);
-        return onLoginSuccess();
-      } else {
-        addFailureToast(response.errors);
-      }
+      dispatch(login(request, onLoginSuccess));
     } finally {
       setIsSubmitting(false);
     }

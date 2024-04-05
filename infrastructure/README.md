@@ -1,5 +1,7 @@
 # Infrastructure
 
+This repository uses the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) to deploy infrastructure as code.
+
 ## Prerequisites
 
 1. **Create an IAM user and group**

@@ -1,6 +1,6 @@
 import { Wallet } from '@kaizen/wallet';
-import { WalletStore } from '.';
+import { WalletState } from './wallet.store';
 
-export const selectWallet = (store: { wallet: WalletStore }): Wallet | null => {
-  return store.wallet.wallet;
+export const selectWallet = (state: WalletState): Wallet | null => {
+  return state.wallet.wallet;
 };

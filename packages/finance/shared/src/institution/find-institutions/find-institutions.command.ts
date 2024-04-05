@@ -1,3 +1,3 @@
-export interface FindInstitutionsCommand {
-  userId: string;
-}
+import { FindInstitutionsRequest } from './find-institutions.request';
+
+export interface FindInstitutionsCommand extends FindInstitutionsRequest {}

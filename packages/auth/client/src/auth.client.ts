@@ -1,22 +1,6 @@
 import { LoginRequest, AuthToken } from '@kaizen/auth';
 import { ApiResponse } from '@kaizen/core';
-import {
-  ApiClient,
-  handleAxiosRequest,
-  DEFAULT_API_SUCCESS_RESPONSE
-} from '@kaizen/core-client';
-import { jwtDecode } from 'jwt-decode';
-
-const setAccessToken = (accessToken: string) => {
-  ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-  const { exp } = jwtDecode<{ exp: number }>(accessToken);
-  const ms = Math.abs(new Date().getTime() - new Date(exp * 1000).getTime());
-  setTimeout(() => {
-    console.log('Refreshing token...');
-    AuthClient.refreshToken();
-  }, ms);
-};
+import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
 
 export const AuthClient = {
   login: async (request: LoginRequest): Promise<ApiResponse<AuthToken>> => {
@@ -28,13 +12,16 @@ export const AuthClient = {
       return response;
     }
 
-    setAccessToken(response.data.accessToken);
+    setAccessTokenHeader(response.data.accessToken);
     return response;
   },
   logout: async (): Promise<ApiResponse<null>> => {
-    ApiClient.delete<void>('/auth'); // Intentionally not awaiting this request
-    delete ApiClient.defaults.headers.common['Authorization'];
-    return Promise.resolve(DEFAULT_API_SUCCESS_RESPONSE);
+    const response = await handleAxiosRequest(() => {
+      return ApiClient.delete<ApiResponse<null>>('/auth');
+    });
+
+    removeAccessTokenHeader();
+    return response;
   },
   refreshToken: async (): Promise<ApiResponse<AuthToken>> => {
     const response = await handleAxiosRequest(() => {
@@ -42,7 +29,15 @@ export const AuthClient = {
     });
     if (response.type === 'FAILURE') return response;
 
-    setAccessToken(response.data.accessToken);
+    setAccessTokenHeader(response.data.accessToken);
     return response;
   }
+};
+
+const setAccessTokenHeader = (accessToken: string) => {
+  ApiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+};
+
+const removeAccessTokenHeader = () => {
+  delete ApiClient.defaults.headers.common['Authorization'];
 };

@@ -1,14 +1,15 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { AuthRoute, useAuthStore } from '@kaizen/auth-client';
+import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
 import { paths } from '../routes';
 import { Sidebar } from '@kaizen/core-client';
+import { useDispatch } from 'react-redux';
 
 export const DashboardLayout = () => {
+  const dispatch = useDispatch<AuthDispatch>();
   const navigate = useNavigate();
-  const authStore = useAuthStore();
 
   const onLogoutClick = () => {
-    authStore.logout();
+    dispatch(logout());
     navigate(paths.home);
   };
 
