@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { Toast } from './toast';
 import { selectToasts } from './toast.selectors';
+import { Toast } from './toast/toast';
 
 export const ToastManager = () => {
   const toasts = useSelector(selectToasts);
