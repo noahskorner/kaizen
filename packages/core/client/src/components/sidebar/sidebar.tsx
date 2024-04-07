@@ -3,7 +3,6 @@ import { BankNotesIcon, CoinsIcon, LogoutIcon } from '@kaizen/core-client';
 import { Avatar } from './avatar';
 import { selectWallet } from '@kaizen/wallet-client';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
 
 export interface SidebarProps {
   financeHref: string;
@@ -11,13 +10,12 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
-  const [showSidebar] = useState(true);
   const wallet = useSelector(selectWallet);
 
   return (
     <div className="fixed h-full">
       <div
-        className={`${showSidebar ? 'flex' : 'hidden md:flex'} h-full w-full flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600 md:w-64`}>
+        className={`hidden h-full w-full flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600 md:flex md:w-64`}>
         <div className="flex w-full flex-col gap-y-4">
           <div className="flex items-center gap-x-3 border-b border-primary-700 pb-4">
             <Avatar />

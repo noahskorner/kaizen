@@ -1,0 +1,3 @@
+.arc-label {
+  @apply rounded-full bg-[rgba(255,255,255,0.3)] px-2 py-1 text-xs font-semibold backdrop-blur-md;
+}
