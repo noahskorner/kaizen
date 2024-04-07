@@ -21,7 +21,7 @@ export const DashboardLayout = () => {
     <AuthRoute onUnauthenticated={onUnauthenticated}>
       <div className="flex h-screen">
         <Sidebar financeHref={paths.finance} onLogoutClick={onLogoutClick} />
-        <div className="w-full p-2 md:ml-64">
+        <div className="w-full max-w-7xl p-2 md:ml-64">
           <Outlet />
         </div>
       </div>

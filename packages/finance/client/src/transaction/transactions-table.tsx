@@ -7,33 +7,41 @@ export const TransactionsTable = () => {
   const transactions = useSelector(selectTransactions);
 
   return (
-    <div>
-      {transactions.map((transaction) => {
-        return (
-          <div
-            key={transaction.id}
-            className="bg-transaction flex w-full items-center justify-between p-2">
-            <div className="flex items-center justify-start gap-x-1 text-sm font-medium capitalize">
-              {transaction.logoUrl && (
+    <div className="flex w-full flex-col gap-2">
+      <h3 className="text-2xl font-bold">Recent transactions</h3>
+      <div className="flex w-full flex-col gap-1">
+        {transactions.map((transaction) => {
+          return (
+            <div
+              key={transaction.id}
+              className="flex w-full items-center justify-center gap-x-2 rounded-lg border px-4 py-3 shadow-sm">
+              {transaction.logoUrl ? (
                 <img
-                  className="h4 w-4 rounded-full"
+                  className="h-8 w-8 flex-shrink-0 rounded-full"
                   src={transaction.logoUrl}
                 />
+              ) : (
+                <div className="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-100"></div>
               )}
-              <h6>{transaction.name}</h6>
+              <div className="flex w-full items-center justify-between">
+                <div className="flex w-full flex-col gap-2">
+                  <h6 className="text-sm font-semibold">{transaction.name}</h6>
+                  {transaction.category && (
+                    <div className="inline-flex gap-2">
+                      <span className="rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
+                        {transaction.category.primary}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <span className="text-sm">
+                  {formatCurrency(transaction.amount, 'USD')}
+                </span>
+              </div>
             </div>
-            <div
-              className={`text-sm ${
-                transaction.amount < 0 ? 'text-primary-700' : 'text-neutral-700'
-              }`}>
-              {formatCurrency(
-                transaction.amount,
-                transaction.isoCurrencyCode ?? 'USD'
-              )}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
