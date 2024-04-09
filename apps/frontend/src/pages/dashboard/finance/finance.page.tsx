@@ -12,6 +12,8 @@ import {
 import { PlaidLink } from './plaid-link';
 import { Button, DonutChart } from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
+import { AccountGroupCard } from './account-group';
+import { AccountType } from '@kaizen/finance';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -71,14 +73,11 @@ export const FinancePage = () => {
         </div>
         {Object.entries(accountGroups).map(([accountType, accountGroup]) => {
           return (
-            <div
+            <AccountGroupCard
               key={accountType}
-              className="flex w-full items-center justify-between gap-x-2 rounded-lg border p-4 shadow-sm">
-              <h6 className="font-semibold capitalize">{accountType}</h6>
-              <span className="font-normal text-neutral-500">
-                {formatCurrency(accountGroup.current, 'USD')}
-              </span>
-            </div>
+              accountType={accountType as AccountType}
+              accountGroup={accountGroup}
+            />
           );
         })}
       </div>
