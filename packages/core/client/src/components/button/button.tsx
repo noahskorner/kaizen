@@ -18,7 +18,7 @@ export const Button = ({
   id,
   children,
   style = 'primary',
-  className = 'w-full rounded-lg',
+  className = '',
   type = 'button',
   active = false,
   disabled = false,

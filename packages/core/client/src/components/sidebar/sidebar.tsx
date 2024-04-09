@@ -15,9 +15,9 @@ export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
   return (
     <div className="fixed h-full">
       <div
-        className={`hidden h-full w-full flex-col items-center justify-between bg-primary-800 p-4 text-neutral-600 md:flex md:w-64`}>
+        className={`hidden h-full w-full flex-col items-center justify-between bg-indigo-800 p-4 text-neutral-600 md:flex md:w-64`}>
         <div className="flex w-full flex-col gap-y-4">
-          <div className="flex items-center gap-x-3 border-b border-primary-700 pb-4">
+          <div className="flex items-center gap-x-3 border-b border-indigo-700 pb-4">
             <Avatar />
             <div className="flex flex-col gap-y-1">
               <h6 className="text-sm font-medium text-neutral-50">
