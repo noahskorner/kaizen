@@ -9,7 +9,9 @@ import {
   IFindTransactionsService,
   ISyncAccountsService,
   IGetAccountRepository,
-  ISyncInstitutionsService
+  ISyncInstitutionsService,
+  ISnapshotAccountsService,
+  ICreateAccountSnapshotRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -59,6 +61,7 @@ export interface IServiceCollection {
   findUserByEmailRepository: IFindUserByEmailRepository;
   getUserRepository: IGetUserRepository;
   getAccountRepository: IGetAccountRepository;
+  createAccountSnapshotRepository: ICreateAccountSnapshotRepository;
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
@@ -73,6 +76,7 @@ export interface IServiceCollection {
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
   syncAccountsService: ISyncAccountsService;
+  snapshotAccountsService: ISnapshotAccountsService;
   syncInstitutionsService: ISyncInstitutionsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;

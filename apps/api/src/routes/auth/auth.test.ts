@@ -117,7 +117,7 @@ describe('/auth', () => {
       expect(body.data.refreshToken).toBeDefined();
       expect(body.data.refreshToken).toBe(refreshToken);
     });
-    it('emits a login success event', async () => {
+    it(`emits a ${ServiceEventType.LOGIN_SUCCESS} event`, async () => {
       // Arrange
       const { serviceEventBus, testBed } = buildTestBed();
       const spy = jest.spyOn(serviceEventBus, 'publish');

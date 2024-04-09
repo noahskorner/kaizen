@@ -2,8 +2,7 @@ import supertest from 'supertest';
 import {
   Institution,
   CreateInstitutionRequest,
-  SyncInstitutionsResponse,
-  Account
+  SyncInstitutionsResponse
 } from '@kaizen/finance';
 import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import {
@@ -12,32 +11,15 @@ import {
   buildItem,
   createAndLoginUser,
   createInstitution,
+  expectAccountToBeExternal,
   expectError
 } from '../../../../test';
 import { buildTestBed } from '../../../../test/build-test-bed';
 import { AccountBase } from 'plaid';
-
-const expectAccountToBeExternal = (actual: Account, expected: AccountBase) => {
-  expect(actual.id).toBeDefined();
-  expect(actual.institutionId).toBeDefined();
-  expect(expected.account_id).toBe(actual.externalId);
-  expect(expected.balances.available).toBe(actual.available);
-  expect(expected.balances.current).toBe(actual.current);
-  expect(expected.balances.limit).toBe(actual.limit);
-  expect(expected.balances.iso_currency_code).toBe(actual.isoCurrencyCode);
-  expect(expected.balances.unofficial_currency_code).toBe(
-    actual.unofficialCurrencyCode
-  );
-  expect(expected.balances.last_updated_datetime).toBe(
-    actual.externalUpdatedAt
-  );
-  expect(expected.mask).toBe(actual.mask);
-  expect(expected.name).toBe(actual.name);
-  expect(expected.official_name).toBe(actual.officialName);
-  expect(expected.type).toBe(actual.type);
-  expect(expected.subtype).toBe(actual.subtype);
-  expect(expected.verification_status).toBe(actual.verificationStatus);
-};
+import {
+  ServiceEventType,
+  SyncAccountsSuccessEvent
+} from '@kaizen/core-server';
 
 describe('/institution', () => {
   describe('create should', () => {
@@ -265,6 +247,26 @@ describe('/institution', () => {
       if (updatedAccount) {
         expectAccountToBeExternal(updatedAccount, updatedExternal);
       }
+    });
+    it(`emits ${ServiceEventType.SYNC_ACCOUNTS_SUCCESS} event`, async () => {
+      // Arrange
+      const { serviceEventBus, testBed } = buildTestBed();
+      const spy = jest.spyOn(serviceEventBus, 'publish');
+      const { authToken, user } = await createAndLoginUser(testBed);
+      const expected: SyncAccountsSuccessEvent = {
+        type: ServiceEventType.SYNC_ACCOUNTS_SUCCESS,
+        payload: {
+          userId: user.id
+        }
+      };
+
+      // Act
+      await supertest(testBed)
+        .put('/institution/sync')
+        .auth(authToken.accessToken, { type: 'bearer' });
+
+      // Assert
+      expect(spy).toHaveBeenCalledWith(expected);
     });
   });
 });
