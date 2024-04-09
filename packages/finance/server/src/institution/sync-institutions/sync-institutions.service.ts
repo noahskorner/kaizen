@@ -1,5 +1,10 @@
 import { ServiceResponse } from '@kaizen/core';
-import { Service } from '@kaizen/core-server';
+import {
+  IServiceEventBus,
+  Service,
+  ServiceEventType,
+  SyncAccountsSuccessEvent
+} from '@kaizen/core-server';
 import {
   ISyncAccountsService,
   ISyncInstitutionsService,
@@ -12,7 +17,10 @@ export class SyncInstitutionsService
   extends Service
   implements ISyncInstitutionsService
 {
-  constructor(private readonly _syncAccountsService: ISyncAccountsService) {
+  constructor(
+    private readonly _syncAccountsService: ISyncAccountsService,
+    private readonly _serviceEventBus: IServiceEventBus
+  ) {
     super();
   }
 
@@ -29,6 +37,13 @@ export class SyncInstitutionsService
       return accountSyncResponse;
     }
 
+    const event: SyncAccountsSuccessEvent = {
+      type: ServiceEventType.SYNC_ACCOUNTS_SUCCESS,
+      payload: {
+        userId: command.userId
+      }
+    };
+    this._serviceEventBus.publish(event);
     return this.success(accountSyncResponse.data);
   }
 }

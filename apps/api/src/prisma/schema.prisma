@@ -157,8 +157,32 @@ model AccountRecord {
   type                   AccountRecordType                @default(Other) @map("type")
   subtype                AccountRecordSubtype?            @map("subtype")
   verificationStatus     AccountRecordVerificationStatus? @map("verification_status")
+  snapshots              AccountSnapshotRecord[]
 
   @@map("account")
+}
+
+// Account Snapshot
+model AccountSnapshotRecord {
+  id                     String                           @id @default(uuid()) @map("id")
+  createdAt              DateTime                         @default(now()) @map("created_at")
+  snapshotId             String                           @map("snapshot_id")
+  accountId              String                           @map("account_id")
+  account                AccountRecord                    @relation(fields: [accountId], references: [id])
+  externalId             String                           @map("external_id")
+  available              Float?                           @map("available")
+  current                Float?                           @map("current")
+  limit                  Float?                           @map("limit")
+  isoCurrencyCode        String?                          @map("iso_currency_code")
+  unofficialCurrencyCode String?                          @map("unofficial_currency_code")
+  mask                   String?                          @map("mask")
+  name                   String                           @map("name")
+  officialName           String?                          @map("official_name")
+  type                   AccountRecordType                @default(Other) @map("type")
+  subtype                AccountRecordSubtype?            @map("subtype")
+  verificationStatus     AccountRecordVerificationStatus? @map("verification_status")
+
+  @@map("account_snapshot")
 }
 
 // Transaction

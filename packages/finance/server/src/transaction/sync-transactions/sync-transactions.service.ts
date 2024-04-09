@@ -8,7 +8,7 @@ import {
   FindAccountsByExternalIdsQuery,
   FindInstitutionsQuery,
   IFinancialProvider,
-  IFindAccountsRepostiory,
+  IFindAccountsRepository,
   IFindInstitutionsRepository,
   ISyncTransactionsRepository,
   ISyncTransactionsService,
@@ -30,7 +30,7 @@ export class SyncTransactionsService
 {
   constructor(
     private readonly _findInstitutionsRepository: IFindInstitutionsRepository,
-    private readonly _findAccountsRepository: IFindAccountsRepostiory,
+    private readonly _findAccountsRepository: IFindAccountsRepository,
     private readonly _financialProvider: IFinancialProvider,
     private readonly _syncTransactionsRepository: ISyncTransactionsRepository
   ) {
