@@ -39,6 +39,7 @@ export const FinancePage = () => {
 
   return (
     <div className="flex flex-col gap-8 p-4">
+      <h3 className="text-2xl font-bold">Spending</h3>
       <div className="w-full max-w-xs">
         <div className="relative -m-16">
           <DonutChart

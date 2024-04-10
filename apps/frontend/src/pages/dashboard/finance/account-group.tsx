@@ -18,10 +18,10 @@ export const AccountGroupCard = ({
   };
 
   return (
-    <div className="w-full gap-x-2 rounded-lg border px-4 py-6 shadow-sm">
+    <div className="w-full gap-x-2 rounded-lg border shadow-sm hover:bg-gray-50">
       <button
         onClick={onCardClick}
-        className="flex w-full items-center justify-between">
+        className="flex w-full items-center justify-between px-4 py-6">
         <h6 className="font-semibold capitalize">{accountType}</h6>
         <div className="flex items-center justify-center gap-2">
           <span className="text-sm">
@@ -43,11 +43,11 @@ export const AccountGroupCard = ({
         </div>
       </button>
       {showAccounts && (
-        <div className="flex w-full flex-col gap-4 pt-8">
+        <div className="flex w-full flex-col gap-4 px-4 pb-6">
           {accountGroup.accounts.map((account) => {
             return (
               <div
-                className="flex w-full items-center justify-between border-b"
+                className="flex w-full items-center justify-between border-b pb-1"
                 key={account.id}>
                 <span className="text-sm">
                   {account.name}&nbsp;
