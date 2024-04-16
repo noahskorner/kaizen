@@ -11,7 +11,9 @@ import {
   IGetAccountRepository,
   ISyncInstitutionsService,
   ISnapshotAccountsService,
-  ICreateAccountSnapshotRepository
+  ICreateAccountSnapshotRepository,
+  IFindExpensesService,
+  IFindExpensesRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -39,6 +41,7 @@ import {
   IUpdateWalletService
 } from '@kaizen/wallet';
 import { GetWalletController } from './routes/wallet';
+import { FindExpensesController } from './routes/finance/expense';
 
 export interface IServiceCollection {
   // Environment
@@ -65,6 +68,7 @@ export interface IServiceCollection {
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
+  findExpensesRepository: IFindExpensesRepository;
   getWalletRepository: IGetWalletRepository;
   createWalletRepository: ICreateWalletRepository;
   updateWalletRepository: IUpdateWalletRepository;
@@ -81,6 +85,7 @@ export interface IServiceCollection {
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
+  findExpensesService: IFindExpensesService;
   createWalletService: ICreateWalletService;
   updateWalletService: IUpdateWalletService;
   getWalletService: IGetWalletService;
@@ -92,4 +97,5 @@ export interface IServiceCollection {
   institutionController: InstitutionController;
   transactionController: TransactionController;
   getWalletController: GetWalletController;
+  findExpensesController: FindExpensesController;
 }

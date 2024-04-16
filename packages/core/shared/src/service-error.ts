@@ -70,8 +70,30 @@ export interface FindTransactionsInvalidEndDateSizeError {
   };
 }
 
-export interface FindTransactionsInvalidInvalidTimeframeSizeError {
+export interface FindTransactionsInvalidInvalidTimeframeError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME;
+  params: {
+    startDate?: string;
+    endDate?: string;
+  };
+}
+
+export interface FindExpensesInvalidStartDateError {
+  code: ErrorCode.FIND_EXPENSES_INVALID_START_DATE;
+  params: {
+    startDate?: string;
+  };
+}
+
+export interface FindExpensesInvalidEndDateError {
+  code: ErrorCode.FIND_EXPENSES_INVALID_END_DATE;
+  params: {
+    endDate?: string;
+  };
+}
+
+export interface FindExpensesInvalidTimeframeError {
+  code: ErrorCode.FIND_EXPENSES_INVALID_TIMEFRAME;
   params: {
     startDate?: string;
     endDate?: string;
@@ -320,6 +342,9 @@ export interface BaseError {
     | ErrorCode.UPDATE_WALLET_NOT_ENOUGH_FUNDS
     | ErrorCode.GET_WALLET_NOT_FOUND
     | ErrorCode.GET_WALLET_NOT_YOUR_WALLET
+    | ErrorCode.FIND_EXPENSES_INVALID_START_DATE
+    | ErrorCode.FIND_EXPENSES_INVALID_END_DATE
+    | ErrorCode.FIND_EXPENSES_INVALID_TIMEFRAME
   >;
   params?: never;
 }
@@ -336,7 +361,7 @@ export type ServiceError =
   | FindTransactionsInvalidPageSizeError
   | FindTransactionsInvalidStartDateSizeError
   | FindTransactionsInvalidEndDateSizeError
-  | FindTransactionsInvalidInvalidTimeframeSizeError
+  | FindTransactionsInvalidInvalidTimeframeError
   | SyncAccountsIntitutionNotFoundError
   | SyncTransactionsInstitutionsNotFound
   | SyncTransactionsInstitutionNotFound
@@ -363,4 +388,7 @@ export type ServiceError =
   | UpdateWalletTransactionAlreadyExistsError
   | UpdateWalletNotEnoughFundsError
   | GetWalletNotFoundError
-  | GetWalletNotYourWalletError;
+  | GetWalletNotYourWalletError
+  | FindExpensesInvalidStartDateError
+  | FindExpensesInvalidEndDateError
+  | FindExpensesInvalidTimeframeError;

@@ -3,7 +3,9 @@
   "name": "kaizen",
   "packageManager": "npm@10.2.2",
   "workspaces": [
-    "apps/**",
+    "apps/api",
+    "apps/blog",
+    "apps/frontend",
     "packages/**"
   ],
   "volta": {

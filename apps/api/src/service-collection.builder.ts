@@ -4,6 +4,8 @@ import {
   CreateInstitutionService,
   FinancialProvider,
   FindAccountsRepository,
+  FindExpensesRepository,
+  FindExpensesService,
   FindInstitutionsRepository,
   FindInstitutionsService,
   FindTransactionsRepository,
@@ -55,6 +57,7 @@ import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
+import { FindExpensesController } from './routes/finance/expense';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -170,6 +173,7 @@ export class ServiceCollectionBuilder {
     const getWalletRepository = new GetWalletRepository(prisma);
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
+    const findExpensesRepository = new FindExpensesRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -228,6 +232,7 @@ export class ServiceCollectionBuilder {
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService, serviceEventBus);
+    const findExpensesService = new FindExpensesService(findExpensesRepository);
     const createWalletService = new CreateWalletService(
       getWalletRepository,
       createWalletRepository
@@ -258,6 +263,9 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.transactionController ??
       new TransactionController(findTransactionsService);
     const getWalletController = new GetWalletController(getWalletService);
+    const findExpensesController = new FindExpensesController(
+      findExpensesService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -282,6 +290,7 @@ export class ServiceCollectionBuilder {
       getWalletRepository,
       createWalletRepository,
       updateWalletRepository,
+      findExpensesRepository,
       // Services
       getUserService,
       createUserService,
@@ -297,13 +306,15 @@ export class ServiceCollectionBuilder {
       createWalletService,
       updateWalletService,
       getWalletService,
+      findExpensesService,
       // Controllers
       homeController,
       userController,
       authController,
       institutionController,
       transactionController,
-      getWalletController
+      getWalletController,
+      findExpensesController
     };
 
     return serviceCollection;

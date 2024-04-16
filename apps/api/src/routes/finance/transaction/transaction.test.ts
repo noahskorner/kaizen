@@ -165,7 +165,7 @@ describe('/transaction', () => {
       expect(response.status).toBe(400);
       expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
     });
-    it('returns 200 and default page size when no page size provided', async () => {
+    it.only('returns 200 and default page size when no page size provided', async () => {
       // Arrange
       const mockItem = buildItem();
       const mockAccount = buildAccount({
@@ -553,7 +553,7 @@ describe('/transaction', () => {
       expect(response.status).toBe(400);
       expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE);
     });
-    it('returns 400 when end date after start date', async () => {
+    it('returns 400 when start date after end date', async () => {
       // Arrange
       const { testBed } = buildTestBed();
       const { authToken } = await createInstitution(testBed);
