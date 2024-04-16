@@ -42,6 +42,13 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     serviceCollection.institutionController.sync
   );
 
+  // /expense
+  router.get(
+    '/expense',
+    authenticate(serviceCollection.environment),
+    serviceCollection.findExpensesController.find
+  );
+
   // /transaction
   router.get(
     '/transaction',

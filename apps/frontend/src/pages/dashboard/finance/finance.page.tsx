@@ -10,7 +10,7 @@ import {
   syncInstitutions
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
-import { Button, DonutChart } from '@kaizen/core-client';
+import { Button, DonutChart, HorizontalBarChart } from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AccountGroupCard } from './account-group';
 import { AccountType } from '@kaizen/finance';
@@ -62,6 +62,15 @@ export const FinancePage = () => {
               {formatCurrency(totalSpent, 'USD')}
             </h3>
           </div>
+        </div>
+        <div>
+          <HorizontalBarChart
+            data={[
+              { country: '1', value: 1 },
+              { country: '2', value: 20 },
+              { country: '3', value: 30 }
+            ]}
+          />
         </div>
       </div>
       <div className="flex w-full flex-col gap-2">
