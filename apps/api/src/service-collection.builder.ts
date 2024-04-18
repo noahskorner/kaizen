@@ -27,7 +27,6 @@ import {
   GetUserRepository,
   GetUserService
 } from '@kaizen/user-server';
-import { AuthController } from './routes/auth/auth.controller';
 import { UserController } from './routes/user/user.controller';
 import { InstitutionController } from './routes/finance/institution/institution.controller';
 import { TransactionController } from './routes/finance/transaction/transaction.controller';
@@ -58,6 +57,9 @@ import { v4 as uuid } from 'uuid';
 import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { FindExpensesController } from './routes/finance/expense';
+import { LoginController } from './routes/auth/login/login.controller';
+import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
+import { LogoutController } from './routes/auth/logout/logout.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -249,9 +251,14 @@ export class ServiceCollectionBuilder {
     const userController =
       this._serviceCollection.userController ??
       new UserController(createUserService, createLinkTokenService);
-    const authController =
-      this._serviceCollection.authController ??
-      new AuthController(environment, loginService, refreshTokenService);
+    const loginController =
+      this._serviceCollection.loginController ??
+      new LoginController(environment, loginService);
+    const refreshTokenController =
+      this._serviceCollection.refreshTokenController ??
+      new RefreshTokenController(environment, refreshTokenService);
+    const logoutController =
+      this._serviceCollection.logoutController ?? new LogoutController();
     const institutionController =
       this._serviceCollection.institutionController ??
       new InstitutionController(
@@ -310,7 +317,9 @@ export class ServiceCollectionBuilder {
       // Controllers
       homeController,
       userController,
-      authController,
+      loginController,
+      refreshTokenController,
+      logoutController,
       institutionController,
       transactionController,
       getWalletController,
