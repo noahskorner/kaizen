@@ -9,11 +9,11 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.get('/', serviceCollection.homeController.find);
 
   // /user
-  router.post('/user', serviceCollection.userController.create);
+  router.post('/user', serviceCollection.createUserController.create);
   router.post(
     '/user/link-token',
     authenticate(serviceCollection.environment),
-    serviceCollection.userController.createLinkToken
+    serviceCollection.createLinkTokenController.createLinkToken
   );
 
   // /auth

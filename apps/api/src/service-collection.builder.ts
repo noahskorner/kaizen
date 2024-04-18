@@ -27,7 +27,6 @@ import {
   GetUserRepository,
   GetUserService
 } from '@kaizen/user-server';
-import { UserController } from './routes/user/user.controller';
 import { InstitutionController } from './routes/finance/institution/institution.controller';
 import { TransactionController } from './routes/finance/transaction/transaction.controller';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
@@ -60,6 +59,8 @@ import { FindExpensesController } from './routes/finance/expense';
 import { LoginController } from './routes/auth/login/login.controller';
 import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
 import { LogoutController } from './routes/auth/logout/logout.controller';
+import { CreateUserController } from './routes/user/create-user/create-user.controller';
+import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -248,9 +249,12 @@ export class ServiceCollectionBuilder {
     // Controllers
     const homeController =
       this._serviceCollection.homeController ?? new HomeController();
-    const userController =
-      this._serviceCollection.userController ??
-      new UserController(createUserService, createLinkTokenService);
+    const createUserController =
+      this._serviceCollection.createUserController ??
+      new CreateUserController(createUserService);
+    const createLinkTokenController =
+      this._serviceCollection.createLinkTokenController ??
+      new CreateLinkTokenController(createLinkTokenService);
     const loginController =
       this._serviceCollection.loginController ??
       new LoginController(environment, loginService);
@@ -316,7 +320,8 @@ export class ServiceCollectionBuilder {
       findExpensesService,
       // Controllers
       homeController,
-      userController,
+      createUserController,
+      createLinkTokenController,
       loginController,
       refreshTokenController,
       logoutController,

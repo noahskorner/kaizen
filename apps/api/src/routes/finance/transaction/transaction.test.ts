@@ -165,7 +165,7 @@ describe('/transaction', () => {
       expect(response.status).toBe(400);
       expectError(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE);
     });
-    it.only('returns 200 and default page size when no page size provided', async () => {
+    it('returns 200 and default page size when no page size provided', async () => {
       // Arrange
       const mockItem = buildItem();
       const mockAccount = buildAccount({
