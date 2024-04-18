@@ -27,8 +27,8 @@ import { PlaidApi } from 'plaid';
 import {
   CreateInstitutionController,
   FindInstitutionsController,
-  SyncInstitutionsController,
-  TransactionController
+  FindTransactionsController,
+  SyncInstitutionsController
 } from './routes/finance';
 import { CreateLinkTokenController, CreateUserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
@@ -107,7 +107,7 @@ export interface IServiceCollection {
   createInstitutionController: CreateInstitutionController;
   findInstitutionsController: FindInstitutionsController;
   syncInstitutionsController: SyncInstitutionsController;
-  transactionController: TransactionController;
+  findTransactionsController: FindTransactionsController;
   getWalletController: GetWalletController;
   findExpensesController: FindExpensesController;
 }

@@ -27,7 +27,6 @@ import {
   GetUserRepository,
   GetUserService
 } from '@kaizen/user-server';
-import { TransactionController } from './routes/finance/transaction/transaction.controller';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -63,6 +62,7 @@ import { CreateLinkTokenController } from './routes/user/create-link-token/creat
 import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
 import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
 import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
+import { FindTransactionsController } from './routes/finance/transaction/find-transactions/find-transactions.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -274,9 +274,9 @@ export class ServiceCollectionBuilder {
     const syncInstitutionsController =
       this._serviceCollection.syncInstitutionsController ??
       new SyncInstitutionsController(syncInstitutionsService);
-    const transactionController =
-      this._serviceCollection.transactionController ??
-      new TransactionController(findTransactionsService);
+    const findTransactionsController =
+      this._serviceCollection.findTransactionsController ??
+      new FindTransactionsController(findTransactionsService);
     const getWalletController = new GetWalletController(getWalletService);
     const findExpensesController = new FindExpensesController(
       findExpensesService
@@ -332,7 +332,7 @@ export class ServiceCollectionBuilder {
       createInstitutionController,
       findInstitutionsController,
       syncInstitutionsController,
-      transactionController,
+      findTransactionsController,
       getWalletController,
       findExpensesController
     };

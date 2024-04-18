@@ -53,7 +53,7 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.get(
     '/transaction',
     authenticate(serviceCollection.environment),
-    serviceCollection.transactionController.find
+    serviceCollection.findTransactionsController.find
   );
 
   // /wallet
