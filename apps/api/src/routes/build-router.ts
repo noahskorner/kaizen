@@ -17,12 +17,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   );
 
   // /auth
-  router.post('/auth', serviceCollection.authController.login);
-  router.get('/auth', serviceCollection.authController.refreshToken);
+  router.post('/auth', serviceCollection.loginController.login);
+  router.get('/auth', serviceCollection.refreshTokenController.refreshToken);
   router.delete(
     '/auth',
     authenticate(serviceCollection.environment),
-    serviceCollection.authController.logout
+    serviceCollection.logoutController.logout
   );
 
   // /institution

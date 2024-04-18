@@ -24,7 +24,6 @@ import {
   ICreateLinkTokenService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
-import { AuthController } from './routes/auth/auth.controller';
 import { InstitutionController, TransactionController } from './routes/finance';
 import { UserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
@@ -42,6 +41,9 @@ import {
 } from '@kaizen/wallet';
 import { GetWalletController } from './routes/wallet';
 import { FindExpensesController } from './routes/finance/expense';
+import { LoginController } from './routes/auth/login/login.controller';
+import { LogoutController } from './routes/auth/logout/logout.controller';
+import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
 
 export interface IServiceCollection {
   // Environment
@@ -93,7 +95,9 @@ export interface IServiceCollection {
   // Controllers
   homeController: HomeController;
   userController: UserController;
-  authController: AuthController;
+  loginController: LoginController;
+  refreshTokenController: RefreshTokenController;
+  logoutController: LogoutController;
   institutionController: InstitutionController;
   transactionController: TransactionController;
   getWalletController: GetWalletController;
