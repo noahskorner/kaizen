@@ -25,7 +25,7 @@ import {
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { InstitutionController, TransactionController } from './routes/finance';
-import { UserController } from './routes/user';
+import { CreateLinkTokenController, CreateUserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
@@ -94,7 +94,8 @@ export interface IServiceCollection {
 
   // Controllers
   homeController: HomeController;
-  userController: UserController;
+  createUserController: CreateUserController;
+  createLinkTokenController: CreateLinkTokenController;
   loginController: LoginController;
   refreshTokenController: RefreshTokenController;
   logoutController: LogoutController;
