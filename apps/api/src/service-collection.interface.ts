@@ -24,7 +24,12 @@ import {
   ICreateLinkTokenService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
-import { InstitutionController, TransactionController } from './routes/finance';
+import {
+  CreateInstitutionController,
+  FindInstitutionsController,
+  FindTransactionsController,
+  SyncInstitutionsController
+} from './routes/finance';
 import { CreateLinkTokenController, CreateUserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
@@ -99,8 +104,10 @@ export interface IServiceCollection {
   loginController: LoginController;
   refreshTokenController: RefreshTokenController;
   logoutController: LogoutController;
-  institutionController: InstitutionController;
-  transactionController: TransactionController;
+  createInstitutionController: CreateInstitutionController;
+  findInstitutionsController: FindInstitutionsController;
+  syncInstitutionsController: SyncInstitutionsController;
+  findTransactionsController: FindTransactionsController;
   getWalletController: GetWalletController;
   findExpensesController: FindExpensesController;
 }
