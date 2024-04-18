@@ -1,5 +1,5 @@
 import { GetWalletByUserIdCommand, IGetWalletService } from '@kaizen/wallet';
-import { Controller } from '../controller';
+import { Controller } from '../../controller';
 import { Request, Response } from 'express';
 import {
   ErrorCode,
@@ -7,7 +7,7 @@ import {
   ServiceFailureResponse,
   hasErrorFor
 } from '@kaizen/core';
-import { catchAsync } from '../../middleware/catch-async';
+import { catchAsync } from '../../../middleware/catch-async';
 
 const GET_WALLET_FORBIDDEN_ERROR: GetWalletNotYourWalletError = {
   code: ErrorCode.GET_WALLET_NOT_YOUR_WALLET
