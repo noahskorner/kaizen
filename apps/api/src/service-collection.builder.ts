@@ -27,7 +27,6 @@ import {
   GetUserRepository,
   GetUserService
 } from '@kaizen/user-server';
-import { InstitutionController } from './routes/finance/institution/institution.controller';
 import { TransactionController } from './routes/finance/transaction/transaction.controller';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
@@ -61,6 +60,9 @@ import { RefreshTokenController } from './routes/auth/refresh-token/refresh-toke
 import { LogoutController } from './routes/auth/logout/logout.controller';
 import { CreateUserController } from './routes/user/create-user/create-user.controller';
 import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
+import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
+import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
+import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -263,13 +265,15 @@ export class ServiceCollectionBuilder {
       new RefreshTokenController(environment, refreshTokenService);
     const logoutController =
       this._serviceCollection.logoutController ?? new LogoutController();
-    const institutionController =
-      this._serviceCollection.institutionController ??
-      new InstitutionController(
-        createInstitutionService,
-        findInstitutionsService,
-        syncInstitutionsService
-      );
+    const createInstitutionController =
+      this._serviceCollection.createInstitutionController ??
+      new CreateInstitutionController(createInstitutionService);
+    const findInstitutionsController =
+      this._serviceCollection.findInstitutionsController ??
+      new FindInstitutionsController(findInstitutionsService);
+    const syncInstitutionsController =
+      this._serviceCollection.syncInstitutionsController ??
+      new SyncInstitutionsController(syncInstitutionsService);
     const transactionController =
       this._serviceCollection.transactionController ??
       new TransactionController(findTransactionsService);
@@ -325,7 +329,9 @@ export class ServiceCollectionBuilder {
       loginController,
       refreshTokenController,
       logoutController,
-      institutionController,
+      createInstitutionController,
+      findInstitutionsController,
+      syncInstitutionsController,
       transactionController,
       getWalletController,
       findExpensesController

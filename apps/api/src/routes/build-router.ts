@@ -29,17 +29,17 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.post(
     '/institution',
     authenticate(serviceCollection.environment),
-    serviceCollection.institutionController.create
+    serviceCollection.createInstitutionController.create
   );
   router.get(
     '/institution',
     authenticate(serviceCollection.environment),
-    serviceCollection.institutionController.find
+    serviceCollection.findInstitutionsController.find
   );
   router.put(
     '/institution/sync',
     authenticate(serviceCollection.environment),
-    serviceCollection.institutionController.sync
+    serviceCollection.syncInstitutionsController.sync
   );
 
   // /expense
