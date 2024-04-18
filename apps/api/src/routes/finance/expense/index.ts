@@ -1,1 +1,1 @@
-export * from './find-expenses.controller';
+export * from './find-expenses';

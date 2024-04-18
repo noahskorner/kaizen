@@ -1,1 +1,1 @@
-export * from './get-wallet.controller';
+export * from './get-wallet';

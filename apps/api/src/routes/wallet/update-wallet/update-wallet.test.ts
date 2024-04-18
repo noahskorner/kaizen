@@ -1,8 +1,8 @@
 import { ErrorCode } from '@kaizen/core';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
-import { createWallet } from '../../../test/create-wallet';
-import { buildTestBed } from '../../../test/build-test-bed';
+import { createWallet } from '../../../../test/create-wallet';
+import { buildTestBed } from '../../../../test/build-test-bed';
 
 describe('UpdateWalletService', () => {
   describe('update should', () => {

@@ -3,8 +3,8 @@ import {
   FindExpensesRequest,
   IFindExpensesService
 } from '@kaizen/finance';
-import { Controller } from '../../controller';
-import { catchAsync } from '../../../middleware/catch-async';
+import { Controller } from '../../../controller';
+import { catchAsync } from '../../../../middleware/catch-async';
 import { Request, Response } from 'express';
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 
