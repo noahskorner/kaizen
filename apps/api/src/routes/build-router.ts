@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate';
 import { IServiceCollection } from '../service-collection.interface';
+import { ExpressAdapter } from './express.adapter';
 
 export const buildRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
@@ -9,7 +10,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.get('/', serviceCollection.homeController.find);
 
   // /user
-  router.post('/user', serviceCollection.createUserController.create);
+  router.post(
+    '/user',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createUserController.create
+    )
+  );
   router.post(
     '/user/link-token',
     authenticate(serviceCollection.environment),

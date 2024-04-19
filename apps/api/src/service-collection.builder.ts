@@ -25,7 +25,8 @@ import {
   CreateUserRepository,
   FindUserByEmailRepository,
   GetUserRepository,
-  GetUserService
+  GetUserService,
+  CreateUserController
 } from '@kaizen/user-server';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
@@ -57,7 +58,6 @@ import { FindExpensesController } from './routes/finance/expense';
 import { LoginController } from './routes/auth/login/login.controller';
 import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
 import { LogoutController } from './routes/auth/logout/logout.controller';
-import { CreateUserController } from './routes/user/create-user/create-user.controller';
 import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
 import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
 import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
