@@ -46,10 +46,10 @@ import {
 } from '@kaizen/wallet';
 import { GetWalletController } from './routes/wallet';
 import { FindExpensesController } from './routes/finance/expense';
-import { LoginController } from './routes/auth/login/login.controller';
 import { LogoutController } from './routes/auth/logout/logout.controller';
 import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
 import { CreateUserController } from '@kaizen/user-server';
+import { LoginController } from '@kaizen/auth-server';
 
 export interface IServiceCollection {
   // Environment

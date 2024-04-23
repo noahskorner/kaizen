@@ -23,7 +23,10 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   );
 
   // /auth
-  router.post('/auth', serviceCollection.loginController.login);
+  router.post(
+    '/auth',
+    ExpressAdapter.toRequestHandler(serviceCollection.loginController.login)
+  );
   router.get('/auth', serviceCollection.refreshTokenController.refreshToken);
   router.delete(
     '/auth',

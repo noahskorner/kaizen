@@ -18,7 +18,11 @@ import {
   SyncTransactionsRepository,
   SyncTransactionsService
 } from '@kaizen/finance-server';
-import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
+import {
+  LoginController,
+  LoginService,
+  RefreshTokenService
+} from '@kaizen/auth-server';
 import {
   CreateUserService,
   CreateLinkTokenService,
@@ -55,7 +59,6 @@ import { v4 as uuid } from 'uuid';
 import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { FindExpensesController } from './routes/finance/expense';
-import { LoginController } from './routes/auth/login/login.controller';
 import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
 import { LogoutController } from './routes/auth/logout/logout.controller';
 import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
