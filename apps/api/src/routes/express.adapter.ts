@@ -17,13 +17,14 @@ export class ExpressAdapter {
 
   private static toMiddlewareRequest(req: Request): MiddlewareRequest {
     return {
-      body: req.body
+      body: req.body,
+      cookies: req.cookies
     } satisfies MiddlewareRequest;
   }
 
   private static toResponse(res: Response, response: MiddlewareResponse) {
     // Attach cookies
-    if (response.cookie != null && response.cookie.length > 0) {
+    if (response.cookie != null) {
       response.cookie.forEach((cookie) => {
         res.cookie(cookie.key, cookie.value, {
           domain: cookie.domain,
@@ -33,6 +34,13 @@ export class ExpressAdapter {
           secure: cookie.secure,
           sameSite: cookie.sameSite
         });
+      });
+    }
+
+    // Clear cookies
+    if (response.clearCookie != null) {
+      response.clearCookie.forEach((cookie) => {
+        res.clearCookie(cookie);
       });
     }
 

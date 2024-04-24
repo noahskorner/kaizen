@@ -21,6 +21,8 @@ import {
 import {
   LoginController,
   LoginService,
+  LogoutController,
+  RefreshTokenController,
   RefreshTokenService
 } from '@kaizen/auth-server';
 import {
@@ -59,8 +61,6 @@ import { v4 as uuid } from 'uuid';
 import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { FindExpensesController } from './routes/finance/expense';
-import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
-import { LogoutController } from './routes/auth/logout/logout.controller';
 import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
 import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
 import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';

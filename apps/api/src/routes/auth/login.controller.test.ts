@@ -9,7 +9,7 @@ import {
   validPassword,
   getRefreshToken,
   buildTestBed
-} from '../../../../test';
+} from '../../../test';
 import { LoginSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
 describe('/auth', () => {

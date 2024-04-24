@@ -14,4 +14,5 @@ export interface MiddlewareResponse {
   status: number;
   body?: unknown;
   cookie?: Cookie[];
+  clearCookie?: string[];
 }

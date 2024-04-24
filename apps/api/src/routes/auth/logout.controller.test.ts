@@ -1,12 +1,12 @@
 import supertest from 'supertest';
 import { serverEnvironment } from '@kaizen/env-server';
-import { ServiceCollectionBuilder } from '../../../service-collection.builder';
-import { AppBuilder } from '../../../app-builder';
+import { ServiceCollectionBuilder } from '../../service-collection.builder';
+import { AppBuilder } from '../../app-builder';
 import {
   defaultTestBed,
   getRefreshToken,
   createAndLoginUser
-} from '../../../../test';
+} from '../../../test';
 
 describe('/auth', () => {
   describe('logout should', () => {
@@ -49,11 +49,13 @@ describe('/auth', () => {
     });
     it('returns 200 when accessToken is valid', async () => {
       // Arrange
-      const { authToken } = await createAndLoginUser(defaultTestBed);
+      const { authHeaders, authToken } =
+        await createAndLoginUser(defaultTestBed);
 
       // Act
       const response = await supertest(defaultTestBed)
         .delete('/auth')
+        .set('Cookie', authHeaders['set-cookie'])
         .auth(authToken.accessToken, { type: 'bearer' });
       const refreshToken = getRefreshToken(response);
 
