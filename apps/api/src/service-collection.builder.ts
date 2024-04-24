@@ -23,7 +23,8 @@ import {
   LoginService,
   LogoutController,
   RefreshTokenController,
-  RefreshTokenService
+  RefreshTokenService,
+  authenticate
 } from '@kaizen/auth-server';
 import {
   CreateUserService,
@@ -96,6 +97,9 @@ export class ServiceCollectionBuilder {
     // Environment
     const environment =
       this._serviceCollection.environment ?? serverEnvironment;
+
+    // Middleware
+    const authMiddleware = authenticate(environment.ACCESS_TOKEN_SECRET);
 
     // Events
     const serviceEventBus =
@@ -267,7 +271,8 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.refreshTokenController ??
       new RefreshTokenController(environment, refreshTokenService);
     const logoutController =
-      this._serviceCollection.logoutController ?? new LogoutController();
+      this._serviceCollection.logoutController ??
+      new LogoutController(authMiddleware);
     const createInstitutionController =
       this._serviceCollection.createInstitutionController ??
       new CreateInstitutionController(createInstitutionService);

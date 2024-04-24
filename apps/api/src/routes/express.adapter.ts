@@ -17,8 +17,9 @@ export class ExpressAdapter {
 
   private static toMiddlewareRequest(req: Request): MiddlewareRequest {
     return {
-      body: req.body,
-      cookies: req.cookies
+      headers: req.headers as Record<string, string>,
+      cookies: req.cookies,
+      body: req.body
     } satisfies MiddlewareRequest;
   }
 

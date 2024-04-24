@@ -1,4 +1,5 @@
 export * from './auth.controller';
+export * from './auth.middleware';
 export * from './auth.service';
 export * from './login';
 export * from './logout';

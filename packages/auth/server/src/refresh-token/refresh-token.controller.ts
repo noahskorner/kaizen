@@ -5,8 +5,6 @@ import { IServerEnvironment } from '@kaizen/env-server';
 import { RequestHandlerBuilder } from '@kaizen/core-server';
 
 export class RefreshTokenController extends AuthController {
-  public static readonly route = '/auth';
-
   constructor(
     _environment: IServerEnvironment,
     private readonly _refreshTokenService: IRefreshTokenService
