@@ -19,14 +19,11 @@ export class RequestHandlerBuilder {
     return (req: MiddlewareRequest) =>
       new Promise((resolve) => {
         let index = 0;
-        const res: MiddlewareResponse = {
-          sent: false,
-          status: 500
-        };
+        const res = new MiddlewareResponse();
 
         const next = () => {
           // Short-circuit if the response has already been sent
-          if (res.sent) {
+          if (res._sent) {
             resolve(res);
             return;
           }

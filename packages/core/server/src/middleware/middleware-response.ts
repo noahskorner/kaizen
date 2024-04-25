@@ -1,18 +1,26 @@
-export interface Cookie {
-  key: string;
-  value: string;
-  domain?: string;
-  path?: string;
-  expires?: Date;
-  httpOnly?: boolean;
-  secure?: boolean;
-  sameSite?: boolean | 'lax' | 'strict' | 'none';
-}
+import { Cookie } from './cookie';
 
-export interface MiddlewareResponse {
-  sent: boolean;
-  status: number;
-  body?: unknown;
-  cookie?: Cookie[];
-  clearCookie?: string[];
+export class MiddlewareResponse {
+  public _sent: boolean = false;
+  public _status: number = 418;
+  public _setCookie: Cookie[] = [];
+  public _clearCookie: string[] = [];
+  public _body?: unknown;
+
+  public send(status: number, body?: unknown) {
+    this._status = status;
+    this._sent = true;
+    this._body = body;
+    return this;
+  }
+
+  public setCookie(cookie: Cookie) {
+    this._setCookie.push(cookie);
+    return this;
+  }
+
+  public clearCookie(key: string) {
+    this._clearCookie.push(key);
+    return this;
+  }
 }

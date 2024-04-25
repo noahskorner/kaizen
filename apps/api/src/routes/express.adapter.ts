@@ -25,31 +25,27 @@ export class ExpressAdapter {
 
   private static toResponse(res: Response, response: MiddlewareResponse) {
     // Attach cookies
-    if (response.cookie != null) {
-      response.cookie.forEach((cookie) => {
-        res.cookie(cookie.key, cookie.value, {
-          domain: cookie.domain,
-          path: cookie.path,
-          expires: cookie.expires,
-          httpOnly: cookie.httpOnly,
-          secure: cookie.secure,
-          sameSite: cookie.sameSite
-        });
+    response._setCookie.forEach((cookie) => {
+      res.cookie(cookie.key, cookie.value, {
+        domain: cookie.domain,
+        path: cookie.path,
+        expires: cookie.expires,
+        httpOnly: cookie.httpOnly,
+        secure: cookie.secure,
+        sameSite: cookie.sameSite
       });
-    }
+    });
 
     // Clear cookies
-    if (response.clearCookie != null) {
-      response.clearCookie.forEach((cookie) => {
-        res.clearCookie(cookie);
-      });
-    }
+    response._clearCookie.forEach((cookie) => {
+      res.clearCookie(cookie);
+    });
 
     // Send response
-    if (response.body == null) {
-      return res.sendStatus(response.status);
+    if (response._body == null) {
+      return res.sendStatus(response._status);
     }
 
-    return res.status(response.status).send(response.body);
+    return res.status(response._status).send(response._body);
   }
 }

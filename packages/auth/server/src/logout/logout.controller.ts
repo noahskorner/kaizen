@@ -13,11 +13,7 @@ export class LogoutController extends Controller {
   public logout = new RequestHandlerBuilder()
     .use((req, res, next) => this._authenticate(req, res, next))
     .use(async (_req, res, next) => {
-      if (res.clearCookie == null) {
-        res.clearCookie = [];
-      }
-
-      res.clearCookie.push(REFRESH_TOKEN_COOKIE_KEY);
+      res.clearCookie(REFRESH_TOKEN_COOKIE_KEY);
       return this.ok(res, next);
     })
     .build();

@@ -14,8 +14,7 @@ export const authenticate: (accessTokenSecret: string) => Middleware =
       const token = authHeader && authHeader.split(' ')[1];
 
       if (!token) {
-        res.sent = true;
-        res.status = 401;
+        res.send(401);
         return next();
       }
 
@@ -24,8 +23,7 @@ export const authenticate: (accessTokenSecret: string) => Middleware =
       req.user = user;
       return next();
     } catch {
-      res.sent = true;
-      res.status = 401;
+      res.send(401);
       return next();
     }
   };

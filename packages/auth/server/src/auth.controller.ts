@@ -9,9 +9,7 @@ export abstract class AuthController extends Controller {
   }
 
   protected setRefreshToken(res: MiddlewareResponse, refreshToken: string) {
-    if (!res.cookie) res.cookie = [];
-
-    res.cookie.push({
+    res.setCookie({
       key: REFRESH_TOKEN_COOKIE_KEY,
       value: refreshToken,
       domain: 'localhost',

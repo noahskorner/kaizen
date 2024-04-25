@@ -12,14 +12,11 @@ export abstract class Controller {
     response?: ServiceSuccessResponse<T>
   ) => {
     if (response == null) {
-      res.sent = true;
-      res.status = 200;
+      res.send(200);
       return next();
     }
 
-    res.sent = true;
-    res.status = 200;
-    res.body = ServiceResponseAdapter.toApiResponse(response);
+    res.send(200, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
 
@@ -28,10 +25,7 @@ export abstract class Controller {
     next: () => void,
     response: ServiceSuccessResponse<T>
   ) => {
-    res.sent = true;
-    res.status = 201;
-    res.body = ServiceResponseAdapter.toApiResponse(response);
-
+    res.send(201, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
 
@@ -41,14 +35,11 @@ export abstract class Controller {
     response?: ServiceFailureResponse
   ) => {
     if (response == null) {
-      res.sent = true;
-      res.status = 400;
+      res.send(400);
       return next();
     }
 
-    res.sent = true;
-    res.status = 400;
-    res.body = ServiceResponseAdapter.toApiResponse(response);
+    res.send(400, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
 
@@ -58,14 +49,11 @@ export abstract class Controller {
     response?: ServiceFailureResponse
   ) => {
     if (response == null) {
-      res.sent = true;
-      res.status = 401;
+      res.send(401);
       return next();
     }
 
-    res.sent = true;
-    res.status = 401;
-    res.body = ServiceResponseAdapter.toApiResponse(response);
+    res.send(401, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
 }
