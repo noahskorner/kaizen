@@ -5,6 +5,7 @@ export interface MiddlewareRequest {
   cookies: Record<string, string>;
   // TODO: Add generic type
   params: Record<string, string>;
+  query: Record<string, string>;
   body: unknown;
   user: {
     id: string;

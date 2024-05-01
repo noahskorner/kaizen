@@ -4,6 +4,7 @@ import {
   CreateInstitutionService,
   FinancialProvider,
   FindAccountsRepository,
+  FindExpensesController,
   FindExpensesRepository,
   FindExpensesService,
   FindInstitutionsRepository,
@@ -33,7 +34,8 @@ import {
   FindUserByEmailRepository,
   GetUserRepository,
   GetUserService,
-  CreateUserController
+  CreateUserController,
+  CreateLinkTokenController
 } from '@kaizen/user-server';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
@@ -61,8 +63,6 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
-import { FindExpensesController } from './routes/finance/expense';
-import { CreateLinkTokenController } from '@kaizen/user-server/src/create-link-token/create-link-token.controller';
 import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
 import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
 import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
@@ -290,6 +290,7 @@ export class ServiceCollectionBuilder {
       getWalletService
     );
     const findExpensesController = new FindExpensesController(
+      authMiddleware,
       findExpensesService
     );
 

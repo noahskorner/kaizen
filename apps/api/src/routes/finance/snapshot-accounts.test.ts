@@ -3,7 +3,7 @@ import {
   buildAccountsBalanceGetResponse,
   buildTestBed,
   createInstitution
-} from '../../../../../test';
+} from '../../../test';
 import {
   Account,
   AccountSnapshot,

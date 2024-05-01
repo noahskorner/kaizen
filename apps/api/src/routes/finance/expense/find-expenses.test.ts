@@ -8,7 +8,7 @@ import {
   createAndLoginUser,
   createInstitution,
   expectError
-} from '../../../../../test';
+} from '../../../../test';
 import { Expense, FindExpensesRequest } from '@kaizen/finance';
 import { ApiResponse, ErrorCode, toSearchParams } from '@kaizen/core';
 import { v4 as uuid } from 'uuid';

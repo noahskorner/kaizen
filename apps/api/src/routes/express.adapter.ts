@@ -19,6 +19,7 @@ export class ExpressAdapter {
     const request = {
       headers: req.headers as Record<string, string>,
       params: req.params,
+      query: req.query as Record<string, string>,
       cookies: req.cookies,
       body: req.body
     } satisfies Omit<MiddlewareRequest, 'user'>;

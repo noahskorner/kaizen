@@ -59,8 +59,9 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   // /expense
   router.get(
     '/expense',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findExpensesController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findExpensesController.find
+    )
   );
 
   // /transaction
