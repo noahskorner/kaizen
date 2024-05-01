@@ -26,9 +26,9 @@ export const CreateUserForm = ({
   onRegisterSuccess = () => {}
 }: CreateUserFormProps) => {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('noahskorner@gmail.com');
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('12345678a$');
   const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
   const dispatch = useDispatch<ToastDispatch>();
 

@@ -4,7 +4,7 @@ import { MiddlewareResponse } from './middleware-response';
 import { RequestHandler } from './request-handler';
 
 export class RequestHandlerBuilder {
-  private middleware: Middleware[];
+  protected middleware: Middleware[];
 
   constructor() {
     this.middleware = [];

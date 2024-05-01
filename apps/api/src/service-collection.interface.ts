@@ -30,7 +30,6 @@ import {
   FindTransactionsController,
   SyncInstitutionsController
 } from './routes/finance';
-import { CreateLinkTokenController } from './routes/user';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
@@ -46,7 +45,10 @@ import {
 } from '@kaizen/wallet';
 import { GetWalletController } from './routes/wallet';
 import { FindExpensesController } from './routes/finance/expense';
-import { CreateUserController } from '@kaizen/user-server';
+import {
+  CreateLinkTokenController,
+  CreateUserController
+} from '@kaizen/user-server';
 import {
   LoginController,
   LogoutController,

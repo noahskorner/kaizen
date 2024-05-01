@@ -62,7 +62,7 @@ import { v4 as uuid } from 'uuid';
 import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { FindExpensesController } from './routes/finance/expense';
-import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
+import { CreateLinkTokenController } from '@kaizen/user-server/src/create-link-token/create-link-token.controller';
 import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
 import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
 import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
@@ -263,7 +263,7 @@ export class ServiceCollectionBuilder {
       new CreateUserController(createUserService);
     const createLinkTokenController =
       this._serviceCollection.createLinkTokenController ??
-      new CreateLinkTokenController(createLinkTokenService);
+      new CreateLinkTokenController(authMiddleware, createLinkTokenService);
     const loginController =
       this._serviceCollection.loginController ??
       new LoginController(environment, loginService);

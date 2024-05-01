@@ -16,11 +16,13 @@ export class ExpressAdapter {
   }
 
   private static toMiddlewareRequest(req: Request): MiddlewareRequest {
-    return {
+    const request = {
       headers: req.headers as Record<string, string>,
       cookies: req.cookies,
       body: req.body
-    } satisfies MiddlewareRequest;
+    } satisfies Omit<MiddlewareRequest, 'user'>;
+
+    return request as MiddlewareRequest;
   }
 
   private static toResponse(res: Response, response: MiddlewareResponse) {

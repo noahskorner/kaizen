@@ -8,7 +8,7 @@ import {
   createUniqueEmail,
   validPassword,
   buildTestBed
-} from '../../../../test';
+} from '../../../test';
 import { CreateUserSuccessEvent, ServiceEventType } from '@kaizen/core-server';
 
 describe('/user', () => {

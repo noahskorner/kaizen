@@ -18,8 +18,9 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   );
   router.post(
     '/user/link-token',
-    authenticate(serviceCollection.environment),
-    serviceCollection.createLinkTokenController.createLinkToken
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createLinkTokenController.createLinkToken
+    )
   );
 
   // /auth

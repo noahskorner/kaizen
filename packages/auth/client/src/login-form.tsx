@@ -23,8 +23,8 @@ export const LoginForm = ({
   onLoginSuccess
 }: LoginFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState(initialEmail ?? '');
-  const [password, setPassword] = useState(initialPassword ?? '');
+  const [email, setEmail] = useState(initialEmail ?? 'noahskorner@gmail.com');
+  const [password, setPassword] = useState(initialPassword ?? '12345678a$');
   const dispatch = useDispatch<AuthDispatch>();
 
   const onSubmitLoginForm = async (

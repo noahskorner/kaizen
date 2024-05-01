@@ -56,4 +56,18 @@ export abstract class Controller {
     res.send(401, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
+
+  protected internalServerError = (
+    res: MiddlewareResponse,
+    next: () => void,
+    response?: ServiceFailureResponse
+  ) => {
+    if (response == null) {
+      res.send(500);
+      return next();
+    }
+
+    res.send(500, ServiceResponseAdapter.toApiResponse(response));
+    return next();
+  };
 }

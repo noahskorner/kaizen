@@ -1,13 +1,13 @@
 import { ApiSuccessResponse } from '@kaizen/core';
 import supertest from 'supertest';
 import { LinkToken } from '@kaizen/user';
-import { ServiceCollectionBuilder } from '../../../service-collection.builder';
-import { AppBuilder } from '../../../app-builder';
+import { ServiceCollectionBuilder } from '../../service-collection.builder';
+import { AppBuilder } from '../../app-builder';
 import {
   MockPlaidApiBuilder,
   mockLinkTokenCreateResponse,
   createAndLoginUser
-} from '../../../../test';
+} from '../../../test';
 
 describe('/user', () => {
   describe('createLinkToken should', () => {

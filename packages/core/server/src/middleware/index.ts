@@ -1,3 +1,4 @@
+export * from './authenticated-request-handler.builder';
 export * from './cookie';
 export * from './middleware-request';
 export * from './middleware-response';
