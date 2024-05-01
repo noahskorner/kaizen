@@ -4,7 +4,7 @@ import {
   createAndLoginUser,
   defaultTestBed,
   expectError
-} from '../../../../test';
+} from '../../../test';
 import { ErrorCode } from '@kaizen/core';
 import { v4 as uuid } from 'uuid';
 

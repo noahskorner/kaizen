@@ -73,8 +73,7 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   // /wallet
   router.get(
     '/wallet/user/:userId',
-    authenticate(serviceCollection.environment),
-    serviceCollection.getWalletController.get
+    ExpressAdapter.toRequestHandler(serviceCollection.getWalletController.get)
   );
 
   return router;

@@ -43,7 +43,6 @@ import {
   IUpdateWalletRepository,
   IUpdateWalletService
 } from '@kaizen/wallet';
-import { GetWalletController } from './routes/wallet';
 import { FindExpensesController } from './routes/finance/expense';
 import {
   CreateLinkTokenController,
@@ -54,6 +53,7 @@ import {
   LogoutController,
   RefreshTokenController
 } from '@kaizen/auth-server';
+import { GetWalletController } from '@kaizen/wallet-server';
 
 export interface IServiceCollection {
   // Environment

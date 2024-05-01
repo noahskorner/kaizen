@@ -52,6 +52,7 @@ import {
 import {
   CreateWalletRepository,
   CreateWalletService,
+  GetWalletController,
   GetWalletRepository,
   GetWalletService,
   UpdateWalletRepository,
@@ -59,7 +60,6 @@ import {
 } from '@kaizen/wallet-server';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
-import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { FindExpensesController } from './routes/finance/expense';
 import { CreateLinkTokenController } from '@kaizen/user-server/src/create-link-token/create-link-token.controller';
@@ -285,7 +285,10 @@ export class ServiceCollectionBuilder {
     const findTransactionsController =
       this._serviceCollection.findTransactionsController ??
       new FindTransactionsController(findTransactionsService);
-    const getWalletController = new GetWalletController(getWalletService);
+    const getWalletController = new GetWalletController(
+      authMiddleware,
+      getWalletService
+    );
     const findExpensesController = new FindExpensesController(
       findExpensesService
     );

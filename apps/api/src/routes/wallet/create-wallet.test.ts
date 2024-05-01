@@ -1,4 +1,4 @@
-import { buildTestBed, createUser } from '../../../../test';
+import { buildTestBed, createUser } from '../../../test';
 import { CreateWalletCommand } from '@kaizen/wallet';
 import { ErrorCode } from '@kaizen/core';
 

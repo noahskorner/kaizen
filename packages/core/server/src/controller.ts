@@ -70,4 +70,32 @@ export abstract class Controller {
     res.send(500, ServiceResponseAdapter.toApiResponse(response));
     return next();
   };
+
+  protected forbidden = (
+    res: MiddlewareResponse,
+    next: () => void,
+    response?: ServiceFailureResponse
+  ) => {
+    if (response == null) {
+      res.send(403);
+      return next();
+    }
+
+    res.send(403, ServiceResponseAdapter.toApiResponse(response));
+    return next();
+  };
+
+  protected notFound = (
+    res: MiddlewareResponse,
+    next: () => void,
+    response?: ServiceFailureResponse
+  ) => {
+    if (response == null) {
+      res.send(404);
+      return next();
+    }
+
+    res.send(404, ServiceResponseAdapter.toApiResponse(response));
+    return next();
+  };
 }
