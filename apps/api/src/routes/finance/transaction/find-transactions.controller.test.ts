@@ -13,7 +13,7 @@ import {
   Location,
   Transaction
 } from '@kaizen/finance';
-import { createAndLoginUser } from '../../../../../test/create-and-login-user';
+import { createAndLoginUser } from '../../../../test/create-and-login-user';
 import {
   expectError,
   createInstitution,
@@ -23,8 +23,8 @@ import {
   buildAccountsBalanceGetResponse,
   buildItem,
   buildItemPublicTokenExchangeResponse
-} from '../../../../../test';
-import { buildTestBed } from '../../../../../test/build-test-bed';
+} from '../../../../test';
+import { buildTestBed } from '../../../../test/build-test-bed';
 import {
   Transaction as PlaidTransaction,
   Location as PlaidLocation,

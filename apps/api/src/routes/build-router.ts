@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/authenticate';
 import { IServiceCollection } from '../service-collection.interface';
 import { ExpressAdapter } from './express.adapter';
 
@@ -70,8 +69,9 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   // /transaction
   router.get(
     '/transaction',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findTransactionsController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findTransactionsController.find
+    )
   );
 
   // /wallet

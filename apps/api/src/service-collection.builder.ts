@@ -1,5 +1,6 @@
 import {
   CreateAccountSnapshotRepository,
+  CreateInstitutionController,
   CreateInstitutionRepository,
   CreateInstitutionService,
   FinancialProvider,
@@ -10,6 +11,7 @@ import {
   FindInstitutionsController,
   FindInstitutionsRepository,
   FindInstitutionsService,
+  FindTransactionsController,
   FindTransactionsRepository,
   FindTransactionsService,
   GetAccountRepository,
@@ -65,8 +67,6 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
-import { CreateInstitutionController } from '@kaizen/finance-server/src/institution/create-institution/create-institution.controller';
-import { FindTransactionsController } from './routes/finance/transaction/find-transactions/find-transactions.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -284,7 +284,7 @@ export class ServiceCollectionBuilder {
       new SyncInstitutionsController(authMiddleware, syncInstitutionsService);
     const findTransactionsController =
       this._serviceCollection.findTransactionsController ??
-      new FindTransactionsController(findTransactionsService);
+      new FindTransactionsController(authMiddleware, findTransactionsService);
     const getWalletController = new GetWalletController(
       authMiddleware,
       getWalletService

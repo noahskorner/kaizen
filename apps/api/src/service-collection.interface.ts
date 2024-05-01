@@ -24,7 +24,6 @@ import {
   ICreateLinkTokenService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
-import { FindTransactionsController } from './routes/finance';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
@@ -52,6 +51,7 @@ import {
   CreateInstitutionController,
   FindExpensesController,
   FindInstitutionsController,
+  FindTransactionsController,
   SyncInstitutionsController
 } from '@kaizen/finance-server';
 
