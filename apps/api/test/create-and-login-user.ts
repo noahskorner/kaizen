@@ -13,5 +13,9 @@ export const createAndLoginUser = async (testBed: Application) => {
     .send({ email: user.email, password: validPassword } as LoginCommand);
   const authResponseBody: ApiSuccessResponse<AuthToken> = authResponse.body;
 
-  return { authToken: authResponseBody.data, user: user };
+  return {
+    authHeaders: authResponse.headers,
+    authToken: authResponseBody.data,
+    user: user
+  };
 };

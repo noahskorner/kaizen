@@ -1,66 +1,86 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/authenticate';
 import { IServiceCollection } from '../service-collection.interface';
+import { ExpressAdapter } from './express.adapter';
 
 export const buildRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
 
   // /
-  router.get('/', serviceCollection.homeController.find);
+  router.get(
+    '/',
+    ExpressAdapter.toRequestHandler(serviceCollection.homeController.find)
+  );
 
   // /user
-  router.post('/user', serviceCollection.createUserController.create);
+  router.post(
+    '/user',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createUserController.create
+    )
+  );
   router.post(
     '/user/link-token',
-    authenticate(serviceCollection.environment),
-    serviceCollection.createLinkTokenController.createLinkToken
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createLinkTokenController.create
+    )
   );
 
   // /auth
-  router.post('/auth', serviceCollection.loginController.login);
-  router.get('/auth', serviceCollection.refreshTokenController.refreshToken);
+  router.post(
+    '/auth',
+    ExpressAdapter.toRequestHandler(serviceCollection.loginController.login)
+  );
+  router.get(
+    '/auth',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.refreshTokenController.refreshToken
+    )
+  );
   router.delete(
     '/auth',
-    authenticate(serviceCollection.environment),
-    serviceCollection.logoutController.logout
+    ExpressAdapter.toRequestHandler(serviceCollection.logoutController.logout)
   );
 
   // /institution
   router.post(
     '/institution',
-    authenticate(serviceCollection.environment),
-    serviceCollection.createInstitutionController.create
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createInstitutionController.create
+    )
   );
   router.get(
     '/institution',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findInstitutionsController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findInstitutionsController.find
+    )
   );
   router.put(
     '/institution/sync',
-    authenticate(serviceCollection.environment),
-    serviceCollection.syncInstitutionsController.sync
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.syncInstitutionsController.sync
+    )
   );
 
   // /expense
   router.get(
     '/expense',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findExpensesController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findExpensesController.find
+    )
   );
 
   // /transaction
   router.get(
     '/transaction',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findTransactionsController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findTransactionsController.find
+    )
   );
 
   // /wallet
   router.get(
     '/wallet/user/:userId',
-    authenticate(serviceCollection.environment),
-    serviceCollection.getWalletController.get
+    ExpressAdapter.toRequestHandler(serviceCollection.getWalletController.get)
   );
 
   return router;

@@ -1,4 +1,4 @@
-import { REFRESH_TOKEN_COOKIE_KEY } from '../src/routes/auth/refresh-token-cookie-key';
+import { REFRESH_TOKEN_COOKIE_KEY } from '@kaizen/auth-server';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getRefreshToken = (response: any): string | null => {

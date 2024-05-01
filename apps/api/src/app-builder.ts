@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import { errorHandler } from './middleware';
 import cookieParser from 'cookie-parser';
 import { IServiceCollection } from './service-collection.interface';
 import { buildRouter } from './routes/build-router';
@@ -34,7 +33,6 @@ export class AppBuilder {
     );
     app.use(cookieParser());
     app.use(router);
-    app.use(errorHandler);
 
     return app;
   }

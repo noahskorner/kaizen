@@ -1,31 +1,45 @@
 import {
   CreateAccountSnapshotRepository,
+  CreateInstitutionController,
   CreateInstitutionRepository,
   CreateInstitutionService,
   FinancialProvider,
   FindAccountsRepository,
+  FindExpensesController,
   FindExpensesRepository,
   FindExpensesService,
+  FindInstitutionsController,
   FindInstitutionsRepository,
   FindInstitutionsService,
+  FindTransactionsController,
   FindTransactionsRepository,
   FindTransactionsService,
   GetAccountRepository,
   SnapshotAccountsService,
   SyncAccountsRepository,
   SyncAccountsService,
+  SyncInstitutionsController,
   SyncInstitutionsService,
   SyncTransactionsRepository,
   SyncTransactionsService
 } from '@kaizen/finance-server';
-import { LoginService, RefreshTokenService } from '@kaizen/auth-server';
+import {
+  LoginController,
+  LoginService,
+  LogoutController,
+  RefreshTokenController,
+  RefreshTokenService,
+  authenticate
+} from '@kaizen/auth-server';
 import {
   CreateUserService,
   CreateLinkTokenService,
   CreateUserRepository,
   FindUserByEmailRepository,
   GetUserRepository,
-  GetUserService
+  GetUserService,
+  CreateUserController,
+  CreateLinkTokenController
 } from '@kaizen/user-server';
 import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
@@ -44,6 +58,7 @@ import {
 import {
   CreateWalletRepository,
   CreateWalletService,
+  GetWalletController,
   GetWalletRepository,
   GetWalletService,
   UpdateWalletRepository,
@@ -51,18 +66,7 @@ import {
 } from '@kaizen/wallet-server';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
-import { GetWalletController } from './routes/wallet';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
-import { FindExpensesController } from './routes/finance/expense';
-import { LoginController } from './routes/auth/login/login.controller';
-import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
-import { LogoutController } from './routes/auth/logout/logout.controller';
-import { CreateUserController } from './routes/user/create-user/create-user.controller';
-import { CreateLinkTokenController } from './routes/user/create-link-token/create-link-token.controller';
-import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
-import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
-import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
-import { FindTransactionsController } from './routes/finance/transaction/find-transactions/find-transactions.controller';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -93,6 +97,9 @@ export class ServiceCollectionBuilder {
     // Environment
     const environment =
       this._serviceCollection.environment ?? serverEnvironment;
+
+    // Middleware
+    const authMiddleware = authenticate(environment.ACCESS_TOKEN_SECRET);
 
     // Events
     const serviceEventBus =
@@ -256,7 +263,7 @@ export class ServiceCollectionBuilder {
       new CreateUserController(createUserService);
     const createLinkTokenController =
       this._serviceCollection.createLinkTokenController ??
-      new CreateLinkTokenController(createLinkTokenService);
+      new CreateLinkTokenController(authMiddleware, createLinkTokenService);
     const loginController =
       this._serviceCollection.loginController ??
       new LoginController(environment, loginService);
@@ -264,21 +271,26 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.refreshTokenController ??
       new RefreshTokenController(environment, refreshTokenService);
     const logoutController =
-      this._serviceCollection.logoutController ?? new LogoutController();
+      this._serviceCollection.logoutController ??
+      new LogoutController(authMiddleware);
     const createInstitutionController =
       this._serviceCollection.createInstitutionController ??
-      new CreateInstitutionController(createInstitutionService);
+      new CreateInstitutionController(authMiddleware, createInstitutionService);
     const findInstitutionsController =
       this._serviceCollection.findInstitutionsController ??
-      new FindInstitutionsController(findInstitutionsService);
+      new FindInstitutionsController(authMiddleware, findInstitutionsService);
     const syncInstitutionsController =
       this._serviceCollection.syncInstitutionsController ??
-      new SyncInstitutionsController(syncInstitutionsService);
+      new SyncInstitutionsController(authMiddleware, syncInstitutionsService);
     const findTransactionsController =
       this._serviceCollection.findTransactionsController ??
-      new FindTransactionsController(findTransactionsService);
-    const getWalletController = new GetWalletController(getWalletService);
+      new FindTransactionsController(authMiddleware, findTransactionsService);
+    const getWalletController = new GetWalletController(
+      authMiddleware,
+      getWalletService
+    );
     const findExpensesController = new FindExpensesController(
+      authMiddleware,
       findExpensesService
     );
 

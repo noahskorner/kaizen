@@ -24,13 +24,6 @@ import {
   ICreateLinkTokenService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
-import {
-  CreateInstitutionController,
-  FindInstitutionsController,
-  FindTransactionsController,
-  SyncInstitutionsController
-} from './routes/finance';
-import { CreateLinkTokenController, CreateUserController } from './routes/user';
 import { HomeController } from './routes/home.controller';
 import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
@@ -44,11 +37,23 @@ import {
   IUpdateWalletRepository,
   IUpdateWalletService
 } from '@kaizen/wallet';
-import { GetWalletController } from './routes/wallet';
-import { FindExpensesController } from './routes/finance/expense';
-import { LoginController } from './routes/auth/login/login.controller';
-import { LogoutController } from './routes/auth/logout/logout.controller';
-import { RefreshTokenController } from './routes/auth/refresh-token/refresh-token.controller';
+import {
+  CreateLinkTokenController,
+  CreateUserController
+} from '@kaizen/user-server';
+import {
+  LoginController,
+  LogoutController,
+  RefreshTokenController
+} from '@kaizen/auth-server';
+import { GetWalletController } from '@kaizen/wallet-server';
+import {
+  CreateInstitutionController,
+  FindExpensesController,
+  FindInstitutionsController,
+  FindTransactionsController,
+  SyncInstitutionsController
+} from '@kaizen/finance-server';
 
 export interface IServiceCollection {
   // Environment
