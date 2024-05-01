@@ -8,8 +8,8 @@ import {
   createAndLoginUser,
   createInstitution,
   expectAccountToBeExternal
-} from '../../../../../test';
-import { buildTestBed } from '../../../../../test/build-test-bed';
+} from '../../../../test';
+import { buildTestBed } from '../../../../test/build-test-bed';
 import { AccountBase } from 'plaid';
 import {
   ServiceEventType,

@@ -5,8 +5,8 @@ import {
   createAndLoginUser,
   expectAccountToBeExternal,
   expectError
-} from '../../../../../test';
-import { buildTestBed } from '../../../../../test/build-test-bed';
+} from '../../../../test';
+import { buildTestBed } from '../../../../test/build-test-bed';
 
 describe('/institution', () => {
   describe('create should', () => {

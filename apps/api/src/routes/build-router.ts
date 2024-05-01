@@ -42,18 +42,21 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   // /institution
   router.post(
     '/institution',
-    authenticate(serviceCollection.environment),
-    serviceCollection.createInstitutionController.create
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createInstitutionController.create
+    )
   );
   router.get(
     '/institution',
-    authenticate(serviceCollection.environment),
-    serviceCollection.findInstitutionsController.find
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findInstitutionsController.find
+    )
   );
   router.put(
     '/institution/sync',
-    authenticate(serviceCollection.environment),
-    serviceCollection.syncInstitutionsController.sync
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.syncInstitutionsController.sync
+    )
   );
 
   // /expense

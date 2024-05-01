@@ -7,6 +7,7 @@ import {
   FindExpensesController,
   FindExpensesRepository,
   FindExpensesService,
+  FindInstitutionsController,
   FindInstitutionsRepository,
   FindInstitutionsService,
   FindTransactionsRepository,
@@ -15,6 +16,7 @@ import {
   SnapshotAccountsService,
   SyncAccountsRepository,
   SyncAccountsService,
+  SyncInstitutionsController,
   SyncInstitutionsService,
   SyncTransactionsRepository,
   SyncTransactionsService
@@ -63,9 +65,7 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
-import { CreateInstitutionController } from './routes/finance/institution/create-institution/create-institution.controller';
-import { FindInstitutionsController } from './routes/finance/institution/find-institutions/find-institutions.controller';
-import { SyncInstitutionsController } from './routes/finance/institution/sync-institutions/sync-institutions.controller';
+import { CreateInstitutionController } from '@kaizen/finance-server/src/institution/create-institution/create-institution.controller';
 import { FindTransactionsController } from './routes/finance/transaction/find-transactions/find-transactions.controller';
 
 export class ServiceCollectionBuilder {
@@ -275,13 +275,13 @@ export class ServiceCollectionBuilder {
       new LogoutController(authMiddleware);
     const createInstitutionController =
       this._serviceCollection.createInstitutionController ??
-      new CreateInstitutionController(createInstitutionService);
+      new CreateInstitutionController(authMiddleware, createInstitutionService);
     const findInstitutionsController =
       this._serviceCollection.findInstitutionsController ??
-      new FindInstitutionsController(findInstitutionsService);
+      new FindInstitutionsController(authMiddleware, findInstitutionsService);
     const syncInstitutionsController =
       this._serviceCollection.syncInstitutionsController ??
-      new SyncInstitutionsController(syncInstitutionsService);
+      new SyncInstitutionsController(authMiddleware, syncInstitutionsService);
     const findTransactionsController =
       this._serviceCollection.findTransactionsController ??
       new FindTransactionsController(findTransactionsService);
