@@ -14,8 +14,8 @@ export class CreateLinkTokenController extends Controller {
     super();
   }
 
-  public createLinkToken = new AuthenticatedRequestHandlerBuilder(
-    (req, res, next) => this._authenticate(req, res, next)
+  public create = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+    this._authenticate(req, res, next)
   )
     .use(async (req, res, next) => {
       const request: CreateLinkTokenRequest = {

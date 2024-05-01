@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { catchAsync } from '../middleware/catch-async';
-import { Controller } from './controller';
+import { Controller, RequestHandlerBuilder } from '@kaizen/core-server';
 
 export class HomeController extends Controller {
-  public find = catchAsync(async (req: Request, res: Response) => {
-    return this.ok(res);
-  });
+  public find = new RequestHandlerBuilder()
+    .use((req, res, next) => {
+      return this.ok(res, next);
+    })
+    .build();
 }

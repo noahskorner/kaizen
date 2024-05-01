@@ -6,7 +6,10 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
 
   // /
-  router.get('/', serviceCollection.homeController.find);
+  router.get(
+    '/',
+    ExpressAdapter.toRequestHandler(serviceCollection.homeController.find)
+  );
 
   // /user
   router.post(
@@ -18,7 +21,7 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.post(
     '/user/link-token',
     ExpressAdapter.toRequestHandler(
-      serviceCollection.createLinkTokenController.createLinkToken
+      serviceCollection.createLinkTokenController.create
     )
   );
 

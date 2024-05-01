@@ -1,9 +1,9 @@
 .markdown-container h1 {
-  @apply font-secondary my-4 text-4xl font-extrabold;
+  @apply my-4 font-secondary text-4xl font-extrabold;
 }
 
 .markdown-container h2 {
-  @apply font-secondary my-4 text-3xl font-extrabold;
+  @apply my-4 font-secondary text-3xl font-extrabold;
 }
 
 .markdown-container code {
