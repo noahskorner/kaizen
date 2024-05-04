@@ -17,13 +17,13 @@ export const selectTransactionsByCategory = createSelector(
       const amount = curr.amount;
 
       const existingCategory = prev.find(
-        (transaction) => transaction.category === category?.primary
+        (transaction) => transaction.category === category?.originalCategory
       );
 
       if (existingCategory) {
         existingCategory.amount += amount;
       } else {
-        prev.push({ category: category?.primary ?? 'NONE', amount });
+        prev.push({ category: category?.originalCategory ?? 'NONE', amount });
       }
 
       return prev;
