@@ -18,10 +18,10 @@ export class SyncTransactionsRepository
         // Update the institutionRecord with the latest cursor
         this._prisma.institutionRecord.update({
           data: {
-            plaidCursor: query.updateInstitutionQuery.cursor
+            plaidCursor: query.syncInstitutionQuery.cursor
           },
           where: {
-            id: query.updateInstitutionQuery.institutionId
+            id: query.syncInstitutionQuery.institutionId
           },
           include: {
             accounts: true
@@ -82,7 +82,7 @@ export class SyncTransactionsRepository
           });
         }),
         // Update the existing transactions
-        ...query.updateTransactionQueries.map((updateTransactionQuery) => {
+        ...query.syncTransactionQueries.map((updateTransactionQuery) => {
           return this._prisma.transactionRecord.update({
             where: {
               id: updateTransactionQuery.id
@@ -170,7 +170,7 @@ export class SyncTransactionsRepository
       ),
       updatedTransactionRecords: transactionRecords.filter(
         (transactionRecord) =>
-          query.updateTransactionQueries.some(
+          query.syncTransactionQueries.some(
             (updateTransactionQuery) =>
               updateTransactionQuery.id === transactionRecord.id
           )

@@ -1,17 +1,17 @@
 import { TransactionCodeRecord } from '../transaction-code-record';
 import { TransactionPaymentChannelRecord } from '../transaction-payment-channel-record';
-import { UpdateCategoryQuery } from './update-category.query';
-import { UpdateLocationQuery } from './update-location.query';
+import { SyncCategoryQuery } from './sync-category.query';
+import { SyncLocationQuery } from './sync-location.query';
 
-export interface UpdateTransactionQuery {
+export interface SyncTransactionQuery {
   id: string;
   amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
   checkNumber: string | null;
   date: string;
-  location: UpdateLocationQuery;
-  category: UpdateCategoryQuery;
+  location: SyncLocationQuery;
+  category: SyncCategoryQuery;
   name: string | null;
   merchantName: string | null;
   originalDescription: string | null;

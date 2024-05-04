@@ -1,5 +1,4 @@
 export * from './build-test-bed';
-export * from './create-account';
 export * from './create-and-login-user';
 export * from './create-institution';
 export * from './create-unique-email';

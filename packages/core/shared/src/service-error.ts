@@ -302,6 +302,15 @@ export interface GetWalletNotYourWalletError {
   code: ErrorCode.GET_WALLET_NOT_YOUR_WALLET;
 }
 
+export interface UpdateCategoryNotFoundError {
+  code: ErrorCode.UPDATE_CATEGORY_NOT_FOUND;
+  params: {
+    userId: string;
+    transactionId: string;
+    categoryId: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -345,6 +354,7 @@ export interface BaseError {
     | ErrorCode.FIND_EXPENSES_INVALID_START_DATE
     | ErrorCode.FIND_EXPENSES_INVALID_END_DATE
     | ErrorCode.FIND_EXPENSES_INVALID_TIMEFRAME
+    | ErrorCode.UPDATE_CATEGORY_NOT_FOUND
   >;
   params?: never;
 }
@@ -391,4 +401,5 @@ export type ServiceError =
   | GetWalletNotYourWalletError
   | FindExpensesInvalidStartDateError
   | FindExpensesInvalidEndDateError
-  | FindExpensesInvalidTimeframeError;
+  | FindExpensesInvalidTimeframeError
+  | UpdateCategoryNotFoundError;

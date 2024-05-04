@@ -1,4 +1,4 @@
-export interface UpdateInstitutionQuery {
+export interface SyncInstitutionQuery {
   institutionId: string;
   cursor: string;
 }

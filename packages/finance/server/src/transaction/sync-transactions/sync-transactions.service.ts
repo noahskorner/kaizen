@@ -14,12 +14,13 @@ import {
   InstitutionAdapter,
   InstitutionRecord,
   SyncExternalTransactionsResponse,
+  SyncTransactionQuery,
+  SyncTransactionsQuery,
   SyncTransactionsCommand,
   SyncTransactionsResponse,
   Transaction,
   TransactionAdapter,
-  TransactionRecordAdapter,
-  UpdateTransactionQuery
+  TransactionRecordAdapter
 } from '@kaizen/finance';
 
 export class SyncTransactionsService
@@ -169,19 +170,19 @@ export class SyncTransactionsService
       return createTransactionQueriesResponse;
     }
 
-    const updateTransactionQueriesResponse =
-      await this._buildUpdateTransactionQueries(response.updated);
-    if (updateTransactionQueriesResponse.type === 'FAILURE') {
-      return updateTransactionQueriesResponse;
+    const syncTransactionQueriesResponse =
+      await this._buildSyncTransactionQueries(response.updated);
+    if (syncTransactionQueriesResponse.type === 'FAILURE') {
+      return syncTransactionQueriesResponse;
     }
 
-    const syncTransactionsQuery = {
-      updateInstitutionQuery: {
+    const syncTransactionsQuery: SyncTransactionsQuery = {
+      syncInstitutionQuery: {
         institutionId: institutionId,
         cursor: response.cursor
       },
       createTransactionQueries: createTransactionQueriesResponse.data,
-      updateTransactionQueries: updateTransactionQueriesResponse.data,
+      syncTransactionQueries: syncTransactionQueriesResponse.data,
       deleteTransactionQueries: response.deleted.map(
         TransactionRecordAdapter.toDeleteTransactionQuery
       )
@@ -259,12 +260,12 @@ export class SyncTransactionsService
     return this.success(queries);
   }
 
-  private async _buildUpdateTransactionQueries(
+  private async _buildSyncTransactionQueries(
     externalTransactions: ExternalTransaction[]
-  ): Promise<ServiceResponse<UpdateTransactionQuery[]>> {
+  ): Promise<ServiceResponse<SyncTransactionQuery[]>> {
     // Build the update transaction queries
     const missingTransactionIds: string[] = [];
-    const queries: UpdateTransactionQuery[] = [];
+    const queries: SyncTransactionQuery[] = [];
     for (const externalTransaction of externalTransactions) {
       // Find the existing transaction
       const transaction =
@@ -278,7 +279,7 @@ export class SyncTransactionsService
 
       // Map to the database query
       queries.push(
-        TransactionRecordAdapter.toUpdateTransactionQuery({
+        TransactionRecordAdapter.toSyncTransactionQuery({
           id: transaction.id,
           externalTransaction,
           locationId: transaction.locationId,
