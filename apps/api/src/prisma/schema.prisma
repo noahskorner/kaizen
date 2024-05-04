@@ -254,6 +254,7 @@ model CategoryRecord {
   updatedAt        DateTime           @default(now()) @updatedAt @map("updated_at")
   transaction      TransactionRecord?
   originalCategory String?            @map("original_category")
+  userCategory     String?            @map("user_category")
   detailed         String?            @map("detailed")
   confidenceLevel  String?            @map("confidence_level")
   iconUrl          String?            @map("icon_url")

@@ -52,7 +52,8 @@ import {
   FindExpensesController,
   FindInstitutionsController,
   FindTransactionsController,
-  SyncInstitutionsController
+  SyncInstitutionsController,
+  UpdateCategoryController
 } from '@kaizen/finance-server';
 
 export interface IServiceCollection {
@@ -115,4 +116,5 @@ export interface IServiceCollection {
   findTransactionsController: FindTransactionsController;
   getWalletController: GetWalletController;
   findExpensesController: FindExpensesController;
+  updateCategoryController: UpdateCategoryController;
 }

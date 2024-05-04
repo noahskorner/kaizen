@@ -76,6 +76,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
       serviceCollection.findTransactionsController.find
     )
   );
+  router.put(
+    '/transaction/:transactionId/category/:categoryId',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.updateCategoryController.update
+    )
+  );
 
   // /wallet
   router.get(

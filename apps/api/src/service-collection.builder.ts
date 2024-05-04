@@ -15,13 +15,17 @@ import {
   FindTransactionsRepository,
   FindTransactionsService,
   GetAccountRepository,
+  GetTransactionRepository,
   SnapshotAccountsService,
   SyncAccountsRepository,
   SyncAccountsService,
   SyncInstitutionsController,
   SyncInstitutionsService,
   SyncTransactionsRepository,
-  SyncTransactionsService
+  SyncTransactionsService,
+  UpdateCategoryController,
+  UpdateCategoryRepository,
+  UpdateCategoryService
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -186,6 +190,8 @@ export class ServiceCollectionBuilder {
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
     const findExpensesRepository = new FindExpensesRepository(prisma);
+    const getTransactionRepositroy = new GetTransactionRepository(prisma);
+    const updateCategoryRepository = new UpdateCategoryRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -254,6 +260,10 @@ export class ServiceCollectionBuilder {
       updateWalletRepository
     );
     const getWalletService = new GetWalletService(getWalletRepository);
+    const updateCategoryService = new UpdateCategoryService(
+      getTransactionRepositroy,
+      updateCategoryRepository
+    );
 
     // Controllers
     const homeController =
@@ -292,6 +302,10 @@ export class ServiceCollectionBuilder {
     const findExpensesController = new FindExpensesController(
       authMiddleware,
       findExpensesService
+    );
+    const updateCategoryController = new UpdateCategoryController(
+      authMiddleware,
+      updateCategoryService
     );
 
     const serviceCollection: IServiceCollection = {
@@ -346,7 +360,8 @@ export class ServiceCollectionBuilder {
       syncInstitutionsController,
       findTransactionsController,
       getWalletController,
-      findExpensesController
+      findExpensesController,
+      updateCategoryController
     };
 
     return serviceCollection;

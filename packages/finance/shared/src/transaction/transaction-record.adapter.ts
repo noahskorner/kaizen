@@ -7,9 +7,9 @@ import {
   CreateLocationQuery,
   CreateTransactionQuery,
   DeleteTransactionQuery,
-  UpdateCategoryQuery,
-  UpdateLocationQuery,
-  UpdateTransactionQuery
+  SyncCategoryQuery,
+  SyncLocationQuery,
+  SyncTransactionQuery
 } from './sync-transactions';
 import { CreateCategoryQuery } from './sync-transactions/create-category.query';
 import { TransactionCodeRecord } from './transaction-code-record';
@@ -62,13 +62,13 @@ export class TransactionRecordAdapter {
     return query;
   }
 
-  public static toUpdateTransactionQuery({
+  public static toSyncTransactionQuery({
     id,
     externalTransaction,
     locationId,
     categoryId
-  }: _ToUpdateTransactionQueryCommand): UpdateTransactionQuery {
-    const query: UpdateTransactionQuery = {
+  }: _ToUpdateTransactionQueryCommand): SyncTransactionQuery {
+    const query: SyncTransactionQuery = {
       id: id,
       location: TransactionRecordAdapter.toUpdateLocationQuery(
         locationId,
@@ -133,8 +133,8 @@ export class TransactionRecordAdapter {
   public static toUpdateCategoryQuery(
     categoryId: string,
     externalCategory: ExternalCategory | null
-  ): UpdateCategoryQuery {
-    const query: UpdateCategoryQuery = {
+  ): SyncCategoryQuery {
+    const query: SyncCategoryQuery = {
       id: categoryId,
       originalCategory: externalCategory?.primary ?? null,
       detailed: externalCategory?.detailed ?? null,
@@ -165,8 +165,8 @@ export class TransactionRecordAdapter {
   public static toUpdateLocationQuery(
     locationId: string,
     location: ExternalLocation
-  ): UpdateLocationQuery {
-    const query: UpdateLocationQuery = {
+  ): SyncLocationQuery {
+    const query: SyncLocationQuery = {
       id: locationId,
       address: location.address,
       city: location.city,

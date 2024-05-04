@@ -1,5 +1,4 @@
-import { Category } from './category';
-import { CategoryRecord } from './category-record';
+import { CategoryAdapter } from './category.adapter';
 import { Location } from './location';
 import { LocationRecord } from './location-record';
 import { Transaction } from './transaction';
@@ -15,7 +14,7 @@ export class TransactionAdapter {
   ): Transaction {
     const transaction: Transaction = {
       location: TransactionAdapter.toLocation(transactionRecord.location),
-      category: TransactionAdapter.toCategory(transactionRecord.category),
+      category: CategoryAdapter.toCategory(transactionRecord.category),
       paymentChannel: TransactionAdapter.toPaymentChannel(
         transactionRecord.paymentChannel
       ),
@@ -67,18 +66,6 @@ export class TransactionAdapter {
     };
 
     return location;
-  }
-
-  private static toCategory(record: CategoryRecord): Category {
-    const category: Category = {
-      id: record.id,
-      originalCategory: record.originalCategory,
-      detailed: record.detailed,
-      confidenceLevel: record.confidenceLevel,
-      iconUrl: record.iconUrl
-    };
-
-    return category;
   }
 
   private static toTransactionCode(

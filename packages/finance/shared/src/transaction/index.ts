@@ -1,4 +1,5 @@
 export * from './category-record';
+export * from './category.adapter';
 export * from './category';
 export * from './external-category';
 export * from './external-location';
@@ -7,6 +8,7 @@ export * from './external-transaction-payment-channel';
 export * from './external-transaction.adapter';
 export * from './external-transaction';
 export * from './find-transactions';
+export * from './get-transaction';
 export * from './location-record';
 export * from './location';
 export * from './sync-transactions';
@@ -18,3 +20,4 @@ export * from './transaction-record.adapter';
 export * from './transaction-record';
 export * from './transaction.adapter';
 export * from './transaction';
+export * from './update-category';
