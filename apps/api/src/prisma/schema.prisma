@@ -218,6 +218,10 @@ model TransactionRecord {
   institution            InstitutionRecord               @relation(fields: [institutionId], references: [id])
   accountId              String                          @map("account_id")
   account                AccountRecord                   @relation(fields: [accountId], references: [id])
+  categoryId             String                          @unique @map("category_id")
+  category               CategoryRecord                  @relation(fields: [categoryId], references: [id])
+  locationId             String                          @unique @map("location_id")
+  location               LocationRecord                  @relation(fields: [locationId], references: [id])
   externalId             String                          @unique @map("external_id")
   externalAccountId      String                          @map("external_account_id")
   amount                 Float                           @map("amount")
@@ -225,8 +229,6 @@ model TransactionRecord {
   unofficialCurrencyCode String?                         @map("unofficial_currency_code")
   checkNumber            String?                         @map("check_number")
   date                   DateTime                        @map("date")
-  locationId             String                          @map("location_id")
-  location               LocationRecord                  @relation(fields: [locationId], references: [id])
   name                   String?                         @map("name")
   merchantName           String?                         @map("merchant_name")
   originalDescription    String?                         @map("original_description")
@@ -239,42 +241,42 @@ model TransactionRecord {
   authorizedDatetime     DateTime?                       @map("authorized_datetime")
   datetime               DateTime?                       @map("datetime")
   paymentChannel         TransactionPaymentChannelRecord @default(Other) @map("payment_channel")
-  categoryId             String?                         @map("category_id")
-  category               CategoryRecord?                 @relation(fields: [categoryId], references: [id])
   code                   TransactionCodeRecord?          @default(Null) @map("code")
-  categoryIconUrl        String?                         @map("category_icon_url")
   merchantEntityId       String?                         @map("merchant_entity_id")
 
   @@map("transaction")
 }
 
-model LocationRecord {
-  id           String              @id @default(uuid()) @map("id")
-  createdAt    DateTime            @default(now()) @map("created_at")
-  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
-  transactions TransactionRecord[]
-  address      String?             @map("address")
-  city         String?             @map("city")
-  region       String?             @map("region")
-  postalCode   String?             @map("postal_code")
-  country      String?             @map("country")
-  lat          Float?              @map("lat")
-  lon          Float?              @map("lon")
-  storeNumber  String?             @map("store_number")
-
-  @@map("location")
-}
-
+// Category
 model CategoryRecord {
-  id              String              @id @default(uuid()) @map("id")
-  createdAt       DateTime            @default(now()) @map("created_at")
-  updatedAt       DateTime            @default(now()) @updatedAt @map("updated_at")
-  primary         String              @map("primary")
-  detailed        String              @map("detailed")
-  confidenceLevel String?             @map("confidence_level")
-  transactions    TransactionRecord[]
+  id               String             @id @default(uuid()) @map("id")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @default(now()) @updatedAt @map("updated_at")
+  transaction      TransactionRecord?
+  originalCategory String?            @map("original_category")
+  detailed         String?            @map("detailed")
+  confidenceLevel  String?            @map("confidence_level")
+  iconUrl          String?            @map("icon_url")
 
   @@map("category")
+}
+
+// Location
+model LocationRecord {
+  id          String             @id @default(uuid()) @map("id")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @default(now()) @updatedAt @map("updated_at")
+  transaction TransactionRecord?
+  address     String?            @map("address")
+  city        String?            @map("city")
+  region      String?            @map("region")
+  postalCode  String?            @map("postal_code")
+  country     String?            @map("country")
+  lat         Float?             @map("lat")
+  lon         Float?             @map("lon")
+  storeNumber String?            @map("store_number")
+
+  @@map("location")
 }
 
 // Wallet

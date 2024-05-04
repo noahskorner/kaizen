@@ -29,7 +29,7 @@ export const TransactionsTable = () => {
                   {transaction.category && (
                     <div className="inline-flex gap-2">
                       <span className="rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
-                        {transaction.category.primary}
+                        {transaction.category.originalCategory}
                       </span>
                     </div>
                   )}

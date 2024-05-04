@@ -21,7 +21,8 @@ export class ExternalTransactionAdapter {
         transaction.location
       ),
       category: ExternalTransactionAdapter.toExternalCategory(
-        transaction.personal_finance_category
+        transaction.personal_finance_category,
+        transaction.personal_finance_category_icon_url ?? null
       ),
       paymentChannel: ExternalTransactionAdapter.toExternalPaymentChannel(
         transaction.payment_channel
@@ -96,14 +97,16 @@ export class ExternalTransactionAdapter {
   }
 
   public static toExternalCategory(
-    category: PersonalFinanceCategory | null | undefined
+    category: PersonalFinanceCategory | null | undefined,
+    iconUrl: string | null
   ): ExternalCategory | null {
     if (category == null) return null;
 
     const externalCategory: ExternalCategory = {
       primary: category.primary,
       detailed: category.detailed,
-      confidenceLevel: category.confidence_level ?? null
+      confidenceLevel: category.confidence_level ?? null,
+      iconUrl: iconUrl
     };
 
     return externalCategory;

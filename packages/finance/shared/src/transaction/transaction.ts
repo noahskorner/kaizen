@@ -10,8 +10,8 @@ export interface Transaction {
   accountId: string;
   externalId: string;
   externalAccountId: string;
+  category: Category;
   location: Location;
-  category: Category | null;
   amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
@@ -30,6 +30,5 @@ export interface Transaction {
   datetime: string | null;
   paymentChannel: TransactionPaymentChannel;
   code: TransactionCode | null;
-  categoryIconUrl: string | null;
   merchantEntityId: string | null;
 }

@@ -1,3 +1,4 @@
+import { ExternalCategory } from './external-category';
 import { ExternalLocation } from './external-location';
 import { ExternalTransaction } from './external-transaction';
 import { ExternalTransactionCode } from './external-transaction-code';
@@ -6,9 +7,11 @@ import {
   CreateLocationQuery,
   CreateTransactionQuery,
   DeleteTransactionQuery,
+  UpdateCategoryQuery,
   UpdateLocationQuery,
   UpdateTransactionQuery
 } from './sync-transactions';
+import { CreateCategoryQuery } from './sync-transactions/create-category.query';
 import { TransactionCodeRecord } from './transaction-code-record';
 import { TransactionPaymentChannelRecord } from './transaction-payment-channel-record';
 
@@ -17,8 +20,7 @@ export class TransactionRecordAdapter {
     userId,
     institutionId,
     accountId,
-    externalTransaction,
-    categoryId
+    externalTransaction
   }: _ToCreateTransactionQueryCommand): CreateTransactionQuery {
     const query: CreateTransactionQuery = {
       userId: userId,
@@ -27,7 +29,9 @@ export class TransactionRecordAdapter {
       location: TransactionRecordAdapter.toCreateLocationQuery(
         externalTransaction.location
       ),
-      categoryId: categoryId,
+      category: TransactionRecordAdapter.toCreateCategoryQuery(
+        externalTransaction.category
+      ),
       paymentChannel: TransactionRecordAdapter.toPaymentChannelRecord(
         externalTransaction.paymentChannel
       ),
@@ -52,7 +56,6 @@ export class TransactionRecordAdapter {
       authorizedDate: externalTransaction.authorizedDate,
       authorizedDatetime: externalTransaction.authorizedDatetime,
       datetime: externalTransaction.datetime,
-      categoryIconUrl: externalTransaction.categoryIconUrl,
       merchantEntityId: externalTransaction.merchantEntityId
     };
 
@@ -71,10 +74,13 @@ export class TransactionRecordAdapter {
         locationId,
         externalTransaction.location
       ),
+      category: TransactionRecordAdapter.toUpdateCategoryQuery(
+        categoryId,
+        externalTransaction.category
+      ),
       paymentChannel: TransactionRecordAdapter.toPaymentChannelRecord(
         externalTransaction.paymentChannel
       ),
-      categoryId: categoryId,
       code: TransactionRecordAdapter.toTransactionCodeRecord(
         externalTransaction.code
       ),
@@ -106,6 +112,34 @@ export class TransactionRecordAdapter {
   ): DeleteTransactionQuery {
     const query: DeleteTransactionQuery = {
       externalId: externalId
+    };
+
+    return query;
+  }
+
+  public static toCreateCategoryQuery(
+    externalCategory: ExternalCategory | null
+  ): CreateCategoryQuery {
+    const query: CreateCategoryQuery = {
+      originalCategory: externalCategory?.primary ?? null,
+      detailed: externalCategory?.detailed ?? null,
+      confidenceLevel: externalCategory?.confidenceLevel ?? null,
+      iconUrl: externalCategory?.iconUrl ?? null
+    };
+
+    return query;
+  }
+
+  public static toUpdateCategoryQuery(
+    categoryId: string,
+    externalCategory: ExternalCategory | null
+  ): UpdateCategoryQuery {
+    const query: UpdateCategoryQuery = {
+      id: categoryId,
+      originalCategory: externalCategory?.primary ?? null,
+      detailed: externalCategory?.detailed ?? null,
+      confidenceLevel: externalCategory?.confidenceLevel ?? null,
+      iconUrl: externalCategory?.iconUrl ?? null
     };
 
     return query;
@@ -204,12 +238,11 @@ interface _ToCreateTransactionQueryCommand {
   institutionId: string;
   accountId: string;
   externalTransaction: ExternalTransaction;
-  categoryId: string | null;
 }
 
 interface _ToUpdateTransactionQueryCommand {
   id: string;
   externalTransaction: ExternalTransaction;
   locationId: string;
-  categoryId: string | null;
+  categoryId: string;
 }

@@ -1,9 +1,7 @@
 import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
-  CategoryRecord,
   CreateTransactionQuery,
-  ExternalCategory,
   ExternalTransaction,
   FindAccountsByExternalIdsQuery,
   FindInstitutionsQuery,
@@ -241,26 +239,13 @@ export class SyncTransactionsService
         missingAccountIds.push(externalTransaction.externalAccountId);
         continue;
       }
-
-      // Get or create the category (if applicable)
-      const categoryId = externalTransaction.category
-        ? (
-            await this._syncTransactionsRepository.getOrCreateCategory({
-              primary: externalTransaction.category.primary,
-              detailed: externalTransaction.category.detailed,
-              confidenceLevel: externalTransaction.category.confidenceLevel
-            })
-          ).id
-        : null;
-
       // Map to the database query
       queries.push(
         TransactionRecordAdapter.toCreateTransactionQuery({
           userId,
           institutionId,
           accountId,
-          externalTransaction,
-          categoryId
+          externalTransaction
         })
       );
     }
@@ -291,18 +276,13 @@ export class SyncTransactionsService
         continue;
       }
 
-      const categoryId = await this._syncCategory(
-        transaction.category,
-        externalTransaction.category
-      );
-
       // Map to the database query
       queries.push(
         TransactionRecordAdapter.toUpdateTransactionQuery({
           id: transaction.id,
           externalTransaction,
           locationId: transaction.locationId,
-          categoryId: categoryId
+          categoryId: transaction.categoryId
         })
       );
     }
@@ -342,34 +322,6 @@ export class SyncTransactionsService
         deleted: [...prev.deleted, ...curr.response.data.deleted]
       };
     }, initialValue);
-  }
-
-  private async _syncCategory(
-    record: CategoryRecord | null,
-    external: ExternalCategory | null
-  ): Promise<string | null> {
-    // This record no longer has a category, let's disconnect it
-    if (external == null) {
-      return null;
-    }
-
-    // This record already has the same category, let's keep it
-    if (
-      record?.primary === external.primary &&
-      record?.detailed === external.detailed &&
-      record?.confidenceLevel === external.confidenceLevel
-    ) {
-      return record.id;
-    }
-
-    // This record has a different category, let's update it
-    const categoryRecord =
-      await this._syncTransactionsRepository.getOrCreateCategory({
-        primary: external.primary,
-        detailed: external.detailed,
-        confidenceLevel: external.confidenceLevel
-      });
-    return categoryRecord.id;
   }
 }
 

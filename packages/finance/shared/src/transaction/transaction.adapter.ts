@@ -48,7 +48,6 @@ export class TransactionAdapter {
       datetime: transactionRecord.datetime
         ? transactionRecord.datetime.toISOString()
         : null,
-      categoryIconUrl: transactionRecord.categoryIconUrl,
       merchantEntityId: transactionRecord.merchantEntityId
     };
     return transaction;
@@ -70,14 +69,13 @@ export class TransactionAdapter {
     return location;
   }
 
-  private static toCategory(record: CategoryRecord | null): Category | null {
-    if (record == null) return null;
-
+  private static toCategory(record: CategoryRecord): Category {
     const category: Category = {
       id: record.id,
-      primary: record.primary,
+      originalCategory: record.originalCategory,
       detailed: record.detailed,
-      confidenceLevel: record.confidenceLevel
+      confidenceLevel: record.confidenceLevel,
+      iconUrl: record.iconUrl
     };
 
     return category;
