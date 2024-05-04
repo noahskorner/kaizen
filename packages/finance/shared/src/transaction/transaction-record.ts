@@ -7,5 +7,5 @@ import {
 
 export type TransactionRecord = PrismaTransactionRecord & {
   location: PrismaLocationRecord;
-  category: PrismaCategoryRecord | null;
+  category: PrismaCategoryRecord;
 };

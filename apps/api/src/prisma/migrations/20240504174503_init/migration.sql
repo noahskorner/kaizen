@@ -60,6 +60,28 @@ CREATE TABLE "account" (
 );
 
 -- CreateTable
+CREATE TABLE "account_snapshot" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "snapshot_id" TEXT NOT NULL,
+    "account_id" TEXT NOT NULL,
+    "external_id" TEXT NOT NULL,
+    "available" DOUBLE PRECISION,
+    "current" DOUBLE PRECISION,
+    "limit" DOUBLE PRECISION,
+    "iso_currency_code" TEXT,
+    "unofficial_currency_code" TEXT,
+    "mask" TEXT,
+    "name" TEXT NOT NULL,
+    "official_name" TEXT,
+    "type" "AccountRecordType" NOT NULL DEFAULT 'Other',
+    "subtype" "AccountRecordSubtype",
+    "verification_status" "AccountRecordVerificationStatus",
+
+    CONSTRAINT "account_snapshot_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "transaction" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -67,6 +89,8 @@ CREATE TABLE "transaction" (
     "user_id" TEXT NOT NULL,
     "institution_id" TEXT NOT NULL,
     "account_id" TEXT NOT NULL,
+    "category_id" TEXT NOT NULL,
+    "location_id" TEXT NOT NULL,
     "external_id" TEXT NOT NULL,
     "external_account_id" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
@@ -74,7 +98,6 @@ CREATE TABLE "transaction" (
     "unofficial_currency_code" TEXT,
     "check_number" TEXT,
     "date" TIMESTAMP(3) NOT NULL,
-    "location_id" TEXT NOT NULL,
     "name" TEXT,
     "merchant_name" TEXT,
     "original_description" TEXT,
@@ -87,9 +110,7 @@ CREATE TABLE "transaction" (
     "authorized_datetime" TIMESTAMP(3),
     "datetime" TIMESTAMP(3),
     "payment_channel" "TransactionPaymentChannelRecord" NOT NULL DEFAULT 'Other',
-    "category_id" TEXT,
     "code" "TransactionCodeRecord" DEFAULT 'Null',
-    "category_icon_url" TEXT,
     "merchant_entity_id" TEXT,
 
     CONSTRAINT "transaction_pkey" PRIMARY KEY ("id")
@@ -117,9 +138,10 @@ CREATE TABLE "category" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "primary" TEXT NOT NULL,
-    "detailed" TEXT NOT NULL,
+    "original_category" TEXT,
+    "detailed" TEXT,
     "confidence_level" TEXT,
+    "icon_url" TEXT,
 
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
@@ -135,6 +157,18 @@ CREATE TABLE "wallet" (
     CONSTRAINT "wallet_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "wallet_transaction" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "transaction_id" TEXT NOT NULL,
+    "wallet_id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+
+    CONSTRAINT "wallet_transaction_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
@@ -145,16 +179,28 @@ CREATE INDEX "user_email_idx" ON "user"("email");
 CREATE UNIQUE INDEX "account_external_id_key" ON "account"("external_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "transaction_category_id_key" ON "transaction"("category_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "transaction_location_id_key" ON "transaction"("location_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "transaction_external_id_key" ON "transaction"("external_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "wallet_user_id_key" ON "wallet"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "wallet_transaction_transaction_id_key" ON "wallet_transaction"("transaction_id");
 
 -- AddForeignKey
 ALTER TABLE "institution" ADD CONSTRAINT "institution_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "account" ADD CONSTRAINT "account_institution_id_fkey" FOREIGN KEY ("institution_id") REFERENCES "institution"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "account_snapshot" ADD CONSTRAINT "account_snapshot_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -166,10 +212,13 @@ ALTER TABLE "transaction" ADD CONSTRAINT "transaction_institution_id_fkey" FOREI
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "transaction" ADD CONSTRAINT "transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "location"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transaction" ADD CONSTRAINT "transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "wallet" ADD CONSTRAINT "wallet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "wallet" ADD CONSTRAINT "wallet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "wallet_transaction" ADD CONSTRAINT "wallet_transaction_wallet_id_fkey" FOREIGN KEY ("wallet_id") REFERENCES "wallet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

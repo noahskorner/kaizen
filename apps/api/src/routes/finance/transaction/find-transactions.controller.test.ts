@@ -47,20 +47,15 @@ const expectLocationToBeExternal = (
 };
 
 const expectCategoryToBeExternal = (
-  category: Category | null,
-  external: PlaidCategory | null
+  category: Category,
+  external: PlaidCategory | null,
+  externalIconUrl: string | null
 ) => {
-  if (category == null || external == null) {
-    expect(category).toBeNull();
-    expect(external).toBeNull();
-  }
-
-  if (category != null && external != null) {
-    expect(category.id).toBeDefined();
-    expect(category.primary).toBe(external.primary);
-    expect(category.detailed).toBe(external.detailed);
-    expect(category.confidenceLevel).toBe(external.confidence_level);
-  }
+  expect(category.id).toBeDefined();
+  expect(category.originalCategory).toBe(external?.primary ?? null);
+  expect(category.detailed).toBe(external?.detailed ?? null);
+  expect(category.confidenceLevel).toBe(external?.confidence_level ?? null);
+  expect(category.iconUrl).toBe(externalIconUrl);
 };
 
 const expectTransactionToBeExternal = (
@@ -76,7 +71,8 @@ const expectTransactionToBeExternal = (
   expectLocationToBeExternal(transaction.location, external.location);
   expectCategoryToBeExternal(
     transaction.category,
-    external.personal_finance_category ?? null
+    external.personal_finance_category ?? null,
+    external.personal_finance_category_icon_url ?? null
   );
   expect(transaction.amount).toBe(external.amount);
   expect(transaction.isoCurrencyCode).toBe(external.iso_currency_code);
@@ -106,9 +102,6 @@ const expectTransactionToBeExternal = (
   expect(transaction.datetime).toBe(external.datetime);
   expect(transaction.paymentChannel).toBe(external.payment_channel);
   expect(transaction.code).toBe(external.transaction_code);
-  expect(transaction.categoryIconUrl).toBe(
-    external.personal_finance_category_icon_url
-  );
   expect(transaction.merchantEntityId).toBe(external.merchant_entity_id);
 };
 

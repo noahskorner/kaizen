@@ -1,7 +1,5 @@
 import { Repository } from '@kaizen/core-server';
 import {
-  CategoryRecord,
-  GetOrCreateCategoryQuery,
   ISyncTransactionsRepository,
   SyncTransactionRecordsResponse,
   SyncTransactionsQuery,
@@ -58,7 +56,6 @@ export class SyncTransactionsRepository
               datetime: createTransactionQuery.datetime,
               paymentChannel: createTransactionQuery.paymentChannel,
               code: createTransactionQuery.code,
-              categoryIconUrl: createTransactionQuery.categoryIconUrl,
               merchantEntityId: createTransactionQuery.merchantEntityId,
               user: {
                 connect: {
@@ -78,13 +75,9 @@ export class SyncTransactionsRepository
               location: {
                 create: createTransactionQuery.location
               },
-              category: createTransactionQuery.categoryId
-                ? {
-                    connect: {
-                      id: createTransactionQuery.categoryId
-                    }
-                  }
-                : undefined
+              category: {
+                create: createTransactionQuery.category
+              }
             }
           });
         }),
@@ -118,7 +111,6 @@ export class SyncTransactionsRepository
               datetime: updateTransactionQuery.datetime,
               paymentChannel: updateTransactionQuery.paymentChannel,
               code: updateTransactionQuery.code,
-              categoryIconUrl: updateTransactionQuery.categoryIconUrl,
               merchantEntityId: updateTransactionQuery.merchantEntityId,
               location: {
                 update: {
@@ -137,15 +129,21 @@ export class SyncTransactionsRepository
                   }
                 }
               },
-              category: updateTransactionQuery.categoryId
-                ? {
-                    connect: {
-                      id: updateTransactionQuery.categoryId
-                    }
+              category: {
+                update: {
+                  where: {
+                    id: updateTransactionQuery.category.id
+                  },
+                  data: {
+                    originalCategory:
+                      updateTransactionQuery.category.originalCategory,
+                    detailed: updateTransactionQuery.category.detailed,
+                    confidenceLevel:
+                      updateTransactionQuery.category.confidenceLevel,
+                    iconUrl: updateTransactionQuery.category.iconUrl
                   }
-                : {
-                    disconnect: true
-                  }
+                }
+              }
             }
           });
         }),
@@ -202,31 +200,5 @@ export class SyncTransactionsRepository
     });
 
     return transactionRecord;
-  }
-
-  public async getOrCreateCategory(
-    query: GetOrCreateCategoryQuery
-  ): Promise<CategoryRecord> {
-    const existingCategoryRecord = await this._prisma.categoryRecord.findFirst({
-      where: {
-        primary: query.primary,
-        detailed: query.detailed,
-        confidenceLevel: query.confidenceLevel
-      }
-    });
-
-    if (existingCategoryRecord != null) {
-      return existingCategoryRecord;
-    }
-
-    const categoryRecord = await this._prisma.categoryRecord.create({
-      data: {
-        primary: query.primary,
-        detailed: query.detailed,
-        confidenceLevel: query.confidenceLevel
-      }
-    });
-
-    return categoryRecord;
   }
 }
