@@ -4,7 +4,6 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import { Construct } from 'constructs';
 import { config } from './config';
-import { serverEnvironment } from '@kaizen/env-server';
 
 export interface ApiStackProps {
   vpc: ec2.Vpc;
@@ -38,8 +37,8 @@ export class ApiStack extends cdk.Stack {
     );
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
-      memoryLimitMiB: 512,
-      environment: serverEnvironment
+      memoryLimitMiB: 512
+      // environment: environment
     });
 
     // Create a security group for the EC2 instance

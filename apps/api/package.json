@@ -43,7 +43,6 @@
     "@kaizen/auth-server": "*",
     "@kaizen/core": "*",
     "@kaizen/core-server": "*",
-    "@kaizen/env-server": "*",
     "@kaizen/finance": "*",
     "@kaizen/finance-server": "*",
     "@kaizen/user": "*",

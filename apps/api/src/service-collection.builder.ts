@@ -45,7 +45,6 @@ import {
   CreateUserController,
   CreateLinkTokenController
 } from '@kaizen/user-server';
-import { IServerEnvironment, serverEnvironment } from '@kaizen/env-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
 import { HomeController } from './routes/home.controller';
@@ -71,13 +70,12 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
+import { Environment, environment } from './env/environment';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
 
-  public withEnvironment(
-    environment: IServerEnvironment
-  ): ServiceCollectionBuilder {
+  public withEnvironment(environment: Environment): ServiceCollectionBuilder {
     this._serviceCollection.environment = environment;
     return this;
   }
@@ -99,11 +97,11 @@ export class ServiceCollectionBuilder {
 
   public build(): IServiceCollection {
     // Environment
-    const environment =
-      this._serviceCollection.environment ?? serverEnvironment;
+    const serverEnvironment =
+      this._serviceCollection.environment ?? environment;
 
     // Middleware
-    const authMiddleware = authenticate(environment.ACCESS_TOKEN_SECRET);
+    const authMiddleware = authenticate(serverEnvironment.ACCESS_TOKEN_SECRET);
 
     // Events
     const serviceEventBus =
@@ -213,10 +211,23 @@ export class ServiceCollectionBuilder {
       new CreateLinkTokenService(getUserRepository, financialProvider);
     const loginService =
       this._serviceCollection.loginService ??
-      new LoginService(environment, findUserByEmailRepository, serviceEventBus);
+      new LoginService(
+        serverEnvironment.ACCESS_TOKEN_SECRET,
+        serverEnvironment.ACCESS_TOKEN_EXPIRATION,
+        serverEnvironment.REFRESH_TOKEN_SECRET,
+        serverEnvironment.REFRESH_TOKEN_EXPIRATION,
+        findUserByEmailRepository,
+        serviceEventBus
+      );
     const refreshTokenService =
       this._serviceCollection.refreshTokenService ??
-      new RefreshTokenService(environment, getUserRepository);
+      new RefreshTokenService(
+        serverEnvironment.ACCESS_TOKEN_SECRET,
+        serverEnvironment.ACCESS_TOKEN_EXPIRATION,
+        serverEnvironment.REFRESH_TOKEN_SECRET,
+        serverEnvironment.REFRESH_TOKEN_EXPIRATION,
+        getUserRepository
+      );
     const syncTransactionsService = new SyncTransactionsService(
       findInstitutionsRepository,
       findAccountsRepository,
@@ -276,10 +287,13 @@ export class ServiceCollectionBuilder {
       new CreateLinkTokenController(authMiddleware, createLinkTokenService);
     const loginController =
       this._serviceCollection.loginController ??
-      new LoginController(environment, loginService);
+      new LoginController(serverEnvironment.NODE_ENV, loginService);
     const refreshTokenController =
       this._serviceCollection.refreshTokenController ??
-      new RefreshTokenController(environment, refreshTokenService);
+      new RefreshTokenController(
+        serverEnvironment.NODE_ENV,
+        refreshTokenService
+      );
     const logoutController =
       this._serviceCollection.logoutController ??
       new LogoutController(authMiddleware);
@@ -310,7 +324,7 @@ export class ServiceCollectionBuilder {
 
     const serviceCollection: IServiceCollection = {
       // Environment
-      environment,
+      environment: serverEnvironment,
       // Events
       serviceEventBus,
       // Plaid

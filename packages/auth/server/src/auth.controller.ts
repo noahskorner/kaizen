@@ -1,10 +1,9 @@
 import { jwtDecode } from 'jwt-decode';
-import { IServerEnvironment } from '@kaizen/env-server';
 import { Controller, Cookie, MiddlewareResponse } from '@kaizen/core-server';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 
 export abstract class AuthController extends Controller {
-  constructor(private readonly _environment: IServerEnvironment) {
+  constructor(protected readonly NODE_ENV: string) {
     super();
   }
 
@@ -14,9 +13,7 @@ export abstract class AuthController extends Controller {
       value: refreshToken,
       domain: 'localhost',
       path: '/',
-      secure:
-        this._environment.NODE_ENV !== 'TEST' &&
-        this._environment.NODE_ENV !== 'DEVELOPMENT',
+      secure: this.NODE_ENV !== 'TEST' && this.NODE_ENV !== 'DEVELOPMENT',
       httpOnly: true,
       expires: this.getTokenExpirationDate(refreshToken)
     } satisfies Cookie);

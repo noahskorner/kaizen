@@ -25,7 +25,6 @@ import {
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { HomeController } from './routes/home.controller';
-import { IServerEnvironment } from '@kaizen/env-server';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 import { IServiceEventBus } from '@kaizen/core-server';
@@ -55,10 +54,11 @@ import {
   SyncInstitutionsController,
   UpdateCategoryController
 } from '@kaizen/finance-server';
+import { Environment } from './env/environment';
 
 export interface IServiceCollection {
   // Environment
-  environment: IServerEnvironment;
+  environment: Environment;
 
   // Events
   serviceEventBus: IServiceEventBus;

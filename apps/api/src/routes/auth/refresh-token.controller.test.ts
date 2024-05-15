@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import { serverEnvironment } from '@kaizen/env-server';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
 import { AppBuilder } from '../../app-builder';
 import {
@@ -11,6 +10,7 @@ import {
 import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import { REFRESH_TOKEN_COOKIE_KEY } from '@kaizen/auth-server';
 import { AuthToken } from '@kaizen/auth';
+import { environment } from '../../env/environment';
 
 describe('/auth', () => {
   describe('refreshToken should', () => {
@@ -36,7 +36,7 @@ describe('/auth', () => {
       // Arrange
       const mockServiceCollection = new ServiceCollectionBuilder()
         .withEnvironment({
-          ...serverEnvironment,
+          ...environment,
           REFRESH_TOKEN_EXPIRATION: '0s'
         })
         .build();

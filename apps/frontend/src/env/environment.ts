@@ -1,9 +1,5 @@
 /// <reference types="vite/client" />
-
-export interface IClientEnvironment {
-  NODE_ENV: 'DEVELOPMENT' | 'TEST';
-  API_DOMAIN: string;
-}
+import { Environment } from './environment.interface';
 
 const NODE_ENV = import.meta.env.VITE_NODE_ENV ?? '';
 if (NODE_ENV != 'DEVELOPMENT' && NODE_ENV != 'TEST') {
@@ -18,7 +14,7 @@ if (API_DOMAIN == null) {
   );
 }
 
-export const clientEnvironment: IClientEnvironment = {
+export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   API_DOMAIN: API_DOMAIN
 };
