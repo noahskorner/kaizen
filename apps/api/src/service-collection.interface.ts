@@ -61,6 +61,7 @@ import {
   UpdateTransactionCategoryController
 } from '@kaizen/finance-server';
 import { Environment } from './env';
+import { ITranscriptionProvider } from '@kaizen/assist-server';
 
 export interface IServiceCollection {
   // Environment
@@ -77,6 +78,7 @@ export interface IServiceCollection {
 
   // Providers
   financialProvider: IFinancialProvider;
+  transcriptionProvider: ITranscriptionProvider;
 
   // Repositories
   createUserRepository: ICreateUserRepository;

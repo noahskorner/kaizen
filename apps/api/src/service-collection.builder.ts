@@ -6,7 +6,7 @@ import {
   CreateInstitutionController,
   CreateInstitutionRepository,
   CreateInstitutionService,
-  FinancialProvider,
+  PlaidFinancialProvider,
   FindAccountsRepository,
   FindCategoriesController,
   FindCategoriesRepository,
@@ -74,6 +74,7 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
+import { OpenAITranscriptionProvider } from '@kaizen/assist-server';
 import { Environment, environment } from './env';
 
 export class ServiceCollectionBuilder {
@@ -201,7 +202,11 @@ export class ServiceCollectionBuilder {
 
     // Providers
     const financialProvider =
-      this._serviceCollection.financialProvider ?? new FinancialProvider(plaid);
+      this._serviceCollection.financialProvider ??
+      new PlaidFinancialProvider(plaid);
+    const transcriptionProvider =
+      this._serviceCollection.transcriptionProvider ??
+      new OpenAITranscriptionProvider(environment.OPENAI_API_KEY);
 
     // Services
     const getUserService =
@@ -355,6 +360,7 @@ export class ServiceCollectionBuilder {
       prisma,
       // Providers
       financialProvider,
+      transcriptionProvider,
       // Repositories
       createUserRepository,
       findUserByEmailRepository,
