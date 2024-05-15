@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@kaizen/core": "*",
-    "@kaizen/env-client": "*",
     "@reduxjs/toolkit": "^2.2.2",
     "axios": "^1.6.2",
     "d3": "^7.9.0",
