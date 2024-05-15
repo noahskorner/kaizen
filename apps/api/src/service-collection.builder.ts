@@ -70,7 +70,7 @@ import {
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { SnapshotAccountsCommand } from '@kaizen/finance';
-import { Environment, environment } from './env/environment';
+import { Environment, environment } from './env';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};

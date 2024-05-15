@@ -54,7 +54,7 @@ import {
   SyncInstitutionsController,
   UpdateCategoryController
 } from '@kaizen/finance-server';
-import { Environment } from './env/environment';
+import { Environment } from './env';
 
 export interface IServiceCollection {
   // Environment
