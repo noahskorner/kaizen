@@ -3,7 +3,6 @@ import { compare } from 'bcrypt';
 import { AuthService } from '../auth.service';
 import { AuthToken, ILoginService, LoginCommand } from '@kaizen/auth';
 import { IFindUserByEmailRepository } from '@kaizen/user';
-import { IServerEnvironment } from '@kaizen/env-server';
 import {
   IServiceEventBus,
   LoginSuccessEvent,
@@ -12,11 +11,19 @@ import {
 
 export class LoginService extends AuthService implements ILoginService {
   constructor(
-    _environment: IServerEnvironment,
+    protected readonly ACCESS_TOKEN_SECRET: string,
+    protected readonly ACCESS_TOKEN_EXPIRATION: string,
+    protected readonly REFRESH_TOKEN_SECRET: string,
+    protected readonly REFRESH_TOKEN_EXPIRATION: string,
     private readonly _findUserByEmailRepository: IFindUserByEmailRepository,
     private readonly _serviceEventBus: IServiceEventBus
   ) {
-    super(_environment);
+    super(
+      ACCESS_TOKEN_SECRET,
+      ACCESS_TOKEN_EXPIRATION,
+      REFRESH_TOKEN_SECRET,
+      REFRESH_TOKEN_EXPIRATION
+    );
   }
 
   public async login(

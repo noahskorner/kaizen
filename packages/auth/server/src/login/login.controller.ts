@@ -1,14 +1,13 @@
 import { ILoginService, LoginRequest } from '@kaizen/auth';
 import { RequestHandlerBuilder } from '@kaizen/core-server';
 import { AuthController } from '../auth.controller';
-import { IServerEnvironment } from '@kaizen/env-server';
 
 export class LoginController extends AuthController {
   constructor(
-    _environment: IServerEnvironment,
+    protected readonly NODE_ENV: string,
     private readonly _loginService: ILoginService
   ) {
-    super(_environment);
+    super(NODE_ENV);
   }
 
   public login = new RequestHandlerBuilder()

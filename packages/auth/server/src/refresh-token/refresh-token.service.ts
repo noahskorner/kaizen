@@ -1,6 +1,5 @@
 import { ServiceResponse, ErrorCode } from '@kaizen/core';
 import { AuthService } from '../auth.service';
-import { IServerEnvironment } from '@kaizen/env-server';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import {
   AuthToken,
@@ -15,10 +14,18 @@ export class RefreshTokenService
   implements IRefreshTokenService
 {
   constructor(
-    protected readonly _environment: IServerEnvironment,
+    protected readonly ACCESS_TOKEN_SECRET: string,
+    protected readonly ACCESS_TOKEN_EXPIRATION: string,
+    protected readonly REFRESH_TOKEN_SECRET: string,
+    protected readonly REFRESH_TOKEN_EXPIRATION: string,
     private readonly _getUserRepository: IGetUserRepository
   ) {
-    super(_environment);
+    super(
+      ACCESS_TOKEN_SECRET,
+      ACCESS_TOKEN_EXPIRATION,
+      REFRESH_TOKEN_SECRET,
+      REFRESH_TOKEN_EXPIRATION
+    );
   }
 
   public async refreshToken(
@@ -31,7 +38,7 @@ export class RefreshTokenService
     try {
       const refreshToken = jwt.verify(
         command.token,
-        this._environment.REFRESH_TOKEN_SECRET
+        this.REFRESH_TOKEN_SECRET
       ) as RefreshToken;
 
       const user = await this._getUserRepository.get({

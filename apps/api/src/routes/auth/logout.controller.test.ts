@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import { serverEnvironment } from '@kaizen/env-server';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
 import { AppBuilder } from '../../app-builder';
 import {
@@ -7,6 +6,7 @@ import {
   getRefreshToken,
   createAndLoginUser
 } from '../../../test';
+import { environment } from '../../env/environment';
 
 describe('/auth', () => {
   describe('logout should', () => {
@@ -30,7 +30,7 @@ describe('/auth', () => {
       // Arrange
       const mockServiceCollection = new ServiceCollectionBuilder()
         .withEnvironment({
-          ...serverEnvironment,
+          ...environment,
           ACCESS_TOKEN_EXPIRATION: '0s'
         })
         .build();

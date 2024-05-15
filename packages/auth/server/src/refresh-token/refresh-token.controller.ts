@@ -1,15 +1,14 @@
 import { REFRESH_TOKEN_COOKIE_KEY } from '../refresh-token-cookie-key';
 import { IRefreshTokenService, RefreshTokenCommand } from '@kaizen/auth';
 import { AuthController } from '../auth.controller';
-import { IServerEnvironment } from '@kaizen/env-server';
 import { RequestHandlerBuilder } from '@kaizen/core-server';
 
 export class RefreshTokenController extends AuthController {
   constructor(
-    _environment: IServerEnvironment,
+    protected readonly NODE_ENV: string,
     private readonly _refreshTokenService: IRefreshTokenService
   ) {
-    super(_environment);
+    super(NODE_ENV);
   }
 
   public refreshToken = new RequestHandlerBuilder()

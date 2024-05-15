@@ -1,6 +1,6 @@
-import { serverEnvironment } from '@kaizen/env-server';
 import { app } from './app';
+import { environment } from './env/environment';
 
-app.listen(parseInt(serverEnvironment.API_PORT), () => {
-  console.log(`Server listening on port ${serverEnvironment.API_PORT}...`);
+app.listen(parseInt(environment.API_PORT), () => {
+  console.log(`Server listening on port ${environment.API_PORT}...`);
 });

@@ -1,4 +1,4 @@
-export interface IServerEnvironment extends Record<string, string> {
+export interface Environment extends Record<string, string> {
   NODE_ENV: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
   ACCESS_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;
@@ -84,7 +84,7 @@ if (PLAID_SECRET == null) {
   );
 }
 
-export const serverEnvironment: IServerEnvironment = {
+export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRATION: ACCESS_TOKEN_EXPIRATION,
