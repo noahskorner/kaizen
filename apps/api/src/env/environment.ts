@@ -79,6 +79,20 @@ if (OPENAI_API_KEY == null) {
   );
 }
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (OPENAI_API_KEY == null) {
+  throw new Error(
+    `Must provide OPENAI_API_KEY. Did you forget to set it in your environment file?`
+  );
+}
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (OPENAI_API_KEY == null) {
+  throw new Error(
+    `Must provide OPENAI_API_KEY. Did you forget to set it in your environment file?`
+  );
+}
+
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
