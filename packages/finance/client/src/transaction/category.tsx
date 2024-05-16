@@ -1,13 +1,20 @@
 import { useClickOutside } from '@kaizen/core-client';
-import { FindCategoriesResponse, Category as ICategory } from '@kaizen/finance';
+import { FindCategoriesResponse, UpdateCategoryRequest } from '@kaizen/finance';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { CategoryClient } from '.';
+import { CategoryClient, TransactionDispatch, setTransactionCategory } from '.';
+import { useDispatch } from 'react-redux';
 
 export interface CategoryProps {
-  category: ICategory;
+  transactionId: string;
+  categoryId: string;
+  originalCategory: string;
 }
 
-export const Category = ({ category }: CategoryProps) => {
+export const Category = ({
+  transactionId,
+  categoryId,
+  originalCategory
+}: CategoryProps) => {
   const [searchText, setSearchText] = useState<string>('');
   const [categories, setCategories] = useState<FindCategoriesResponse>({});
   const [filteredCategories, setFilteredCategories] =
@@ -17,6 +24,7 @@ export const Category = ({ category }: CategoryProps) => {
     setShowDropdown(false)
   );
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch<TransactionDispatch>();
 
   const onCategoryClick = () => {
     setShowDropdown(!showDropdown);
@@ -35,6 +43,23 @@ export const Category = ({ category }: CategoryProps) => {
         return prev;
       }, {} as FindCategoriesResponse);
     setFilteredCategories(newFilteredCategories);
+  };
+
+  const onCategorySelect = async (category: string) => {
+    const response = await CategoryClient.update(transactionId, categoryId, {
+      userCategory: category
+    } satisfies UpdateCategoryRequest);
+
+    if (response.type === 'SUCCESS') {
+      dispatch(
+        setTransactionCategory({
+          transactionId: transactionId,
+          category: response.data
+        })
+      );
+    }
+
+    setShowDropdown(false);
   };
 
   useEffect(() => {
@@ -65,7 +90,7 @@ export const Category = ({ category }: CategoryProps) => {
       <button
         onClick={onCategoryClick}
         className="rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
-        {category.originalCategory}
+        {originalCategory}
       </button>
       <div
         ref={dropdownRef}
@@ -81,7 +106,9 @@ export const Category = ({ category }: CategoryProps) => {
         <div className="flex max-h-52 flex-col gap-y-1 overflow-auto">
           {searchText.length > 0 && (
             <div className="w-full">
-              <button className="inline rounded-lg bg-gray-300 px-2 py-1 text-xs font-medium lowercase text-gray-700">
+              <button
+                onClick={() => onCategorySelect(searchText)}
+                className="inline rounded-lg bg-gray-300 px-2 py-1 text-xs font-medium lowercase text-gray-700">
                 {searchText} (New Category)
               </button>
             </div>
@@ -89,7 +116,9 @@ export const Category = ({ category }: CategoryProps) => {
           {Object.entries(filteredCategories).map(([category]) => {
             return (
               <div key={category} className="w-full">
-                <button className="inline rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
+                <button
+                  onClick={() => onCategorySelect(category)}
+                  className="inline rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
                   {category}
                 </button>
               </div>

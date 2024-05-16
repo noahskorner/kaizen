@@ -3,8 +3,10 @@ import {
   LOAD_TRANSACTIONS,
   LOAD_TRANSACTIONS_FAILURE,
   LOAD_TRANSACTIONS_SUCCESS,
+  SET_TRANSACTION_CATEGORY,
   TransactionAction
 } from './transaction.actions';
+import { Transaction } from '@kaizen/finance';
 
 const initialState: TransactionStore = {
   loading: false,
@@ -30,6 +32,19 @@ export const transactionReducers = (
       return {
         loading: false,
         transactions: []
+      };
+    case SET_TRANSACTION_CATEGORY:
+      return {
+        loading: false,
+        transactions: state.transactions.map((transaction) => {
+          if (transaction.id !== action.payload.transactionId)
+            return transaction;
+
+          return {
+            ...transaction,
+            category: action.payload.category
+          } satisfies Transaction;
+        })
       };
     default:
       return state;

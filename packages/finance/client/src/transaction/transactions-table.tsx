@@ -27,9 +27,18 @@ export const TransactionsTable = () => {
               <div className="flex w-full items-center justify-between">
                 <div className="flex w-full flex-col gap-2">
                   <h6 className="text-sm font-semibold">{transaction.name}</h6>
-                  {transaction.category && (
-                    <Category category={transaction.category} />
-                  )}
+                  {transaction.category &&
+                    (transaction.category.userCategory ||
+                      transaction.category.originalCategory) && (
+                      <Category
+                        transactionId={transaction.id}
+                        categoryId={transaction.category.id}
+                        originalCategory={
+                          transaction.category.userCategory ??
+                          transaction.category.originalCategory!
+                        }
+                      />
+                    )}
                 </div>
                 <span className="text-sm">
                   {formatCurrency(transaction.amount, 'USD')}
