@@ -5,6 +5,9 @@ import {
   CreateInstitutionService,
   FinancialProvider,
   FindAccountsRepository,
+  FindCategoriesController,
+  FindCategoriesRepository,
+  FindCategoriesService,
   FindExpensesController,
   FindExpensesRepository,
   FindExpensesService,
@@ -190,6 +193,7 @@ export class ServiceCollectionBuilder {
     const findExpensesRepository = new FindExpensesRepository(prisma);
     const getTransactionRepositroy = new GetTransactionRepository(prisma);
     const updateCategoryRepository = new UpdateCategoryRepository(prisma);
+    const findCategoriesRepository = new FindCategoriesRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -275,6 +279,9 @@ export class ServiceCollectionBuilder {
       getTransactionRepositroy,
       updateCategoryRepository
     );
+    const findCategoriesService = new FindCategoriesService(
+      findCategoriesRepository
+    );
 
     // Controllers
     const homeController =
@@ -321,6 +328,10 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       updateCategoryService
     );
+    const findCategoriesController = new FindCategoriesController(
+      authMiddleware,
+      findCategoriesService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -346,6 +357,7 @@ export class ServiceCollectionBuilder {
       createWalletRepository,
       updateWalletRepository,
       findExpensesRepository,
+      findCategoriesRepository,
       // Services
       getUserService,
       createUserService,
@@ -362,6 +374,7 @@ export class ServiceCollectionBuilder {
       updateWalletService,
       getWalletService,
       findExpensesService,
+      findCategoriesService,
       // Controllers
       homeController,
       createUserController,
@@ -375,7 +388,8 @@ export class ServiceCollectionBuilder {
       findTransactionsController,
       getWalletController,
       findExpensesController,
-      updateCategoryController
+      updateCategoryController,
+      findCategoriesController
     };
 
     return serviceCollection;

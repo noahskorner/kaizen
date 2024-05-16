@@ -24,7 +24,7 @@ export interface BuildSutCommand {
   sut: Express;
 }
 
-const cachedPrismaClient = new PrismaClient();
+const cachedPrismaClient = new PrismaClient({ log: ['query'] });
 
 export const buildTestBed = (command?: Partial<BuildSutCommand>) => {
   const mockItemPublicTokenExchangeResponse =

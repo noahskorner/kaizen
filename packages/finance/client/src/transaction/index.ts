@@ -1,3 +1,5 @@
+export * from './category.client';
+export * from './category';
 export * from './transaction.actions';
 export * from './transaction.client';
 export * from './transaction.effects';

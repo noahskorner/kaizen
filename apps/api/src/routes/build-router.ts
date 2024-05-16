@@ -83,6 +83,16 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
 
+  // /transaction/category
+  router.get('/transaction/category', async (req, res) => {
+    const handler = ExpressAdapter.toRequestHandler(
+      serviceCollection.findCategoriesController.find
+    );
+
+    const response = await handler(req, res);
+    return response;
+  });
+
   // /wallet
   router.get(
     '/wallet/user/:userId',
