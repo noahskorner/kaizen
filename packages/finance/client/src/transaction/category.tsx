@@ -2,7 +2,6 @@ import { useClickOutside } from '@kaizen/core-client';
 import { FindCategoriesResponse, Category as ICategory } from '@kaizen/finance';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { CategoryClient } from '.';
-import { spawn } from 'child_process';
 
 export interface CategoryProps {
   category: ICategory;
