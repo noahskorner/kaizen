@@ -27,7 +27,7 @@ describe('/transaction/category', () => {
       // Asserts
       expect(response.status).toBe(200);
       expect(response.body.type).toBe('SUCCESS');
-      expect(response.body.data).toEqual([]);
+      expect(response.body.data).toEqual({});
     });
     it('return categories and their counts', async () => {
       // Arrange
