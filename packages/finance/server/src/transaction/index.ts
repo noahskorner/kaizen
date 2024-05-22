@@ -1,3 +1,4 @@
+export * from './find-categories';
 export * from './find-transactions';
 export * from './get-transaction';
 export * from './sync-transactions';

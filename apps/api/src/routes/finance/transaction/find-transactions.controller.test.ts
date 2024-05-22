@@ -8,7 +8,6 @@ import {
   toSearchParams
 } from '@kaizen/core';
 import {
-  Category,
   FindTransactionsRequest,
   Location,
   Transaction
@@ -22,13 +21,13 @@ import {
   buildAccount,
   buildAccountsBalanceGetResponse,
   buildItem,
-  buildItemPublicTokenExchangeResponse
+  buildItemPublicTokenExchangeResponse,
+  expectCategoryToBeExternal
 } from '../../../../test';
 import { buildTestBed } from '../../../../test/build-test-bed';
 import {
   Transaction as PlaidTransaction,
-  Location as PlaidLocation,
-  PersonalFinanceCategory as PlaidCategory
+  Location as PlaidLocation
 } from 'plaid';
 
 const expectLocationToBeExternal = (
@@ -44,18 +43,6 @@ const expectLocationToBeExternal = (
   expect(location.lat).toBe(external.lat);
   expect(location.lon).toBe(external.lon);
   expect(location.storeNumber).toBe(external.store_number);
-};
-
-const expectCategoryToBeExternal = (
-  category: Category,
-  external: PlaidCategory | null,
-  externalIconUrl: string | null
-) => {
-  expect(category.id).toBeDefined();
-  expect(category.originalCategory).toBe(external?.primary ?? null);
-  expect(category.detailed).toBe(external?.detailed ?? null);
-  expect(category.confidenceLevel).toBe(external?.confidence_level ?? null);
-  expect(category.iconUrl).toBe(externalIconUrl);
 };
 
 const expectTransactionToBeExternal = (

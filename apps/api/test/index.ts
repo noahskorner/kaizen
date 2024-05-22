@@ -6,6 +6,7 @@ export * from './create-user';
 export * from './create-wallet';
 export * from './default-test-bed';
 export * from './expect-account-to-be-external';
+export * from './expect-category-to-be-external';
 export * from './expect-error';
 export * from './expect-valid-date';
 export * from './get-random-boolean';
