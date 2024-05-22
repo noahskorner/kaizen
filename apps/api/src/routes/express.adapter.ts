@@ -11,8 +11,7 @@ export class ExpressAdapter {
       const request = ExpressAdapter.toMiddlewareRequest(req);
       const response = await handler(request);
 
-      const res2ponse = ExpressAdapter.toResponse(res, response);
-      return res2ponse;
+      return ExpressAdapter.toResponse(res, response);
     };
   }
 
