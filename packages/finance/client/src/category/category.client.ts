@@ -7,5 +7,10 @@ export const CategoryClient = {
     return handleAxiosRequest(() => {
       return ApiClient.post<ApiResponse<Category>>(`/category`, request);
     });
+  },
+  find: (): Promise<ApiResponse<Category[]>> => {
+    return handleAxiosRequest(() => {
+      return ApiClient.get<ApiResponse<Category[]>>(`/category`);
+    });
   }
 };
