@@ -4,7 +4,6 @@ export * from './external-transaction-code';
 export * from './external-transaction-payment-channel';
 export * from './external-transaction.adapter';
 export * from './external-transaction';
-export * from './find-categories';
 export * from './find-transactions';
 export * from './get-transaction';
 export * from './location-record';

@@ -1,9 +1,9 @@
 import { ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
+  Category,
   FindCategoriesCommand,
   FindCategoriesQuery,
-  FindCategoriesResponse,
   IFindCategoriesRepository,
   IFindCategoriesService
 } from '@kaizen/finance';
@@ -20,7 +20,7 @@ export class FindCategoriesService
 
   public async find(
     command: FindCategoriesCommand
-  ): Promise<ServiceResponse<FindCategoriesResponse>> {
+  ): Promise<ServiceResponse<Category[]>> {
     const response = await this._findCategoriesRepository.find(
       command satisfies FindCategoriesQuery
     );
