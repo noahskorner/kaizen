@@ -13,7 +13,10 @@ import {
   ISnapshotAccountsService,
   ICreateAccountSnapshotRepository,
   IFindCategoriesRepository,
-  IFindCategoriesService
+  IFindCategoriesService,
+  ICreateCategoryRepository,
+  ICreateCategoryService,
+  IGetCategoryRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -47,6 +50,7 @@ import {
 } from '@kaizen/auth-server';
 import { GetWalletController } from '@kaizen/wallet-server';
 import {
+  CreateCategoryController,
   CreateInstitutionController,
   FindCategoriesController,
   FindInstitutionsController,
@@ -85,6 +89,8 @@ export interface IServiceCollection {
   createWalletRepository: ICreateWalletRepository;
   updateWalletRepository: IUpdateWalletRepository;
   findCategoriesRepository: IFindCategoriesRepository;
+  createCategoryRepository: ICreateCategoryRepository;
+  getCategoryRepository: IGetCategoryRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -102,6 +108,7 @@ export interface IServiceCollection {
   updateWalletService: IUpdateWalletService;
   getWalletService: IGetWalletService;
   findCategoriesService: IFindCategoriesService;
+  createCategoryService: ICreateCategoryService;
 
   // Controllers
   homeController: HomeController;
@@ -117,4 +124,5 @@ export interface IServiceCollection {
   getWalletController: GetWalletController;
   updateCategoryController: UpdateCategoryController;
   findCategoriesController: FindCategoriesController;
+  createCategoryController: CreateCategoryController;
 }

@@ -262,6 +262,7 @@ model CategoryRecord {
   name         String              @map("name")
   transactions TransactionRecord[]
 
+  @@unique([userId, name])
   @@map("category")
 }
 

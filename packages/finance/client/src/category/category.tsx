@@ -1,7 +1,11 @@
 import { useClickOutside } from '@kaizen/core-client';
 import { FindCategoriesResponse, UpdateCategoryRequest } from '@kaizen/finance';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { CategoryClient, TransactionDispatch, setTransactionCategory } from '.';
+import {
+  TransactionCategoryClient,
+  TransactionDispatch,
+  setTransactionCategory
+} from '../transaction';
 import { useDispatch } from 'react-redux';
 
 export interface CategoryProps {
@@ -46,9 +50,13 @@ export const Category = ({
   };
 
   const onCategorySelect = async (category: string) => {
-    const response = await CategoryClient.update(transactionId, categoryId, {
-      userCategory: category
-    } satisfies UpdateCategoryRequest);
+    const response = await TransactionCategoryClient.update(
+      transactionId,
+      categoryId,
+      {
+        userCategory: category
+      } satisfies UpdateCategoryRequest
+    );
 
     if (response.type === 'SUCCESS') {
       dispatch(
@@ -75,7 +83,7 @@ export const Category = ({
   // TODO: We need to pull these from the store instead
   useEffect(() => {
     const loadCategories = async () => {
-      const response = await CategoryClient.find();
+      const response = await TransactionCategoryClient.find();
 
       if (response.type === 'SUCCESS') {
         setCategories(response.data);

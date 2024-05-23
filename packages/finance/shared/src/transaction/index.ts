@@ -1,6 +1,3 @@
-export * from './category-record';
-export * from './category.adapter';
-export * from './category';
 export * from './external-category';
 export * from './external-location';
 export * from './external-transaction-code';

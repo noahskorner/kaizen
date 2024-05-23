@@ -1,4 +1,4 @@
-import { CategoryRecord } from '../category-record';
+import { CategoryRecord } from '../../category/category-record';
 import { UpdateCategoryQuery } from './update-category.query';
 
 export interface IUpdateCategoryRepository {

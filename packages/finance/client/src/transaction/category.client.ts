@@ -6,7 +6,8 @@ import {
   UpdateCategoryRequest
 } from '@kaizen/finance';
 
-export const CategoryClient = {
+// TODO: Move these into the TransactionClient
+export const TransactionCategoryClient = {
   update: (
     transactionId: string,
     categoryId: string,

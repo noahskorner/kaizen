@@ -61,6 +61,14 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
 
+  // /category
+  router.post(
+    '/category',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.createCategoryController.create
+    )
+  );
+
   // /transaction
   router.get(
     '/transaction',

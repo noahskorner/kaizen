@@ -190,6 +190,9 @@ CREATE UNIQUE INDEX "transaction_location_id_key" ON "transaction"("location_id"
 CREATE UNIQUE INDEX "transaction_external_id_key" ON "transaction"("external_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "category_user_id_name_key" ON "category"("user_id", "name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "wallet_user_id_key" ON "wallet"("user_id");
 
 -- CreateIndex

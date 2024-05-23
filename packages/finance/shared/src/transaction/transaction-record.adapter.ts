@@ -1,4 +1,3 @@
-import { ExternalCategory } from './external-category';
 import { ExternalLocation } from './external-location';
 import { ExternalTransaction } from './external-transaction';
 import { ExternalTransactionCode } from './external-transaction-code';
@@ -7,11 +6,9 @@ import {
   CreateLocationQuery,
   CreateTransactionQuery,
   DeleteTransactionQuery,
-  SyncCategoryQuery,
   SyncLocationQuery,
   SyncTransactionQuery
 } from './sync-transactions';
-import { CreateCategoryQuery } from './sync-transactions/create-category.query';
 import { TransactionCodeRecord } from './transaction-code-record';
 import { TransactionPaymentChannelRecord } from './transaction-payment-channel-record';
 
@@ -114,34 +111,6 @@ export class TransactionRecordAdapter {
   ): DeleteTransactionQuery {
     const query: DeleteTransactionQuery = {
       externalId: externalId
-    };
-
-    return query;
-  }
-
-  public static toCreateCategoryQuery(
-    externalCategory: ExternalCategory | null
-  ): CreateCategoryQuery {
-    const query: CreateCategoryQuery = {
-      originalCategory: externalCategory?.primary ?? null,
-      detailed: externalCategory?.detailed ?? null,
-      confidenceLevel: externalCategory?.confidenceLevel ?? null,
-      iconUrl: externalCategory?.iconUrl ?? null
-    };
-
-    return query;
-  }
-
-  public static toUpdateCategoryQuery(
-    categoryId: string,
-    externalCategory: ExternalCategory | null
-  ): SyncCategoryQuery {
-    const query: SyncCategoryQuery = {
-      id: categoryId,
-      originalCategory: externalCategory?.primary ?? null,
-      detailed: externalCategory?.detailed ?? null,
-      confidenceLevel: externalCategory?.confidenceLevel ?? null,
-      iconUrl: externalCategory?.iconUrl ?? null
     };
 
     return query;

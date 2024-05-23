@@ -14,34 +14,6 @@ export interface CreateAccountInvalidPlaidPublicTokenError {
   };
 }
 
-export interface CreateVirtualAccountInvalidNameError {
-  code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME;
-  params: {
-    name: string;
-  };
-}
-
-export interface CreateVirtualAccountInvalidBalanceError {
-  code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE;
-  params: {
-    balance: number;
-  };
-}
-
-export interface CreateVirtualAccountInvalidAmountError {
-  code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT;
-  params: {
-    amount: number;
-  };
-}
-
-export interface CreateVirtualAccountInvalidFrequencyError {
-  code: ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY;
-  params: {
-    frequency: number;
-  };
-}
-
 export interface FindTransactionsInvalidPageError {
   code: ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE;
   params: {
@@ -311,15 +283,26 @@ export interface UpdateCategoryNotFoundError {
   };
 }
 
+export interface CreateCategoryMustProvideNameError {
+  code: ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME;
+  params: {
+    userId: string;
+  };
+}
+
+export interface CreateCategoryAlreadyExistsError {
+  code: ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS;
+  params: {
+    userId: string;
+    name: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
     | ErrorCode.REFRESH_TOKEN_EXPIRED
     | ErrorCode.CREATE_ACCOUNT_INVALID_PLAID_PUBLIC_TOKEN
-    | ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_NAME
-    | ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_BALANCE
-    | ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_AMOUNT
-    | ErrorCode.CREATE_VIRTUAL_ACCOUNT_INVALID_FREQUENCY
     | ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE
     | ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE
     | ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE
@@ -355,6 +338,8 @@ export interface BaseError {
     | ErrorCode.FIND_EXPENSES_INVALID_END_DATE
     | ErrorCode.FIND_EXPENSES_INVALID_TIMEFRAME
     | ErrorCode.UPDATE_CATEGORY_NOT_FOUND
+    | ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME
+    | ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS
   >;
   params?: never;
 }
@@ -363,10 +348,6 @@ export type ServiceError =
   | BaseError
   | RefreshTokenExpiredError
   | CreateAccountInvalidPlaidPublicTokenError
-  | CreateVirtualAccountInvalidNameError
-  | CreateVirtualAccountInvalidBalanceError
-  | CreateVirtualAccountInvalidAmountError
-  | CreateVirtualAccountInvalidFrequencyError
   | FindTransactionsInvalidPageError
   | FindTransactionsInvalidPageSizeError
   | FindTransactionsInvalidStartDateSizeError
@@ -402,4 +383,6 @@ export type ServiceError =
   | FindExpensesInvalidStartDateError
   | FindExpensesInvalidEndDateError
   | FindExpensesInvalidTimeframeError
-  | UpdateCategoryNotFoundError;
+  | UpdateCategoryNotFoundError
+  | CreateCategoryMustProvideNameError
+  | CreateCategoryAlreadyExistsError;
