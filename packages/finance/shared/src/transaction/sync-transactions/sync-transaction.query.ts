@@ -1,6 +1,5 @@
 import { TransactionCodeRecord } from '../transaction-code-record';
 import { TransactionPaymentChannelRecord } from '../transaction-payment-channel-record';
-import { SyncCategoryQuery } from './sync-category.query';
 import { SyncLocationQuery } from './sync-location.query';
 
 export interface SyncTransactionQuery {
@@ -11,7 +10,6 @@ export interface SyncTransactionQuery {
   checkNumber: string | null;
   date: string;
   location: SyncLocationQuery;
-  category: SyncCategoryQuery;
   name: string | null;
   merchantName: string | null;
   originalDescription: string | null;
@@ -27,4 +25,8 @@ export interface SyncTransactionQuery {
   code: TransactionCodeRecord | null;
   categoryIconUrl: string | null;
   merchantEntityId: string | null;
+  originalCategory: string | null;
+  originalDetailed: string | null;
+  originalConfidenceLevel: string | null;
+  originalIconUrl: string | null;
 }

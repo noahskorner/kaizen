@@ -75,9 +75,11 @@ export class SyncTransactionsRepository
               location: {
                 create: createTransactionQuery.location
               },
-              category: {
-                create: createTransactionQuery.category
-              }
+              originalCategory: createTransactionQuery.originalCategory,
+              originalDetailed: createTransactionQuery.originalDetailed,
+              originalConfidenceLevel:
+                createTransactionQuery.originalConfidenceLevel,
+              originalIconUrl: createTransactionQuery.originalIconUrl
             }
           });
         }),
@@ -112,6 +114,11 @@ export class SyncTransactionsRepository
               paymentChannel: updateTransactionQuery.paymentChannel,
               code: updateTransactionQuery.code,
               merchantEntityId: updateTransactionQuery.merchantEntityId,
+              originalCategory: updateTransactionQuery.originalCategory,
+              originalDetailed: updateTransactionQuery.originalDetailed,
+              originalConfidenceLevel:
+                updateTransactionQuery.originalConfidenceLevel,
+              originalIconUrl: updateTransactionQuery.originalIconUrl,
               location: {
                 update: {
                   where: {
@@ -126,21 +133,6 @@ export class SyncTransactionsRepository
                     lat: updateTransactionQuery.location.lat,
                     lon: updateTransactionQuery.location.lon,
                     storeNumber: updateTransactionQuery.location.storeNumber
-                  }
-                }
-              },
-              category: {
-                update: {
-                  where: {
-                    id: updateTransactionQuery.category.id
-                  },
-                  data: {
-                    originalCategory:
-                      updateTransactionQuery.category.originalCategory,
-                    detailed: updateTransactionQuery.category.detailed,
-                    confidenceLevel:
-                      updateTransactionQuery.category.confidenceLevel,
-                    iconUrl: updateTransactionQuery.category.iconUrl
                   }
                 }
               }

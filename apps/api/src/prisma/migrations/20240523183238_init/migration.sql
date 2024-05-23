@@ -89,7 +89,7 @@ CREATE TABLE "transaction" (
     "user_id" TEXT NOT NULL,
     "institution_id" TEXT NOT NULL,
     "account_id" TEXT NOT NULL,
-    "category_id" TEXT NOT NULL,
+    "category_id" TEXT,
     "location_id" TEXT NOT NULL,
     "external_id" TEXT NOT NULL,
     "external_account_id" TEXT NOT NULL,
@@ -112,8 +112,23 @@ CREATE TABLE "transaction" (
     "payment_channel" "TransactionPaymentChannelRecord" NOT NULL DEFAULT 'Other',
     "code" "TransactionCodeRecord" DEFAULT 'Null',
     "merchant_entity_id" TEXT,
+    "original_category" TEXT,
+    "detailed_category" TEXT,
+    "original_confidence_level" TEXT,
+    "original_icon_url" TEXT,
 
     CONSTRAINT "transaction_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "category" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -131,19 +146,6 @@ CREATE TABLE "location" (
     "store_number" TEXT,
 
     CONSTRAINT "location_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "category" (
-    "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "original_category" TEXT,
-    "detailed" TEXT,
-    "confidence_level" TEXT,
-    "icon_url" TEXT,
-
-    CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -212,10 +214,13 @@ ALTER TABLE "transaction" ADD CONSTRAINT "transaction_institution_id_fkey" FOREI
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transaction" ADD CONSTRAINT "transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transaction" ADD CONSTRAINT "transaction_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transaction" ADD CONSTRAINT "transaction_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "location"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "category" ADD CONSTRAINT "category_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "wallet" ADD CONSTRAINT "wallet_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

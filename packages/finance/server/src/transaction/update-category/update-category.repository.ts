@@ -15,7 +15,7 @@ export class UpdateCategoryRepository
         id: query.categoryId
       },
       data: {
-        userCategory: query.userCategory
+        name: query.name
       }
     });
   }

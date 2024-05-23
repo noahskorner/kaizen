@@ -1,4 +1,3 @@
-import { CategoryAdapter } from './category.adapter';
 import { Location } from './location';
 import { LocationRecord } from './location-record';
 import { Transaction } from './transaction';
@@ -14,7 +13,6 @@ export class TransactionAdapter {
   ): Transaction {
     const transaction: Transaction = {
       location: TransactionAdapter.toLocation(transactionRecord.location),
-      category: CategoryAdapter.toCategory(transactionRecord.category),
       paymentChannel: TransactionAdapter.toPaymentChannel(
         transactionRecord.paymentChannel
       ),
@@ -47,7 +45,11 @@ export class TransactionAdapter {
       datetime: transactionRecord.datetime
         ? transactionRecord.datetime.toISOString()
         : null,
-      merchantEntityId: transactionRecord.merchantEntityId
+      merchantEntityId: transactionRecord.merchantEntityId,
+      originalCategory: transactionRecord.originalCategory,
+      originalDetailed: transactionRecord.originalDetailed,
+      originalConfidenceLevel: transactionRecord.originalConfidenceLevel,
+      originalIconUrl: transactionRecord.originalIconUrl
     };
     return transaction;
   }

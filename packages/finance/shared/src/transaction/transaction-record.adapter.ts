@@ -29,9 +29,6 @@ export class TransactionRecordAdapter {
       location: TransactionRecordAdapter.toCreateLocationQuery(
         externalTransaction.location
       ),
-      category: TransactionRecordAdapter.toCreateCategoryQuery(
-        externalTransaction.category
-      ),
       paymentChannel: TransactionRecordAdapter.toPaymentChannelRecord(
         externalTransaction.paymentChannel
       ),
@@ -56,7 +53,12 @@ export class TransactionRecordAdapter {
       authorizedDate: externalTransaction.authorizedDate,
       authorizedDatetime: externalTransaction.authorizedDatetime,
       datetime: externalTransaction.datetime,
-      merchantEntityId: externalTransaction.merchantEntityId
+      merchantEntityId: externalTransaction.merchantEntityId,
+      originalCategory: externalTransaction.category?.primary ?? null,
+      originalDetailed: externalTransaction.category?.detailed ?? null,
+      originalConfidenceLevel:
+        externalTransaction.category?.confidenceLevel ?? null,
+      originalIconUrl: externalTransaction.category?.iconUrl ?? null
     };
 
     return query;
@@ -65,18 +67,13 @@ export class TransactionRecordAdapter {
   public static toSyncTransactionQuery({
     id,
     externalTransaction,
-    locationId,
-    categoryId
+    locationId
   }: _ToUpdateTransactionQueryCommand): SyncTransactionQuery {
     const query: SyncTransactionQuery = {
       id: id,
       location: TransactionRecordAdapter.toUpdateLocationQuery(
         locationId,
         externalTransaction.location
-      ),
-      category: TransactionRecordAdapter.toUpdateCategoryQuery(
-        categoryId,
-        externalTransaction.category
       ),
       paymentChannel: TransactionRecordAdapter.toPaymentChannelRecord(
         externalTransaction.paymentChannel
@@ -101,7 +98,12 @@ export class TransactionRecordAdapter {
       authorizedDatetime: externalTransaction.authorizedDatetime,
       datetime: externalTransaction.datetime,
       categoryIconUrl: externalTransaction.categoryIconUrl,
-      merchantEntityId: externalTransaction.merchantEntityId
+      merchantEntityId: externalTransaction.merchantEntityId,
+      originalCategory: externalTransaction.category?.primary ?? null,
+      originalDetailed: externalTransaction.category?.detailed ?? null,
+      originalConfidenceLevel:
+        externalTransaction.category?.confidenceLevel ?? null,
+      originalIconUrl: externalTransaction.category?.iconUrl ?? null
     };
 
     return query;
@@ -244,5 +246,4 @@ interface _ToUpdateTransactionQueryCommand {
   id: string;
   externalTransaction: ExternalTransaction;
   locationId: string;
-  categoryId: string;
 }

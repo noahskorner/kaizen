@@ -48,7 +48,7 @@ export class UpdateCategoryService
 
     const categoryRecord = await this.updateCategoryRepository.update({
       categoryId: command.categoryId,
-      userCategory: command.userCategory
+      name: command.userCategory ?? '' // TODO: FIX THIS
     } satisfies UpdateCategoryQuery);
 
     return this.success(CategoryAdapter.toCategory(categoryRecord));

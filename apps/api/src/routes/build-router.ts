@@ -61,14 +61,6 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
 
-  // /expense
-  router.get(
-    '/expense',
-    ExpressAdapter.toRequestHandler(
-      serviceCollection.findExpensesController.find
-    )
-  );
-
   // /transaction
   router.get(
     '/transaction',

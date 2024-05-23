@@ -1,4 +1,3 @@
-import { Category } from './category';
 import { Location } from './location';
 import { TransactionCode } from './transaction-code';
 import { TransactionPaymentChannel } from './transaction-payment-channel';
@@ -10,7 +9,6 @@ export interface Transaction {
   accountId: string;
   externalId: string;
   externalAccountId: string;
-  category: Category;
   location: Location;
   amount: number;
   isoCurrencyCode: string | null;
@@ -31,4 +29,8 @@ export interface Transaction {
   paymentChannel: TransactionPaymentChannel;
   code: TransactionCode | null;
   merchantEntityId: string | null;
+  originalCategory: string | null;
+  originalDetailed: string | null;
+  originalConfidenceLevel: string | null;
+  originalIconUrl: string | null;
 }

@@ -8,9 +8,6 @@ import {
   FindCategoriesController,
   FindCategoriesRepository,
   FindCategoriesService,
-  FindExpensesController,
-  FindExpensesRepository,
-  FindExpensesService,
   FindInstitutionsController,
   FindInstitutionsRepository,
   FindInstitutionsService,
@@ -190,7 +187,6 @@ export class ServiceCollectionBuilder {
     const getWalletRepository = new GetWalletRepository(prisma);
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
-    const findExpensesRepository = new FindExpensesRepository(prisma);
     const getTransactionRepositroy = new GetTransactionRepository(prisma);
     const updateCategoryRepository = new UpdateCategoryRepository(prisma);
     const findCategoriesRepository = new FindCategoriesRepository(prisma);
@@ -265,7 +261,6 @@ export class ServiceCollectionBuilder {
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService, serviceEventBus);
-    const findExpensesService = new FindExpensesService(findExpensesRepository);
     const createWalletService = new CreateWalletService(
       getWalletRepository,
       createWalletRepository
@@ -320,10 +315,6 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       getWalletService
     );
-    const findExpensesController = new FindExpensesController(
-      authMiddleware,
-      findExpensesService
-    );
     const updateCategoryController = new UpdateCategoryController(
       authMiddleware,
       updateCategoryService
@@ -356,7 +347,6 @@ export class ServiceCollectionBuilder {
       getWalletRepository,
       createWalletRepository,
       updateWalletRepository,
-      findExpensesRepository,
       findCategoriesRepository,
       // Services
       getUserService,
@@ -373,7 +363,6 @@ export class ServiceCollectionBuilder {
       createWalletService,
       updateWalletService,
       getWalletService,
-      findExpensesService,
       findCategoriesService,
       // Controllers
       homeController,
@@ -387,7 +376,6 @@ export class ServiceCollectionBuilder {
       syncInstitutionsController,
       findTransactionsController,
       getWalletController,
-      findExpensesController,
       updateCategoryController,
       findCategoriesController
     };

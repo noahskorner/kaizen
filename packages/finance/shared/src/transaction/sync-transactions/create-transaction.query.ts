@@ -1,6 +1,5 @@
 import { TransactionCodeRecord } from '../transaction-code-record';
 import { TransactionPaymentChannelRecord } from '../transaction-payment-channel-record';
-import { CreateCategoryQuery } from './create-category.query';
 import { CreateLocationQuery } from './create-location.query';
 
 export interface CreateTransactionQuery {
@@ -10,7 +9,6 @@ export interface CreateTransactionQuery {
   externalId: string;
   externalAccountId: string;
   location: CreateLocationQuery;
-  category: CreateCategoryQuery;
   amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
@@ -30,4 +28,8 @@ export interface CreateTransactionQuery {
   paymentChannel: TransactionPaymentChannelRecord;
   code: TransactionCodeRecord | null;
   merchantEntityId: string | null;
+  originalCategory: string | null;
+  originalDetailed: string | null;
+  originalConfidenceLevel: string | null;
+  originalIconUrl: string | null;
 }
