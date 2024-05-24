@@ -61,13 +61,21 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
 
-  // /expense
-  router.get(
-    '/expense',
+  // /category
+  router.post(
+    '/category',
     ExpressAdapter.toRequestHandler(
-      serviceCollection.findExpensesController.find
+      serviceCollection.createCategoryController.create
     )
   );
+  router.get('/category', async (req, res) => {
+    const handler = ExpressAdapter.toRequestHandler(
+      serviceCollection.findCategoriesController.find
+    );
+
+    const response = await handler(req, res);
+    return response;
+  });
 
   // /transaction
   router.get(
@@ -77,21 +85,11 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
   router.put(
-    '/transaction/:transactionId/category/:categoryId',
+    '/transaction/:transactionId/category',
     ExpressAdapter.toRequestHandler(
-      serviceCollection.updateCategoryController.update
+      serviceCollection.updateTransactionCategoryController.update
     )
   );
-
-  // /transaction/category
-  router.get('/transaction/category', async (req, res) => {
-    const handler = ExpressAdapter.toRequestHandler(
-      serviceCollection.findCategoriesController.find
-    );
-
-    const response = await handler(req, res);
-    return response;
-  });
 
   // /wallet
   router.get(

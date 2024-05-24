@@ -1,5 +1,9 @@
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
-import { FindTransactionsRequest, Transaction } from '@kaizen/finance';
+import {
+  FindTransactionsRequest,
+  Transaction,
+  UpdateTransactionCategoryRequest
+} from '@kaizen/finance';
 import { Paginated, toSearchParams, ApiResponse } from '@kaizen/core';
 
 export const TransactionClient = {
@@ -9,6 +13,16 @@ export const TransactionClient = {
     return handleAxiosRequest(() => {
       return ApiClient.get<ApiResponse<Paginated<Transaction>>>(
         `/transaction?${toSearchParams(request)}`
+      );
+    });
+  },
+  updateCategory: (
+    request: UpdateTransactionCategoryRequest
+  ): Promise<ApiResponse<Transaction>> => {
+    return handleAxiosRequest(() => {
+      return ApiClient.put<ApiResponse<Transaction>>(
+        `/transaction/${request.transactionId}/category`,
+        request
       );
     });
   }

@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { walletReducers } from '@kaizen/wallet-client';
 import { authReducers } from '@kaizen/auth-client';
 import {
+  categoryReducers,
   institutionReducers,
   transactionReducers
 } from '@kaizen/finance-client';
@@ -10,14 +11,15 @@ import { effects } from './effects/effects';
 import { onLoginFailureDisplayToast } from './effects/on-login-failure-display-toast';
 import { onLoginLoadInstitutions } from './effects/on-login-load-institutions';
 import { onLoginLoadWallet } from './effects/on-login-load-wallet';
-import { onLoginLoadTransactions } from './effects';
+import { onLoginLoadCategories, onLoginLoadTransactions } from './effects';
 
 const rootReducer = combineReducers({
   wallet: walletReducers,
   auth: authReducers,
   institution: institutionReducers,
   toast: toastReducers,
-  transaction: transactionReducers
+  transaction: transactionReducers,
+  category: categoryReducers
 });
 
 export const store = configureStore({
@@ -29,3 +31,4 @@ effects.run(onLoginFailureDisplayToast);
 effects.run(onLoginLoadWallet);
 effects.run(onLoginLoadInstitutions);
 effects.run(onLoginLoadTransactions);
+effects.run(onLoginLoadCategories);

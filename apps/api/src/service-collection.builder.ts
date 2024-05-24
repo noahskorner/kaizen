@@ -1,5 +1,8 @@
 import {
   CreateAccountSnapshotRepository,
+  CreateCategoryController,
+  CreateCategoryRepository,
+  CreateCategoryService,
   CreateInstitutionController,
   CreateInstitutionRepository,
   CreateInstitutionService,
@@ -8,9 +11,6 @@ import {
   FindCategoriesController,
   FindCategoriesRepository,
   FindCategoriesService,
-  FindExpensesController,
-  FindExpensesRepository,
-  FindExpensesService,
   FindInstitutionsController,
   FindInstitutionsRepository,
   FindInstitutionsService,
@@ -18,6 +18,7 @@ import {
   FindTransactionsRepository,
   FindTransactionsService,
   GetAccountRepository,
+  GetCategoryRepository,
   GetTransactionRepository,
   SnapshotAccountsService,
   SyncAccountsRepository,
@@ -26,9 +27,9 @@ import {
   SyncInstitutionsService,
   SyncTransactionsRepository,
   SyncTransactionsService,
-  UpdateCategoryController,
-  UpdateCategoryRepository,
-  UpdateCategoryService
+  UpdateTransactionCategoryController,
+  UpdateTransactionCategoryRepository,
+  UpdateTransactionCategoryService
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -184,16 +185,19 @@ export class ServiceCollectionBuilder {
     const findTransactionsRepository =
       this._serviceCollection.findTransactionsRepository ??
       new FindTransactionsRepository(prisma);
+    const updateTransactionCategoryRepository =
+      this._serviceCollection.updateTransactionCategoryRepository ??
+      new UpdateTransactionCategoryRepository(prisma);
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
     const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
     const findAccountsRepository = new FindAccountsRepository(prisma);
     const getWalletRepository = new GetWalletRepository(prisma);
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
-    const findExpensesRepository = new FindExpensesRepository(prisma);
     const getTransactionRepositroy = new GetTransactionRepository(prisma);
-    const updateCategoryRepository = new UpdateCategoryRepository(prisma);
     const findCategoriesRepository = new FindCategoriesRepository(prisma);
+    const createCategoryRepository = new CreateCategoryRepository(prisma);
+    const getCategoryRepository = new GetCategoryRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -262,10 +266,16 @@ export class ServiceCollectionBuilder {
     const findTransactionsService =
       this._serviceCollection.findTransactionsService ??
       new FindTransactionsService(findTransactionsRepository);
+    const updateTransactionCategoryService =
+      this._serviceCollection.updateTransactionCategoryService ??
+      new UpdateTransactionCategoryService(
+        getTransactionRepositroy,
+        getCategoryRepository,
+        updateTransactionCategoryRepository
+      );
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService, serviceEventBus);
-    const findExpensesService = new FindExpensesService(findExpensesRepository);
     const createWalletService = new CreateWalletService(
       getWalletRepository,
       createWalletRepository
@@ -275,12 +285,12 @@ export class ServiceCollectionBuilder {
       updateWalletRepository
     );
     const getWalletService = new GetWalletService(getWalletRepository);
-    const updateCategoryService = new UpdateCategoryService(
-      getTransactionRepositroy,
-      updateCategoryRepository
-    );
     const findCategoriesService = new FindCategoriesService(
       findCategoriesRepository
+    );
+    const createCategoryService = new CreateCategoryService(
+      getCategoryRepository,
+      createCategoryRepository
     );
 
     // Controllers
@@ -320,17 +330,18 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       getWalletService
     );
-    const findExpensesController = new FindExpensesController(
-      authMiddleware,
-      findExpensesService
-    );
-    const updateCategoryController = new UpdateCategoryController(
-      authMiddleware,
-      updateCategoryService
-    );
+    const updateTransactionCategoryController =
+      new UpdateTransactionCategoryController(
+        authMiddleware,
+        updateTransactionCategoryService
+      );
     const findCategoriesController = new FindCategoriesController(
       authMiddleware,
       findCategoriesService
+    );
+    const createCategoryController = new CreateCategoryController(
+      authMiddleware,
+      createCategoryService
     );
 
     const serviceCollection: IServiceCollection = {
@@ -353,11 +364,13 @@ export class ServiceCollectionBuilder {
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
+      updateTransactionCategoryRepository,
       getWalletRepository,
       createWalletRepository,
       updateWalletRepository,
-      findExpensesRepository,
       findCategoriesRepository,
+      createCategoryRepository,
+      getCategoryRepository,
       // Services
       getUserService,
       createUserService,
@@ -369,12 +382,13 @@ export class ServiceCollectionBuilder {
       createInstitutionService,
       findInstitutionsService,
       findTransactionsService,
+      updateTransactionCategoryService,
       syncInstitutionsService,
       createWalletService,
       updateWalletService,
       getWalletService,
-      findExpensesService,
       findCategoriesService,
+      createCategoryService,
       // Controllers
       homeController,
       createUserController,
@@ -387,9 +401,9 @@ export class ServiceCollectionBuilder {
       syncInstitutionsController,
       findTransactionsController,
       getWalletController,
-      findExpensesController,
-      updateCategoryController,
-      findCategoriesController
+      updateTransactionCategoryController,
+      findCategoriesController,
+      createCategoryController
     };
 
     return serviceCollection;

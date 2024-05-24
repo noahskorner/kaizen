@@ -1,5 +1,4 @@
-export interface GetTransactionByCategoryQuery {
+export interface GetTransactionQuery {
   userId: string;
   transactionId: string;
-  categoryId: string;
 }

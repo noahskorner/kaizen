@@ -21,8 +21,7 @@ import {
   buildAccount,
   buildAccountsBalanceGetResponse,
   buildItem,
-  buildItemPublicTokenExchangeResponse,
-  expectCategoryToBeExternal
+  buildItemPublicTokenExchangeResponse
 } from '../../../../test';
 import { buildTestBed } from '../../../../test/build-test-bed';
 import {
@@ -56,11 +55,6 @@ const expectTransactionToBeExternal = (
   expect(transaction.externalId).toBe(external.transaction_id);
   expect(transaction.externalAccountId).toBe(external.account_id);
   expectLocationToBeExternal(transaction.location, external.location);
-  expectCategoryToBeExternal(
-    transaction.category,
-    external.personal_finance_category ?? null,
-    external.personal_finance_category_icon_url ?? null
-  );
   expect(transaction.amount).toBe(external.amount);
   expect(transaction.isoCurrencyCode).toBe(external.iso_currency_code);
   expect(transaction.unofficialCurrencyCode).toBe(
@@ -90,6 +84,18 @@ const expectTransactionToBeExternal = (
   expect(transaction.paymentChannel).toBe(external.payment_channel);
   expect(transaction.code).toBe(external.transaction_code);
   expect(transaction.merchantEntityId).toBe(external.merchant_entity_id);
+  expect(transaction.originalCategory).toBe(
+    external.personal_finance_category?.primary
+  );
+  expect(transaction.originalDetailed).toBe(
+    external.personal_finance_category?.detailed
+  );
+  expect(transaction.originalConfidenceLevel).toBe(
+    external.personal_finance_category?.confidence_level
+  );
+  expect(transaction.originalIconUrl).toBe(
+    external.personal_finance_category_icon_url
+  );
 };
 
 describe('/transaction', () => {

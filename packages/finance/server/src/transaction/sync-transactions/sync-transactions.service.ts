@@ -282,8 +282,7 @@ export class SyncTransactionsService
         TransactionRecordAdapter.toSyncTransactionQuery({
           id: transaction.id,
           externalTransaction,
-          locationId: transaction.locationId,
-          categoryId: transaction.categoryId
+          locationId: transaction.locationId
         })
       );
     }

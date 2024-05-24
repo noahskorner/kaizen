@@ -12,10 +12,13 @@ import {
   ISyncInstitutionsService,
   ISnapshotAccountsService,
   ICreateAccountSnapshotRepository,
-  IFindExpensesService,
-  IFindExpensesRepository,
   IFindCategoriesRepository,
-  IFindCategoriesService
+  IFindCategoriesService,
+  ICreateCategoryRepository,
+  ICreateCategoryService,
+  IGetCategoryRepository,
+  IUpdateTransactionCategoryRepository,
+  IUpdateTransactionCategoryService
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -49,13 +52,13 @@ import {
 } from '@kaizen/auth-server';
 import { GetWalletController } from '@kaizen/wallet-server';
 import {
+  CreateCategoryController,
   CreateInstitutionController,
   FindCategoriesController,
-  FindExpensesController,
   FindInstitutionsController,
   FindTransactionsController,
   SyncInstitutionsController,
-  UpdateCategoryController
+  UpdateTransactionCategoryController
 } from '@kaizen/finance-server';
 import { Environment } from './env';
 
@@ -84,11 +87,13 @@ export interface IServiceCollection {
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
-  findExpensesRepository: IFindExpensesRepository;
+  updateTransactionCategoryRepository: IUpdateTransactionCategoryRepository;
   getWalletRepository: IGetWalletRepository;
   createWalletRepository: ICreateWalletRepository;
   updateWalletRepository: IUpdateWalletRepository;
   findCategoriesRepository: IFindCategoriesRepository;
+  createCategoryRepository: ICreateCategoryRepository;
+  getCategoryRepository: IGetCategoryRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -102,11 +107,12 @@ export interface IServiceCollection {
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
   findTransactionsService: IFindTransactionsService;
-  findExpensesService: IFindExpensesService;
+  updateTransactionCategoryService: IUpdateTransactionCategoryService;
   createWalletService: ICreateWalletService;
   updateWalletService: IUpdateWalletService;
   getWalletService: IGetWalletService;
   findCategoriesService: IFindCategoriesService;
+  createCategoryService: ICreateCategoryService;
 
   // Controllers
   homeController: HomeController;
@@ -119,8 +125,8 @@ export interface IServiceCollection {
   findInstitutionsController: FindInstitutionsController;
   syncInstitutionsController: SyncInstitutionsController;
   findTransactionsController: FindTransactionsController;
+  updateTransactionCategoryController: UpdateTransactionCategoryController;
   getWalletController: GetWalletController;
-  findExpensesController: FindExpensesController;
-  updateCategoryController: UpdateCategoryController;
   findCategoriesController: FindCategoriesController;
+  createCategoryController: CreateCategoryController;
 }

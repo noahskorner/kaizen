@@ -4,32 +4,32 @@ import { createSelector } from 'reselect';
 export const selectTransactions = (state: TransactionState) =>
   state.transaction.transactions;
 
-interface TransactionsByCategory {
-  category: string;
-  amount: number;
-}
+// interface TransactionsByCategory {
+//   category: string;
+//   amount: number;
+// }
 
-export const selectTransactionsByCategory = createSelector(
-  selectTransactions,
-  (transactions) => {
-    return transactions.reduce((prev, curr) => {
-      const category = curr.category;
-      const amount = curr.amount;
+// export const selectTransactionsByCategory = createSelector(
+//   selectTransactions,
+//   (transactions) => {
+//     return transactions.reduce((prev, curr) => {
+//       const category = curr.category;
+//       const amount = curr.amount;
 
-      const existingCategory = prev.find(
-        (transaction) => transaction.category === category?.originalCategory
-      );
+//       const existingCategory = prev.find(
+//         (transaction) => transaction.category === category?.originalCategory
+//       );
 
-      if (existingCategory) {
-        existingCategory.amount += amount;
-      } else {
-        prev.push({ category: category?.originalCategory ?? 'NONE', amount });
-      }
+//       if (existingCategory) {
+//         existingCategory.amount += amount;
+//       } else {
+//         prev.push({ category: category?.originalCategory ?? 'NONE', amount });
+//       }
 
-      return prev;
-    }, new Array<TransactionsByCategory>());
-  }
-);
+//       return prev;
+//     }, new Array<TransactionsByCategory>());
+//   }
+// );
 
 export const selectTotalSpent = createSelector(
   selectTransactions,

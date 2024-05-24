@@ -1,29 +1,49 @@
-# Data Preparation:
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-# Collect historical transaction data that includes information about the transaction amount, transaction date, and the category of the expense. Ensure that your dataset covers a sufficiently long time period to capture variations in spending patterns.
-# Filter the data to include only transactions related to fixed expenses and categorize them accordingly.
-# Feature Engineering:
+# Example data
+data = [
+    {"amount": 100.0, "date": "2023-01-01", "name": "Grocery Store", "category": "Groceries"},
+    {"amount": 50.0, "date": "2023-01-02", "name": "Gas Station", "category": "Fuel"},
+    {"amount": 300.0, "date": "2023-01-03", "name": "Electronics Store", "category": "Electronics"},
+    {"amount": 20.0, "date": "2023-01-04", "name": "Coffee Shop", "category": "Food"},
+    # Add more labeled transactions
+]
 
-# Extract relevant features from your transaction data. Some potential features include:
-# Week of the year: This can capture seasonal patterns in spending.
-# Day of the week: Certain expenses might occur more frequently on specific days.
-# Month: Certain expenses might occur more frequently during certain months.
-# You might also consider other features like average transaction amount for a given category, frequency of transactions, etc.
-# Model Selection:
+# Convert to DataFrame
+df = pd.DataFrame(data)
 
-# Given that you're dealing with a regression problem and want to predict weekly expenses for a particular category, you can start with simple regression models like Linear Regression or Ridge Regression. These models are easy to interpret and can serve as a baseline.
-# You can also explore more complex regression algorithms such as Decision Trees, Random Forests, Gradient Boosting Machines (e.g., XGBoost, LightGBM), or Neural Networks.
-# Consider the trade-offs between model complexity and interpretability, as well as the size of your dataset.
-# Model Training and Evaluation:
+# Feature engineering: combine amount and name into a single feature
+df['feature'] = df['name'] + " " + df['amount'].astype(str)
 
-# Split your dataset into training and testing sets (e.g., using a 80-20 or 70-30 split).
-# Train your regression model on the training data and evaluate its performance using appropriate metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), or R-squared.
-# Use cross-validation techniques to assess the generalization performance of your model and mitigate overfitting.
-# Model Deployment and Monitoring:
+# Extract features and labels
+X = df['feature']
+y = df['category']
 
-# Once you've trained and evaluated your model, deploy it to predict weekly expenses for the desired category.
-# Monitor the model's performance over time and retrain it periodically with new data to ensure its accuracy and relevance.
-# Fine-tuning and Optimization:
+# Convert text data to TF-IDF features
+vectorizer = TfidfVectorizer()
+X_tfidf = vectorizer.fit_transform(X)
 
-# Experiment with different features, algorithms, and hyperparameters to optimize your model's performance.
-# Consider incorporating domain knowledge or additional external data sources to improve the predictive accuracy of your model.
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_tfidf, y, test_size=0.2, random_state=42)
+
+# Initialize and train the classifier
+classifier = RandomForestClassifier()
+classifier.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = classifier.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Model accuracy: {accuracy * 100:.2f}%")
+
+# Example of predicting a new transaction
+new_transaction = {"amount": 75.0, "date": "2023-01-05", "name": "Supermarket"}
+new_feature = f"{new_transaction['name']} {new_transaction['amount']}"
+new_feature_tfidf = vectorizer.transform([new_feature])
+predicted_category = classifier.predict(new_feature_tfidf)
+print(f"Predicted category for the new transaction: {predicted_category[0]}")
