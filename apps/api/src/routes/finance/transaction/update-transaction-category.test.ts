@@ -37,6 +37,9 @@ describe('/transaction/:transactionId/category should', () => {
       // Act
       const response = await supertest(testBed)
         .put(`/transaction/${transactionId}/category`)
+        .send({
+          transactionId: transactionId
+        } satisfies Omit<UpdateTransactionCategoryRequest, 'categoryId'>)
         .auth(authToken.accessToken, { type: 'bearer' });
 
       // Asserts
@@ -51,7 +54,8 @@ describe('/transaction/:transactionId/category should', () => {
       const response = await supertest(testBed)
         .put(`/transaction/${transactionId}/category`)
         .send({
-          categoryId: uuid()
+          categoryId: uuid(),
+          transactionId: transactionId
         } satisfies UpdateTransactionCategoryRequest)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -69,7 +73,8 @@ describe('/transaction/:transactionId/category should', () => {
       const categoryResponse =
         createCategoryResponse.body as ApiSuccessResponse<Category>;
       const request: UpdateTransactionCategoryRequest = {
-        categoryId: categoryResponse.data.id
+        categoryId: categoryResponse.data.id,
+        transactionId: transactionId
       };
 
       // Act
