@@ -1,6 +1,6 @@
 import { Repository } from '@kaizen/core-server';
 import {
-  GetTransactionByCategoryQuery,
+  GetTransactionQuery,
   IGetTransactionRepository,
   TransactionRecord
 } from '@kaizen/finance';
@@ -9,14 +9,13 @@ export class GetTransactionRepository
   extends Repository
   implements IGetTransactionRepository
 {
-  public async getByCategory(
-    query: GetTransactionByCategoryQuery
+  public async get(
+    query: GetTransactionQuery
   ): Promise<TransactionRecord | null> {
     return this._prisma.transactionRecord.findFirst({
       where: {
         id: query.transactionId,
-        userId: query.userId,
-        categoryId: query.categoryId
+        userId: query.userId
       },
       include: {
         category: true,

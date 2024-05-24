@@ -7,12 +7,13 @@ import {
 import { CategoryClient } from './category.client';
 
 export function* loadCategories() {
-  yield takeEvery(LOAD_CATEGORIES, async function* loadCategories() {
-    const response = await CategoryClient.find();
-    if (response.type === 'FAILURE') {
-      yield put({ type: LOAD_CATEGORIES_FAILURE, payload: response.errors });
-    } else {
-      yield put({ type: LOAD_CATEGORIES_SUCCESS, payload: response.data });
-    }
+  yield takeEvery(LOAD_CATEGORIES, function* loadCategories() {
+    yield CategoryClient.find().then((response) => {
+      if (response.type === 'FAILURE') {
+        put({ type: LOAD_CATEGORIES_FAILURE, payload: response.errors });
+      } else {
+        put({ type: LOAD_CATEGORIES_SUCCESS, payload: response.data });
+      }
+    });
   });
 }

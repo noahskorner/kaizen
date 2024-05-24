@@ -1,3 +1,4 @@
+import { Category } from '../category/category';
 import { Location } from './location';
 import { TransactionCode } from './transaction-code';
 import { TransactionPaymentChannel } from './transaction-payment-channel';
@@ -9,6 +10,8 @@ export interface Transaction {
   accountId: string;
   externalId: string;
   externalAccountId: string;
+  categoryId: string | null;
+  category: Category | null;
   location: Location;
   amount: number;
   isoCurrencyCode: string | null;

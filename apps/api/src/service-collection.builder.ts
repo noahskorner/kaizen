@@ -27,9 +27,9 @@ import {
   SyncInstitutionsService,
   SyncTransactionsRepository,
   SyncTransactionsService,
-  UpdateCategoryController,
-  UpdateCategoryRepository,
-  UpdateCategoryService
+  UpdateTransactionCategoryController,
+  UpdateTransactionCategoryRepository,
+  UpdateTransactionCategoryService
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -185,6 +185,9 @@ export class ServiceCollectionBuilder {
     const findTransactionsRepository =
       this._serviceCollection.findTransactionsRepository ??
       new FindTransactionsRepository(prisma);
+    const updateTransactionCategoryRepository =
+      this._serviceCollection.updateTransactionCategoryRepository ??
+      new UpdateTransactionCategoryRepository(prisma);
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
     const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
     const findAccountsRepository = new FindAccountsRepository(prisma);
@@ -192,7 +195,6 @@ export class ServiceCollectionBuilder {
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
     const getTransactionRepositroy = new GetTransactionRepository(prisma);
-    const updateCategoryRepository = new UpdateCategoryRepository(prisma);
     const findCategoriesRepository = new FindCategoriesRepository(prisma);
     const createCategoryRepository = new CreateCategoryRepository(prisma);
     const getCategoryRepository = new GetCategoryRepository(prisma);
@@ -264,6 +266,13 @@ export class ServiceCollectionBuilder {
     const findTransactionsService =
       this._serviceCollection.findTransactionsService ??
       new FindTransactionsService(findTransactionsRepository);
+    const updateTransactionCategoryService =
+      this._serviceCollection.updateTransactionCategoryService ??
+      new UpdateTransactionCategoryService(
+        getTransactionRepositroy,
+        getCategoryRepository,
+        updateTransactionCategoryRepository
+      );
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
       new SyncInstitutionsService(syncAccountsService, serviceEventBus);
@@ -276,10 +285,6 @@ export class ServiceCollectionBuilder {
       updateWalletRepository
     );
     const getWalletService = new GetWalletService(getWalletRepository);
-    const updateCategoryService = new UpdateCategoryService(
-      getTransactionRepositroy,
-      updateCategoryRepository
-    );
     const findCategoriesService = new FindCategoriesService(
       findCategoriesRepository
     );
@@ -325,10 +330,11 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       getWalletService
     );
-    const updateCategoryController = new UpdateCategoryController(
-      authMiddleware,
-      updateCategoryService
-    );
+    const updateTransactionCategoryController =
+      new UpdateTransactionCategoryController(
+        authMiddleware,
+        updateTransactionCategoryService
+      );
     const findCategoriesController = new FindCategoriesController(
       authMiddleware,
       findCategoriesService
@@ -358,6 +364,7 @@ export class ServiceCollectionBuilder {
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
+      updateTransactionCategoryRepository,
       getWalletRepository,
       createWalletRepository,
       updateWalletRepository,
@@ -375,6 +382,7 @@ export class ServiceCollectionBuilder {
       createInstitutionService,
       findInstitutionsService,
       findTransactionsService,
+      updateTransactionCategoryService,
       syncInstitutionsService,
       createWalletService,
       updateWalletService,
@@ -393,7 +401,7 @@ export class ServiceCollectionBuilder {
       syncInstitutionsController,
       findTransactionsController,
       getWalletController,
-      updateCategoryController,
+      updateTransactionCategoryController,
       findCategoriesController,
       createCategoryController
     };

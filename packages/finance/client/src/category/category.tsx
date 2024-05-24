@@ -1,34 +1,30 @@
 import { useClickOutside } from '@kaizen/core-client';
-import { FindCategoriesResponse, UpdateCategoryRequest } from '@kaizen/finance';
+import { Category, CreateCategoryRequest } from '@kaizen/finance';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import {
-  TransactionCategoryClient,
-  TransactionDispatch,
-  setTransactionCategory
-} from '../transaction';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCategories } from './category.selectors';
+import { CategoryClient } from './category.client';
+import { addCategoryAction } from './category.actions';
+import { CategoryDispatch } from './category.store';
 
-export interface CategoryProps {
+export interface CategorySelectorProps {
   transactionId: string;
-  categoryId: string;
-  originalCategory: string;
+  name: string;
 }
 
-export const Category = ({
+export const CategorySelector = ({
   transactionId,
-  categoryId,
-  originalCategory
-}: CategoryProps) => {
+  name
+}: CategorySelectorProps) => {
   const [searchText, setSearchText] = useState<string>('');
-  const [categories, setCategories] = useState<FindCategoriesResponse>({});
-  const [filteredCategories, setFilteredCategories] =
-    useState<FindCategoriesResponse>({});
+  const categories = useSelector(selectCategories);
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useClickOutside<HTMLDivElement>(() =>
     setShowDropdown(false)
   );
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch<TransactionDispatch>();
+  const dispatch = useDispatch<CategoryDispatch>();
 
   const onCategoryClick = () => {
     setShowDropdown(!showDropdown);
@@ -36,39 +32,27 @@ export const Category = ({
 
   const onCategorySearch = (event: FormEvent<HTMLInputElement>) => {
     setSearchText(event.currentTarget.value);
-    const newFilteredCategories = Object.entries(categories)
-      .filter(([category]) => {
-        return category
-          .toLowerCase()
-          .includes(event.currentTarget.value.toLocaleLowerCase());
-      })
-      .reduce((prev, [category, count]) => {
-        prev[category] = count;
-        return prev;
-      }, {} as FindCategoriesResponse);
+    const newFilteredCategories = filteredCategories;
     setFilteredCategories(newFilteredCategories);
   };
 
-  const onCategorySelect = async (category: string) => {
-    const response = await TransactionCategoryClient.update(
-      transactionId,
-      categoryId,
-      {
-        userCategory: category
-      } satisfies UpdateCategoryRequest
-    );
+  const onCreateCategoryClick = async (name: string) => {
+    const response = await CategoryClient.create({
+      name: name
+    } satisfies CreateCategoryRequest);
 
     if (response.type === 'SUCCESS') {
-      dispatch(
-        setTransactionCategory({
-          transactionId: transactionId,
-          category: response.data
-        })
-      );
+      dispatch(addCategoryAction(response.data));
     }
 
     setShowDropdown(false);
   };
+
+  useEffect(() => {
+    if (!showDropdown) {
+      setSearchText('');
+    }
+  }, [showDropdown]);
 
   useEffect(() => {
     if (showDropdown) {
@@ -80,25 +64,12 @@ export const Category = ({
     setFilteredCategories(categories);
   }, [categories]);
 
-  // TODO: We need to pull these from the store instead
-  useEffect(() => {
-    const loadCategories = async () => {
-      const response = await TransactionCategoryClient.find();
-
-      if (response.type === 'SUCCESS') {
-        setCategories(response.data);
-      }
-    };
-
-    loadCategories();
-  }, []);
-
   return (
     <div className="relative">
       <button
         onClick={onCategoryClick}
         className="rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
-        {originalCategory}
+        {name}
       </button>
       <div
         ref={dropdownRef}
@@ -115,19 +86,19 @@ export const Category = ({
           {searchText.length > 0 && (
             <div className="w-full">
               <button
-                onClick={() => onCategorySelect(searchText)}
+                onClick={() => onCreateCategoryClick(searchText)}
                 className="inline rounded-lg bg-gray-300 px-2 py-1 text-xs font-medium lowercase text-gray-700">
                 {searchText} (New Category)
               </button>
             </div>
           )}
-          {Object.entries(filteredCategories).map(([category]) => {
+          {filteredCategories.map((category) => {
             return (
-              <div key={category} className="w-full">
+              <div key={category.id} className="w-full">
                 <button
-                  onClick={() => onCategorySelect(category)}
+                  onClick={() => onCreateCategoryClick(category.name)}
                   className="inline rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
-                  {category}
+                  {category.name}
                 </button>
               </div>
             );

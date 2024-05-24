@@ -3,7 +3,7 @@ import { ApiResponse } from '@kaizen/core';
 import {
   Category,
   FindCategoriesResponse,
-  UpdateCategoryRequest
+  UpdateTransactionCategory
 } from '@kaizen/finance';
 
 // TODO: Move these into the TransactionClient
@@ -11,7 +11,7 @@ export const TransactionCategoryClient = {
   update: (
     transactionId: string,
     categoryId: string,
-    request: UpdateCategoryRequest
+    request: UpdateTransactionCategory
   ): Promise<ApiResponse<Category>> => {
     return handleAxiosRequest(() => {
       return ApiClient.put<ApiResponse<Category>>(

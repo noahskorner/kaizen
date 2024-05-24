@@ -274,11 +274,18 @@ export interface GetWalletNotYourWalletError {
   code: ErrorCode.GET_WALLET_NOT_YOUR_WALLET;
 }
 
-export interface UpdateCategoryNotFoundError {
-  code: ErrorCode.UPDATE_CATEGORY_NOT_FOUND;
+export interface UpdateTransactionCategoryTransactionNotFoundError {
+  code: ErrorCode.UPDATE_TRANSACTION_CATEGORY_TRANSACTION_NOT_FOUND;
   params: {
     userId: string;
     transactionId: string;
+  };
+}
+
+export interface UpdateTransactionCategoryNotFoundError {
+  code: ErrorCode.UPDATE_TRANSACTION_CATEGORY_NOT_FOUND;
+  params: {
+    userId: string;
     categoryId: string;
   };
 }
@@ -337,7 +344,8 @@ export interface BaseError {
     | ErrorCode.FIND_EXPENSES_INVALID_START_DATE
     | ErrorCode.FIND_EXPENSES_INVALID_END_DATE
     | ErrorCode.FIND_EXPENSES_INVALID_TIMEFRAME
-    | ErrorCode.UPDATE_CATEGORY_NOT_FOUND
+    | ErrorCode.UPDATE_TRANSACTION_CATEGORY_TRANSACTION_NOT_FOUND
+    | ErrorCode.UPDATE_TRANSACTION_CATEGORY_NOT_FOUND
     | ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME
     | ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS
   >;
@@ -383,6 +391,7 @@ export type ServiceError =
   | FindExpensesInvalidStartDateError
   | FindExpensesInvalidEndDateError
   | FindExpensesInvalidTimeframeError
-  | UpdateCategoryNotFoundError
+  | UpdateTransactionCategoryTransactionNotFoundError
+  | UpdateTransactionCategoryNotFoundError
   | CreateCategoryMustProvideNameError
   | CreateCategoryAlreadyExistsError;

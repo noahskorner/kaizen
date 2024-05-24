@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import './transactions-table.css';
 import { selectTransactions } from './transaction.selectors';
 import { formatCurrency } from '../format-currency';
+import { CategorySelector } from '.';
 // import { Category } from './category';
 
 export const TransactionsTable = () => {
@@ -27,18 +28,10 @@ export const TransactionsTable = () => {
               <div className="flex w-full items-center justify-between">
                 <div className="flex w-full flex-col gap-2">
                   <h6 className="text-sm font-semibold">{transaction.name}</h6>
-                  {/* {transaction.category &&
-                    (transaction.category.userCategory ||
-                      transaction.category.originalCategory) && (
-                      <Category
-                        transactionId={transaction.id}
-                        categoryId={transaction.category.id}
-                        originalCategory={
-                          transaction.category.userCategory ??
-                          transaction.category.originalCategory!
-                        }
-                      />
-                    )} */}
+                  <CategorySelector
+                    transactionId={transaction.id}
+                    name={transaction.originalCategory ?? 'Categorize me!'}
+                  />
                 </div>
                 <span className="text-sm">
                   {formatCurrency(transaction.amount, 'USD')}

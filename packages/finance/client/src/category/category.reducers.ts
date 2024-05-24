@@ -1,4 +1,5 @@
 import {
+  ADD_CATEGORY,
   CategoryAction,
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_FAILURE,
@@ -30,6 +31,11 @@ export const categoryReducers = (
       return {
         loading: false,
         categories: []
+      };
+    case ADD_CATEGORY:
+      return {
+        loading: false,
+        categories: [action.payload, ...state.categories]
       };
     default:
       return state;

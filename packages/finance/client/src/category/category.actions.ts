@@ -39,7 +39,20 @@ export const loadCategoriesFailureAction = (
   };
 };
 
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+export interface AddCategoryAction {
+  type: typeof ADD_CATEGORY;
+  payload: Category;
+}
+export const addCategoryAction = (category: Category): AddCategoryAction => {
+  return {
+    type: ADD_CATEGORY,
+    payload: category
+  };
+};
+
 export type CategoryAction =
   | LoadCategoriesAction
   | LoadCategoriesSuccessAction
-  | LoadCategoriesFailureAction;
+  | LoadCategoriesFailureAction
+  | AddCategoryAction;

@@ -85,9 +85,9 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
   router.put(
-    '/transaction/:transactionId/category/:categoryId',
+    '/transaction/:transactionId/category',
     ExpressAdapter.toRequestHandler(
-      serviceCollection.updateCategoryController.update
+      serviceCollection.updateTransactionCategoryController.update
     )
   );
 
