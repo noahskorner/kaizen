@@ -1,19 +1,19 @@
-import { put, takeEvery } from 'redux-saga/effects';
 import {
-  LOAD_CATEGORIES,
-  LOAD_CATEGORIES_FAILURE,
-  LOAD_CATEGORIES_SUCCESS
+  loadCategoriesAction,
+  loadCategoriesFailureAction,
+  loadCategoriesSuccessAction
 } from './category.actions';
 import { CategoryClient } from './category.client';
+import { CategoryDispatch } from './category.store';
 
-export function* loadCategories() {
-  yield takeEvery(LOAD_CATEGORIES, function* loadCategories() {
-    yield CategoryClient.find().then((response) => {
-      if (response.type === 'FAILURE') {
-        put({ type: LOAD_CATEGORIES_FAILURE, payload: response.errors });
-      } else {
-        put({ type: LOAD_CATEGORIES_SUCCESS, payload: response.data });
-      }
-    });
-  });
-}
+export const loadCategories = () => {
+  return async (dispatch: CategoryDispatch) => {
+    dispatch(loadCategoriesAction());
+
+    const response = await CategoryClient.find();
+    if (response.type === 'FAILURE')
+      return dispatch(loadCategoriesFailureAction(response.errors));
+
+    return dispatch(loadCategoriesSuccessAction(response.data));
+  };
+};

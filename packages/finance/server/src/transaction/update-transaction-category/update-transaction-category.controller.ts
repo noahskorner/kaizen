@@ -25,7 +25,6 @@ export class UpdateTransactionCategoryController extends Controller {
     .use(async (req, res, next) => {
       const result = await this.updateTransactionCategoryService.update({
         userId: req.user.id,
-        transactionId: req.params.transactionId,
         ...(req.body as UpdateTransactionCategoryRequest)
       } satisfies UpdateTransactionCategoryCommand);
 

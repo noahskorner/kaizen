@@ -12,17 +12,21 @@ export class UpdateTransactionCategoryRepository
   public async update(
     query: UpdateTransactionCategoryQuery
   ): Promise<TransactionRecord> {
-    return this._prisma.transactionRecord.update({
-      where: {
-        id: query.transactionId
-      },
-      data: {
-        categoryId: query.categoryId
-      },
-      include: {
-        category: true,
-        location: true
-      }
-    });
+    try {
+      return this._prisma.transactionRecord.update({
+        where: {
+          id: query.transactionId
+        },
+        data: {
+          categoryId: query.categoryId
+        },
+        include: {
+          category: true,
+          location: true
+        }
+      });
+    } catch (error) {
+      throw new Error();
+    }
   }
 }

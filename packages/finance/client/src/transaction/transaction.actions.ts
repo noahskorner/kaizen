@@ -1,5 +1,5 @@
 import { ApiError, Paginated } from '@kaizen/core';
-import { Category, Transaction } from '@kaizen/finance';
+import { Transaction } from '@kaizen/finance';
 
 export const LOAD_TRANSACTIONS = 'LOAD_TRANSACTIONS';
 export interface LoadTransactionsAction {
@@ -39,20 +39,17 @@ export const loadTransactionsFailureAction = (
   };
 };
 
-export const SET_TRANSACTION_CATEGORY = 'SET_TRANSACTION_CATEGORY';
+export const SET_TRANSACTION = 'SET_TRANSACTION';
 export interface SetTransactionAction {
-  type: typeof SET_TRANSACTION_CATEGORY;
-  payload: {
-    transactionId: string;
-    category: Category;
-  };
+  type: typeof SET_TRANSACTION;
+  payload: Transaction;
 }
-export const setTransactionCategory = (
-  payload: SetTransactionAction['payload']
+export const setTransactionAction = (
+  transaction: Transaction
 ): SetTransactionAction => {
   return {
-    type: SET_TRANSACTION_CATEGORY,
-    payload: payload
+    type: SET_TRANSACTION,
+    payload: transaction
   };
 };
 

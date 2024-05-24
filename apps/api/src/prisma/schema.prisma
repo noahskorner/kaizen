@@ -219,7 +219,7 @@ model TransactionRecord {
   institution             InstitutionRecord               @relation(fields: [institutionId], references: [id])
   accountId               String                          @map("account_id")
   account                 AccountRecord                   @relation(fields: [accountId], references: [id])
-  categoryId              String?                         @unique @map("category_id")
+  categoryId              String?                         @map("category_id")
   category                CategoryRecord?                 @relation(fields: [categoryId], references: [id])
   locationId              String                          @unique @map("location_id")
   location                LocationRecord                  @relation(fields: [locationId], references: [id])

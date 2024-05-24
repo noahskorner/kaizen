@@ -4,7 +4,6 @@ import { authReducers } from '@kaizen/auth-client';
 import {
   categoryReducers,
   institutionReducers,
-  loadCategories,
   transactionReducers
 } from '@kaizen/finance-client';
 import { toastReducers } from '@kaizen/core-client';
@@ -27,8 +26,6 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([effects])
 });
-
-effects.run(loadCategories);
 
 effects.run(onLoginFailureDisplayToast);
 effects.run(onLoginLoadWallet);

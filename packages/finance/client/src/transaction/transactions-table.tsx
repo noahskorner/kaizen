@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux';
 import './transactions-table.css';
 import { selectTransactions } from './transaction.selectors';
 import { formatCurrency } from '../format-currency';
-import { CategorySelector } from '.';
-// import { Category } from './category';
+import { CategorySelector } from '../category/category.selector';
 
 export const TransactionsTable = () => {
   const transactions = useSelector(selectTransactions);
@@ -30,7 +29,13 @@ export const TransactionsTable = () => {
                   <h6 className="text-sm font-semibold">{transaction.name}</h6>
                   <CategorySelector
                     transactionId={transaction.id}
-                    name={transaction.originalCategory ?? 'Categorize me!'}
+                    name={
+                      transaction.category
+                        ? transaction.category.name
+                        : transaction.originalCategory
+                          ? transaction.originalCategory
+                          : ''
+                    }
                   />
                 </div>
                 <span className="text-sm">

@@ -1,11 +1,20 @@
 import { useClickOutside } from '@kaizen/core-client';
-import { Category, CreateCategoryRequest } from '@kaizen/finance';
+import {
+  Category,
+  CreateCategoryRequest,
+  UpdateTransactionCategoryRequest
+} from '@kaizen/finance';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCategories } from './category.selectors';
 import { CategoryClient } from './category.client';
 import { addCategoryAction } from './category.actions';
 import { CategoryDispatch } from './category.store';
+import {
+  TransactionClient,
+  TransactionDispatch,
+  setTransactionAction
+} from '../transaction';
 
 export interface CategorySelectorProps {
   transactionId: string;
@@ -24,9 +33,25 @@ export const CategorySelector = ({
     setShowDropdown(false)
   );
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch<CategoryDispatch>();
+  const dispatch = useDispatch<CategoryDispatch & TransactionDispatch>();
+
+  const createCategory = async (categoryId: string) => {
+    const response = await TransactionClient.updateCategory({
+      transactionId: transactionId,
+      categoryId: categoryId
+    } satisfies UpdateTransactionCategoryRequest);
+
+    if (response.type === 'SUCCESS') {
+      dispatch(setTransactionAction(response.data));
+    }
+  };
 
   const onCategoryClick = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const onUpdateCategoryClick = async (categoryId: string) => {
+    await createCategory(categoryId);
     setShowDropdown(!showDropdown);
   };
 
@@ -43,6 +68,8 @@ export const CategorySelector = ({
 
     if (response.type === 'SUCCESS') {
       dispatch(addCategoryAction(response.data));
+
+      await createCategory(response.data.id);
     }
 
     setShowDropdown(false);
@@ -96,7 +123,7 @@ export const CategorySelector = ({
             return (
               <div key={category.id} className="w-full">
                 <button
-                  onClick={() => onCreateCategoryClick(category.name)}
+                  onClick={() => onUpdateCategoryClick(category.id)}
                   className="inline rounded-lg bg-gray-200 px-2 py-1 text-xs font-medium lowercase text-gray-700">
                   {category.name}
                 </button>
