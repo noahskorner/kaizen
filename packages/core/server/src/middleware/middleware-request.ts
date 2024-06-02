@@ -1,3 +1,5 @@
+import { Readable } from 'stream';
+
 export interface MiddlewareRequest {
   // consider just making this 'authentication'
   headers: Record<string, string>;
@@ -7,6 +9,7 @@ export interface MiddlewareRequest {
   params: Record<string, string>;
   query: Record<string, string>;
   body: unknown;
+  stream: Readable;
   user: {
     id: string;
     email: string;

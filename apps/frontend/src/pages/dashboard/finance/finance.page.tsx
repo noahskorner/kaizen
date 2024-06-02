@@ -43,15 +43,18 @@ export const FinancePage = () => {
             {linkToken && <PlaidLink linkToken={linkToken} />}
           </div>
         </div>
-        {Object.entries(accountGroups).map(([accountType, accountGroup]) => {
-          return (
-            <AccountGroupCard
-              key={accountType}
-              accountType={accountType as AccountType}
-              accountGroup={accountGroup}
-            />
-          );
-        })}
+        {Object.entries(accountGroups).map(
+          ([accountType, accountGroup], index) => {
+            return (
+              <AccountGroupCard
+                key={accountType}
+                showAccounts={index === 0}
+                accountType={accountType as AccountType}
+                accountGroup={accountGroup}
+              />
+            );
+          }
+        )}
       </div>
       <div className="flex flex-col gap-y-4">
         <div className="flex w-full justify-start">

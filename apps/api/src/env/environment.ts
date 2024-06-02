@@ -72,6 +72,13 @@ if (PLAID_SECRET == null) {
   );
 }
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (OPENAI_API_KEY == null) {
+  throw new Error(
+    `Must provide OPENAI_API_KEY. Did you forget to set it in your environment file?`
+  );
+}
+
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
@@ -83,5 +90,6 @@ export const environment: Environment = {
   FRONTEND_DOMAIN: FRONTEND_DOMAIN,
   REFRESH_TOKEN_COOKIE_DOMAIN: REFRESH_TOKEN_COOKIE_DOMAIN,
   PLAID_CLIENT_ID: PLAID_CLIENT_ID,
-  PLAID_SECRET: PLAID_SECRET
+  PLAID_SECRET: PLAID_SECRET,
+  OPENAI_API_KEY: OPENAI_API_KEY
 };

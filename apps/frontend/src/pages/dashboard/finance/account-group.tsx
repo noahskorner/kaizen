@@ -5,13 +5,15 @@ import { useState } from 'react';
 export interface AccountGroupProps {
   accountType: AccountType;
   accountGroup: AccountGroup;
+  showAccounts: boolean;
 }
 
 export const AccountGroupCard = ({
   accountType,
-  accountGroup
+  accountGroup,
+  showAccounts: initialShowAccounts
 }: AccountGroupProps) => {
-  const [showAccounts, setShowAccounts] = useState(false);
+  const [showAccounts, setShowAccounts] = useState(initialShowAccounts);
 
   const onCardClick = () => {
     setShowAccounts(!showAccounts);

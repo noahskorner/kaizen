@@ -21,10 +21,11 @@ export class ExpressAdapter {
       params: req.params,
       query: req.query as Record<string, string>,
       cookies: req.cookies,
-      body: req.body
+      body: req.body,
+      stream: req
     } satisfies Omit<MiddlewareRequest, 'user'>;
 
-    return request as MiddlewareRequest;
+    return request as unknown as MiddlewareRequest;
   }
 
   private static toResponse(res: Response, response: MiddlewareResponse) {

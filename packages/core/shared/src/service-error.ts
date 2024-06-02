@@ -290,6 +290,13 @@ export interface UpdateTransactionCategoryNotFoundError {
   };
 }
 
+export interface TranscriptionProviderTranscriptionFailedError {
+  code: ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED;
+  params: {
+    error: unknown;
+  };
+}
+
 export interface CreateCategoryMustProvideNameError {
   code: ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME;
   params: {
@@ -302,6 +309,13 @@ export interface CreateCategoryAlreadyExistsError {
   params: {
     userId: string;
     name: string;
+  };
+}
+
+export interface TranscriptionProviderTranscriptionFailedError {
+  code: ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED;
+  params: {
+    error: unknown;
   };
 }
 
@@ -348,6 +362,8 @@ export interface BaseError {
     | ErrorCode.UPDATE_TRANSACTION_CATEGORY_NOT_FOUND
     | ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME
     | ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS
+    | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
+    | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
   >;
   params?: never;
 }
@@ -394,4 +410,5 @@ export type ServiceError =
   | UpdateTransactionCategoryTransactionNotFoundError
   | UpdateTransactionCategoryNotFoundError
   | CreateCategoryMustProvideNameError
-  | CreateCategoryAlreadyExistsError;
+  | CreateCategoryAlreadyExistsError
+  | TranscriptionProviderTranscriptionFailedError;

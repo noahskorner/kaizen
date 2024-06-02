@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IServiceCollection } from '../service-collection.interface';
 import { ExpressAdapter } from './express.adapter';
+import { AssistController } from './assist/assist.controller';
 
 export const buildRouter = (serviceCollection: IServiceCollection) => {
   const router = Router();
@@ -9,6 +10,13 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
   router.get(
     '/',
     ExpressAdapter.toRequestHandler(serviceCollection.homeController.find)
+  );
+
+  router.post('/assist/transcribe', (req, res) =>
+    new AssistController(serviceCollection.transcriptionProvider).transcribe(
+      req,
+      res
+    )
   );
 
   // /user

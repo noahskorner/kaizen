@@ -17,7 +17,10 @@ import {
 } from '@kaizen/finance';
 import { Service } from '@kaizen/core-server';
 
-export class FinancialProvider extends Service implements IFinancialProvider {
+export class PlaidFinancialProvider
+  extends Service
+  implements IFinancialProvider
+{
   constructor(private readonly _plaid: PlaidApi) {
     super();
   }
