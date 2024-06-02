@@ -1,0 +1,11 @@
+.category {
+  svg {
+    display: none;
+  }
+}
+
+.category:hover {
+  svg {
+    display: inline-block;
+  }
+}

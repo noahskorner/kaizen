@@ -10,4 +10,5 @@ export interface Environment extends Record<string, string> {
   FRONTEND_DOMAIN: string;
   PLAID_CLIENT_ID: string;
   PLAID_SECRET: string;
+  OPENAI_API_KEY: string;
 }

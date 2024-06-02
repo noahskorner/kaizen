@@ -28,6 +28,8 @@
     "@kaizen/user-client": "*",
     "@kaizen/wallet": "*",
     "@kaizen/wallet-client": "*",
+    "@kaizen/assist": "*",
+    "@kaizen/assist-client": "*",
     "@reduxjs/toolkit": "^2.2.2",
     "react": "^18.2.0",
     "react-plaid-link": "^3.5.1",

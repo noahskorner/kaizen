@@ -12,7 +12,7 @@ export class AssistController {
   ) {}
 
   public transcribe(req: Request, res: Response) {
-    const fileName = `${uuid()}.mp3`;
+    const fileName = `${uuid()}.wav`;
     const fileStream = fs.createWriteStream(fileName);
     req.pipe(fileStream);
 
