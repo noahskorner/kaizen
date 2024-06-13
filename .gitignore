@@ -46,3 +46,4 @@ apps/api/src/prisma/seed/local.json
 temp
 
 venv
+apps/api/src/env/.env.production

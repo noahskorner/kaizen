@@ -18,6 +18,10 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "api:docker:build": "docker build -t kaizen-ecr-repository .",
+    "api:docker:start": "docker run -p 3001:3001 kaizen-ecr-repository",
+    "api:docker:tag": "docker tag kaizen-ecr-repository:latest AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com/kaizen-ecr-repository:latest",
+    "api:docker:push": "docker push AWS_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com/kaizen-ecr-repository:latest",
     "clean": "npm run turbo:clean && find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' ) -exec rm -rf {} +",
     "dev": "turbo run dev",
     "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",

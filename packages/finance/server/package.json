@@ -16,7 +16,8 @@
     "@kaizen/core": "*",
     "@kaizen/core-server": "*",
     "@kaizen/finance": "*",
-    "plaid": "^18.0.0"
+    "plaid": "^18.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {}
 }

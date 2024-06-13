@@ -25,5 +25,9 @@ export const config = {
   API_CONTAINER_ID: 'kaizen-api-container',
   API_SECURITY_GROUP_ID: 'kaizen-api-security-group',
   API_SCALING_GROUP_CAPACITY_ID: 'kaizen-api-scaling-group-capacity',
-  API_SERVICE_ID: 'kaizen-api-service'
+  API_SERVICE_ID: 'kaizen-api-service',
+  API_LOAD_BALANCER_ID: 'kaizen-api-load-balancer',
+  API_TARGET_GROUP_ID: 'kaizen-api-target-group',
+  API_LISTENER_ID: 'kaizen-api-listener',
+  API_LOAD_BALANCER_DNS_ID: 'kaizen-api-load-balancer-dns'
 };

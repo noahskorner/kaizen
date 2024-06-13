@@ -25,6 +25,7 @@ export class DatabaseStack extends Stack {
       ec2.Port.tcp(config.DATABASE_PORT),
       'Allow postgres from self'
     );
+    // TODO: Allow postgres from specific IP addresses
 
     // Create the subnet group
     const subnetGroup = new rds.SubnetGroup(
@@ -61,7 +62,8 @@ export class DatabaseStack extends Stack {
           username: config.DATABASE_USERNAME
         }),
         generateStringKey: 'password',
-        passwordLength: 24
+        passwordLength: 24,
+        excludeCharacters: '/@" '
       }
     });
     const credentials = rds.Credentials.fromSecret(secret);
@@ -90,6 +92,8 @@ export class DatabaseStack extends Stack {
         // subnets: vpc.privateSubnets
         subnets: vpc.publicSubnets
       },
+      // TODO: Making this public to save on NAT Gateway costs
+      publiclyAccessible: true,
       removalPolicy: RemovalPolicy.DESTROY,
       storageEncrypted: true,
       parameterGroup: parameterGroup,
