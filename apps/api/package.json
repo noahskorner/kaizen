@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "main": "server.js",
+  "packageManager": "npm@10.2.2",
   "volta": {
     "node": "20.9.0",
     "npm": "10.2.2"
@@ -10,10 +11,6 @@
   "scripts": {
     "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
     "build": "tsc",
-    "docker:build": "./build.sh && docker build -t $npm_config_aws_repository_id .",
-    "docker:start": "docker run -p 3001:3001 $npm_config_aws_repository_id",
-    "docker:tag": "docker tag $npm_config_aws_repository_id:latest $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
-    "docker:push": "docker push $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
     "test": "npm run test:setup && dotenv -e ./src/env/.env.test jest && npm run test:teardown",
@@ -39,6 +36,8 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.596.0",
+    "@kaizen/assist-server": "*",
     "@kaizen/auth": "*",
     "@kaizen/auth-server": "*",
     "@kaizen/core": "*",
@@ -49,7 +48,6 @@
     "@kaizen/user-server": "*",
     "@kaizen/wallet": "*",
     "@kaizen/wallet-server": "*",
-    "@kaizen/assist-server": "*",
     "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
