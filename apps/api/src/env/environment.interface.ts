@@ -1,4 +1,4 @@
-export interface Environment extends Record<string, string> {
+export interface Environment {
   NODE_ENV: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
   ACCESS_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;
@@ -11,4 +11,9 @@ export interface Environment extends Record<string, string> {
   PLAID_CLIENT_ID: string;
   PLAID_SECRET: string;
   OPENAI_API_KEY: string;
+  AWS_REGION: string | null;
+  AWS_DATABASE_SECRET_ID: string | null;
+  AWS_DATABASE_HOST: string | null;
+  AWS_DATABASE_NAME: string | null;
+  AWS_DATABASE_PORT: string | null;
 }

@@ -33,17 +33,20 @@ export class ApiStack extends cdk.Stack {
     });
 
     // Create a task definition with the container
-    const taskDefinition = new ecs.Ec2TaskDefinition(
+    const taskDefinition = new ecs.FargateTaskDefinition(
       this,
-      config.API_TASK_DEFINITION_ID
+      config.API_TASK_DEFINITION_ID,
+      {
+        memoryLimitMiB: 512,
+        cpu: 256
+      }
     );
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
-      memoryLimitMiB: 512,
-      environment: environment,
+      environment: environment as unknown as Record<string, string>,
       portMappings: [
         {
-          containerPort: 3000
+          containerPort: 3001
         }
       ]
     });
@@ -73,10 +76,11 @@ export class ApiStack extends cdk.Stack {
     cluster.connections.addSecurityGroup(apiSecurityGroup);
     cluster.connections.addSecurityGroup(databaseSecurityGroup);
 
-    // Start the task on the instance
-    const ec2Service = new ecs.Ec2Service(this, config.API_SERVICE_ID, {
+    // Create a Fargate service
+    const fargateService = new ecs.FargateService(this, config.API_SERVICE_ID, {
       cluster,
-      taskDefinition
+      taskDefinition,
+      assignPublicIp: true
     });
 
     // Create an application load balancer
@@ -96,7 +100,7 @@ export class ApiStack extends cdk.Stack {
       {
         vpc: vpc,
         port: 80,
-        targetType: elbv2.TargetType.INSTANCE,
+        targetType: elbv2.TargetType.IP,
         protocol: elbv2.ApplicationProtocol.HTTP,
         healthCheck: {
           path: '/',
@@ -108,8 +112,8 @@ export class ApiStack extends cdk.Stack {
       }
     );
 
-    // Associate the target group with the EC2 service
-    targetGroup.addTarget(ec2Service);
+    // Associate the target group with the Fargate service
+    targetGroup.addTarget(fargateService);
 
     // Create a listener for the load balancer
     loadBalancer.addListener(config.API_LISTENER_ID, {
