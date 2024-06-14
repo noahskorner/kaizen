@@ -97,7 +97,5 @@ export const environment: Environment = {
   AWS_DATABASE_HOST: process.env.AWS_DATABASE_HOST ?? null,
   AWS_DATABASE_NAME: process.env.AWS_DATABASE_NAME ?? null,
   AWS_DATABASE_PORT: process.env.AWS_DATABASE_PORT ?? null,
-  AWS_DATABASE_WHITELIST: process.env.AWS_DATABASE_WHITELIST
-    ? JSON.parse(process.env.AWS_DATABASE_WHITELIST)
-    : null
+  AWS_DATABASE_WHITELIST: JSON.parse(process.env.AWS_DATABASE_WHITELIST ?? '[]')
 };
