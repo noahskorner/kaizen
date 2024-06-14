@@ -59,9 +59,10 @@ jobs:
           PLAID_SECRET: ${{ secrets.PLAID_SECRET }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_DATABASE_SECRET_ID: ${{ secrets.AWS_DATABASE_SECRET_ID }}
           AWS_DATABASE_HOST: ${{ secrets.AWS_DATABASE_HOST }}
           AWS_DATABASE_NAME: ${{ secrets.AWS_DATABASE_NAME }}
           AWS_DATABASE_PORT: ${{ secrets.AWS_DATABASE_PORT }}
+          AWS_DATABASE_WHITELIST: ${{ secrets.AWS_DATABASE_WHITELIST }}

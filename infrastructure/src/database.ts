@@ -4,6 +4,7 @@ import * as rds from 'aws-cdk-lib/aws-rds';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { config } from './config';
+import { environment } from '../../apps/api/src/env/environment';
 
 export class DatabaseStack extends Stack {
   public readonly securityGroup: ec2.SecurityGroup;
@@ -25,7 +26,14 @@ export class DatabaseStack extends Stack {
       ec2.Port.tcp(config.DATABASE_PORT),
       'Allow postgres from self'
     );
-    // TODO: Allow postgres from specific IP addresses
+
+    environment.AWS_DATABASE_WHITELIST?.forEach((ipAddress) => {
+      this.securityGroup.addIngressRule(
+        ec2.Peer.ipv4(ipAddress),
+        ec2.Port.tcp(config.DATABASE_PORT),
+        'Allow postgres from whitelisted IP'
+      );
+    });
 
     // Create the subnet group
     const subnetGroup = new rds.SubnetGroup(

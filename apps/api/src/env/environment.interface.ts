@@ -16,4 +16,5 @@ export interface Environment {
   AWS_DATABASE_HOST: string | null;
   AWS_DATABASE_NAME: string | null;
   AWS_DATABASE_PORT: string | null;
+  AWS_DATABASE_WHITELIST: string[] | null;
 }
