@@ -65,3 +65,4 @@ jobs:
           AWS_DATABASE_HOST: ${{ secrets.AWS_DATABASE_HOST }}
           AWS_DATABASE_NAME: ${{ secrets.AWS_DATABASE_NAME }}
           AWS_DATABASE_PORT: ${{ secrets.AWS_DATABASE_PORT }}
+          AWS_DATABASE_WHITELIST: ${{ secrets.AWS_DATABASE_WHITELIST }}
