@@ -2,6 +2,25 @@ import fs, { mkdirSync } from 'fs';
 import path from 'path';
 import { CreateFileChatCompletion } from './create-file-chat-completion';
 import { toFile } from './to-file';
+import { ChatCompletion } from 'openai/resources';
+
+const createCodeFile = (codeDir: string, response: ChatCompletion) => {
+  const file = toFile(response);
+  if (file == null) {
+    console.error('No file to create!');
+    return;
+  }
+  const fullPath = path.resolve(codeDir, file.name);
+  const directory = path.dirname(fullPath);
+
+  // Ensure the directory exists
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+
+  // Now that the directory is ensured to exist, write the file
+  fs.writeFileSync(fullPath, file.content);
+};
 
 export const createOutput = (
   requestId: string,
@@ -33,11 +52,6 @@ export const createOutput = (
     );
 
     // Create the code file
-    const file = toFile(response.response);
-    if (file == null) {
-      console.error('No file to create!');
-      return;
-    }
-    fs.writeFileSync(path.resolve(codeDir, file.name), file.content);
+    createCodeFile(codeDir, response.response);
   });
 };

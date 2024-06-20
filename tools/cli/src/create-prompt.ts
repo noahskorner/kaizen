@@ -10,7 +10,7 @@ export const createPrompt = (
   codeSchema: string
 ): ChatCompletionCreateParamsNonStreaming => {
   return {
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-4o',
     messages: [
       GLOBAL_PROMPT,
       createSchemaPrompt(task, fileSchema, codeSchema),
