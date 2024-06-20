@@ -47,3 +47,5 @@ temp
 
 venv
 apps/api/src/env/.env.production
+
+tools/cli/src/output
