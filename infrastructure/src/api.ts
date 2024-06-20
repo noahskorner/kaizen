@@ -43,7 +43,11 @@ export class ApiStack extends cdk.Stack {
     );
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
-      environment: environment as unknown as Record<string, string>,
+      environment: {
+        ...environment,
+        // TODO: Maybe we shouldn't set the environment here...
+        AWS_DATABASE_WHITELIST: ''
+      } as unknown as Record<string, string>,
       portMappings: [
         {
           containerPort: 3001
