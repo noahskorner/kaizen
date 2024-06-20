@@ -6,14 +6,23 @@ import { Construct } from 'constructs';
 import { config } from './config';
 import { environment } from '../../apps/api/src/env/environment';
 
-export class DatabaseStack extends Stack {
-  public readonly securityGroup: ec2.SecurityGroup;
+export interface DatabaseStackProps {
+  vpc: ec2.Vpc;
+  apiSecurityGroup: ec2.SecurityGroup;
+}
 
-  constructor(scope: Construct, id: string, vpc: ec2.Vpc) {
+export class DatabaseStack extends Stack {
+  public readonly secret: secretsmanager.ISecret;
+
+  constructor(
+    scope: Construct,
+    id: string,
+    { vpc, apiSecurityGroup }: DatabaseStackProps
+  ) {
     super(scope, id);
 
     // Create the security group
-    this.securityGroup = new ec2.SecurityGroup(
+    const dbSecurityGroup = new ec2.SecurityGroup(
       this,
       config.DATABASE_SECURITY_GROUP_ID,
       {
@@ -21,19 +30,29 @@ export class DatabaseStack extends Stack {
         allowAllOutbound: true
       }
     );
-    this.securityGroup.addIngressRule(
-      this.securityGroup,
+
+    // Allow the database to be accessed from itself
+    dbSecurityGroup.addIngressRule(
+      dbSecurityGroup,
       ec2.Port.tcp(config.DATABASE_PORT),
       'Allow postgres from self'
     );
 
+    // Allow the database to be accessed from whitelisted IPs
     environment.AWS_DATABASE_WHITELIST?.forEach((ipAddress) => {
-      this.securityGroup.addIngressRule(
+      dbSecurityGroup.addIngressRule(
         ec2.Peer.ipv4(ipAddress),
         ec2.Port.tcp(config.DATABASE_PORT),
         'Allow postgres from whitelisted IP'
       );
     });
+
+    // Allow the API to connect to the database
+    dbSecurityGroup.addIngressRule(
+      apiSecurityGroup,
+      ec2.Port.tcp(config.DATABASE_PORT),
+      'Allow postgres from API'
+    );
 
     // Create the subnet group
     const subnetGroup = new rds.SubnetGroup(
@@ -63,7 +82,7 @@ export class DatabaseStack extends Stack {
     );
 
     // Create a secret to store database credentials
-    const secret = new secretsmanager.Secret(this, config.DATABASE_SECRET_ID, {
+    this.secret = new secretsmanager.Secret(this, config.DATABASE_SECRET_ID, {
       secretName: config.DATABASE_SECRET_ID,
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
@@ -74,7 +93,7 @@ export class DatabaseStack extends Stack {
         excludeCharacters: '/@" '
       }
     });
-    const credentials = rds.Credentials.fromSecret(secret);
+    const credentials = rds.Credentials.fromSecret(this.secret);
 
     // Create the database
     const database = new rds.DatabaseInstance(this, config.DATABASE_ID, {
@@ -87,7 +106,7 @@ export class DatabaseStack extends Stack {
       }),
       backupRetention: Duration.days(0),
       allocatedStorage: 20,
-      securityGroups: [this.securityGroup],
+      securityGroups: [dbSecurityGroup],
       allowMajorVersionUpgrade: true,
       autoMinorVersionUpgrade: true,
       instanceType: ec2.InstanceType.of(
