@@ -94,8 +94,5 @@ export const environment: Environment = {
   OPENAI_API_KEY: OPENAI_API_KEY,
   AWS_REGION: process.env.AWS_REGION ?? null,
   AWS_DATABASE_SECRET_ID: process.env.AWS_DATABASE_SECRET_ID ?? null,
-  AWS_DATABASE_HOST: process.env.AWS_DATABASE_HOST ?? null,
-  AWS_DATABASE_NAME: process.env.AWS_DATABASE_NAME ?? null,
-  AWS_DATABASE_PORT: process.env.AWS_DATABASE_PORT ?? null,
   AWS_DATABASE_WHITELIST: JSON.parse(process.env.AWS_DATABASE_WHITELIST ?? '[]')
 };

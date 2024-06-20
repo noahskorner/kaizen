@@ -9,7 +9,7 @@ RUN npm install -g npm@10.2.2
 
 # Set working directory
 WORKDIR /app
-RUN npm install -g turbo
+RUN npm install -g turbo@latest
 COPY . .
 
 # Generate a partial monorepo with a pruned lockfile for a target workspace.

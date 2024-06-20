@@ -13,8 +13,5 @@ export interface Environment {
   OPENAI_API_KEY: string;
   AWS_REGION: string | null;
   AWS_DATABASE_SECRET_ID: string | null;
-  AWS_DATABASE_HOST: string | null;
-  AWS_DATABASE_NAME: string | null;
-  AWS_DATABASE_PORT: string | null;
   AWS_DATABASE_WHITELIST: string[] | null;
 }
