@@ -1,4 +1,4 @@
-# Build Custom AI Assistants For Free With Ollama
+# Build Custom AI Assistants For Free With Ollama!
 
 ## Introduction
 
@@ -79,7 +79,7 @@ Let's create a custom AI assitant to generate prisma models for us.
 
 ## 3. Make a request to the Ollama API
 
-Ollama provides a simple API to interact with your custom AI assistants. Let's make a request to the API to generate prisma models for us.
+Ollama provides a simple REST API to interact with your custom AI assistants. Let's make a request to the API to generate prisma models for us.
 
 ```bash
 curl http://localhost:11434/api/generate -d '{
