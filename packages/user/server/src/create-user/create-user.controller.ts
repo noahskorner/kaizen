@@ -1,12 +1,12 @@
 import { CreateUserRequest, ICreateUserService } from '@kaizen/user';
-import { Controller, RequestHandlerBuilder } from '@kaizen/core-server';
+import { Controller, EndpointBuilder } from '@kaizen/core-server';
 
 export class CreateUserController extends Controller {
   constructor(private readonly _createUserService: ICreateUserService) {
     super();
   }
 
-  public create = new RequestHandlerBuilder()
+  public create = new EndpointBuilder()
     .use(async (req, res, next) => {
       const request = req.body as CreateUserRequest;
       const response = await this._createUserService.create(request);

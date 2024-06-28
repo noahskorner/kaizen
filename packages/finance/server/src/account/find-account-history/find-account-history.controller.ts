@@ -1,6 +1,6 @@
 import {
-  FindTransactionsRequest,
-  IFindTransactionsService
+  FindAccountHistoryRequest,
+  IFindAccountHistoryService
 } from '@kaizen/finance';
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
@@ -9,10 +9,10 @@ import {
   Middleware
 } from '@kaizen/core-server';
 
-export class FindTransactionsController extends Controller {
+export class FindAccountHistoryController extends Controller {
   constructor(
     private readonly authenticate: Middleware,
-    private readonly findTransactionsService: IFindTransactionsService
+    private readonly findAccountHistoryService: IFindAccountHistoryService
   ) {
     super();
   }
@@ -21,33 +21,37 @@ export class FindTransactionsController extends Controller {
     this.authenticate(req, res, next)
   )
     .use(async (req, res, next) => {
-      const request: FindTransactionsRequest = {
+      const request: FindAccountHistoryRequest = {
         page: parseInt(req.query.page as string),
-        pageSize: req.query.pageSize
-          ? parseInt(req.query.pageSize as string)
-          : undefined,
-        startDate: req.query.startDate as string | undefined,
-        endDate: req.query.endDate as string | undefined
+        pageSize: parseInt(req.query.pageSize as string),
+        startDate: req.query.startDate as string,
+        endDate: req.query.endDate as string
       };
 
-      const response = await this.findTransactionsService.find({
+      const response = await this.findAccountHistoryService.find({
         ...request,
         userId: req.user.id
       });
 
       if (response.type == 'FAILURE') {
         if (
-          hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE) ||
+          hasErrorFor(response, ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE) ||
           hasErrorFor(
             response,
-            ErrorCode.FIND_TRANSACTIONS_INVALID_PAGE_SIZE
+            ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE_SIZE
           ) ||
           hasErrorFor(
             response,
-            ErrorCode.FIND_TRANSACTIONS_INVALID_START_DATE
+            ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_START_DATE
           ) ||
-          hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_END_DATE) ||
-          hasErrorFor(response, ErrorCode.FIND_TRANSACTIONS_INVALID_TIMEFRAME)
+          hasErrorFor(
+            response,
+            ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_END_DATE
+          ) ||
+          hasErrorFor(
+            response,
+            ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_TIMEFRAME
+          )
         ) {
           return this.badRequest(res, next, response);
         }

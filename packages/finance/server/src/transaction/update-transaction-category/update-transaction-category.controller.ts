@@ -1,6 +1,6 @@
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
-  AuthenticatedRequestHandlerBuilder,
+  AuthenticatedEndpointBuilder,
   Controller,
   Middleware
 } from '@kaizen/core-server';
@@ -19,7 +19,7 @@ export class UpdateTransactionCategoryController extends Controller {
     this.updateTransactionCategoryService = updateTransactionCategoryService;
   }
 
-  public update = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+  public update = new AuthenticatedEndpointBuilder((req, res, next) =>
     this.authenticate(req, res, next)
   )
     .use(async (req, res, next) => {

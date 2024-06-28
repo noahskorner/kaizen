@@ -1,6 +1,6 @@
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
-  AuthenticatedRequestHandlerBuilder,
+  AuthenticatedEndpointBuilder,
   Controller,
   Middleware
 } from '@kaizen/core-server';
@@ -18,7 +18,7 @@ export class CreateCategoryController extends Controller {
     super();
   }
 
-  public create = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+  public create = new AuthenticatedEndpointBuilder((req, res, next) =>
     this.authenticate(req, res, next)
   )
     .use(async (req, res, next) => {

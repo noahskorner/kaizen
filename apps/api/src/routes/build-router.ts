@@ -69,6 +69,14 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     )
   );
 
+  // /account
+  router.get(
+    '/account/history',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.findAccountHistoryController.find
+    )
+  );
+
   // /category
   router.post(
     '/category',

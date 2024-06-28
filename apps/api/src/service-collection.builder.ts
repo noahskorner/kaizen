@@ -29,7 +29,10 @@ import {
   SyncTransactionsService,
   UpdateTransactionCategoryController,
   UpdateTransactionCategoryRepository,
-  UpdateTransactionCategoryService
+  UpdateTransactionCategoryService,
+  FindAccountHistoryRepository,
+  FindAccountHistoryService,
+  FindAccountHistoryController
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -199,6 +202,9 @@ export class ServiceCollectionBuilder {
     const findCategoriesRepository = new FindCategoriesRepository(prisma);
     const createCategoryRepository = new CreateCategoryRepository(prisma);
     const getCategoryRepository = new GetCategoryRepository(prisma);
+    const findAccountHistoryRepository = new FindAccountHistoryRepository(
+      prisma
+    );
 
     // Providers
     const financialProvider =
@@ -297,6 +303,9 @@ export class ServiceCollectionBuilder {
       getCategoryRepository,
       createCategoryRepository
     );
+    const findAccountHistoryService = new FindAccountHistoryService(
+      findAccountHistoryRepository
+    );
 
     // Controllers
     const homeController =
@@ -348,6 +357,10 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       createCategoryService
     );
+    const findAccountHistoryController = new FindAccountHistoryController(
+      authMiddleware,
+      findAccountHistoryService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -377,6 +390,7 @@ export class ServiceCollectionBuilder {
       findCategoriesRepository,
       createCategoryRepository,
       getCategoryRepository,
+      findAccountHistoryRepository,
       // Services
       getUserService,
       createUserService,
@@ -395,6 +409,7 @@ export class ServiceCollectionBuilder {
       getWalletService,
       findCategoriesService,
       createCategoryService,
+      findAccountHistoryService,
       // Controllers
       homeController,
       createUserController,
@@ -409,7 +424,8 @@ export class ServiceCollectionBuilder {
       getWalletController,
       updateTransactionCategoryController,
       findCategoriesController,
-      createCategoryController
+      createCategoryController,
+      findAccountHistoryController
     };
 
     return serviceCollection;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserClient } from '@kaizen/user-client';
 import {
+  AccountHistoryGraph,
   InstitutionDispatch,
   TransactionsTable,
   selectAccountGroups,
@@ -35,7 +36,10 @@ export const FinancePage = () => {
 
   return (
     <div className="flex flex-row gap-8 p-4">
-      <div className="flex w-full max-w-2xl flex-col gap-2">
+      <div className="flex w-full">
+        <AccountHistoryGraph />
+      </div>
+      <div className="flex w-full flex-col gap-2">
         <div className="flex w-full items-center justify-between">
           <h3 className="text-2xl font-bold">Accounts</h3>
           <div className="flex gap-x-1">

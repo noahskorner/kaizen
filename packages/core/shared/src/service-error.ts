@@ -319,6 +319,47 @@ export interface TranscriptionProviderTranscriptionFailedError {
   };
 }
 
+export interface FindAccountHistoryInvalidPageError {
+  code: ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE;
+  params: {
+    userId: string;
+    page: number;
+  };
+}
+
+export interface FindAccountHistoryInvalidPageSizeError {
+  code: ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE_SIZE;
+  params: {
+    userId: string;
+    pageSize: number;
+  };
+}
+
+export interface FindAccountHistoryInvalidStartDateError {
+  code: ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_START_DATE;
+  params: {
+    userId: string;
+    startDate: string;
+  };
+}
+
+export interface FindAccountHistoryInvalidEndDateError {
+  code: ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_END_DATE;
+  params: {
+    userId: string;
+    endDate: string;
+  };
+}
+
+export interface FindAccountHistoryInvalidTimeframeError {
+  code: ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_TIMEFRAME;
+  params: {
+    userId: string;
+    startDate: string;
+    endDate: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -364,6 +405,11 @@ export interface BaseError {
     | ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS
     | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
     | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
+    | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE
+    | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE_SIZE
+    | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_START_DATE
+    | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_END_DATE
+    | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_TIMEFRAME
   >;
   params?: never;
 }
@@ -411,4 +457,9 @@ export type ServiceError =
   | UpdateTransactionCategoryNotFoundError
   | CreateCategoryMustProvideNameError
   | CreateCategoryAlreadyExistsError
-  | TranscriptionProviderTranscriptionFailedError;
+  | TranscriptionProviderTranscriptionFailedError
+  | FindAccountHistoryInvalidPageError
+  | FindAccountHistoryInvalidPageSizeError
+  | FindAccountHistoryInvalidStartDateError
+  | FindAccountHistoryInvalidEndDateError
+  | FindAccountHistoryInvalidTimeframeError;
