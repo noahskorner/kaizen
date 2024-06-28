@@ -3,9 +3,14 @@ import {
   ApiResponse,
   ErrorCode,
   Paginated,
+  ServiceSuccessResponse,
   toSearchParams
 } from '@kaizen/core';
-import { AccountSnapshot, FindAccountHistoryRequest } from '@kaizen/finance';
+import {
+  AccountSnapshot,
+  FindAccountHistoryRequest,
+  SnapshotAccountsCommand
+} from '@kaizen/finance';
 import { createAndLoginUser } from '../../../../test/create-and-login-user';
 import { expectError, createInstitution } from '../../../../test';
 import { buildTestBed } from '../../../../test/build-test-bed';
@@ -148,45 +153,38 @@ describe('/account/history', () => {
         expect(body.data.hits).toEqual([]);
       }
     });
-    // TODO: Write these tests. They aren't working because the accounts are snapshatted via event
-    // it('returns 200 and account history', async () => {
-    //   // Arrange
-    //   const mockItem = buildItem();
-    //   const mockAccount = buildAccount({
-    //     item_id: mockItem.item_id
-    //   });
-    //   const { testBed } = buildTestBed({
-    //     itemPublicTokenExchangeResponse: buildItemPublicTokenExchangeResponse({
-    //       item_id: mockItem.item_id
-    //     }),
-    //     accountsBalanceGetResponse: buildAccountsBalanceGetResponse({
-    //       accounts: [mockAccount]
-    //     })
-    //   });
-    //   const { authToken } = await createInstitution(testBed);
+    it('returns 200 and account history', async () => {
+      // Arrange
+      const { testBed, serviceCollection } = buildTestBed();
+      const { user, authToken } = await createInstitution(testBed);
+      const { data: accountSnapshots } =
+        (await serviceCollection.snapshotAccountsService.snapshot({
+          userId: user.id
+        } satisfies SnapshotAccountsCommand)) as unknown as ServiceSuccessResponse<
+          ApiResponse<AccountSnapshot[]>
+        >;
 
-    //   // Build request
-    //   const pageSize = 1;
-    //   const request: FindAccountHistoryRequest = {
-    //     page: 1,
-    //     pageSize: pageSize,
-    //     startDate: new Date(1998, 7, 30, 0, 0, 0).toISOString(),
-    //     endDate: new Date(1998, 7, 31, 0, 0, 0, 0).toISOString()
-    //   };
+      // Build request
+      const request: FindAccountHistoryRequest = {
+        page: 1,
+        pageSize: 1,
+        startDate: new Date(1998, 7, 30, 0, 0, 0).toISOString(),
+        endDate: new Date().toISOString()
+      };
 
-    //   // Act
-    //   const response = await supertest(testBed)
-    //     .get(`/account/history?${toSearchParams(request)}`)
-    //     .auth(authToken.accessToken, { type: 'bearer' });
-    //   const body = response.body as ApiResponse<Paginated<AccountSnapshot>>;
+      // Act
+      const response = await supertest(testBed)
+        .get(`/account/history?${toSearchParams(request)}`)
+        .auth(authToken.accessToken, { type: 'bearer' });
+      const body = response.body as ApiResponse<Paginated<AccountSnapshot>>;
 
-    //   // Asserts
-    //   expect(response.status).toBe(200);
-    //   expect(body.type).toBe('SUCCESS');
-    //   if (body.type === 'SUCCESS') {
-    //     expect(body.data.total).toBe(1);
-    //     expectAccountSnapshotToBeExternal(body.data.hits[0], mockAccount);
-    //   }
-    // });
+      // Asserts
+      expect(response.status).toBe(200);
+      expect(body.type).toBe('SUCCESS');
+      if (body.type === 'SUCCESS') {
+        expect(body.data.total).toBe(1);
+        expect(body.data.hits[0]).toEqual(accountSnapshots[0]);
+      }
+    });
   });
 });

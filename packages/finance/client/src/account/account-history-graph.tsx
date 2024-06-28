@@ -1,12 +1,15 @@
-import { AccountSnapshot } from '@kaizen/finance';
 import { useEffect, useState } from 'react';
 import { FindAccountHistoryClient } from './find-account-history.client';
-import { LineGraph } from '@kaizen/core-client';
+import { VerticalBarChart } from '@kaizen/core-client';
+
+interface AccountHistory {
+  snapshotId: string;
+  date: string;
+  total: number;
+}
 
 export const AccountHistoryGraph = () => {
-  const [accountSnapshots, setAccountSnapshots] = useState<AccountSnapshot[]>(
-    []
-  );
+  const [accountHistory, setAccountHistory] = useState<AccountHistory[]>([]);
 
   useEffect(() => {
     const loadAccountSnapshots = async () => {
@@ -24,7 +27,27 @@ export const AccountHistoryGraph = () => {
         // Handle error
         return;
       }
-      setAccountSnapshots(findAccountSnapshotsResponse.data.hits);
+
+      setAccountHistory(
+        findAccountSnapshotsResponse.data.hits
+          .reverse()
+          .reduce((groups, snapshot) => {
+            const { snapshotId, createdAt, available } = snapshot;
+            const existingGroup = groups.find(
+              (group) => group.snapshotId === snapshotId
+            );
+            if (existingGroup) {
+              existingGroup.total += available ?? 0;
+            } else {
+              groups.push({
+                snapshotId,
+                date: createdAt,
+                total: available ?? 0
+              });
+            }
+            return groups;
+          }, new Array<AccountHistory>())
+      );
     };
 
     loadAccountSnapshots();
@@ -32,12 +55,10 @@ export const AccountHistoryGraph = () => {
 
   return (
     <>
-      <LineGraph
-        data={accountSnapshots.map((x) => {
-          return { date: x.createdAt, value: x.available ?? 0 };
-        })}
-        width={500}
-        height={500}></LineGraph>
+      <VerticalBarChart
+        data={accountHistory.map((x) => {
+          return { date: x.date, netWorth: x.total };
+        })}></VerticalBarChart>
     </>
   );
 };
