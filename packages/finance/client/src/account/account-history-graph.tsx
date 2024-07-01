@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FindAccountHistoryClient } from './find-account-history.client';
-import { VerticalBarChart } from '@kaizen/core-client';
+import { LineChart } from '@kaizen/core-client';
 
 interface AccountHistory {
   snapshotId: string;
@@ -54,11 +54,10 @@ export const AccountHistoryGraph = () => {
   }, []);
 
   return (
-    <>
-      <VerticalBarChart
-        data={accountHistory.map((x) => {
-          return { date: x.date, netWorth: x.total };
-        })}></VerticalBarChart>
-    </>
+    <LineChart
+      data={accountHistory.map((x) => {
+        return { date: x.date, value: x.total };
+      })}
+    />
   );
 };

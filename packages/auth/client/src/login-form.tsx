@@ -80,7 +80,7 @@ export const LoginForm = ({
         </Button>
         <p className="text-sm">
           Need an account?&nbsp;
-          <Link to={registerHref} className="text-blue-800 hover:underline">
+          <Link to={registerHref} className="text-blue-400 hover:underline">
             Click here!
           </Link>
         </p>

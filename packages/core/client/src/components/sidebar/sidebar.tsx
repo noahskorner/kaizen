@@ -27,9 +27,26 @@ export const Sidebar = ({
   return (
     <div className="fixed h-full">
       <div
-        className={`hidden h-full w-full flex-col items-center justify-between bg-indigo-800 p-2 text-neutral-600 md:flex md:w-64`}>
+        className={`hidden h-full w-full flex-col items-center justify-between bg-neutral-700 px-3 py-2 text-neutral-600 md:flex md:w-64`}>
         <div className="flex w-full flex-col gap-y-4">
-          <div className="flex items-center gap-x-3 border-b border-indigo-700 pb-4">
+          <div>
+            <button className="rounded-lg p-2 text-neutral-50 hover:bg-neutral-600">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            </button>
+          </div>
+          {/* <div className="flex items-center gap-x-3 border-b border-neutral-700 pb-4">
             <Avatar />
             <div className="flex flex-col gap-y-1">
               <h6 className="text-sm font-medium text-neutral-50">
@@ -44,26 +61,23 @@ export const Sidebar = ({
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <SidebarButton
+          {/* <SidebarButton
             onClick={onAssistantClick}
             icon={<SparklesIcon />}
             label="Assistant"
-          />
-          {transcribedAudio && (
+          /> */}
+          {/* {transcribedAudio && (
             <p className="rounded-lg bg-indigo-500 p-4 text-xs text-neutral-100">
               {transcribedAudio}
             </p>
-          )}
-          <div className="w-full">
-            <p className="mb-2 text-xs text-neutral-100">Dashboards</p>
-            <SidebarButton
-              icon={<BankNotesIcon />}
-              href={financeHref}
-              label="Finances"
-            />
-          </div>
+          )} */}
+          <SidebarButton
+            icon={<BankNotesIcon />}
+            href={financeHref}
+            label="Finances"
+          />
         </div>
         <div className="w-full">
           <p className="mb-2 text-xs text-neutral-100">Account</p>

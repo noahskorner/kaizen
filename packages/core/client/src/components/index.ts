@@ -3,7 +3,7 @@ export * from './button-group';
 export * from './donut-chart';
 export * from './horizontal-bar-chart';
 export * from './input-errors';
-export * from './line-graph';
+export * from './line-chart';
 export * from './modal';
 export * from './sidebar';
 export * from './text-input';

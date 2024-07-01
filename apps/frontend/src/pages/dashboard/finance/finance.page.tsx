@@ -35,8 +35,17 @@ export const FinancePage = () => {
   };
 
   return (
-    <div className="flex flex-row gap-8 p-4">
-      <div className="flex w-full">
+    <div className="flex w-full flex-col gap-x-6 gap-y-6 p-4 lg:grid lg:grid-cols-12">
+      <div className="h-[60rem] w-full bg-red-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
+        Account History
+      </div>
+      <div className="h-[50rem] w-full bg-blue-500 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
+        Account Overview
+      </div>
+      <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
+        Transactions Table
+      </div>
+      {/* <div className="flex w-full">
         <AccountHistoryGraph />
       </div>
       <div className="flex w-full flex-col gap-2">
@@ -66,7 +75,7 @@ export const FinancePage = () => {
             <TransactionsTable />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
