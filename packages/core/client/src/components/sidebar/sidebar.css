@@ -1,0 +1,53 @@
+.slide-in-from-left {
+  animation: slide-in 0.3s ease-in-out forwards;
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-out-from-left {
+  animation: slide-out 0.3s ease-in-out forwards;
+}
+
+@keyframes slide-out {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.appear {
+  animation: appear 0s ease-in-out forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes appear {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+.disappear {
+  animation: disappear 0s ease-in-out forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes disappear {
+  from {
+    visibility: visible;
+  }
+  to {
+    visibility: hidden;
+  }
+}

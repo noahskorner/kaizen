@@ -6,14 +6,25 @@ import {
   institutionReducers,
   transactionReducers
 } from '@kaizen/finance-client';
-import { toastReducers } from '@kaizen/core-client';
+import {
+  screenReducers,
+  sidebarReducers,
+  toastReducers
+} from '@kaizen/core-client';
 import { effects } from './effects/effects';
 import { onLoginFailureDisplayToast } from './effects/on-login-failure-display-toast';
 import { onLoginLoadInstitutions } from './effects/on-login-load-institutions';
 import { onLoginLoadWallet } from './effects/on-login-load-wallet';
-import { onLoginLoadCategories, onLoginLoadTransactions } from './effects';
+import {
+  onDesktopShowSidebar,
+  onLoginLoadCategories,
+  onLoginLoadTransactions
+} from './effects';
+import { onMobileHideSidebar } from './effects/on-mobile-hide-sidebar';
 
 const rootReducer = combineReducers({
+  screen: screenReducers,
+  sidebar: sidebarReducers,
   wallet: walletReducers,
   auth: authReducers,
   institution: institutionReducers,
@@ -27,6 +38,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([effects])
 });
 
+effects.run(onMobileHideSidebar);
+effects.run(onDesktopShowSidebar);
 effects.run(onLoginFailureDisplayToast);
 effects.run(onLoginLoadWallet);
 effects.run(onLoginLoadInstitutions);
