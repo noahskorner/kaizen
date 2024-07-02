@@ -10,7 +10,7 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center lg:justify-center">
+    <div className="flex h-screen w-screen flex-col items-center pt-16">
       <CreateUserForm
         loginHref={paths.login}
         onRegisterSuccess={onRegisterSuccess}

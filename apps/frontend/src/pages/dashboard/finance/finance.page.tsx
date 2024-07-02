@@ -36,11 +36,14 @@ export const FinancePage = () => {
 
   return (
     <div className="flex w-full flex-col gap-x-6 gap-y-6 p-4 lg:grid lg:grid-cols-12">
-      <div className="h-[60rem] w-full bg-red-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
-        Account History
+      <div className="w-full lg:col-span-7 lg:h-[60rem] xl:col-span-8 2xl:col-span-9">
+        <AccountHistoryGraph />
       </div>
       <div className="h-[50rem] w-full bg-blue-500 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
-        Account Overview
+        <div className="flex gap-x-1">
+          <Button onClick={onSyncClick}>Sync</Button>
+          {linkToken && <PlaidLink linkToken={linkToken} />}
+        </div>
       </div>
       <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
         Transactions Table
@@ -51,10 +54,6 @@ export const FinancePage = () => {
       <div className="flex w-full flex-col gap-2">
         <div className="flex w-full items-center justify-between">
           <h3 className="text-2xl font-bold">Accounts</h3>
-          <div className="flex gap-x-1">
-            <Button onClick={onSyncClick}>Sync</Button>
-            {linkToken && <PlaidLink linkToken={linkToken} />}
-          </div>
         </div>
         {Object.entries(accountGroups).map(
           ([accountType, accountGroup], index) => {

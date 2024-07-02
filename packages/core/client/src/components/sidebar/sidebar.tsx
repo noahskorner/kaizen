@@ -33,7 +33,7 @@ export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
   return (
     <>
       <div
-        className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed h-full`}>
+        className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
         <div
           className={`flex h-full w-64 flex-col items-center justify-between bg-neutral-700 px-3 py-2 text-neutral-600`}>
           <div className="flex w-full flex-col gap-y-4">

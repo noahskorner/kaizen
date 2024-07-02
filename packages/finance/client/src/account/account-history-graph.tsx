@@ -1,63 +1,178 @@
 import { useEffect, useState } from 'react';
 import { FindAccountHistoryClient } from './find-account-history.client';
 import { LineChart } from '@kaizen/core-client';
+import { selectNetworth } from '../institution';
+import { useSelector } from 'react-redux';
+import { formatCurrency } from '../format-currency';
 
-interface AccountHistory {
+const DEFAULT_TIMEFRAME = '1M';
+
+interface NetworthHistory {
   snapshotId: string;
   date: string;
-  total: number;
+  value: number;
 }
 
+type Timeframe = '1W' | '1M' | '3M' | 'YTD' | 'ALL';
+
 export const AccountHistoryGraph = () => {
-  const [accountHistory, setAccountHistory] = useState<AccountHistory[]>([]);
+  const [currentTimeframe, setCurrentTimeframe] =
+    useState<Timeframe>(DEFAULT_TIMEFRAME);
+  const [networthHistory, setNetworthHistory] = useState<NetworthHistory[]>([]);
+  const networth = useSelector(selectNetworth);
+
+  const percentChange = calculatePercentChange(networthHistory);
+
+  const difference =
+    networthHistory.length < 1
+      ? 0
+      : networthHistory[networthHistory.length - 1].value -
+        networthHistory[0].value;
+
+  const loadNetworthHistory = async (timeframe: Timeframe) => {
+    const { startDate, endDate } = getTimeframe(timeframe);
+
+    const findAccountSnapshotsResponse = await FindAccountHistoryClient.find({
+      page: 1,
+      pageSize: 250000,
+      startDate: startDate,
+      endDate: endDate
+    });
+
+    if (findAccountSnapshotsResponse.type === 'FAILURE') {
+      // TODO: Handle error
+      return;
+    }
+
+    setNetworthHistory(
+      findAccountSnapshotsResponse.data.hits
+        .reverse()
+        .reduce((groups, snapshot) => {
+          const { snapshotId, createdAt, available } = snapshot;
+          const existingGroup = groups.find(
+            (group) => group.snapshotId === snapshotId
+          );
+          if (existingGroup) {
+            existingGroup.value += available ?? 0;
+          } else {
+            groups.push({
+              snapshotId,
+              date: createdAt,
+              value: available ?? 0
+            });
+          }
+          return groups;
+        }, new Array<NetworthHistory>())
+    );
+  };
+
+  const onTimeframeClick = (timeframe: Timeframe) => {
+    setCurrentTimeframe(timeframe);
+  };
+
+  const getLabel = (timeframe: Timeframe) => {
+    switch (timeframe) {
+      case '1W':
+        return 'Last week';
+      case '1M':
+        return 'Last month';
+      case '3M':
+        return 'Last 3 months';
+      case 'YTD':
+        return 'Year-to-date';
+      case 'ALL':
+        return 'All time';
+      default:
+        return '';
+    }
+  };
 
   useEffect(() => {
-    const loadAccountSnapshots = async () => {
-      // TODO: Need to do this in a batch depending on timeframe selected
-      const findAccountSnapshotsResponse = await FindAccountHistoryClient.find({
-        page: 1,
-        pageSize: 25,
-        startDate: new Date(1998, 7, 30).toISOString(),
-        endDate: new Date(2050, 7, 30).toISOString()
-      });
-
-      console.log(findAccountSnapshotsResponse);
-
-      if (findAccountSnapshotsResponse.type === 'FAILURE') {
-        // Handle error
-        return;
-      }
-
-      setAccountHistory(
-        findAccountSnapshotsResponse.data.hits
-          .reverse()
-          .reduce((groups, snapshot) => {
-            const { snapshotId, createdAt, available } = snapshot;
-            const existingGroup = groups.find(
-              (group) => group.snapshotId === snapshotId
-            );
-            if (existingGroup) {
-              existingGroup.total += available ?? 0;
-            } else {
-              groups.push({
-                snapshotId,
-                date: createdAt,
-                total: available ?? 0
-              });
-            }
-            return groups;
-          }, new Array<AccountHistory>())
-      );
-    };
-
-    loadAccountSnapshots();
-  }, []);
+    loadNetworthHistory(currentTimeframe);
+  }, [currentTimeframe]);
 
   return (
-    <LineChart
-      data={accountHistory.map((x) => {
-        return { date: x.date, value: x.total };
-      })}
-    />
+    <div className="flex h-full w-full flex-col rounded-lg p-4 text-white">
+      <div>
+        <h2 className="mb-1 text-2xl font-bold">NETWORTH</h2>
+        <p className="mb-1 text-4xl font-bold">
+          {formatCurrency(networth, 'USD')}
+        </p>
+        <div className="mb-4 flex items-center">
+          <span className="mr-4 text-green-500">
+            {difference > 0 ? '+' : ''}
+            {formatCurrency(difference, 'USD')} ({percentChange > 0 ? '+' : '-'}
+            ${Math.abs(percentChange)}%) {getLabel(currentTimeframe)}
+          </span>
+        </div>
+      </div>
+      <LineChart data={networthHistory} />
+      <div className="mt-4 flex w-full items-start justify-start gap-x-4 border-b border-neutral-500 pb-4">
+        {['1W', '1M', '3M', 'YTD', 'ALL'].map((timeframe) => (
+          <button
+            key={timeframe}
+            onClick={() => onTimeframeClick(timeframe as Timeframe)}
+            className={`${currentTimeframe === timeframe ? 'border-b-2 border-green-500 text-green-500' : ''} font-bold hover:text-neutral-200`}>
+            {timeframe}
+          </button>
+        ))}
+      </div>
+    </div>
   );
+};
+
+const getTimeframe = (timeframe: Timeframe) => {
+  const currentDate = new Date();
+  let startDate: Date;
+  let endDate: Date;
+
+  switch (timeframe) {
+    case '1W':
+      startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+      endDate = currentDate;
+      break;
+    case '1M':
+      startDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - 1,
+        currentDate.getDate()
+      );
+      endDate = currentDate;
+      break;
+    case '3M':
+      startDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - 3,
+        currentDate.getDate()
+      );
+      endDate = currentDate;
+      break;
+    case 'YTD':
+      startDate = new Date(currentDate.getFullYear(), 0, 1);
+      endDate = currentDate;
+      break;
+    case 'ALL':
+      startDate = new Date(0);
+      endDate = currentDate;
+      break;
+    default:
+      startDate = new Date();
+      endDate = new Date();
+      break;
+  }
+
+  return { startDate: startDate.toISOString(), endDate: endDate.toISOString() };
+};
+
+const calculatePercentChange = (networthHistory: NetworthHistory[]) => {
+  if (networthHistory.length < 2) {
+    return 0;
+  }
+
+  const startValue = networthHistory[0].value;
+  const endValue = networthHistory[networthHistory.length - 1].value;
+  const change = endValue - startValue;
+  const percentChange = (change / Math.abs(startValue)) * 100;
+
+  return parseFloat(percentChange.toFixed(2));
 };

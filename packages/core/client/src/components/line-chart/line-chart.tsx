@@ -1,13 +1,12 @@
 import {
   LineChart as RechartsLineChart,
   Line,
-  XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  ReferenceLine
 } from 'recharts';
 
-// Define the data structure
 interface DataPoint {
   date: string;
   value: number;
@@ -15,47 +14,43 @@ interface DataPoint {
 
 export const LineChart = ({ data }: { data: DataPoint[] }) => {
   return (
-    <div className="w-full rounded-lg bg-black p-4 text-white">
-      <h2 className="mb-1 text-2xl font-bold">Lululemon</h2>
-      <p className="mb-1 text-4xl font-bold">$425.56</p>
-      <div className="mb-4 flex items-center">
-        <span className="mr-4 text-green-500">+$4.87 (+1.16%) Today</span>
-        <span className="text-gray-400">-$0.02 (-0.00%) After Hours</span>
-      </div>
-      <ResponsiveContainer width="100%" height={200}>
-        <RechartsLineChart data={data}>
-          <XAxis
-            dataKey="date"
-            axisLine={false}
-            tick={{ fill: '#fff' }}
-            className="text-xs"
-          />
-          <YAxis hide={true} domain={['auto', 'auto']} />
-          <Tooltip
-            content={<>Hello world</>}
-            contentStyle={{ backgroundColor: '#333', border: 'none' }}
-            itemStyle={{ color: '#fff' }}></Tooltip>
-          <Line
-            type="monotone"
-            dataKey="value"
-            stroke="#22c55e"
-            strokeWidth={2}
-            dot={false}
-          />
-        </RechartsLineChart>
-      </ResponsiveContainer>
-      <div className="mt-2 flex justify-between">
-        {data.map((point) => (
-          <button
-            key={point.date}
-            className="text-xs text-gray-400 hover:text-white">
-            {point.date}
-          </button>
-        ))}
-        <button className="text-xs text-gray-400 hover:text-white">
-          Expand
-        </button>
-      </div>
-    </div>
+    <ResponsiveContainer width="100%" height="100%">
+      <RechartsLineChart data={data}>
+        <YAxis hide={true} domain={['auto', 'auto']} />
+        <Tooltip
+          animationDuration={0}
+          content={({ payload }) => {
+            if (payload && payload.length) {
+              return (
+                <span className="rounded-md bg-neutral-500 px-4 py-2 text-xs text-neutral-50">
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(payload[0].value as number)}
+                </span>
+              );
+            }
+
+            // Return empty fragment or any other placeholder when there's no payload
+            return <></>;
+          }}
+          contentStyle={{ backgroundColor: '#333', border: 'none' }}
+          itemStyle={{ color: '#fff' }}
+        />
+        <Line
+          type="linear"
+          dataKey="value"
+          stroke="#22c55e"
+          strokeWidth={2}
+          dot={false}
+          activeDot={false}
+        />
+        <ReferenceLine
+          y={Math.max(...data.map((item) => item.value))}
+          stroke="#333"
+          strokeDasharray="3 3"
+        />
+      </RechartsLineChart>
+    </ResponsiveContainer>
   );
 };

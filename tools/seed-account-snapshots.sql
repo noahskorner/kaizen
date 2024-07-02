@@ -1,10 +1,16 @@
-DO $ $ DECLARE i INT;
+DELETE FROM account_snapshot;
+
+DO $$ DECLARE i INT;
 
 start_date TIMESTAMP := NOW();
 
-account_id TEXT := 'a314e4fd-adbf-4ae8-b67a-ad7fbade980a';
+account_id TEXT := '152e9299-9d16-4702-bddc-91cac9e59a8b';
+account_external_id TEXT := 'bLWMxopa7qI58PlQovvyu641AWza4ncm6P984';
+base_value INT := 1000;
+increment INT := 10;
+max_randomness INT := 100;
 
--- Replace with actual account ID
+-- Max randomness added to each increment
 BEGIN FOR i IN 1..100 LOOP
 INSERT INTO
     public.account_snapshot (
@@ -28,15 +34,12 @@ INSERT INTO
 VALUES
     (
         gen_random_uuid(),
-        -- or use a UUID generation function
         start_date + (i || ' hours') :: INTERVAL,
         gen_random_uuid(),
         account_id,
-        'KBey8XEzo1HJejNp83JkSx1eoeDnevFRoy1qe',
-        1000 + (i * 10),
-        -- gradually increasing available balance
-        1000 + (i * 10),
-        -- same for current balance for simplicity
+        account_external_id,
+        base_value + (i * increment) + (random() * max_randomness) :: INT,
+        base_value + (i * increment) + (random() * max_randomness) :: INT,
         5000,
         'USD',
         NULL,
@@ -50,9 +53,4 @@ VALUES
 
 END LOOP;
 
-END $ $;
-
-SELECT
-    *
-FROM
-    account;
+END $$;
