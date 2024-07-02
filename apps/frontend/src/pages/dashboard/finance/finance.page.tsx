@@ -3,15 +3,16 @@ import { UserClient } from '@kaizen/user-client';
 import {
   AccountHistoryGraph,
   InstitutionDispatch,
-  TransactionsTable,
+  // TransactionsTable,
+  formatCurrency,
   selectAccountGroups,
   syncInstitutions
 } from '@kaizen/finance-client';
 import { PlaidLink } from './plaid-link';
 import { Button } from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { AccountGroupCard } from './account-group';
-import { AccountType } from '@kaizen/finance';
+// import { AccountGroupCard } from './account-group';
+// import { AccountType } from '@kaizen/finance';
 
 export const FinancePage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -39,13 +40,28 @@ export const FinancePage = () => {
       <div className="w-full lg:col-span-7 lg:h-[60rem] xl:col-span-8 2xl:col-span-9">
         <AccountHistoryGraph />
       </div>
-      <div className="h-[50rem] w-full bg-blue-500 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
+      <div className="h-[50rem] w-full rounded-lg border border-neutral-600 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
+        <div className="border-b border-neutral-600 p-4 ">
+          <h2 className="font-bold">Accounts</h2>
+        </div>
+        {Object.entries(accountGroups).map(([accountType, accountGroup]) => {
+          return (
+            <div
+              key={accountType}
+              className="flex items-center justify-between p-4 text-sm">
+              <h3 className="font-medium uppercase">{accountType}</h3>
+              <span className="font-normal">
+                {formatCurrency(accountGroup.available, 'USD')}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
         <div className="flex gap-x-1">
           <Button onClick={onSyncClick}>Sync</Button>
           {linkToken && <PlaidLink linkToken={linkToken} />}
         </div>
-      </div>
-      <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
         Transactions Table
       </div>
       {/* <div className="flex w-full">

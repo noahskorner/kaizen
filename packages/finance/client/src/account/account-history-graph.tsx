@@ -98,12 +98,12 @@ export const AccountHistoryGraph = () => {
         stroke={`${positive ? '#22c55e' : '#ef4444'}`}
         data={networthHistory}
       />
-      <div className="mt-4 flex w-full items-start justify-start gap-x-4 border-b border-neutral-500 pb-4">
+      <div className="mt-4 flex w-full items-center justify-start gap-x-4 border-b border-neutral-500 pb-4">
         {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? `${positive ? ' border-green-500 text-green-500' : 'border-red-500 text-red-500'} border-b-2` : ''} font-bold hover:text-neutral-200`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-700 text-neutral-50' : 'bg-red-700 text-neutral-50'} rounded-lg px-2 py-1` : ''} text-xs font-semibold hover:text-neutral-200`}>
             {timeframe}
           </button>
         ))}
