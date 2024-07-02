@@ -74,7 +74,7 @@ export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
       </div>
       <button
         onClick={toggleSidebar}
-        className={`${!showSidebar ? 'appear' : 'disappear'} fixed left-3 top-2 rounded-lg bg-neutral-700 p-2 text-neutral-50 hover:bg-neutral-800`}>
+        className={`${!showSidebar ? 'appear' : 'disappear'} fixed left-3 top-2 rounded-lg bg-neutral-600 p-2 text-neutral-50 hover:bg-neutral-800`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

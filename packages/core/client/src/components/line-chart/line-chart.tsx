@@ -12,7 +12,12 @@ interface DataPoint {
   value: number;
 }
 
-export const LineChart = ({ data }: { data: DataPoint[] }) => {
+interface LineChartProps {
+  stroke: string;
+  data: DataPoint[];
+}
+
+export const LineChart = ({ stroke, data }: LineChartProps) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RechartsLineChart data={data}>
@@ -40,7 +45,7 @@ export const LineChart = ({ data }: { data: DataPoint[] }) => {
         <Line
           type="linear"
           dataKey="value"
-          stroke="#22c55e"
+          stroke={stroke}
           strokeWidth={2}
           dot={false}
           activeDot={false}

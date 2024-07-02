@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FindAccountHistoryClient } from './find-account-history.client';
 import { LineChart } from '@kaizen/core-client';
 import { selectNetworth } from '../institution';
@@ -14,6 +14,7 @@ interface NetworthHistory {
 }
 
 type Timeframe = '1W' | '1M' | '3M' | 'YTD' | 'ALL';
+const TIMEFRAMES = ['1W', '1M', '3M', 'YTD', 'ALL'];
 
 export const AccountHistoryGraph = () => {
   const [currentTimeframe, setCurrentTimeframe] =
@@ -21,13 +22,15 @@ export const AccountHistoryGraph = () => {
   const [networthHistory, setNetworthHistory] = useState<NetworthHistory[]>([]);
   const networth = useSelector(selectNetworth);
 
-  const percentChange = calculatePercentChange(networthHistory);
+  const percentChange = useMemo(() => {
+    return calculatePercentChange(networthHistory);
+  }, [networthHistory]);
 
-  const difference =
-    networthHistory.length < 1
-      ? 0
-      : networthHistory[networthHistory.length - 1].value -
-        networthHistory[0].value;
+  const difference = useMemo(() => {
+    return calculateDifference(networthHistory);
+  }, [networthHistory]);
+
+  const positive = difference > 0;
 
   const loadNetworthHistory = async (timeframe: Timeframe) => {
     const { startDate, endDate } = getTimeframe(timeframe);
@@ -70,23 +73,6 @@ export const AccountHistoryGraph = () => {
     setCurrentTimeframe(timeframe);
   };
 
-  const getLabel = (timeframe: Timeframe) => {
-    switch (timeframe) {
-      case '1W':
-        return 'Last week';
-      case '1M':
-        return 'Last month';
-      case '3M':
-        return 'Last 3 months';
-      case 'YTD':
-        return 'Year-to-date';
-      case 'ALL':
-        return 'All time';
-      default:
-        return '';
-    }
-  };
-
   useEffect(() => {
     loadNetworthHistory(currentTimeframe);
   }, [currentTimeframe]);
@@ -99,20 +85,25 @@ export const AccountHistoryGraph = () => {
           {formatCurrency(networth, 'USD')}
         </p>
         <div className="mb-4 flex items-center">
-          <span className="mr-4 text-green-500">
-            {difference > 0 ? '+' : ''}
-            {formatCurrency(difference, 'USD')} ({percentChange > 0 ? '+' : '-'}
-            ${Math.abs(percentChange)}%) {getLabel(currentTimeframe)}
+          <span
+            className={`${positive ? 'text-green-500' : 'text-red-500'} mr-4`}>
+            {positive ? '+' : '-'}
+            {formatCurrency(Math.abs(difference), 'USD')} (
+            {positive ? '+' : '-'}${Math.abs(percentChange)}%)&nbsp;
+            {getLabel(currentTimeframe)}
           </span>
         </div>
       </div>
-      <LineChart data={networthHistory} />
+      <LineChart
+        stroke={`${positive ? '#22c55e' : '#ef4444'}`}
+        data={networthHistory}
+      />
       <div className="mt-4 flex w-full items-start justify-start gap-x-4 border-b border-neutral-500 pb-4">
-        {['1W', '1M', '3M', 'YTD', 'ALL'].map((timeframe) => (
+        {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? 'border-b-2 border-green-500 text-green-500' : ''} font-bold hover:text-neutral-200`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' border-green-500 text-green-500' : 'border-red-500 text-red-500'} border-b-2` : ''} font-bold hover:text-neutral-200`}>
             {timeframe}
           </button>
         ))}
@@ -175,4 +166,28 @@ const calculatePercentChange = (networthHistory: NetworthHistory[]) => {
   const percentChange = (change / Math.abs(startValue)) * 100;
 
   return parseFloat(percentChange.toFixed(2));
+};
+
+const calculateDifference = (networthHistory: NetworthHistory[]) => {
+  return networthHistory.length < 1
+    ? 0
+    : networthHistory[networthHistory.length - 1].value -
+        networthHistory[0].value;
+};
+
+const getLabel = (timeframe: Timeframe) => {
+  switch (timeframe) {
+    case '1W':
+      return 'Last week';
+    case '1M':
+      return 'Last month';
+    case '3M':
+      return 'Last 3 months';
+    case 'YTD':
+      return 'Year-to-date';
+    case 'ALL':
+      return 'All time';
+    default:
+      return '';
+  }
 };

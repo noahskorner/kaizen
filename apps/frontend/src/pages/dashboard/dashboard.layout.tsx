@@ -67,7 +67,8 @@ export const DashboardLayout = () => {
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />
-        <div className={`${showSidebar ? 'md:ml-64' : ''} w-full p-2`}>
+        <div
+          className={`${showSidebar ? 'md:ml-64' : ''} w-full px-2 py-8 pb-2`}>
           <Outlet />
         </div>
       </div>
