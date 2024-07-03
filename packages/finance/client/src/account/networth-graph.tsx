@@ -30,7 +30,7 @@ export const NetworthGraph = () => {
     return calculateDifference(networthHistory);
   }, [networthHistory]);
 
-  const positive = difference > 0;
+  const positive = difference >= 0;
 
   const loadNetworthHistory = async (timeframe: Timeframe) => {
     const { startDate, endDate } = getTimeframe(timeframe);
@@ -80,10 +80,9 @@ export const NetworthGraph = () => {
   return (
     <div className="flex h-full w-full flex-col rounded-lg p-4 text-white">
       <div>
-        <h2 className="mb-1 text-2xl font-bold">NETWORTH</h2>
-        <p className="mb-1 text-4xl font-bold">
+        <h2 className="mb-1 text-4xl font-bold">
           {formatCurrency(networth, 'USD')}
-        </p>
+        </h2>
         <div className="mb-4 flex items-center">
           <span
             className={`${positive ? 'text-green-500' : 'text-red-500'} mr-4`}>

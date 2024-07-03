@@ -1,3 +1,4 @@
+import { SimpleLineChart } from '@kaizen/core-client';
 import { AccountType } from '@kaizen/finance';
 import { AccountGroup, formatCurrency } from '@kaizen/finance-client';
 import { useState } from 'react';
@@ -15,48 +16,47 @@ export const AccountGroupCard = ({
 }: AccountGroupProps) => {
   const [showAccounts, setShowAccounts] = useState(initialShowAccounts);
 
-  const onCardClick = () => {
+  const onGroupClick = () => {
     setShowAccounts(!showAccounts);
   };
 
   return (
-    <div className="w-full gap-x-2 rounded-lg border shadow-sm hover:bg-gray-50">
+    <div className="flex w-full flex-col">
       <button
-        onClick={onCardClick}
-        className="flex w-full items-center justify-between px-4 py-6">
-        <h6 className="font-semibold capitalize">{accountType}</h6>
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-sm">
-            {formatCurrency(accountGroup.current, 'USD')}
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-4 w-4">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m19.5 8.25-7.5 7.5-7.5-7.5"
-            />
-          </svg>
+        onClick={onGroupClick}
+        className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-neutral-600">
+        <div className="flex w-full max-w-48 gap-x-2">
+          <h3 className="w-32 font-semibold capitalize">{accountType}</h3>
+          <SimpleLineChart
+            stroke={'#22c55e'}
+            data={[
+              { date: '2023-01-01', value: 100 },
+              { date: '2023-01-02', value: 1500 },
+              { date: '2023-01-03', value: 130 },
+              { date: '2023-01-04', value: 1700 },
+              { date: '2023-01-05', value: 160 },
+              { date: '2023-01-06', value: 1800 },
+              { date: '2023-01-07', value: 200 }
+            ]}
+          />
         </div>
+        <span className="font-normal">
+          {formatCurrency(accountGroup.available, 'USD')}
+        </span>
       </button>
       {showAccounts && (
-        <div className="flex w-full flex-col gap-4 px-4 pb-6">
+        <div className="flex w-full flex-col px-2">
           {accountGroup.accounts.map((account) => {
             return (
               <div
-                className="flex w-full items-center justify-between border-b pb-1"
+                className="flex w-full items-center justify-between p-4"
                 key={account.id}>
-                <span className="text-sm">
-                  {account.name}&nbsp;
-                  <span className="text-xs text-gray-500">
+                <div className="flex flex-col gap-y-1">
+                  <span className="text-sm">{account.name}&nbsp;</span>
+                  <span className="text-xs text-neutral-300">
                     (*{account.mask})
                   </span>
-                </span>
+                </div>
                 <span className="text-sm">
                   {formatCurrency(account.current ?? 0, 'USD')}
                 </span>

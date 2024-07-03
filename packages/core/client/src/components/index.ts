@@ -6,3 +6,4 @@ export * from './modal';
 export * from './sidebar';
 export * from './text-input';
 export * from './toast-manager';
+export * from './simple-line-chart';

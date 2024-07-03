@@ -52,7 +52,7 @@ export const LineChart = ({ stroke, data }: LineChartProps) => {
         />
         <ReferenceLine
           y={Math.max(...data.map((item) => item.value))}
-          stroke="#333"
+          stroke="#ccc"
           strokeDasharray="3 3"
         />
       </RechartsLineChart>
