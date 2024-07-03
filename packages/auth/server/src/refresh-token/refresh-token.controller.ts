@@ -1,7 +1,7 @@
 import { REFRESH_TOKEN_COOKIE_KEY } from '../refresh-token-cookie-key';
 import { IRefreshTokenService, RefreshTokenCommand } from '@kaizen/auth';
 import { AuthController } from '../auth.controller';
-import { RequestHandlerBuilder } from '@kaizen/core-server';
+import { EndpointBuilder } from '@kaizen/core-server';
 
 export class RefreshTokenController extends AuthController {
   constructor(
@@ -11,7 +11,7 @@ export class RefreshTokenController extends AuthController {
     super(NODE_ENV);
   }
 
-  public refreshToken = new RequestHandlerBuilder()
+  public refreshToken = new EndpointBuilder()
     .use(async (req, res, next) => {
       const refreshToken: string = req.cookies[REFRESH_TOKEN_COOKIE_KEY];
       const command: RefreshTokenCommand = { token: refreshToken };

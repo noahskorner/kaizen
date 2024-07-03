@@ -2,9 +2,9 @@ import { ApiFailureResponse, ErrorCode } from '@kaizen/core';
 import { Middleware } from './middleware';
 import { MiddlewareRequest } from './middleware-request';
 import { MiddlewareResponse } from './middleware-response';
-import { RequestHandler } from './request-handler';
+import { Endpoint } from './endpoint';
 
-export class RequestHandlerBuilder {
+export class EndpointBuilder {
   protected middleware: Middleware[];
 
   constructor() {
@@ -16,7 +16,7 @@ export class RequestHandlerBuilder {
     return this;
   }
 
-  public build(): RequestHandler {
+  public build(): Endpoint {
     return (req: MiddlewareRequest) =>
       new Promise((resolve) => {
         let index = 0;

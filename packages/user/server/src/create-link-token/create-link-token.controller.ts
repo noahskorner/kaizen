@@ -1,7 +1,7 @@
 import { CreateLinkTokenRequest, ICreateLinkTokenService } from '@kaizen/user';
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
-  AuthenticatedRequestHandlerBuilder,
+  AuthenticatedEndpointBuilder,
   Controller,
   Middleware
 } from '@kaizen/core-server';
@@ -14,7 +14,7 @@ export class CreateLinkTokenController extends Controller {
     super();
   }
 
-  public create = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+  public create = new AuthenticatedEndpointBuilder((req, res, next) =>
     this._authenticate(req, res, next)
   )
     .use(async (req, res, next) => {

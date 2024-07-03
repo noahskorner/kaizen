@@ -3,7 +3,7 @@ import {
   SyncInstitutionsCommand
 } from '@kaizen/finance';
 import {
-  AuthenticatedRequestHandlerBuilder,
+  AuthenticatedEndpointBuilder,
   Controller,
   Middleware
 } from '@kaizen/core-server';
@@ -16,7 +16,7 @@ export class SyncInstitutionsController extends Controller {
     super();
   }
 
-  public sync = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+  public sync = new AuthenticatedEndpointBuilder((req, res, next) =>
     this.authenticate(req, res, next)
   )
     .use(async (req, res, next) => {

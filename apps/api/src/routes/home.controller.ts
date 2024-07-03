@@ -1,8 +1,8 @@
 import { ServiceSuccessResponse } from '@kaizen/core';
-import { Controller, RequestHandlerBuilder } from '@kaizen/core-server';
+import { Controller, EndpointBuilder } from '@kaizen/core-server';
 
 export class HomeController extends Controller {
-  public find = new RequestHandlerBuilder()
+  public find = new EndpointBuilder()
     .use((req, res, next) => {
       const response: ServiceSuccessResponse<string> = {
         type: 'SUCCESS',

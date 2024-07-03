@@ -4,7 +4,7 @@ import {
 } from '@kaizen/finance';
 import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
-  AuthenticatedRequestHandlerBuilder,
+  AuthenticatedEndpointBuilder,
   Controller,
   Middleware
 } from '@kaizen/core-server';
@@ -17,7 +17,7 @@ export class FindTransactionsController extends Controller {
     super();
   }
 
-  public find = new AuthenticatedRequestHandlerBuilder((req, res, next) =>
+  public find = new AuthenticatedEndpointBuilder((req, res, next) =>
     this.authenticate(req, res, next)
   )
     .use(async (req, res, next) => {

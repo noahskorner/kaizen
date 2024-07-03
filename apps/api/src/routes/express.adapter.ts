@@ -1,12 +1,12 @@
 import {
   MiddlewareRequest,
   MiddlewareResponse,
-  RequestHandler
+  Endpoint
 } from '@kaizen/core-server';
 import { Request, Response } from 'express';
 
 export class ExpressAdapter {
-  public static toRequestHandler(handler: RequestHandler) {
+  public static toRequestHandler(handler: Endpoint) {
     return async (req: Request, res: Response) => {
       const request = ExpressAdapter.toMiddlewareRequest(req);
       const response = await handler(request);

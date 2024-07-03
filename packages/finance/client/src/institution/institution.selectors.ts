@@ -28,3 +28,18 @@ export const selectAccountGroups = createSelector(
     }, {} as AccountGroupMap);
   }
 );
+
+export const selectNetworth = createSelector(
+  insitutionSelector,
+  (institutions) => {
+    return institutions.reduce((totalNetworth, institution) => {
+      const institutionNetworth = institution.accounts.reduce(
+        (acc, account) => {
+          return acc + (account.current ?? 0);
+        },
+        0
+      );
+      return totalNetworth + institutionNetworth;
+    }, 0);
+  }
+);

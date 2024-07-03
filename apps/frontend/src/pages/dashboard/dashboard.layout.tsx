@@ -1,8 +1,8 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
 import { paths } from '../routes';
-import { Sidebar } from '@kaizen/core-client';
-import { useDispatch } from 'react-redux';
+import { Sidebar, selectShowSidebar } from '@kaizen/core-client';
+import { useDispatch, useSelector } from 'react-redux';
 import { AssistClient } from '@kaizen/assist-client';
 import { useRef, useState } from 'react';
 
@@ -11,6 +11,7 @@ export const DashboardLayout = () => {
   const dispatch = useDispatch<AuthDispatch>();
   const navigate = useNavigate();
   const [transcribedAudio, setTranscribedAudio] = useState<string | null>(null);
+  const showSidebar = useSelector(selectShowSidebar);
 
   const onLogoutClick = () => {
     dispatch(logout());
@@ -66,7 +67,8 @@ export const DashboardLayout = () => {
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />
-        <div className="w-full max-w-7xl p-2 md:ml-64">
+        <div
+          className={`${showSidebar ? 'md:ml-64' : ''} w-full px-2 py-8 pb-2`}>
           <Outlet />
         </div>
       </div>
