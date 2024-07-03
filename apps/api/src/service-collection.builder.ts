@@ -1,5 +1,4 @@
 import {
-  CreateAccountSnapshotRepository,
   CreateCategoryController,
   CreateCategoryRepository,
   CreateCategoryService,
@@ -20,7 +19,6 @@ import {
   GetAccountRepository,
   GetCategoryRepository,
   GetTransactionRepository,
-  SnapshotAccountsService,
   SyncAccountsRepository,
   SyncAccountsService,
   SyncInstitutionsController,
@@ -32,7 +30,9 @@ import {
   UpdateTransactionCategoryService,
   FindAccountHistoryRepository,
   FindAccountHistoryService,
-  FindAccountHistoryController
+  FindAccountHistoryController,
+  CreateAccountHistoryRepository,
+  CreateAccountHistoryService
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -76,9 +76,9 @@ import {
 } from '@kaizen/wallet-server';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
-import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { OpenAITranscriptionProvider } from '@kaizen/assist-server';
 import { Environment, environment } from './env';
+import { CreateAccountHistoryCommand } from '@kaizen/finance';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -126,10 +126,10 @@ export class ServiceCollectionBuilder {
         .withHandler(
           ServiceEventType.SYNC_ACCOUNTS_SUCCESS,
           async (event: SyncAccountsSuccessEvent) => {
-            const command: SnapshotAccountsCommand = {
+            const command: CreateAccountHistoryCommand = {
               userId: event.payload.userId
             };
-            await serviceCollection.snapshotAccountsService.snapshot(command);
+            await serviceCollection.createAccountHistoryService.create(command);
           }
         )
         // When a user logs in, give them 10 coins
@@ -177,9 +177,9 @@ export class ServiceCollectionBuilder {
     const getAccountRepository =
       this._serviceCollection.getAccountRepository ??
       new GetAccountRepository(prisma);
-    const createAccountSnapshotRepository =
-      this._serviceCollection.createAccountSnapshotRepository ??
-      new CreateAccountSnapshotRepository(prisma);
+    const createAccountHistoryRepository = new CreateAccountHistoryRepository(
+      prisma
+    );
     const createInstitutionRepository =
       this._serviceCollection.createInstitutionRepository ??
       new CreateInstitutionRepository(prisma);
@@ -260,9 +260,9 @@ export class ServiceCollectionBuilder {
       syncAccountsRepository,
       syncTransactionsService
     );
-    const snapshotAccountsService = new SnapshotAccountsService(
+    const createAccountHistoryService = new CreateAccountHistoryService(
       findAccountsRepository,
-      createAccountSnapshotRepository
+      createAccountHistoryRepository
     );
     const createInstitutionService =
       this._serviceCollection.createInstitutionService ??
@@ -379,7 +379,7 @@ export class ServiceCollectionBuilder {
       findUserByEmailRepository,
       getUserRepository,
       getAccountRepository,
-      createAccountSnapshotRepository,
+      createAccountHistoryRepository,
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
@@ -398,7 +398,7 @@ export class ServiceCollectionBuilder {
       loginService,
       refreshTokenService,
       syncAccountsService,
-      snapshotAccountsService,
+      createAccountHistoryService,
       createInstitutionService,
       findInstitutionsService,
       findTransactionsService,

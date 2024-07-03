@@ -1,11 +1,11 @@
-import { AccountRecord } from '../account-record';
-import { CreateAccountSnapshotQuery } from './create-account-snapshot.query';
+import { AccountRecord } from './account-record';
+import { CreateAccountHistoryQuery } from './create-account-history/create-account-history.query';
 
-export class AccountSnapshotRecordAdapter {
-  public static toCreateAccountSnapshotQuery(
+export class AccountHistoryRecordAdapter {
+  public static toCreateAccountHistoryQuery(
     snapshotId: string,
     accountRecord: AccountRecord
-  ): CreateAccountSnapshotQuery {
+  ): CreateAccountHistoryQuery {
     return {
       snapshotId: snapshotId,
       accountId: accountRecord.id,
@@ -21,6 +21,6 @@ export class AccountSnapshotRecordAdapter {
       type: accountRecord.type,
       subtype: accountRecord.subtype,
       verificationStatus: accountRecord.verificationStatus
-    } satisfies CreateAccountSnapshotQuery;
+    } satisfies CreateAccountHistoryQuery;
   }
 }

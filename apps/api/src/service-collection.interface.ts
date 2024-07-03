@@ -10,8 +10,6 @@ import {
   ISyncAccountsService,
   IGetAccountRepository,
   ISyncInstitutionsService,
-  ISnapshotAccountsService,
-  ICreateAccountSnapshotRepository,
   IFindCategoriesRepository,
   IFindCategoriesService,
   ICreateCategoryRepository,
@@ -20,7 +18,9 @@ import {
   IUpdateTransactionCategoryRepository,
   IUpdateTransactionCategoryService,
   IFindAccountHistoryRepository,
-  IFindAccountHistoryService
+  IFindAccountHistoryService,
+  ICreateAccountHistoryService,
+  ICreateAccountHistoryRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -88,7 +88,7 @@ export interface IServiceCollection {
   findUserByEmailRepository: IFindUserByEmailRepository;
   getUserRepository: IGetUserRepository;
   getAccountRepository: IGetAccountRepository;
-  createAccountSnapshotRepository: ICreateAccountSnapshotRepository;
+  createAccountHistoryRepository: ICreateAccountHistoryRepository;
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
@@ -108,7 +108,7 @@ export interface IServiceCollection {
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
   syncAccountsService: ISyncAccountsService;
-  snapshotAccountsService: ISnapshotAccountsService;
+  createAccountHistoryService: ICreateAccountHistoryService;
   syncInstitutionsService: ISyncInstitutionsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;

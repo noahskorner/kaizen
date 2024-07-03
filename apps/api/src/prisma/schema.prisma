@@ -158,13 +158,13 @@ model AccountRecord {
   type                   AccountRecordType                @default(Other) @map("type")
   subtype                AccountRecordSubtype?            @map("subtype")
   verificationStatus     AccountRecordVerificationStatus? @map("verification_status")
-  snapshots              AccountSnapshotRecord[]
+  history                AccountHistoryRecord[]
 
   @@map("account")
 }
 
-// Account Snapshot
-model AccountSnapshotRecord {
+// Account History
+model AccountHistoryRecord {
   id                     String                           @id @default(uuid()) @map("id")
   createdAt              DateTime                         @default(now()) @map("created_at")
   snapshotId             String                           @map("snapshot_id")
@@ -183,7 +183,7 @@ model AccountSnapshotRecord {
   subtype                AccountRecordSubtype?            @map("subtype")
   verificationStatus     AccountRecordVerificationStatus? @map("verification_status")
 
-  @@map("account_snapshot")
+  @@map("account_history")
 }
 
 // Transaction

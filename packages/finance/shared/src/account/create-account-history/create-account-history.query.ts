@@ -2,7 +2,7 @@ import { AccountRecordSubtype } from '../account-record-subtype';
 import { AccountRecordType } from '../account-record-type';
 import { AccountRecordVerificationStatus } from '../account-record-verification-status';
 
-export interface CreateAccountSnapshotQuery {
+export interface CreateAccountHistoryQuery {
   snapshotId: string;
   accountId: string;
   externalId: string;

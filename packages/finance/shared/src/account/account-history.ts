@@ -1,8 +1,8 @@
-import { AccountSubtype } from '../account-subtype';
-import { AccountType } from '../account-type';
-import { AccountVerificationStatus } from '../account-verification-status';
+import { AccountSubtype } from './account-subtype';
+import { AccountType } from './account-type';
+import { AccountVerificationStatus } from './account-verification-status';
 
-export interface AccountSnapshot {
+export interface AccountHistory {
   id: string;
   createdAt: string;
   snapshotId: string;

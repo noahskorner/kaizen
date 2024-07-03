@@ -16,7 +16,7 @@ interface NetworthHistory {
 type Timeframe = '1W' | '1M' | '3M' | 'YTD' | 'ALL';
 const TIMEFRAMES = ['1W', '1M', '3M', 'YTD', 'ALL'];
 
-export const AccountHistoryGraph = () => {
+export const NetworthGraph = () => {
   const [currentTimeframe, setCurrentTimeframe] =
     useState<Timeframe>(DEFAULT_TIMEFRAME);
   const [networthHistory, setNetworthHistory] = useState<NetworthHistory[]>([]);
@@ -35,20 +35,20 @@ export const AccountHistoryGraph = () => {
   const loadNetworthHistory = async (timeframe: Timeframe) => {
     const { startDate, endDate } = getTimeframe(timeframe);
 
-    const findAccountSnapshotsResponse = await FindAccountHistoryClient.find({
+    const findAccountHistoryResponse = await FindAccountHistoryClient.find({
       page: 1,
       pageSize: 250000,
       startDate: startDate,
       endDate: endDate
     });
 
-    if (findAccountSnapshotsResponse.type === 'FAILURE') {
+    if (findAccountHistoryResponse.type === 'FAILURE') {
       // TODO: Handle error
       return;
     }
 
     setNetworthHistory(
-      findAccountSnapshotsResponse.data.hits
+      findAccountHistoryResponse.data.hits
         .reverse()
         .reduce((groups, snapshot) => {
           const { snapshotId, createdAt, available } = snapshot;

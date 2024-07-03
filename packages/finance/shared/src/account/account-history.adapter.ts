@@ -1,12 +1,12 @@
-import { AccountAdapter } from '../account.adapter';
-import { AccountSnapshot } from './account-snapshot';
-import { AccountSnapshotRecord } from './account-snapshot-record';
+import { AccountAdapter } from './account.adapter';
+import { AccountHistory } from './account-history';
+import { AccountHistoryRecord } from './account-history-record';
 
-export class AccountSnapshotAdapter {
-  public static toAccountSnapshot(
-    accountSnapshotRecord: AccountSnapshotRecord
-  ): AccountSnapshot {
-    const account: AccountSnapshot = {
+export class AccountHistoryAdapter {
+  public static toAccountHistory(
+    accountSnapshotRecord: AccountHistoryRecord
+  ): AccountHistory {
+    const account: AccountHistory = {
       id: accountSnapshotRecord.id,
       createdAt: accountSnapshotRecord.createdAt.toISOString(),
       snapshotId: accountSnapshotRecord.snapshotId,

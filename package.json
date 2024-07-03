@@ -85,5 +85,8 @@
     "turbo": "^1.13.4",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.16.1"
   }
 }

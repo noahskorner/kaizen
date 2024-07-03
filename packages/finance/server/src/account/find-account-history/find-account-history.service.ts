@@ -11,8 +11,8 @@ import {
 } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
-  AccountSnapshot,
-  AccountSnapshotAdapter,
+  AccountHistory,
+  AccountHistoryAdapter,
   FindAccountHistoryCommand,
   FindAccountHistoryQuery,
   IFindAccountHistoryRepository,
@@ -31,23 +31,23 @@ export class FindAccountHistoryService
 
   public async find(
     command: FindAccountHistoryCommand
-  ): Promise<ServiceResponse<Paginated<AccountSnapshot>>> {
+  ): Promise<ServiceResponse<Paginated<AccountHistory>>> {
     const errors = this.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
     }
 
-    const paginatedAccountSnapshotRecords =
+    const paginatedAccountHistoryRecords =
       await this._findAccountHistoryRepository.find(
         command satisfies FindAccountHistoryQuery
       );
 
     return this.success({
-      total: paginatedAccountSnapshotRecords.total,
-      hits: paginatedAccountSnapshotRecords.hits.map(
-        AccountSnapshotAdapter.toAccountSnapshot
+      total: paginatedAccountHistoryRecords.total,
+      hits: paginatedAccountHistoryRecords.hits.map(
+        AccountHistoryAdapter.toAccountHistory
       )
-    } satisfies Paginated<AccountSnapshot>);
+    } satisfies Paginated<AccountHistory>);
   }
 
   private validate(command: FindAccountHistoryCommand) {

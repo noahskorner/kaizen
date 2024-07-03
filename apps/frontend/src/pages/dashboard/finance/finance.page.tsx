@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserClient } from '@kaizen/user-client';
 import {
-  AccountHistoryGraph,
+  NetworthGraph,
   InstitutionDispatch,
   // TransactionsTable,
   formatCurrency,
@@ -38,7 +38,7 @@ export const FinancePage = () => {
   return (
     <div className="flex w-full flex-col gap-x-6 gap-y-6 p-4 lg:grid lg:grid-cols-12">
       <div className="w-full lg:col-span-7 lg:h-[60rem] xl:col-span-8 2xl:col-span-9">
-        <AccountHistoryGraph />
+        <NetworthGraph />
       </div>
       <div className="h-[50rem] w-full rounded-lg border border-neutral-600 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
         <div className="border-b border-neutral-600 p-4 ">
