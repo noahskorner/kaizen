@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { walletReducers } from '@kaizen/wallet-client';
 import { authReducers } from '@kaizen/auth-client';
 import {
+  accountHistoryReducers,
   categoryReducers,
   institutionReducers,
   transactionReducers
@@ -21,6 +22,7 @@ import {
   onLoginLoadTransactions
 } from './effects';
 import { onMobileHideSidebar } from './effects/on-mobile-hide-sidebar';
+import { onLoginLoadAccountHistory } from './effects/on-login-load-account-history';
 
 const rootReducer = combineReducers({
   screen: screenReducers,
@@ -30,7 +32,8 @@ const rootReducer = combineReducers({
   institution: institutionReducers,
   toast: toastReducers,
   transaction: transactionReducers,
-  category: categoryReducers
+  category: categoryReducers,
+  accountHistory: accountHistoryReducers
 });
 
 export const store = configureStore({
@@ -45,3 +48,4 @@ effects.run(onLoginLoadWallet);
 effects.run(onLoginLoadInstitutions);
 effects.run(onLoginLoadTransactions);
 effects.run(onLoginLoadCategories);
+effects.run(onLoginLoadAccountHistory);

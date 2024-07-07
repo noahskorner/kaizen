@@ -1,26 +1,24 @@
-import { useEffect, useMemo, useState } from 'react';
-import { FindAccountHistoryClient } from './find-account-history.client';
+import { useMemo, useState } from 'react';
 import { LineChart } from '@kaizen/core-client';
 import { selectNetworth } from '../institution';
 import { useSelector } from 'react-redux';
 import { formatCurrency } from '../format-currency';
+import { Timeframe } from './timeframe';
+import { createNetworthHistorySelector } from './account-history.selectors';
+import { NetworthHistory } from './networth';
 
 const DEFAULT_TIMEFRAME = '1M';
 
-interface NetworthHistory {
-  snapshotId: string;
-  date: string;
-  value: number;
-}
-
-type Timeframe = '1W' | '1M' | '3M' | 'YTD' | 'ALL';
 const TIMEFRAMES = ['1W', '1M', '3M', 'YTD', 'ALL'];
 
 export const NetworthGraph = () => {
   const [currentTimeframe, setCurrentTimeframe] =
     useState<Timeframe>(DEFAULT_TIMEFRAME);
-  const [networthHistory, setNetworthHistory] = useState<NetworthHistory[]>([]);
   const networth = useSelector(selectNetworth);
+  const networthHistorySelector = useMemo(() => {
+    return createNetworthHistorySelector(currentTimeframe);
+  }, [currentTimeframe]);
+  const networthHistory = useSelector(networthHistorySelector);
 
   const percentChange = useMemo(() => {
     return calculatePercentChange(networthHistory);
@@ -32,50 +30,9 @@ export const NetworthGraph = () => {
 
   const positive = difference >= 0;
 
-  const loadNetworthHistory = async (timeframe: Timeframe) => {
-    const { startDate, endDate } = getTimeframe(timeframe);
-
-    const findAccountHistoryResponse = await FindAccountHistoryClient.find({
-      page: 1,
-      pageSize: 250000,
-      startDate: startDate,
-      endDate: endDate
-    });
-
-    if (findAccountHistoryResponse.type === 'FAILURE') {
-      // TODO: Handle error
-      return;
-    }
-
-    setNetworthHistory(
-      findAccountHistoryResponse.data.hits
-        .reverse()
-        .reduce((groups, snapshot) => {
-          const { snapshotId, createdAt, available } = snapshot;
-          const existingGroup = groups.find(
-            (group) => group.snapshotId === snapshotId
-          );
-          if (existingGroup) {
-            existingGroup.value += available ?? 0;
-          } else {
-            groups.push({
-              snapshotId,
-              date: createdAt,
-              value: available ?? 0
-            });
-          }
-          return groups;
-        }, new Array<NetworthHistory>())
-    );
-  };
-
   const onTimeframeClick = (timeframe: Timeframe) => {
     setCurrentTimeframe(timeframe);
   };
-
-  useEffect(() => {
-    loadNetworthHistory(currentTimeframe);
-  }, [currentTimeframe]);
 
   return (
     <div className="flex h-full w-full flex-col rounded-lg p-4 text-white">
@@ -109,49 +66,6 @@ export const NetworthGraph = () => {
       </div>
     </div>
   );
-};
-
-const getTimeframe = (timeframe: Timeframe) => {
-  const currentDate = new Date();
-  let startDate: Date;
-  let endDate: Date;
-
-  switch (timeframe) {
-    case '1W':
-      startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-      endDate = currentDate;
-      break;
-    case '1M':
-      startDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - 1,
-        currentDate.getDate()
-      );
-      endDate = currentDate;
-      break;
-    case '3M':
-      startDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - 3,
-        currentDate.getDate()
-      );
-      endDate = currentDate;
-      break;
-    case 'YTD':
-      startDate = new Date(currentDate.getFullYear(), 0, 1);
-      endDate = currentDate;
-      break;
-    case 'ALL':
-      startDate = new Date(0);
-      endDate = currentDate;
-      break;
-    default:
-      startDate = new Date();
-      endDate = new Date();
-      break;
-  }
-
-  return { startDate: startDate.toISOString(), endDate: endDate.toISOString() };
 };
 
 const calculatePercentChange = (networthHistory: NetworthHistory[]) => {
