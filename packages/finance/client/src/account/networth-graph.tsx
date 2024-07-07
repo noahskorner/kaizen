@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LineChart } from '@kaizen/core-client';
 import { selectNetworth } from '../institution';
 import { useSelector } from 'react-redux';
@@ -12,9 +12,11 @@ const DEFAULT_TIMEFRAME = '1M';
 const TIMEFRAMES = ['1W', '1M', '3M', 'YTD', 'ALL'];
 
 export const NetworthGraph = () => {
+  const [currentNetworth, setCurrentNetworth] = useState(0);
   const [currentTimeframe, setCurrentTimeframe] =
     useState<Timeframe>(DEFAULT_TIMEFRAME);
   const networth = useSelector(selectNetworth);
+
   const networthHistorySelector = useMemo(() => {
     return createNetworthHistorySelector(currentTimeframe);
   }, [currentTimeframe]);
@@ -34,11 +36,23 @@ export const NetworthGraph = () => {
     setCurrentTimeframe(timeframe);
   };
 
+  const onMouseLeave = () => {
+    setCurrentNetworth(networth);
+  };
+
+  const onTooltipHover = useCallback((value: number) => {
+    setCurrentNetworth(value);
+  }, []);
+
+  useEffect(() => {
+    setCurrentNetworth(networth);
+  }, [networth]);
+
   return (
     <div className="flex h-full w-full flex-col rounded-lg p-4 text-white">
       <div>
         <h2 className="mb-1 text-4xl font-bold">
-          {formatCurrency(networth, 'USD')}
+          {formatCurrency(currentNetworth, 'USD')}
         </h2>
         <div className="mb-4 flex items-center">
           <span
@@ -50,16 +64,19 @@ export const NetworthGraph = () => {
           </span>
         </div>
       </div>
-      <LineChart
-        stroke={`${positive ? '#22c55e' : '#ef4444'}`}
-        data={networthHistory}
-      />
-      <div className="mt-4 flex w-full items-center justify-start gap-x-4 border-b border-neutral-500 pb-4">
+      <div onMouseLeave={onMouseLeave} className="h-full w-full">
+        <LineChart
+          stroke={`${positive ? '#22c55e' : '#ef4444'}`}
+          data={networthHistory}
+          onTooltipHover={onTooltipHover}
+        />
+      </div>
+      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-neutral-500 pb-4">
         {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-700 text-neutral-50' : 'bg-red-700 text-neutral-50'} rounded-lg px-2 py-1` : ''} text-xs font-semibold hover:text-neutral-200`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-700 text-neutral-50' : 'bg-red-700 text-neutral-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold hover:text-neutral-200`}>
             {timeframe}
           </button>
         ))}

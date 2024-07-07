@@ -37,28 +37,32 @@ export const FinancePage = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-x-6 gap-y-6 p-4 lg:grid lg:grid-cols-12">
-      <div className="order-2 w-full lg:order-1 lg:col-span-5 xl:col-span-4 2xl:col-span-3">
-        <div className="w-full rounded-lg border border-neutral-500 ">
-          <div className="border-b border-neutral-500 p-4 ">
-            <h2 className="font-bold">Accounts</h2>
+    <div className="flex w-full flex-col gap-y-6 p-4">
+      <div className="flex w-full flex-col gap-x-6 gap-y-6 lg:flex-row">
+        <div className="order-2 w-full lg:order-1 lg:max-w-sm">
+          <div className="w-full rounded-lg border border-neutral-500 ">
+            <div className="border-b border-neutral-500 p-4 ">
+              <h2 className="font-bold">Accounts</h2>
+            </div>
+            {Object.entries(accountGroups).map(
+              ([accountType, accountGroup]) => {
+                return (
+                  <AccountGroupCard
+                    key={accountType}
+                    accountType={accountType as AccountType}
+                    accountGroup={accountGroup}
+                    showAccounts={true}
+                  />
+                );
+              }
+            )}
           </div>
-          {Object.entries(accountGroups).map(([accountType, accountGroup]) => {
-            return (
-              <AccountGroupCard
-                key={accountType}
-                accountType={accountType as AccountType}
-                accountGroup={accountGroup}
-                showAccounts={true}
-              />
-            );
-          })}
+        </div>
+        <div className="order-1 flex w-full items-stretch lg:order-2 lg:min-h-[50rem]">
+          <NetworthGraph />
         </div>
       </div>
-      <div className="order-1 flex w-full items-stretch lg:order-2 lg:col-span-7 lg:min-h-[50rem] xl:col-span-8 2xl:col-span-9">
-        <NetworthGraph />
-      </div>
-      <div className="order-3 h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
+      <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
         <div className="flex gap-x-1">
           <Button onClick={onSyncClick}>Sync</Button>
           {linkToken && <PlaidLink linkToken={linkToken} />}

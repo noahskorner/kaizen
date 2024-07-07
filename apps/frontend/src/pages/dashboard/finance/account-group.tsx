@@ -1,4 +1,3 @@
-import { SimpleLineChart } from '@kaizen/core-client';
 import { AccountType } from '@kaizen/finance';
 import { AccountGroup, formatCurrency } from '@kaizen/finance-client';
 import { useState } from 'react';
@@ -27,18 +26,6 @@ export const AccountGroupCard = ({
         className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-neutral-600">
         <div className="flex w-full max-w-48 gap-x-2">
           <h3 className="w-32 font-semibold capitalize">{accountType}</h3>
-          <SimpleLineChart
-            stroke={'#22c55e'}
-            data={[
-              { date: '2023-01-01', value: 100 },
-              { date: '2023-01-02', value: 1500 },
-              { date: '2023-01-03', value: 130 },
-              { date: '2023-01-04', value: 1700 },
-              { date: '2023-01-05', value: 160 },
-              { date: '2023-01-06', value: 1800 },
-              { date: '2023-01-07', value: 200 }
-            ]}
-          />
         </div>
         <span className="font-normal">
           {formatCurrency(accountGroup.available, 'USD')}

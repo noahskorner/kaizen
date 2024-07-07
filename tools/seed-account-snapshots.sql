@@ -11,6 +11,7 @@ DECLARE
     base_value INT := 1000;
     increment INT := 10;
     max_randomness INT := 100;
+    types "AccountRecordType"[] := ARRAY['Investment', 'Credit', 'Depository', 'Loan', 'Brokerage', 'Other'];
 
 BEGIN 
     -- Calculate the number of iterations needed (weekly)
@@ -49,7 +50,7 @@ BEGIN
             'xxxx' || LPAD(i :: TEXT, 4, '0'),
             'Account ' || i,
             'Official Account ' || i,
-            'Other',
+            types[FLOOR(1 + random() * array_length(types, 1)) :: INT],
             NULL,
             NULL
         );

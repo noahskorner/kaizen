@@ -15,23 +15,34 @@ interface DataPoint {
 interface LineChartProps {
   stroke: string;
   data: DataPoint[];
+  onTooltipHover: (value: number) => void;
 }
 
-export const LineChart = ({ stroke, data }: LineChartProps) => {
+export const LineChart = ({ stroke, data, onTooltipHover }: LineChartProps) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RechartsLineChart data={data}>
         <YAxis hide={true} domain={['auto', 'auto']} />
         <Tooltip
           animationDuration={0}
+          position={{ y: 0 }}
           content={({ payload }) => {
             if (payload && payload.length) {
+              const value = parseInt(payload[0].payload.value);
+              if (!isNaN(value)) {
+                onTooltipHover(value);
+              }
+
               return (
-                <span className="rounded-md bg-neutral-500 px-4 py-2 text-xs text-neutral-50">
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                  }).format(payload[0].value as number)}
+                <span className="text-xs text-neutral-300">
+                  {new Date(payload[0].payload.date).toLocaleDateString(
+                    'en-US',
+                    {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    }
+                  )}
                 </span>
               );
             }
@@ -48,10 +59,12 @@ export const LineChart = ({ stroke, data }: LineChartProps) => {
           stroke={stroke}
           strokeWidth={2}
           dot={false}
-          activeDot={false}
+          activeDot={{
+            stroke: '#000000'
+          }}
         />
         <ReferenceLine
-          y={Math.max(...data.map((item) => item.value))}
+          y={data.reduce((acc, item) => acc + item.value, 0) / data.length}
           stroke="#ccc"
           strokeDasharray="3 3"
         />
