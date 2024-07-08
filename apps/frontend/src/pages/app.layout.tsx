@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
-import { paths } from '../routes';
+import { paths } from './routes';
 import {
   Sidebar,
   SidebarDispatch,
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AssistClient } from '@kaizen/assist-client';
 import { useRef, useState } from 'react';
 
-export const DashboardLayout = () => {
+export const AppLayout = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const dispatch = useDispatch<AuthDispatch & SidebarDispatch>();
   const navigate = useNavigate();
@@ -74,6 +74,7 @@ export const DashboardLayout = () => {
           transcribedAudio={transcribedAudio}
           dashboardHref={paths.dashboard}
           spendingHref={paths.spending}
+          accountHref={paths.settings}
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />
@@ -96,7 +97,7 @@ export const DashboardLayout = () => {
             </svg>
           </button>
         </div>
-        <div className={`${showSidebar ? 'md:ml-64' : ''} w-full p-4`}>
+        <div className={`${showSidebar ? 'md:ml-64' : ''} w-full p-2 lg:p-8`}>
           <Outlet />
         </div>
       </div>

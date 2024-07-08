@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LineChart } from '@kaizen/core-client';
+import { LineChart, formatCurrency } from '@kaizen/core-client';
 import { selectNetworth } from '../institution';
 import { useSelector } from 'react-redux';
-import { formatCurrency } from '../format-currency';
 import { Timeframe } from './timeframe';
 import { createNetworthHistorySelector } from './account-history.selectors';
 import { NetworthHistory } from './networth';

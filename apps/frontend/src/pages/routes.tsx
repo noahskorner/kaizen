@@ -1,18 +1,20 @@
 import { HomePage } from './home/home.page';
 import { LoginPage } from './login/login.page';
 import { RegisterPage } from './register/register.page';
-import { DashboardLayout } from './dashboard/dashboard.layout';
-import { FinancePage } from './dashboard/finance/finance.page';
+import { AppLayout } from './app.layout';
+import { FinancePage } from './finance/finance.page';
 import { RouteObject } from 'react-router-dom';
-import { SpendingPage } from './dashboard/spending/spending.page';
+import { SpendingPage } from './spending/spending.page';
+import { SettingsPage } from './settings/settings-page';
 
-export const paths: Record<string, string> = {
+export const paths = {
   home: '/',
   login: '/login',
   register: '/register',
   dashboard: '/dashboard',
   spending: '/spending',
-  accounts: '/accounts'
+  accounts: '/accounts',
+  settings: '/settings'
 };
 
 export const routes: RouteObject[] = [
@@ -20,7 +22,7 @@ export const routes: RouteObject[] = [
   { path: paths.login, element: <LoginPage /> },
   { path: paths.register, element: <RegisterPage /> },
   {
-    element: <DashboardLayout />,
+    element: <AppLayout />,
     children: [
       {
         path: paths.dashboard,
@@ -29,6 +31,10 @@ export const routes: RouteObject[] = [
       {
         path: paths.spending,
         element: <SpendingPage />
+      },
+      {
+        path: paths.settings,
+        element: <SettingsPage />
       }
     ]
   }

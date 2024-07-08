@@ -1,5 +1,6 @@
+import { formatCurrency } from '@kaizen/core-client';
 import { AccountType } from '@kaizen/finance';
-import { AccountGroup, formatCurrency } from '@kaizen/finance-client';
+import { AccountGroup } from '@kaizen/finance-client';
 import { useState } from 'react';
 
 export interface AccountGroupProps {

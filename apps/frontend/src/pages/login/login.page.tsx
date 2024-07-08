@@ -18,7 +18,7 @@ export const LoginPage = () => {
         registerHref={paths.register}
         email={searchParams.email}
         password={searchParams.password}
-        onLoginSuccess={() => navigate(paths.finance)}
+        onLoginSuccess={() => navigate(paths.dashboard)}
       />
     </div>
   );

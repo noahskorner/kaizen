@@ -3,8 +3,7 @@ import { UserClient } from '@kaizen/user-client';
 import {
   NetworthGraph,
   selectAccountGroups,
-  TransactionClient,
-  formatCurrency
+  TransactionClient
 } from '@kaizen/finance-client';
 import { useSelector } from 'react-redux';
 import { AccountGroupCard } from './account-group-card';
@@ -13,6 +12,7 @@ import {
   FindTransactionsRequest,
   Transaction
 } from '@kaizen/finance';
+import { formatCurrency, formatDate } from '@kaizen/core-client';
 
 export const FinancePage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -81,7 +81,7 @@ export const FinancePage = () => {
                   <div className="flex flex-col gap-y-1">
                     <span className="text-sm">{transaction.name}&nbsp;</span>
                     <span className="text-xs text-neutral-300">
-                      {new Date(transaction.date).toLocaleDateString('en-US')}
+                      {formatDate(transaction.date)}
                     </span>
                   </div>
                   <span className="text-sm">

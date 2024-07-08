@@ -1,20 +1,20 @@
 import './sidebar.css';
 import { useEffect, useRef } from 'react';
 import { SidebarButton } from './sidebar-link';
-import {
-  LogoutIcon,
-  SidebarDispatch,
-  selectShowSidebar,
-  toggleSidebarAction
-} from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { HomeIcon } from '../../icons/home';
 import { TagIcon } from '../../icons/tag';
+import { SidebarDispatch } from './sidebar.store';
+import { selectShowSidebar } from './sidebar.selectors';
+import { toggleSidebarAction } from './sidebar.actions';
+import { SettingsIcon } from '../../icons/settings';
+import { LogoutIcon } from '../../icons/logout';
 
 export interface SidebarProps {
   transcribedAudio: string | null;
   dashboardHref: string;
   spendingHref: string;
+  accountHref: string;
   onLogoutClick?: React.MouseEventHandler<HTMLButtonElement>;
   onAssistantClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -22,6 +22,7 @@ export interface SidebarProps {
 export const Sidebar = ({
   dashboardHref,
   spendingHref,
+  accountHref,
   onLogoutClick
 }: SidebarProps) => {
   const firstRenderRef = useRef(true);
@@ -74,7 +75,12 @@ export const Sidebar = ({
             />
           </div>
         </div>
-        <div className="w-full">
+        <div className="flex w-full flex-col gap-y-2">
+          <SidebarButton
+            icon={<SettingsIcon />}
+            href={accountHref}
+            label="Settings"
+          />
           <SidebarButton
             icon={<LogoutIcon />}
             onClick={onLogoutClick}

@@ -5,3 +5,5 @@ export * from './logout';
 export * from './pencil';
 export * from './sparkles';
 export * from './todos';
+export * from './settings';
+export * from './account';
