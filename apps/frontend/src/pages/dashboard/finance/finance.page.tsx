@@ -2,24 +2,25 @@ import { useEffect, useState } from 'react';
 import { UserClient } from '@kaizen/user-client';
 import {
   NetworthGraph,
-  InstitutionDispatch,
-  // TransactionsTable,
   selectAccountGroups,
-  syncInstitutions
+  TransactionClient,
+  formatCurrency
 } from '@kaizen/finance-client';
-import { PlaidLink } from './plaid-link';
-import { Button } from '@kaizen/core-client';
-import { useDispatch, useSelector } from 'react-redux';
-import { AccountGroupCard } from './account-group';
-import { AccountType } from '@kaizen/finance';
-// import { AccountGroupCard } from './account-group';
-// import { AccountType } from '@kaizen/finance';
+import { useSelector } from 'react-redux';
+import { AccountGroupCard } from './account-group-card';
+import {
+  AccountType,
+  FindTransactionsRequest,
+  Transaction
+} from '@kaizen/finance';
 
 export const FinancePage = () => {
-  const [linkToken, setLinkToken] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setLinkToken] = useState<string | null>(null);
   const accountGroups = useSelector(selectAccountGroups);
-  // const transactionsByCategory = useSelector(selectTransactionsByCategory);
-  const dispatch = useDispatch<InstitutionDispatch>();
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
+    []
+  );
 
   useEffect(() => {
     const createLinkToken = async () => {
@@ -32,16 +33,27 @@ export const FinancePage = () => {
     createLinkToken();
   }, []);
 
-  const onSyncClick = async () => {
-    dispatch(syncInstitutions());
-  };
+  useEffect(() => {
+    const loadRecentTransactions = async () => {
+      const response = await TransactionClient.find({
+        page: 1,
+        pageSize: 10
+      } satisfies FindTransactionsRequest);
+      if (response.type === 'SUCCESS') {
+        setRecentTransactions(response.data.hits);
+      }
+    };
+
+    loadRecentTransactions();
+  }, []);
 
   return (
-    <div className="flex w-full flex-col gap-y-6 p-4">
-      <div className="flex w-full flex-col gap-x-6 gap-y-6 lg:flex-row">
-        <div className="order-2 w-full lg:order-1 lg:max-w-sm">
-          <div className="w-full rounded-lg border border-neutral-500 ">
-            <div className="border-b border-neutral-500 p-4 ">
+    <div className="flex h-full w-full flex-col gap-y-6">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <div className="flex h-full w-full flex-col items-stretch gap-x-6 gap-y-6 lg:flex-row">
+        <div className="order-2 flex h-full w-full flex-col gap-y-6 lg:order-1 lg:max-w-sm">
+          <div className="w-full rounded-lg border border-neutral-600 ">
+            <div className="border-b border-neutral-600 p-4">
               <h2 className="font-bold">Accounts</h2>
             </div>
             {Object.entries(accountGroups).map(
@@ -51,23 +63,38 @@ export const FinancePage = () => {
                     key={accountType}
                     accountType={accountType as AccountType}
                     accountGroup={accountGroup}
-                    showAccounts={true}
+                    showAccounts={false}
                   />
                 );
               }
             )}
           </div>
+          <div className="w-full rounded-lg border border-neutral-600 ">
+            <div className="border-b border-neutral-600 p-4 ">
+              <h2 className="font-bold">Recent Transactions</h2>
+            </div>
+            {recentTransactions.map((transaction) => {
+              return (
+                <div
+                  className="flex w-full items-center justify-between p-4"
+                  key={transaction.id}>
+                  <div className="flex flex-col gap-y-1">
+                    <span className="text-sm">{transaction.name}&nbsp;</span>
+                    <span className="text-xs text-neutral-300">
+                      {new Date(transaction.date).toLocaleDateString('en-US')}
+                    </span>
+                  </div>
+                  <span className="text-sm">
+                    {formatCurrency(transaction.amount ?? 0, 'USD')}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="order-1 flex w-full items-stretch lg:order-2 lg:min-h-[50rem]">
+        <div className="order-1 flex h-full w-full items-stretch lg:order-2 lg:max-h-[50rem]">
           <NetworthGraph />
         </div>
-      </div>
-      <div className="h-[60rem] w-full bg-green-500 lg:col-span-7 xl:col-span-8 2xl:col-span-9">
-        <div className="flex gap-x-1">
-          <Button onClick={onSyncClick}>Sync</Button>
-          {linkToken && <PlaidLink linkToken={linkToken} />}
-        </div>
-        Transactions Table
       </div>
     </div>
   );

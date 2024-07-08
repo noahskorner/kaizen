@@ -1,14 +1,19 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
 import { paths } from '../routes';
-import { Sidebar, selectShowSidebar } from '@kaizen/core-client';
+import {
+  Sidebar,
+  SidebarDispatch,
+  selectShowSidebar,
+  toggleSidebarAction
+} from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AssistClient } from '@kaizen/assist-client';
 import { useRef, useState } from 'react';
 
 export const DashboardLayout = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const dispatch = useDispatch<AuthDispatch>();
+  const dispatch = useDispatch<AuthDispatch & SidebarDispatch>();
   const navigate = useNavigate();
   const [transcribedAudio, setTranscribedAudio] = useState<string | null>(null);
   const showSidebar = useSelector(selectShowSidebar);
@@ -58,16 +63,40 @@ export const DashboardLayout = () => {
     }
   };
 
+  const onSidebarToggleClick = () => {
+    dispatch(toggleSidebarAction());
+  };
+
   return (
     <AuthRoute onUnauthenticated={onUnauthenticated}>
       <div className="flex h-screen">
         <Sidebar
           transcribedAudio={transcribedAudio}
-          financeHref={paths.finance}
+          dashboardHref={paths.dashboard}
+          spendingHref={paths.spending}
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />
-        <div className={`${showSidebar ? 'md:ml-64' : 'ml-12'} w-full px-2`}>
+        <div className="fixed left-0 right-0 top-0 flex w-full flex-col items-start justify-between px-3 py-2">
+          <button
+            onClick={onSidebarToggleClick}
+            className={`${!showSidebar ? 'appear' : 'disappear'} rounded-lg bg-neutral-600 p-2 text-neutral-50 hover:bg-neutral-500`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className={`${showSidebar ? 'md:ml-64' : ''} w-full p-4`}>
           <Outlet />
         </div>
       </div>

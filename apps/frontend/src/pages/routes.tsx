@@ -3,15 +3,16 @@ import { LoginPage } from './login/login.page';
 import { RegisterPage } from './register/register.page';
 import { DashboardLayout } from './dashboard/dashboard.layout';
 import { FinancePage } from './dashboard/finance/finance.page';
-import { DashboardPage } from './dashboard/dashboard.page';
 import { RouteObject } from 'react-router-dom';
+import { SpendingPage } from './dashboard/spending/spending.page';
 
 export const paths: Record<string, string> = {
   home: '/',
   login: '/login',
   register: '/register',
   dashboard: '/dashboard',
-  finance: '/dashboard/finance'
+  spending: '/spending',
+  accounts: '/accounts'
 };
 
 export const routes: RouteObject[] = [
@@ -23,11 +24,11 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: paths.dashboard,
-        element: <DashboardPage />
+        element: <FinancePage />
       },
       {
-        path: paths.finance,
-        element: <FinancePage />
+        path: paths.spending,
+        element: <SpendingPage />
       }
     ]
   }

@@ -25,7 +25,9 @@ export const AccountGroupCard = ({
         onClick={onGroupClick}
         className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-neutral-600">
         <div className="flex w-full max-w-48 gap-x-2">
-          <h3 className="w-32 font-semibold capitalize">{accountType}</h3>
+          <h3 className="w-32 font-semibold capitalize">
+            {getAccountGroupLabel(accountType)}
+          </h3>
         </div>
         <span className="font-normal">
           {formatCurrency(accountGroup.available, 'USD')}
@@ -54,4 +56,22 @@ export const AccountGroupCard = ({
       )}
     </div>
   );
+};
+
+const getAccountGroupLabel = (type: AccountType): string => {
+  switch (type) {
+    case AccountType.Brokerage:
+      return 'brokerage';
+    case AccountType.Investment:
+      return 'investments';
+    case AccountType.Credit:
+      return 'credit';
+    case AccountType.Depository:
+      return 'cash';
+    case AccountType.Loan:
+      return 'loans';
+    case AccountType.Other:
+    default:
+      return 'other';
+  }
 };

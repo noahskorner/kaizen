@@ -56,7 +56,7 @@ export const NetworthGraph = () => {
         </h2>
         <div className="mb-4 flex items-center">
           <span
-            className={`${positive ? 'text-green-500' : 'text-red-500'} mr-4`}>
+            className={`${positive ? 'text-green-300' : 'text-red-500'} mr-4`}>
             {positive ? '+' : '-'}
             {formatCurrency(Math.abs(difference), 'USD')} (
             {positive ? '+' : '-'}${Math.abs(percentChange)}%)&nbsp;
@@ -66,7 +66,7 @@ export const NetworthGraph = () => {
       </div>
       <div onMouseLeave={onMouseLeave} className="h-full w-full">
         <LineChart
-          stroke={`${positive ? '#22c55e' : '#ef4444'}`}
+          stroke={`${positive ? '#86efac' : '#ef4444'}`}
           data={networthHistory}
           onTooltipHover={onTooltipHover}
         />
@@ -76,7 +76,7 @@ export const NetworthGraph = () => {
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-700 text-neutral-50' : 'bg-red-700 text-neutral-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold hover:text-neutral-200`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-300 text-neutral-900' : 'bg-red-700 text-neutral-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold`}>
             {timeframe}
           </button>
         ))}
