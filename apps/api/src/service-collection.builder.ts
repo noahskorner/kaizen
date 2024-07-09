@@ -50,7 +50,9 @@ import {
   GetUserRepository,
   GetUserService,
   CreateUserController,
-  CreateLinkTokenController
+  CreateLinkTokenController,
+  UpdateUserEmailService,
+  UpdateUserEmailController
 } from '@kaizen/user-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -59,7 +61,9 @@ import { HomeController } from './routes/home.controller';
 import { PrismaClient } from '@prisma/client';
 import {
   CreateUserSuccessEvent,
+  IEmailProvider,
   IServiceEventBus,
+  LocalEmailProvider,
   LoginSuccessEvent,
   ServiceEventBusBuilder,
   ServiceEventType,
@@ -100,6 +104,11 @@ export class ServiceCollectionBuilder {
 
   public withEventBus(serviceEventBus: IServiceEventBus) {
     this._serviceCollection.serviceEventBus = serviceEventBus;
+    return this;
+  }
+
+  public withEmailProvider(emailProvider: IEmailProvider) {
+    this._serviceCollection.emailProvider = emailProvider;
     return this;
   }
 
@@ -213,6 +222,8 @@ export class ServiceCollectionBuilder {
     const transcriptionProvider =
       this._serviceCollection.transcriptionProvider ??
       new OpenAITranscriptionProvider(environment.OPENAI_API_KEY);
+    const emailProvider =
+      this._serviceCollection.emailProvider ?? new LocalEmailProvider();
 
     // Services
     const getUserService =
@@ -306,6 +317,12 @@ export class ServiceCollectionBuilder {
     const findAccountHistoryService = new FindAccountHistoryService(
       findAccountHistoryRepository
     );
+    const updateUserEmailService = new UpdateUserEmailService(
+      environment.EMAIL_VERIFICATION_SECRET,
+      environment.EMAIL_VERIFICATION_EXPIRATION,
+      findUserByEmailRepository,
+      emailProvider
+    );
 
     // Controllers
     const homeController =
@@ -361,6 +378,10 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       findAccountHistoryService
     );
+    const updateUserEmailController = new UpdateUserEmailController(
+      authMiddleware,
+      updateUserEmailService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -374,6 +395,7 @@ export class ServiceCollectionBuilder {
       // Providers
       financialProvider,
       transcriptionProvider,
+      emailProvider,
       // Repositories
       createUserRepository,
       findUserByEmailRepository,
@@ -410,6 +432,7 @@ export class ServiceCollectionBuilder {
       findCategoriesService,
       createCategoryService,
       findAccountHistoryService,
+      updateUserEmailService,
       // Controllers
       homeController,
       createUserController,
@@ -425,7 +448,8 @@ export class ServiceCollectionBuilder {
       updateTransactionCategoryController,
       findCategoriesController,
       createCategoryController,
-      findAccountHistoryController
+      findAccountHistoryController,
+      updateUserEmailController
     };
 
     return serviceCollection;

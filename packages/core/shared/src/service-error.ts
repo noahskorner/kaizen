@@ -360,6 +360,28 @@ export interface FindAccountHistoryInvalidTimeframeError {
   };
 }
 
+export interface UpdateUserEmailInvalidEmailError {
+  code: ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL;
+  params: {
+    email: string;
+  };
+}
+
+export interface UpdateUserEmailAlreadyInUseError {
+  code: ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE;
+  params: {
+    userId: string;
+    email: string;
+  };
+}
+
+export interface EmailProviderSendEmailFailedError {
+  code: ErrorCode.EMAIL_PROVIDER_SEND_EMAIL_FAILED;
+  params: {
+    error: unknown;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -410,6 +432,9 @@ export interface BaseError {
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_START_DATE
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_END_DATE
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_TIMEFRAME
+    | ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL
+    | ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE
+    | ErrorCode.EMAIL_PROVIDER_SEND_EMAIL_FAILED
   >;
   params?: never;
 }
@@ -462,4 +487,7 @@ export type ServiceError =
   | FindAccountHistoryInvalidPageSizeError
   | FindAccountHistoryInvalidStartDateError
   | FindAccountHistoryInvalidEndDateError
-  | FindAccountHistoryInvalidTimeframeError;
+  | FindAccountHistoryInvalidTimeframeError
+  | UpdateUserEmailInvalidEmailError
+  | UpdateUserEmailAlreadyInUseError
+  | EmailProviderSendEmailFailedError;

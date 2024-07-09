@@ -28,13 +28,14 @@ import {
   IGetUserRepository,
   IGetUserService,
   ICreateUserService,
-  ICreateLinkTokenService
+  ICreateLinkTokenService,
+  IUpdateUserEmailService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { HomeController } from './routes/home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
-import { IServiceEventBus } from '@kaizen/core-server';
+import { IEmailProvider, IServiceEventBus } from '@kaizen/core-server';
 import {
   ICreateWalletRepository,
   ICreateWalletService,
@@ -45,7 +46,8 @@ import {
 } from '@kaizen/wallet';
 import {
   CreateLinkTokenController,
-  CreateUserController
+  CreateUserController,
+  UpdateUserEmailController
 } from '@kaizen/user-server';
 import {
   LoginController,
@@ -82,6 +84,7 @@ export interface IServiceCollection {
   // Providers
   financialProvider: IFinancialProvider;
   transcriptionProvider: ITranscriptionProvider;
+  emailProvider: IEmailProvider;
 
   // Repositories
   createUserRepository: ICreateUserRepository;
@@ -120,6 +123,7 @@ export interface IServiceCollection {
   findCategoriesService: IFindCategoriesService;
   createCategoryService: ICreateCategoryService;
   findAccountHistoryService: IFindAccountHistoryService;
+  updateUserEmailService: IUpdateUserEmailService;
 
   // Controllers
   homeController: HomeController;
@@ -137,4 +141,5 @@ export interface IServiceCollection {
   findCategoriesController: FindCategoriesController;
   createCategoryController: CreateCategoryController;
   findAccountHistoryController: FindAccountHistoryController;
+  updateUserEmailController: UpdateUserEmailController;
 }
