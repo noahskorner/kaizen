@@ -14,7 +14,7 @@ import {
 } from '@kaizen/finance';
 import { formatCurrency, formatDate } from '@kaizen/core-client';
 
-export const FinancePage = () => {
+export const DashboardPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setLinkToken] = useState<string | null>(null);
   const accountGroups = useSelector(selectAccountGroups);

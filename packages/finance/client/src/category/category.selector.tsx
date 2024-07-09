@@ -14,6 +14,7 @@ import {
   TransactionDispatch,
   setTransactionAction
 } from '../transaction';
+import { TextInput } from '@kaizen/core-client';
 
 export interface CategorySelectorProps {
   transactionId: string;
@@ -127,12 +128,11 @@ export const CategorySelector = ({
           tabIndex={-1}
           className={`${selected ? 'flex flex-col gap-y-1' : 'hidden'} w-[32rem] gap-y-4 rounded-lg bg-neutral-600 p-4 shadow-lg`}>
           <h6 className="font-semibold">Category</h6>
-          <input
+          <TextInput
+            id="category-search"
+            name="category-search"
             value={searchText}
-            onInput={onCategorySearch}
-            ref={inputRef}
-            type="text"
-            className="block w-full rounded-lg border border-neutral-500 bg-neutral-700 p-2 text-xs text-neutral-50 outline-none focus:border-neutral-300 focus:ring-neutral-300"
+            onChange={onCategorySearch}
           />
           <div className="grid max-h-[32rem] grid-cols-3 gap-4 overflow-auto pr-2">
             {searchText.length > 0 && (
