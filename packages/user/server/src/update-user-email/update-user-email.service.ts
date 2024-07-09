@@ -9,7 +9,6 @@ import {
   IFindUserByEmailRepository,
   IUpdateUserEmailService,
   UpdateUserEmailCommand,
-  UpdateUserEmailResponse,
   UpdateUserEmailValidator
 } from '@kaizen/user';
 import jwt from 'jsonwebtoken';
@@ -29,7 +28,7 @@ export class UpdateUserEmailService
 
   public async update(
     command: UpdateUserEmailCommand
-  ): Promise<ServiceResponse<UpdateUserEmailResponse>> {
+  ): Promise<ServiceResponse<boolean>> {
     const errors = UpdateUserEmailValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
@@ -67,8 +66,6 @@ export class UpdateUserEmailService
 
     if (response.type === 'FAILURE') return response;
 
-    return this.success({
-      token: emailVerificationToken
-    } satisfies UpdateUserEmailResponse);
+    return this.success(true);
   }
 }

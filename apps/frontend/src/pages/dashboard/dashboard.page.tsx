@@ -63,7 +63,7 @@ export const DashboardPage = () => {
                     key={accountType}
                     accountType={accountType as AccountType}
                     accountGroup={accountGroup}
-                    showAccounts={false}
+                    showAccounts={true}
                   />
                 );
               }

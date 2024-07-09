@@ -9,12 +9,13 @@ export interface TextInputProps {
   label?: string;
   value: string | number;
   required?: boolean;
+  disabled?: boolean;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
   description?: string;
   errors?: ApiError[];
   min?: number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 export function TextInput({
@@ -23,6 +24,7 @@ export function TextInput({
   label,
   value,
   required,
+  disabled,
   placeholder,
   description,
   type = 'text',
@@ -43,7 +45,7 @@ export function TextInput({
       <input
         className={`${
           errors.length > 0 ? 'ring-1 ring-red-600' : ''
-        } block w-full rounded-lg border border-neutral-500 bg-neutral-900 p-2.5 text-sm text-neutral-50`}
+        } ${disabled ? 'cursor-not-allowed bg-neutral-600 text-neutral-300' : 'bg-neutral-900 text-neutral-50'} block w-full rounded-lg border border-neutral-500 p-2.5 text-sm `}
         type={type}
         name={name}
         id={id}
@@ -51,9 +53,10 @@ export function TextInput({
         min={min}
         placeholder={placeholder}
         onChange={onChange}
+        disabled={disabled}
         required={required}
       />
-      <InputErrors errors={errors} />
+      {errors.length > 0 && <InputErrors errors={errors} />}
     </div>
   );
 }
