@@ -93,6 +93,20 @@ if (EMAIL_VERIFICATION_EXPIRATION == null) {
   );
 }
 
+const FORGOT_PASSWORD_SECRET = process.env.FORGOT_PASSWORD_SECRET;
+if (FORGOT_PASSWORD_SECRET == null) {
+  throw new Error(
+    `Must provide FORGOT_PASSWORD_SECRET. Did you forget to set it in your environment file?`
+  );
+}
+
+const FORGOT_PASSWORD_EXPIRATION = process.env.FORGOT_PASSWORD_EXPIRATION;
+if (FORGOT_PASSWORD_EXPIRATION == null) {
+  throw new Error(
+    `Must provide FORGOT_PASSWORD_EXPIRATION. Did you forget to set it in your environment file?`
+  );
+}
+
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
@@ -110,5 +124,9 @@ export const environment: Environment = {
   OPENAI_API_KEY: OPENAI_API_KEY,
   AWS_REGION: process.env.AWS_REGION ?? null,
   AWS_DATABASE_SECRET_ID: process.env.AWS_DATABASE_SECRET_ID ?? null,
-  AWS_DATABASE_WHITELIST: JSON.parse(process.env.AWS_DATABASE_WHITELIST ?? '[]')
+  AWS_DATABASE_WHITELIST: JSON.parse(
+    process.env.AWS_DATABASE_WHITELIST ?? '[]'
+  ),
+  FORGOT_PASSWORD_SECRET: FORGOT_PASSWORD_SECRET,
+  FORGOT_PASSWORD_EXPIRATION: FORGOT_PASSWORD_EXPIRATION
 };

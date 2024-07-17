@@ -16,4 +16,6 @@ export interface Environment {
   AWS_REGION: string | null;
   AWS_DATABASE_SECRET_ID: string | null;
   AWS_DATABASE_WHITELIST: string[] | null;
+  FORGOT_PASSWORD_SECRET: string;
+  FORGOT_PASSWORD_EXPIRATION: string;
 }

@@ -44,6 +44,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
       serviceCollection.verifyUpdateEmailController.verify
     )
   );
+  router.patch(
+    '/user/:userId/password',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.updatePasswordController.update
+    )
+  );
 
   // /auth
   router.post(
