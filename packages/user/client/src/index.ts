@@ -1,3 +1,4 @@
 export * from './create-user-form';
+export * from './update-email.client';
 export * from './user.client';
-export * from './update-user-email.client';
+export * from './verify-update-email.client';

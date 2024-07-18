@@ -38,7 +38,7 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
       serviceCollection.updateEmailController.update
     )
   );
-  router.patch(
+  router.put(
     '/user/email',
     ExpressAdapter.toRequestHandler(
       serviceCollection.verifyUpdateEmailController.verify

@@ -16,6 +16,7 @@ import jwt from 'jsonwebtoken';
 
 export class UpdateEmailService extends Service implements IUpdateEmailService {
   constructor(
+    private readonly FRONTEND_DOMAIN: string,
     private readonly EMAIL_VERIFICATION_SECRET: string,
     private readonly EMAIL_VERIFICATION_EXPIRATION: string,
     private readonly findUserByEmailRepository: IFindUserByEmailRepository,
@@ -59,7 +60,7 @@ export class UpdateEmailService extends Service implements IUpdateEmailService {
     const response = await this.emailProvider.sendEmail({
       to: normalizedEmail,
       subject: 'Verify your email',
-      text: emailVerificationToken
+      text: `${this.FRONTEND_DOMAIN}/verify-update-email?token=${emailVerificationToken}`
     } satisfies SendEmailCommand);
 
     if (response.type === 'FAILURE') return response;

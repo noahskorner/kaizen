@@ -23,7 +23,7 @@ describe('/user/email', () => {
     it('returns 400 when token not provided', async () => {
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/email`)
+        .put(`/user/email`)
         .send();
 
       // Assert
@@ -38,7 +38,7 @@ describe('/user/email', () => {
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/email`)
+        .put(`/user/email`)
         .send(request);
 
       // Assert
@@ -68,7 +68,7 @@ describe('/user/email', () => {
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/email`)
+        .put(`/user/email`)
         .send({
           token: updateEmailResponse.data.token
         } satisfies VerifyUpdateEmailRequest);

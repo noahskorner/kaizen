@@ -40,6 +40,7 @@ export const SettingsPage = () => {
     const response = await UpdateEmailClient.update({
       email: updatedEmail
     } satisfies UpdateEmailRequest);
+
     console.log(response);
   };
 
