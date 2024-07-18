@@ -51,8 +51,11 @@ import {
   GetUserService,
   CreateUserController,
   CreateLinkTokenController,
-  UpdateUserEmailService,
-  UpdateUserEmailController
+  VerifyUpdateEmailService,
+  VerifyUpdateEmailController,
+  UpdateEmailRepository,
+  UpdateEmailService,
+  UpdateEmailController
 } from '@kaizen/user-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -214,6 +217,7 @@ export class ServiceCollectionBuilder {
     const findAccountHistoryRepository = new FindAccountHistoryRepository(
       prisma
     );
+    const updateEmailRepository = new UpdateEmailRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -317,11 +321,15 @@ export class ServiceCollectionBuilder {
     const findAccountHistoryService = new FindAccountHistoryService(
       findAccountHistoryRepository
     );
-    const updateUserEmailService = new UpdateUserEmailService(
+    const updateEmailService = new UpdateEmailService(
       environment.EMAIL_VERIFICATION_SECRET,
       environment.EMAIL_VERIFICATION_EXPIRATION,
       findUserByEmailRepository,
       emailProvider
+    );
+    const verifyUpdateEmailService = new VerifyUpdateEmailService(
+      environment.EMAIL_VERIFICATION_SECRET,
+      updateEmailRepository
     );
 
     // Controllers
@@ -378,9 +386,12 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       findAccountHistoryService
     );
-    const updateUserEmailController = new UpdateUserEmailController(
+    const updateEmailController = new UpdateEmailController(
       authMiddleware,
-      updateUserEmailService
+      updateEmailService
+    );
+    const verifyUpdateEmailController = new VerifyUpdateEmailController(
+      verifyUpdateEmailService
     );
 
     const serviceCollection: IServiceCollection = {
@@ -413,6 +424,7 @@ export class ServiceCollectionBuilder {
       createCategoryRepository,
       getCategoryRepository,
       findAccountHistoryRepository,
+      updateEmailRepository,
       // Services
       getUserService,
       createUserService,
@@ -432,7 +444,8 @@ export class ServiceCollectionBuilder {
       findCategoriesService,
       createCategoryService,
       findAccountHistoryService,
-      updateUserEmailService,
+      updateEmailService: updateEmailService,
+      verifyUpdateEmailService,
       // Controllers
       homeController,
       createUserController,
@@ -449,7 +462,8 @@ export class ServiceCollectionBuilder {
       findCategoriesController,
       createCategoryController,
       findAccountHistoryController,
-      updateUserEmailController
+      updateEmailController,
+      verifyUpdateEmailController
     };
 
     return serviceCollection;

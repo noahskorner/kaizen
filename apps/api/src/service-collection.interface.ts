@@ -29,7 +29,9 @@ import {
   IGetUserService,
   ICreateUserService,
   ICreateLinkTokenService,
-  IUpdateUserEmailService
+  IUpdateEmailService,
+  IUpdateEmailRepository,
+  IVerifyUpdateEmailService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { HomeController } from './routes/home.controller';
@@ -47,7 +49,8 @@ import {
 import {
   CreateLinkTokenController,
   CreateUserController,
-  UpdateUserEmailController
+  UpdateEmailController,
+  VerifyUpdateEmailController
 } from '@kaizen/user-server';
 import {
   LoginController,
@@ -103,6 +106,7 @@ export interface IServiceCollection {
   createCategoryRepository: ICreateCategoryRepository;
   getCategoryRepository: IGetCategoryRepository;
   findAccountHistoryRepository: IFindAccountHistoryRepository;
+  updateEmailRepository: IUpdateEmailRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -123,7 +127,8 @@ export interface IServiceCollection {
   findCategoriesService: IFindCategoriesService;
   createCategoryService: ICreateCategoryService;
   findAccountHistoryService: IFindAccountHistoryService;
-  updateUserEmailService: IUpdateUserEmailService;
+  updateEmailService: IUpdateEmailService;
+  verifyUpdateEmailService: IVerifyUpdateEmailService;
 
   // Controllers
   homeController: HomeController;
@@ -141,5 +146,6 @@ export interface IServiceCollection {
   findCategoriesController: FindCategoriesController;
   createCategoryController: CreateCategoryController;
   findAccountHistoryController: FindAccountHistoryController;
-  updateUserEmailController: UpdateUserEmailController;
+  updateEmailController: UpdateEmailController;
+  verifyUpdateEmailController: VerifyUpdateEmailController;
 }

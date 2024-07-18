@@ -1,4 +1,4 @@
-import { ErrorCode } from '@kaizen/core';
+import { ErrorCode, ServiceResponse } from '@kaizen/core';
 import supertest from 'supertest';
 import {
   createAndLoginUser,
@@ -6,60 +6,60 @@ import {
   defaultTestBed,
   expectError
 } from '../../../test';
-import { UpdateUserEmailRequest } from '@kaizen/user';
+import { UpdateEmailRequest } from '@kaizen/user';
 import { v4 as uuid } from 'uuid';
 import { ServiceCollectionBuilder } from '../../service-collection.builder';
 import { AppBuilder } from '../../app-builder';
 import { IEmailProvider } from '@kaizen/core-server';
 
-describe('/user/:userId/email', () => {
+describe('/user/email/token', () => {
   describe('update should', () => {
     it('returns 400 when email not provided', async () => {
       // Arrange
-      const { user, authToken } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/email`)
+        .post(`/user/email/token`)
         .send()
         .auth(authToken.accessToken, { type: 'bearer' });
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL);
+      expectError(response, ErrorCode.UPDATE_EMAIL_INVALID_EMAIL);
     });
     it('returns 400 when email invalid', async () => {
       // Arrange
-      const { user, authToken } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/email`)
+        .post(`/user/email/token`)
         .send({
           email: uuid()
-        } satisfies UpdateUserEmailRequest)
+        } satisfies UpdateEmailRequest)
         .auth(authToken.accessToken, { type: 'bearer' });
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL);
+      expectError(response, ErrorCode.UPDATE_EMAIL_INVALID_EMAIL);
     });
     it('returns 400 when email already in use', async () => {
       // Arrange
       const { user: existingUser } = await createAndLoginUser(defaultTestBed);
-      const { user, authToken } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/email`)
+        .post(`/user/email/token`)
         .send({
           email: existingUser.email
-        } satisfies UpdateUserEmailRequest)
+        } satisfies UpdateEmailRequest)
         .auth(authToken.accessToken, { type: 'bearer' });
 
       // Assert
       expect(response.statusCode).toBe(400);
-      expectError(response, ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE);
+      expectError(response, ErrorCode.UPDATE_EMAIL_ALREADY_IN_USE);
     });
     it('returns 500 when email provider fails', async () => {
       // Arrange
@@ -80,14 +80,14 @@ describe('/user/:userId/email', () => {
       const testBed = new AppBuilder()
         .withServiceCollection(mockServiceCollection)
         .build();
-      const { user, authToken } = await createAndLoginUser(testBed);
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
       const response = await supertest(testBed)
-        .patch(`/user/${user.id}/email`)
+        .post(`/user/email/token`)
         .send({
           email: createUniqueEmail()
-        } satisfies UpdateUserEmailRequest)
+        } satisfies UpdateEmailRequest)
         .auth(authToken.accessToken, { type: 'bearer' });
 
       // Assert
@@ -108,19 +108,24 @@ describe('/user/:userId/email', () => {
       const testBed = new AppBuilder()
         .withServiceCollection(mockServiceCollection)
         .build();
-      const { user, authToken } = await createAndLoginUser(testBed);
+      const { authToken } = await createAndLoginUser(testBed);
 
       // Act
       const response = await supertest(testBed)
-        .patch(`/user/${user.id}/email`)
+        .post(`/user/email/token`)
         .send({
           email: createUniqueEmail()
-        } satisfies UpdateUserEmailRequest)
+        } satisfies UpdateEmailRequest)
         .auth(authToken.accessToken, { type: 'bearer' });
+      const body = response.body as ServiceResponse<boolean>;
 
       // Assert
       expect(response.statusCode).toBe(200);
       expect(mockEmailProvider.sendEmail).toHaveBeenCalled();
+      expect(body.type).toBe('SUCCESS');
+      if (body.type === 'SUCCESS') {
+        expect(body.data).toBe(true);
+      }
     });
   });
 });
