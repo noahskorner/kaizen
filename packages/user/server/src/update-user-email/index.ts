@@ -1,2 +1,3 @@
-export * from './update-user-email.controller';
-export * from './update-user-email.service';
+export * from './update-email.controller';
+export * from './update-email.repository';
+export * from './update-email.service';

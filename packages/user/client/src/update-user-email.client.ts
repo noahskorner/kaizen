@@ -1,14 +1,11 @@
 import { ApiResponse } from '@kaizen/core';
 import { ApiClient, handleAxiosRequest } from '@kaizen/core-client';
-import { UpdateUserEmailRequest } from '@kaizen/user';
+import { UpdateEmailRequest } from '@kaizen/user';
 
-export const UpdateUserEmailClient = {
-  update: (request: UpdateUserEmailRequest): Promise<ApiResponse<boolean>> => {
+export const UpdateEmailClient = {
+  update: (request: UpdateEmailRequest): Promise<ApiResponse<boolean>> => {
     return handleAxiosRequest(() => {
-      return ApiClient.patch<ApiResponse<boolean>>(
-        `/user/${request.userId}/email`,
-        request
-      );
+      return ApiClient.post<ApiResponse<boolean>>(`/user/email/token`, request);
     });
   }
 };

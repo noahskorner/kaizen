@@ -3,3 +3,4 @@ export * from './create-user';
 export * from './find-user-by-email';
 export * from './get-user';
 export * from './update-user-email';
+export * from './verify-update-email';

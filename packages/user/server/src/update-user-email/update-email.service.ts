@@ -1,22 +1,20 @@
 import {
   ErrorCode,
   ServiceResponse,
-  UpdateUserEmailAlreadyInUseError
+  UpdateEmailAlreadyInUseError
 } from '@kaizen/core';
 import { IEmailProvider, SendEmailCommand, Service } from '@kaizen/core-server';
 import {
   EmailVerificationToken,
   IFindUserByEmailRepository,
-  IUpdateUserEmailService,
-  UpdateUserEmailCommand,
-  UpdateUserEmailValidator
+  IUpdateEmailService,
+  UpdateEmailResponse,
+  UpdateEmailCommand,
+  UpdateEmailValidator
 } from '@kaizen/user';
 import jwt from 'jsonwebtoken';
 
-export class UpdateUserEmailService
-  extends Service
-  implements IUpdateUserEmailService
-{
+export class UpdateEmailService extends Service implements IUpdateEmailService {
   constructor(
     private readonly EMAIL_VERIFICATION_SECRET: string,
     private readonly EMAIL_VERIFICATION_EXPIRATION: string,
@@ -27,9 +25,9 @@ export class UpdateUserEmailService
   }
 
   public async update(
-    command: UpdateUserEmailCommand
-  ): Promise<ServiceResponse<boolean>> {
-    const errors = UpdateUserEmailValidator.validate(command);
+    command: UpdateEmailCommand
+  ): Promise<ServiceResponse<UpdateEmailResponse>> {
+    const errors = UpdateEmailValidator.validate(command);
     if (errors.length > 0) {
       return this.failures(errors);
     }
@@ -41,9 +39,9 @@ export class UpdateUserEmailService
     if (existingUser != null) {
       return this.failures([
         {
-          code: ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE,
+          code: ErrorCode.UPDATE_EMAIL_ALREADY_IN_USE,
           params: { userId: command.userId, email: command.email }
-        } satisfies UpdateUserEmailAlreadyInUseError
+        } satisfies UpdateEmailAlreadyInUseError
       ]);
     }
 
@@ -66,6 +64,8 @@ export class UpdateUserEmailService
 
     if (response.type === 'FAILURE') return response;
 
-    return this.success(true);
+    return this.success({
+      token: emailVerificationToken
+    } satisfies UpdateEmailResponse);
   }
 }

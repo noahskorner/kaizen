@@ -360,15 +360,15 @@ export interface FindAccountHistoryInvalidTimeframeError {
   };
 }
 
-export interface UpdateUserEmailInvalidEmailError {
-  code: ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL;
+export interface UpdateEmailInvalidEmailError {
+  code: ErrorCode.UPDATE_EMAIL_INVALID_EMAIL;
   params: {
     email: string;
   };
 }
 
-export interface UpdateUserEmailAlreadyInUseError {
-  code: ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE;
+export interface UpdateEmailAlreadyInUseError {
+  code: ErrorCode.UPDATE_EMAIL_ALREADY_IN_USE;
   params: {
     userId: string;
     email: string;
@@ -379,6 +379,17 @@ export interface EmailProviderSendEmailFailedError {
   code: ErrorCode.EMAIL_PROVIDER_SEND_EMAIL_FAILED;
   params: {
     error: unknown;
+  };
+}
+
+export interface VerifyUpdateEmailTokenNotProvidedError {
+  code: ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_PROVIDED;
+}
+
+export interface VerifyUpdateEmailTokenNotValidError {
+  code: ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_VALID;
+  params: {
+    token: string;
   };
 }
 
@@ -432,9 +443,11 @@ export interface BaseError {
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_START_DATE
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_END_DATE
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_TIMEFRAME
-    | ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL
-    | ErrorCode.UPDATE_USER_EMAIL_ALREADY_IN_USE
+    | ErrorCode.UPDATE_EMAIL_INVALID_EMAIL
+    | ErrorCode.UPDATE_EMAIL_ALREADY_IN_USE
     | ErrorCode.EMAIL_PROVIDER_SEND_EMAIL_FAILED
+    | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_PROVIDED
+    | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_VALID
   >;
   params?: never;
 }
@@ -488,6 +501,8 @@ export type ServiceError =
   | FindAccountHistoryInvalidStartDateError
   | FindAccountHistoryInvalidEndDateError
   | FindAccountHistoryInvalidTimeframeError
-  | UpdateUserEmailInvalidEmailError
-  | UpdateUserEmailAlreadyInUseError
-  | EmailProviderSendEmailFailedError;
+  | UpdateEmailInvalidEmailError
+  | UpdateEmailAlreadyInUseError
+  | EmailProviderSendEmailFailedError
+  | VerifyUpdateEmailTokenNotProvidedError
+  | VerifyUpdateEmailTokenNotValidError;

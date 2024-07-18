@@ -1,9 +1,9 @@
 import { selectEmail, selectUserId } from '@kaizen/auth-client';
 import { ApiError } from '@kaizen/core';
 import { TextInput } from '@kaizen/core-client';
-import { UpdateUserEmailRequest, UpdateUserEmailValidator } from '@kaizen/user';
-import { UpdateUserEmailClient } from '@kaizen/user-client';
-import { ChangeEvent, useState } from 'react';
+import { UpdateEmailRequest, UpdateEmailValidator } from '@kaizen/user';
+import { UpdateEmailClient } from '@kaizen/user-client';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export const SettingsPage = () => {
@@ -18,11 +18,15 @@ export const SettingsPage = () => {
     setErrors([]);
   };
 
-  const onSendVerificationEmailClick = async () => {
+  const onSendVerificationEmailSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+
     if (userId == null)
       throw new Error('Something whent wrong, userId is null.');
 
-    const errors = UpdateUserEmailValidator.validateEmail(updatedEmail);
+    const errors = UpdateEmailValidator.validateEmail(updatedEmail);
     if (errors.length > 0) {
       setErrors([
         {
@@ -33,10 +37,9 @@ export const SettingsPage = () => {
       return;
     }
 
-    const response = await UpdateUserEmailClient.update({
-      userId: userId,
+    const response = await UpdateEmailClient.update({
       email: updatedEmail
-    } satisfies UpdateUserEmailRequest);
+    } satisfies UpdateEmailRequest);
     console.log(response);
   };
 
@@ -44,7 +47,9 @@ export const SettingsPage = () => {
     <div className="flex w-full flex-col gap-y-6">
       <h1 className="text-3xl font-bold">Settings</h1>
       <div className="flex w-full max-w-2xl flex-col gap-y-8">
-        <div className="flex w-full flex-col gap-y-4 rounded-lg border border-neutral-500 bg-neutral-700">
+        <form
+          onSubmit={onSendVerificationEmailSubmit}
+          className="flex w-full flex-col gap-y-4 rounded-lg border border-neutral-500 bg-neutral-700">
           <div className="flex flex-col gap-y-6 p-6">
             <div>
               <h3 className="mb-6 text-xl font-bold">Email</h3>
@@ -69,13 +74,12 @@ export const SettingsPage = () => {
           </div>
           <div className="flex flex-col items-end justify-center border-t border-neutral-500 px-6 py-4">
             <button
-              onClick={onSendVerificationEmailClick}
-              type="button"
+              type="submit"
               className="rounded-lg bg-neutral-50 px-3 py-2 text-center text-sm font-medium text-neutral-950 hover:bg-neutral-100 focus:outline-none">
               Send Verification Email
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import { ErrorCode, ServiceError } from '@kaizen/core';
 import { emailRegex } from '../email.regex';
-import { UpdateUserEmailRequest } from './update-user-email.request';
+import { UpdateEmailRequest } from './update-email.request';
 
-export class UpdateUserEmailValidator {
-  public static validate(request: UpdateUserEmailRequest): ServiceError[] {
-    return [...UpdateUserEmailValidator.validateEmail(request.email)];
+export class UpdateEmailValidator {
+  public static validate(request: UpdateEmailRequest): ServiceError[] {
+    return [...UpdateEmailValidator.validateEmail(request.email)];
   }
 
   public static validateEmail(email: string): ServiceError[] {
@@ -12,13 +12,13 @@ export class UpdateUserEmailValidator {
 
     if (email == null) {
       errors.push({
-        code: ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL,
+        code: ErrorCode.UPDATE_EMAIL_INVALID_EMAIL,
         params: { email }
       });
     }
     if (!emailRegex.test(email)) {
       errors.push({
-        code: ErrorCode.UPDATE_USER_EMAIL_INVALID_EMAIL,
+        code: ErrorCode.UPDATE_EMAIL_INVALID_EMAIL,
         params: { email }
       });
     }
