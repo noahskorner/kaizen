@@ -1,4 +1,13 @@
-import { TextInput, Button, useToast } from '@kaizen/core-client';
+import {
+  Button,
+  useToast,
+  Input,
+  FormField,
+  Label,
+  Form,
+  FormMessage,
+  FormDescription
+} from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
@@ -77,37 +86,51 @@ export const CreateUserForm = ({
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-y-6 p-4">
-      <form
+    <div className="flex w-full max-w-md flex-col gap-y-6 p-4">
+      <Form
         onSubmit={submitRegisterForm}
         className="flex w-full flex-col gap-y-2">
-        <TextInput
-          id={CREATE_USER_FORM_EMAIL_INPUT_ID}
-          name="email"
-          label="Email address"
-          value={email}
-          errors={emailErrors}
-          onChange={onEmailChange}
-        />
-        <TextInput
-          id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
-          name="password"
-          type="password"
-          label="Password"
-          value={password}
-          errors={passwordErrors}
-          onChange={onPasswordChange}
-        />
+        <FormField>
+          <Label className={`${emailErrors.length && 'text-destructive'}`}>
+            Email address
+          </Label>
+          <Input
+            id={CREATE_USER_FORM_EMAIL_INPUT_ID}
+            name="email"
+            value={email}
+            onChange={onEmailChange}
+          />
+          <FormDescription>
+            Enter the email you want to use to login with
+          </FormDescription>
+          {emailErrors.map((error) => (
+            <FormMessage key={error.code} message={error.message} />
+          ))}
+        </FormField>
+        <FormField>
+          <Label className={`${passwordErrors.length && 'text-destructive'}`}>
+            Password
+          </Label>
+          <Input
+            id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
+            name="password"
+            value={password}
+            onChange={onPasswordChange}
+          />
+          {passwordErrors.map((error) => (
+            <FormMessage key={error.code} message={error.message} />
+          ))}
+        </FormField>
         <Button type="submit" disabled={loading}>
           Register
         </Button>
         <p className="text-sm">
           Already have an account?&nbsp;
-          <Link to={loginHref} className="text-blue-800 hover:underline">
+          <Link to={loginHref} className="text-blue-400 hover:underline">
             Click here!
           </Link>
         </p>
-      </form>
+      </Form>
     </div>
   );
 };

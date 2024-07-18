@@ -1,4 +1,4 @@
-import { TextInput, Button } from '@kaizen/core-client';
+import { Button, Input } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
 import { LoginRequest } from '@kaizen/auth';
 import { Link } from 'react-router-dom';
@@ -57,18 +57,18 @@ export const LoginForm = ({
       <form
         onSubmit={onSubmitLoginForm}
         className="flex w-full flex-col gap-y-2">
-        <TextInput
+        <Input
           id={LOGIN_FORM_EMAIL_INPUT_ID}
           name="email"
-          label="Email address"
+          // label="Email address"
           value={email}
           onChange={onEmailChange}
         />
-        <TextInput
+        <Input
           id={LOGIN_FORM_PASSWORD_INPUT_ID}
           name="password"
           type="password"
-          label="Password"
+          // label="Password"
           value={password}
           onChange={onPasswordChange}
         />

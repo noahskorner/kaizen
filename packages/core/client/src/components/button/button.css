@@ -1,7 +1,0 @@
-.button.-primary {
-  @apply rounded-lg bg-indigo-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300;
-}
-
-.button.-primary.-active {
-  @apply outline-none ring-4 ring-indigo-300;
-}

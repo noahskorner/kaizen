@@ -1,6 +1,6 @@
 import { selectEmail, selectUserId } from '@kaizen/auth-client';
 import { ApiError } from '@kaizen/core';
-import { TextInput } from '@kaizen/core-client';
+import { Input } from '@kaizen/core-client';
 import { UpdateEmailRequest, UpdateEmailValidator } from '@kaizen/user';
 import { UpdateEmailClient } from '@kaizen/user-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -54,7 +54,7 @@ export const SettingsPage = () => {
           <div className="flex flex-col gap-y-6 p-6">
             <div>
               <h3 className="mb-6 text-xl font-bold">Email</h3>
-              <TextInput
+              <Input
                 id="email"
                 name="email"
                 type="email"
@@ -62,13 +62,13 @@ export const SettingsPage = () => {
                 value={email ?? ''}
               />
             </div>
-            <TextInput
+            <Input
               id="email"
               name="email"
               type="email"
-              label="Enter the email address you want to use to log in with."
+              // label="Enter the email address you want to use to log in with."
               placeholder="john.doe@company.com"
-              errors={errors}
+              // errors={errors}
               value={updatedEmail}
               onChange={onEmailChange}
             />
