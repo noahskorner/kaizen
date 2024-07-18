@@ -34,7 +34,7 @@ export const LineChart = ({ stroke, data, onTooltipHover }: LineChartProps) => {
               }
 
               return (
-                <span className="text-xs text-neutral-300">
+                <span className="text-xs text-zinc-300">
                   {new Date(payload[0].payload.date).toLocaleDateString(
                     'en-US',
                     {

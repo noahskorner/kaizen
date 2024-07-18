@@ -39,7 +39,7 @@ export const ButtonGroup = ({
   return (
     <div className="flex flex-col gap-y-2 text-sm">
       <label className="font-semibold">Donation Frequency</label>
-      {description && <p className="text-xs text-neutral-700">{description}</p>}
+      {description && <p className="text-xs text-zinc-700">{description}</p>}
       <div
         className={`${
           errors.length > 0 && 'ring-1 ring-red-600'

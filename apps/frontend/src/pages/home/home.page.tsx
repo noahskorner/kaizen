@@ -1,4 +1,4 @@
-import { Button } from '@kaizen/core-client';
+import { Button, Input } from '@kaizen/core-client';
 
 export const HomePage = () => {
   return (
@@ -11,6 +11,7 @@ export const HomePage = () => {
         <Button to={'/register'}>/register</Button>
         <Button to={'/dashboard'}>/dashboard</Button>
         <Button to={'/dashboard/finance'}>/dashboard/finance</Button>
+        <Input />
       </div>
     </div>
   );

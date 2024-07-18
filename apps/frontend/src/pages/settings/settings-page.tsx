@@ -50,7 +50,7 @@ export const SettingsPage = () => {
       <div className="flex w-full max-w-2xl flex-col gap-y-8">
         <form
           onSubmit={onSendVerificationEmailSubmit}
-          className="flex w-full flex-col gap-y-4 rounded-lg border border-neutral-500 bg-neutral-700">
+          className="flex w-full flex-col gap-y-4 rounded-lg border border-zinc-500 bg-zinc-700">
           <div className="flex flex-col gap-y-6 p-6">
             <div>
               <h3 className="mb-6 text-xl font-bold">Email</h3>
@@ -73,10 +73,10 @@ export const SettingsPage = () => {
               onChange={onEmailChange}
             />
           </div>
-          <div className="flex flex-col items-end justify-center border-t border-neutral-500 px-6 py-4">
+          <div className="flex flex-col items-end justify-center border-t border-zinc-500 px-6 py-4">
             <button
               type="submit"
-              className="rounded-lg bg-neutral-50 px-3 py-2 text-center text-sm font-medium text-neutral-950 hover:bg-neutral-100 focus:outline-none">
+              className="rounded-lg bg-zinc-50 px-3 py-2 text-center text-sm font-medium text-zinc-950 hover:bg-zinc-100 focus:outline-none">
               Send Verification Email
             </button>
           </div>

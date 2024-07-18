@@ -28,7 +28,7 @@ export const PieChart = ({ data }: PieChartProps) => {
           data={data}
           innerRadius="75%"
           outerRadius="90%"
-          className="fill-neutral-600"
+          className="fill-zinc-600"
           cornerRadius={8}
           paddingAngle={2}
           dataKey="value"

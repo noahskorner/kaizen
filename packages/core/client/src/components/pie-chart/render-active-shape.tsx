@@ -34,7 +34,7 @@ export const renderActiveShape = (props: any) => {
         y={cy}
         dy={8}
         textAnchor="middle"
-        className="fill-neutral-50 font-bold lg:text-4xl">
+        className="fill-zinc-50 font-bold lg:text-4xl">
         {payload.name}
       </text>
       <Sector
@@ -62,18 +62,18 @@ export const renderActiveShape = (props: any) => {
         className="stroke-green-300"
         fill="none"
       />
-      <circle cx={ex} cy={ey} r={2} className="fill-neutral-50" stroke="none" />
+      <circle cx={ex} cy={ey} r={2} className="fill-zinc-50" stroke="none" />
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        className="fill-neutral-50">{`${formatCurrency(value, 'USD')}`}</text>
+        className="fill-zinc-50">{`${formatCurrency(value, 'USD')}`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         dy={18}
         textAnchor={textAnchor}
-        className="fill-neutral-300 text-sm">
+        className="fill-zinc-300 text-sm">
         {`${percent * 100 < 1 ? '<1' : (percent * 100).toFixed(2)}%`}
       </text>
     </g>

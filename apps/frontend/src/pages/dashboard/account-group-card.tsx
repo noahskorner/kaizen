@@ -24,7 +24,7 @@ export const AccountGroupCard = ({
     <div className="flex w-full flex-col">
       <button
         onClick={onGroupClick}
-        className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-neutral-600">
+        className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-zinc-600">
         <div className="flex w-full max-w-48 gap-x-2">
           <h3 className="w-32 font-semibold capitalize">
             {getAccountGroupLabel(accountType)}
@@ -43,7 +43,7 @@ export const AccountGroupCard = ({
                 key={account.id}>
                 <div className="flex flex-col gap-y-1">
                   <span className="text-sm">{account.name}&nbsp;</span>
-                  <span className="text-xs text-neutral-300">
+                  <span className="text-xs text-zinc-300">
                     (*{account.mask})
                   </span>
                 </div>

@@ -41,12 +41,12 @@ export const Sidebar = ({
     <div
       className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
       <div
-        className={`flex h-full w-64 flex-col items-center justify-between bg-neutral-700 px-3 py-2 text-neutral-600`}>
+        className={`flex h-full w-64 flex-col items-center justify-between bg-zinc-900 px-3 py-2 text-zinc-600`}>
         <div className="flex w-full flex-col gap-y-4">
           <div>
             <button
               onClick={toggleSidebar}
-              className="rounded-lg p-2 text-neutral-50 hover:bg-neutral-600">
+              className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-600">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

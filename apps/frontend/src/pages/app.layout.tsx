@@ -81,7 +81,7 @@ export const AppLayout = () => {
         <div className="fixed left-0 right-0 top-0 flex w-full flex-col items-start justify-between px-3 py-2">
           <button
             onClick={onSidebarToggleClick}
-            className={`${!showSidebar ? 'appear' : 'disappear'} rounded-lg bg-neutral-600 p-2 text-neutral-50 hover:bg-neutral-500`}>
+            className={`${!showSidebar ? 'appear' : 'disappear'} rounded-lg bg-zinc-600 p-2 text-zinc-50 hover:bg-zinc-500`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

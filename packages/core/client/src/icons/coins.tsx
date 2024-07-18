@@ -6,7 +6,7 @@ export const CoinsIcon = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="h-4 fill-yellow-400 text-neutral-900">
+      className="h-4 fill-yellow-400 text-zinc-900">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

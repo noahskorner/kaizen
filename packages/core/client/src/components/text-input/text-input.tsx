@@ -36,16 +36,16 @@ export function TextInput({
     <div className="flex flex-col gap-y-6">
       {label && (
         <label
-          className="block text-sm font-medium text-neutral-50"
+          className="block text-sm font-medium text-zinc-50"
           htmlFor={id}>
           {label}
         </label>
       )}
-      {description && <p className="text-xs text-neutral-700">{description}</p>}
+      {description && <p className="text-xs text-zinc-700">{description}</p>}
       <input
         className={`${
           errors.length > 0 ? 'ring-1 ring-red-600' : ''
-        } ${disabled ? 'cursor-not-allowed bg-neutral-600 text-neutral-300' : 'bg-neutral-900 text-neutral-50'} block w-full rounded-lg border border-neutral-500 p-2.5 text-sm `}
+        } ${disabled ? 'cursor-not-allowed bg-zinc-600 text-zinc-300' : 'bg-zinc-900 text-zinc-50'} block w-full rounded-lg border border-zinc-500 p-2.5 text-sm `}
         type={type}
         name={name}
         id={id}

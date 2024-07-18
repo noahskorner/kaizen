@@ -70,12 +70,12 @@ export const NetworthGraph = () => {
           onTooltipHover={onTooltipHover}
         />
       </div>
-      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-neutral-500 pb-4">
+      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-zinc-500 pb-4">
         {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-300 text-neutral-900' : 'bg-red-700 text-neutral-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-300 text-zinc-900' : 'bg-red-700 text-zinc-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold`}>
             {timeframe}
           </button>
         ))}

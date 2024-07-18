@@ -22,7 +22,7 @@ export const renderShape = (props: any) => {
         startAngle={startAngle}
         cornerRadius={cornerRadius}
         endAngle={endAngle}
-        className="fill-neutral-500"
+        className="fill-zinc-500"
       />
     </g>
   );

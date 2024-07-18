@@ -120,13 +120,13 @@ export const CategorySelector = ({
       <button
         onMouseEnter={onCategoryMouseEnter}
         onClick={onCategoryClick}
-        className="rounded-lg bg-green-300 px-2 py-1 text-xs font-medium lowercase text-neutral-700">
+        className="rounded-lg bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-700">
         {name}
       </button>
       <div className="absolute left-0 top-full z-10 pt-1">
         <div
           tabIndex={-1}
-          className={`${selected ? 'flex flex-col gap-y-1' : 'hidden'} w-[32rem] gap-y-4 rounded-lg bg-neutral-600 p-4 shadow-lg`}>
+          className={`${selected ? 'flex flex-col gap-y-1' : 'hidden'} w-[32rem] gap-y-4 rounded-lg bg-zinc-600 p-4 shadow-lg`}>
           <h6 className="font-semibold">Category</h6>
           <TextInput
             id="category-search"
@@ -139,7 +139,7 @@ export const CategorySelector = ({
               <div className="w-full">
                 <button
                   onClick={() => onCreateCategoryClick(searchText)}
-                  className="inline h-32 w-full rounded-lg bg-neutral-500 px-2 py-1 text-xs font-medium lowercase text-neutral-50">
+                  className="inline h-32 w-full rounded-lg bg-zinc-500 px-2 py-1 text-xs font-medium lowercase text-zinc-50">
                   {searchText} (New Category)
                 </button>
               </div>
@@ -149,7 +149,7 @@ export const CategorySelector = ({
                 <div key={category.id} className="col-span-1">
                   <button
                     onClick={() => onUpdateCategoryClick(category.id)}
-                    className={`${category.name === name ? 'border border-neutral-400' : ''} inline h-32 w-full rounded-lg bg-neutral-500 px-2 py-1 text-xs font-medium lowercase text-neutral-50 shadow-lg hover:bg-neutral-400 `}>
+                    className={`${category.name === name ? 'border border-zinc-400' : ''} inline h-32 w-full rounded-lg bg-zinc-500 px-2 py-1 text-xs font-medium lowercase text-zinc-50 shadow-lg hover:bg-zinc-400 `}>
                     {category.name}
                   </button>
                 </div>
