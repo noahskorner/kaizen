@@ -1,5 +1,5 @@
-import { Button, Input } from '@kaizen/core-client';
-import { ChangeEvent, FormEvent, useState, MouseEvent } from 'react';
+import { Button, Form, FormField, Input, Label } from '@kaizen/core-client';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { LoginRequest } from '@kaizen/auth';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -27,9 +27,7 @@ export const LoginForm = ({
   const [password, setPassword] = useState(initialPassword ?? '12345678a$');
   const dispatch = useDispatch<AuthDispatch>();
 
-  const onSubmitLoginForm = async (
-    event: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
-  ) => {
+  const onSubmitLoginForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsSubmitting(true);
@@ -53,29 +51,28 @@ export const LoginForm = ({
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-y-6 p-4">
-      <form
-        onSubmit={onSubmitLoginForm}
-        className="flex w-full flex-col gap-y-2">
-        <Input
-          id={LOGIN_FORM_EMAIL_INPUT_ID}
-          name="email"
-          // label="Email address"
-          value={email}
-          onChange={onEmailChange}
-        />
-        <Input
-          id={LOGIN_FORM_PASSWORD_INPUT_ID}
-          name="password"
-          type="password"
-          // label="Password"
-          value={password}
-          onChange={onPasswordChange}
-        />
-        <Button
-          disabled={isSubmitting}
-          onClick={onSubmitLoginForm}
-          type="submit">
+    <div className="flex w-full max-w-md flex-col gap-y-6 p-4">
+      <Form onSubmit={onSubmitLoginForm}>
+        <FormField>
+          <Label>Email address</Label>
+          <Input
+            id={LOGIN_FORM_EMAIL_INPUT_ID}
+            name="email"
+            value={email}
+            onChange={onEmailChange}
+          />
+        </FormField>
+        <FormField>
+          <Label>Password</Label>
+          <Input
+            id={LOGIN_FORM_PASSWORD_INPUT_ID}
+            name="password"
+            type="password"
+            value={password}
+            onChange={onPasswordChange}
+          />
+        </FormField>
+        <Button variant="primary" disabled={isSubmitting} type="submit">
           Login
         </Button>
         <p className="text-sm">
@@ -84,7 +81,7 @@ export const LoginForm = ({
             Click here!
           </Link>
         </p>
-      </form>
+      </Form>
     </div>
   );
 };

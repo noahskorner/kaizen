@@ -6,7 +6,13 @@ const Form = React.forwardRef<
   HTMLFormElement,
   React.HTMLAttributes<HTMLFormElement>
 >(({ className, ...props }, ref) => {
-  return <form ref={ref} className={cn('space-y-2', className)} {...props} />;
+  return (
+    <form
+      ref={ref}
+      className={cn('flex w-full flex-col gap-y-4', className)}
+      {...props}
+    />
+  );
 });
 Form.displayName = 'Form';
 

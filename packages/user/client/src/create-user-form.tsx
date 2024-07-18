@@ -34,7 +34,7 @@ export const CreateUserForm = ({
   const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
   const { toast } = useToast();
 
-  const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const emailErrors = CreateUserValidator.validateEmail(email).map(
@@ -87,9 +87,7 @@ export const CreateUserForm = ({
 
   return (
     <div className="flex w-full max-w-md flex-col gap-y-6 p-4">
-      <Form
-        onSubmit={submitRegisterForm}
-        className="flex w-full flex-col gap-y-2">
+      <Form onSubmit={onSubmitRegisterForm}>
         <FormField>
           <Label className={`${emailErrors.length && 'text-destructive'}`}>
             Email address
@@ -121,7 +119,7 @@ export const CreateUserForm = ({
             <FormMessage key={error.code} message={error.message} />
           ))}
         </FormField>
-        <Button type="submit" disabled={loading}>
+        <Button variant="primary" type="submit" disabled={loading}>
           Register
         </Button>
         <p className="text-sm">
