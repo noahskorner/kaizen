@@ -1,17 +1,10 @@
-import {
-  TextInput,
-  Button,
-  ToastDispatch,
-  CreateToastRequest,
-  createToast
-} from '@kaizen/core-client';
+import { TextInput, Button, useToast } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
 import { ApiError } from '@kaizen/core';
 import { UserClient } from '.';
 import { Link } from 'react-router-dom';
 import { ServiceErrorAdapter } from '@kaizen/core/src/service-error.adapter';
-import { useDispatch } from 'react-redux';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -30,7 +23,7 @@ export const CreateUserForm = ({
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
   const [password, setPassword] = useState('12345678a$');
   const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
-  const dispatch = useDispatch<ToastDispatch>();
+  const { toast } = useToast();
 
   const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,11 +49,10 @@ export const CreateUserForm = ({
     setLoading(false);
 
     if (response.type === 'FAILURE') {
-      const toast: CreateToastRequest = {
-        title: 'Uh oh!',
-        message: response.errors.map((error) => error.message).join(' ')
-      };
-      dispatch(createToast(toast));
+      toast({
+        title: 'Unable to create new user.',
+        description: response.errors.map((e) => e.message).join(' ')
+      });
     } else {
       onRegisterSuccess();
     }

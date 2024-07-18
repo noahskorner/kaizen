@@ -4,16 +4,11 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { paths } from '../routes';
-import {
-  CreateToastRequest,
-  ToastDispatch,
-  createToast
-} from '@kaizen/core-client';
 
 export const VerifyUpdateEmailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AuthDispatch & ToastDispatch>();
+  const dispatch = useDispatch<AuthDispatch>();
 
   useEffect(() => {
     const verifyUpdateEmail = async () => {
@@ -29,11 +24,6 @@ export const VerifyUpdateEmailPage = () => {
       }
 
       dispatch(refreshToken());
-      dispatch(
-        createToast({
-          title: `Email successfully updated to ${response.data.email}🎉`
-        } satisfies CreateToastRequest)
-      );
       navigate(paths.settings);
     };
 

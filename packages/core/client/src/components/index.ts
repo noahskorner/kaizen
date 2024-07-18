@@ -7,5 +7,5 @@ export * from './pie-chart';
 export * from './sidebar';
 export * from './simple-line-chart';
 export * from './text-input';
-export * from './toast-manager';
+export * from './toast';
 export * from './ui';
