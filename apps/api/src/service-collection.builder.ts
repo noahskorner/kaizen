@@ -55,8 +55,7 @@ import {
   VerifyUpdateEmailController,
   UpdateEmailRepository,
   UpdateEmailService,
-  UpdateEmailController
-  CreateLinkTokenController,
+  UpdateEmailController,
   UpdatePasswordRepository,
   UpdatePasswordService,
   UpdatePasswordController,
