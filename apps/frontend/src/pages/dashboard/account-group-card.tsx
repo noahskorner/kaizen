@@ -24,7 +24,7 @@ export const AccountGroupCard = ({
     <div className="flex w-full flex-col">
       <button
         onClick={onGroupClick}
-        className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-zinc-600">
+        className="flex items-stretch justify-between gap-x-4 p-4 text-left text-sm hover:bg-zinc-900">
         <div className="flex w-full max-w-48 gap-x-2">
           <h3 className="w-32 font-semibold capitalize">
             {getAccountGroupLabel(accountType)}

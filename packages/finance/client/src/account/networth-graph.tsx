@@ -70,7 +70,7 @@ export const NetworthGraph = () => {
           onTooltipHover={onTooltipHover}
         />
       </div>
-      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-zinc-500 pb-4">
+      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-zinc-800 pb-4">
         {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}

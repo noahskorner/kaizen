@@ -119,14 +119,14 @@ export const CreateUserForm = ({
             <FormMessage key={error.code} message={error.message} />
           ))}
         </FormField>
-        <Button variant="primary" type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading}>
           Register
         </Button>
-        <p className="text-sm">
+        <p className="text-muted text-sm">
           Already have an account?&nbsp;
-          <Link to={loginHref} className="text-blue-400 hover:underline">
-            Click here!
-          </Link>
+          <Button variant="link" asChild className="p-0">
+            <Link to={loginHref}>Click here!</Link>
+          </Button>
         </p>
       </Form>
     </div>

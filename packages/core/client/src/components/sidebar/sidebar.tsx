@@ -46,7 +46,7 @@ export const Sidebar = ({
           <div>
             <button
               onClick={toggleSidebar}
-              className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-600">
+              className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -62,7 +62,7 @@ export const Sidebar = ({
               </svg>
             </button>
           </div>
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-1">
             <SidebarButton
               icon={<HomeIcon />}
               href={dashboardHref}
@@ -75,7 +75,7 @@ export const Sidebar = ({
             />
           </div>
         </div>
-        <div className="flex w-full flex-col gap-y-2">
+        <div className="flex w-full flex-col gap-y-1">
           <SidebarButton
             icon={<SettingsIcon />}
             href={accountHref}

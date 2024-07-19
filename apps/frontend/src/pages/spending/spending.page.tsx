@@ -11,7 +11,9 @@ export const SpendingPage = () => {
   return (
     <div className="flex w-full flex-col-reverse gap-6 lg:flex-row">
       <div className="flex w-full max-w-5xl flex-col gap-4">
-        <h1 className="text-3xl font-bold">Transactions</h1>
+        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+          Transactions
+        </h1>
         <TransactionsTable />
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center lg:h-[50rem]">

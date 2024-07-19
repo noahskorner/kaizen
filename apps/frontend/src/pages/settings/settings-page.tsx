@@ -1,6 +1,14 @@
 import { selectEmail, selectUserId } from '@kaizen/auth-client';
 import { ApiError } from '@kaizen/core';
-import { Input } from '@kaizen/core-client';
+import {
+  Button,
+  Form,
+  FormField,
+  FormMessage,
+  Input,
+  Label,
+  useToast
+} from '@kaizen/core-client';
 import { UpdateEmailRequest, UpdateEmailValidator } from '@kaizen/user';
 import { UpdateEmailClient } from '@kaizen/user-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -11,6 +19,7 @@ export const SettingsPage = () => {
   const email = useSelector(selectEmail);
   const [updatedEmail, setUpdatedEmail] = useState('');
   const [errors, setErrors] = useState<ApiError[]>([]);
+  const { toast } = useToast();
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     const updatedEmail = event.target.value;
@@ -41,16 +50,23 @@ export const SettingsPage = () => {
       email: updatedEmail
     } satisfies UpdateEmailRequest);
 
-    console.log(response);
+    if (response.type === 'SUCCESS') {
+      toast({
+        title: 'Succesfully updated email.',
+        description: 'Please check your email for verification.'
+      });
+    }
   };
 
   return (
     <div className="flex w-full flex-col gap-y-6">
-      <h1 className="text-3xl font-bold">Settings</h1>
+      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+        Settings
+      </h1>
       <div className="flex w-full max-w-2xl flex-col gap-y-8">
-        <form
+        <Form
           onSubmit={onSendVerificationEmailSubmit}
-          className="flex w-full flex-col gap-y-4 rounded-lg border border-zinc-500 bg-zinc-700">
+          className="flex w-full flex-col gap-y-4 rounded-lg border border-zinc-700 bg-zinc-900">
           <div className="flex flex-col gap-y-6 p-6">
             <div>
               <h3 className="mb-6 text-xl font-bold">Email</h3>
@@ -62,25 +78,29 @@ export const SettingsPage = () => {
                 value={email ?? ''}
               />
             </div>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              // label="Enter the email address you want to use to log in with."
-              placeholder="john.doe@company.com"
-              // errors={errors}
-              value={updatedEmail}
-              onChange={onEmailChange}
-            />
+            <FormField>
+              <Label id="email">
+                Enter the email address you want to use to log in with.
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="jon.snow@gmail.com"
+                value={updatedEmail}
+                onChange={onEmailChange}
+              />
+              {errors.map((error) => (
+                <FormMessage key={error.code} message={error.message} />
+              ))}
+            </FormField>
           </div>
-          <div className="flex flex-col items-end justify-center border-t border-zinc-500 px-6 py-4">
-            <button
-              type="submit"
-              className="rounded-lg bg-zinc-50 px-3 py-2 text-center text-sm font-medium text-zinc-950 hover:bg-zinc-100 focus:outline-none">
-              Send Verification Email
-            </button>
+          <div className="flex flex-col items-end justify-center border-t border-zinc-700 px-6 py-4">
+            <Button size="sm" type="submit">
+              Send verification email
+            </Button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   );

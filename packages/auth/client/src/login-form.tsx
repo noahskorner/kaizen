@@ -72,14 +72,14 @@ export const LoginForm = ({
             onChange={onPasswordChange}
           />
         </FormField>
-        <Button variant="primary" disabled={isSubmitting} type="submit">
+        <Button disabled={isSubmitting} type="submit">
           Login
         </Button>
         <p className="text-sm">
           Need an account?&nbsp;
-          <Link to={registerHref} className="text-blue-400 hover:underline">
-            Click here!
-          </Link>
+          <Button variant="link" asChild className="p-0">
+            <Link to={registerHref}>Click here!</Link>
+          </Button>
         </p>
       </Form>
     </div>

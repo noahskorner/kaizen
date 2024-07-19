@@ -25,7 +25,7 @@ export const TransactionsTable = () => {
         return (
           <div
             key={transaction.id}
-            className="flex w-full items-center justify-center gap-x-2 border-b border-zinc-600 px-4 py-3">
+            className="flex w-full items-center justify-center gap-x-2 border-b border-zinc-800 px-4 py-3">
             {transaction.category == null && (
               <span className="size-2 rounded-full bg-blue-600"></span>
             )}
@@ -36,7 +36,7 @@ export const TransactionsTable = () => {
                 src={transaction.logoUrl}
               />
             ) : (
-              <div className="h-8 w-8 flex-shrink-0 rounded-full bg-zinc-600"></div>
+              <div className="h-8 w-8 flex-shrink-0 rounded-full bg-zinc-800"></div>
             )}
             <div className="flex w-full items-center justify-between">
               <div className="flex w-full flex-col items-start gap-3 lg:flex-row lg:items-center">

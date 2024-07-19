@@ -49,11 +49,13 @@ export const DashboardPage = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+        Dashboard
+      </h1>
       <div className="flex h-full w-full flex-col items-stretch gap-x-6 gap-y-6 lg:flex-row">
         <div className="order-2 flex h-full w-full flex-col gap-y-6 lg:order-1 lg:max-w-sm">
-          <div className="w-full rounded-lg border border-zinc-600 ">
-            <div className="border-b border-zinc-600 p-4">
+          <div className="w-full rounded-lg border border-zinc-800 ">
+            <div className="border-b border-zinc-800 p-4">
               <h2 className="font-bold">Accounts</h2>
             </div>
             {Object.entries(accountGroups).map(
@@ -69,8 +71,8 @@ export const DashboardPage = () => {
               }
             )}
           </div>
-          <div className="w-full rounded-lg border border-zinc-600 ">
-            <div className="border-b border-zinc-600 p-4 ">
+          <div className="w-full rounded-lg border border-zinc-800 ">
+            <div className="border-b border-zinc-800 p-4 ">
               <h2 className="font-bold">Recent Transactions</h2>
             </div>
             {recentTransactions.map((transaction) => {
