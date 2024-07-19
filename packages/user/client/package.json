@@ -16,6 +16,7 @@
     "@kaizen/core": "*",
     "@kaizen/core-client": "*",
     "@kaizen/user": "*",
+    "@kaizen/auth-client": "*",
     "react": "^18.2.0",
     "react-router-dom": "^6.19.0",
     "@reduxjs/toolkit": "^2.2.2",
