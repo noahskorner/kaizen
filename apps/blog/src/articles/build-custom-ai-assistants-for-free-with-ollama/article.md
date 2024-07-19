@@ -1,3 +1,14 @@
+---
+title: 'Build Custom AI Assistants For Free With Ollama!'
+author: 'Noah Korner'
+preview: 'In this article, we will explore how to build custom AI assistants completely free, using Ollama.'
+date: '2024-06-25'
+tags:
+  - 'AI'
+  - 'Machine Learning'
+  - 'Ollama'
+---
+
 # Build Custom AI Assistants For Free With Ollama!
 
 ## Introduction

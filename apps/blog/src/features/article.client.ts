@@ -10,12 +10,13 @@ export const ArticleClient = {
   find: (): Promise<Article[]> => {
     return Promise.resolve(
       fs.readdirSync(ARTICLE_DIRECTORY).map((article) => {
-        const articlePath = path.join(ARTICLE_DIRECTORY, article);
+        const articleDirectory = path.join(ARTICLE_DIRECTORY, article);
+        const articlePath = path.join(articleDirectory, 'article.md');
         const { content, data } = matter(fs.readFileSync(articlePath, 'utf8'));
         const meta: ArticleMeta = data as ArticleMeta;
 
         return {
-          slug: article.replace('.md', ''),
+          slug: article,
           meta,
           content
         };
@@ -23,7 +24,8 @@ export const ArticleClient = {
     );
   },
   get: (slug: string): Promise<Article> => {
-    const articlePath = path.join(ARTICLE_DIRECTORY, slug + '.md');
+    const articleDirectory = path.join(ARTICLE_DIRECTORY, slug);
+    const articlePath = path.join(articleDirectory, 'article.md');
     const { content, data } = matter(fs.readFileSync(articlePath, 'utf8'));
 
     const article: Article = {
