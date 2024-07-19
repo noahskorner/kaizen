@@ -8,15 +8,15 @@ import {
   createAndLoginUser
 } from '../../../test';
 
-describe('/user/:userId/password', () => {
+describe('/user/password/token', () => {
   describe('update should', () => {
     it('returns 400 when password not provided', async () => {
       // Arrange
-      const { authToken, user } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/password`)
+        .post(`/user/password/token`)
         .send({})
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -26,14 +26,14 @@ describe('/user/:userId/password', () => {
     });
     it('returns 400 when password not long enough', async () => {
       // Arrange
-      const { authToken, user } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
       const request: UpdatePasswordRequest = {
         password: '1234567'
       };
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/password`)
+        .post(`/user/password/token`)
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -43,14 +43,14 @@ describe('/user/:userId/password', () => {
     });
     it('returns 400 when password has no numbers', async () => {
       // Arrange
-      const { authToken, user } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
       const request: UpdatePasswordRequest = {
         password: 'abcdefghi'
       };
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/password`)
+        .post(`/user/password/token`)
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -60,14 +60,14 @@ describe('/user/:userId/password', () => {
     });
     it('returns 400 when password has no symbols', async () => {
       // Arrange
-      const { authToken, user } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
       const request: UpdatePasswordRequest = {
         password: '1234567a'
       };
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/password`)
+        .post(`/user/password/token`)
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
 
@@ -77,14 +77,14 @@ describe('/user/:userId/password', () => {
     });
     it('returns 200', async () => {
       // Arrange
-      const { authToken, user } = await createAndLoginUser(defaultTestBed);
+      const { authToken } = await createAndLoginUser(defaultTestBed);
       const request: UpdatePasswordRequest = {
         password: validPassword
       };
 
       // Act
       const response = await supertest(defaultTestBed)
-        .patch(`/user/${user.id}/password`)
+        .post(`/user/password/token`)
         .send(request)
         .auth(authToken.accessToken, { type: 'bearer' });
 

@@ -1,4 +1,4 @@
-import { UpdateEmailForm } from '@kaizen/user-client';
+import { UpdateEmailForm, UpdatePasswordForm } from '@kaizen/user-client';
 
 export const SettingsPage = () => {
   return (
@@ -8,6 +8,7 @@ export const SettingsPage = () => {
       </h1>
       <div className="flex w-full max-w-2xl flex-col gap-y-8">
         <UpdateEmailForm />
+        <UpdatePasswordForm />
       </div>
     </div>
   );

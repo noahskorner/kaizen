@@ -1,4 +1,4 @@
-import { ApiError } from '@kaizen/core';
+import { ServiceError } from '@kaizen/core';
 import {
   Button,
   Form,
@@ -12,13 +12,12 @@ import { UpdateEmailRequest, UpdateEmailValidator } from '@kaizen/user';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UpdateEmailClient } from './update-email.client';
-import { selectEmail, selectUserId } from '@kaizen/auth-client';
+import { selectEmail } from '@kaizen/auth-client';
 
 export const UpdateEmailForm = () => {
-  const userId = useSelector(selectUserId);
   const email = useSelector(selectEmail);
   const [updatedEmail, setUpdatedEmail] = useState('');
-  const [errors, setErrors] = useState<ApiError[]>([]);
+  const [errors, setErrors] = useState<ServiceError[]>([]);
   const { toast } = useToast();
 
   const onEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,17 +31,9 @@ export const UpdateEmailForm = () => {
   ) => {
     event.preventDefault();
 
-    if (userId == null)
-      throw new Error('Something whent wrong, userId is null.');
-
     const errors = UpdateEmailValidator.validateEmail(updatedEmail);
     if (errors.length > 0) {
-      setErrors([
-        {
-          code: errors[0].code,
-          message: 'Must provide a valid email address.'
-        } satisfies ApiError
-      ]);
+      setErrors(errors);
       return;
     }
 
@@ -66,15 +57,15 @@ export const UpdateEmailForm = () => {
         <div>
           <h3 className="mb-6 text-xl font-bold">Email</h3>
           <Input
-            id="email"
-            name="email"
-            type="email"
+            id="currentEmail"
+            name="currentEmail"
+            type="currentEmail"
             disabled={true}
             value={email ?? ''}
           />
         </div>
         <FormField>
-          <Label id="email">
+          <Label htmlFor="email">
             Enter the email address you want to use to log in with.
           </Label>
           <Input
@@ -86,7 +77,7 @@ export const UpdateEmailForm = () => {
             onChange={onEmailChange}
           />
           {errors.map((error) => (
-            <FormMessage key={error.code} message={error.message} />
+            <FormMessage key={error.code} message={error.code} />
           ))}
         </FormField>
       </div>
