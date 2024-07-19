@@ -28,7 +28,7 @@ const getDatabaseUrl = async (): Promise<string> => {
     const username = secret.username;
     const password = secret.password;
     const host = secret.host;
-    const databaseName = secret.dbInstanceIdentifier;
+    const databaseName = secret.dbname;
     const port = secret.port;
 
     return `postgresql://${username}:${password}@${host}:${port}/${databaseName}?schema=public`;
