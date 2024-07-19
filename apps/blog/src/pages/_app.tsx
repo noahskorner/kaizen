@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className="flex min-h-screen flex-col items-stretch font-primary">
+    <div className="font-primary flex min-h-screen flex-col items-stretch">
       <nav className="fixed flex h-24 w-full items-center justify-between border-b border-slate-800 bg-slate-950 p-8 shadow">
         <div className="w-1/3"></div>
         <div className="hidden lg:flex">

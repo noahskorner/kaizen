@@ -122,7 +122,7 @@ export const CreateUserForm = ({
         <Button type="submit" disabled={loading}>
           Register
         </Button>
-        <p className="text-muted text-sm">
+        <p className="text-sm text-muted">
           Already have an account?&nbsp;
           <Button variant="link" asChild className="p-0">
             <Link to={loginHref}>Click here!</Link>

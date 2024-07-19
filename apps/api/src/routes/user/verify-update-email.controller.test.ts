@@ -53,6 +53,7 @@ describe('/user/email', () => {
         cachedPrismaClient
       );
       const updateEmailService = new UpdateEmailService(
+        environment.FRONTEND_DOMAIN,
         environment.EMAIL_VERIFICATION_SECRET,
         environment.EMAIL_VERIFICATION_EXPIRATION,
         findUserByEmailRepository,
