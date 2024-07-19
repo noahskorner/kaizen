@@ -1,6 +1,6 @@
 {
   "extends": "../../../tsconfig.react.json",
-  "include": ["."],
+  "include": [".", "../../core/client/src/utils/format-currency.ts"],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "outDir": "../../../dist/packages/finance/client"

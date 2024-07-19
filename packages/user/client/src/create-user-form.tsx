@@ -1,9 +1,12 @@
 import {
-  TextInput,
   Button,
-  ToastDispatch,
-  CreateToastRequest,
-  createToast
+  useToast,
+  Input,
+  FormField,
+  Label,
+  Form,
+  FormMessage,
+  FormDescription
 } from '@kaizen/core-client';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { CreateUserRequest, CreateUserValidator } from '@kaizen/user';
@@ -11,7 +14,6 @@ import { ApiError } from '@kaizen/core';
 import { UserClient } from '.';
 import { Link } from 'react-router-dom';
 import { ServiceErrorAdapter } from '@kaizen/core/src/service-error.adapter';
-import { useDispatch } from 'react-redux';
 
 const CREATE_USER_FORM_EMAIL_INPUT_ID = 'create-user-form-email-input';
 const CREATE_USER_FORM_PASSWORD_INPUT_ID = 'create-user-form-password-input';
@@ -30,9 +32,9 @@ export const CreateUserForm = ({
   const [emailErrors, setEmailErrors] = useState<ApiError[]>([]);
   const [password, setPassword] = useState('12345678a$');
   const [passwordErrors, setPasswordErrors] = useState<ApiError[]>([]);
-  const dispatch = useDispatch<ToastDispatch>();
+  const { toast } = useToast();
 
-  const submitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitRegisterForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const emailErrors = CreateUserValidator.validateEmail(email).map(
@@ -56,11 +58,10 @@ export const CreateUserForm = ({
     setLoading(false);
 
     if (response.type === 'FAILURE') {
-      const toast: CreateToastRequest = {
-        title: 'Uh oh!',
-        message: response.errors.map((error) => error.message).join(' ')
-      };
-      dispatch(createToast(toast));
+      toast({
+        title: 'Unable to create new user.',
+        description: response.errors.map((e) => e.message).join(' ')
+      });
     } else {
       onRegisterSuccess();
     }
@@ -85,37 +86,49 @@ export const CreateUserForm = ({
   };
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-y-6 p-4">
-      <form
-        onSubmit={submitRegisterForm}
-        className="flex w-full flex-col gap-y-2">
-        <TextInput
-          id={CREATE_USER_FORM_EMAIL_INPUT_ID}
-          name="email"
-          label="Email address"
-          value={email}
-          errors={emailErrors}
-          onChange={onEmailChange}
-        />
-        <TextInput
-          id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
-          name="password"
-          type="password"
-          label="Password"
-          value={password}
-          errors={passwordErrors}
-          onChange={onPasswordChange}
-        />
+    <div className="flex w-full max-w-md flex-col gap-y-6 p-4">
+      <Form onSubmit={onSubmitRegisterForm}>
+        <FormField>
+          <Label className={`${emailErrors.length && 'text-destructive'}`}>
+            Email address
+          </Label>
+          <Input
+            id={CREATE_USER_FORM_EMAIL_INPUT_ID}
+            name="email"
+            value={email}
+            onChange={onEmailChange}
+          />
+          <FormDescription>
+            Enter the email you want to use to login with
+          </FormDescription>
+          {emailErrors.map((error) => (
+            <FormMessage key={error.code} message={error.message} />
+          ))}
+        </FormField>
+        <FormField>
+          <Label className={`${passwordErrors.length && 'text-destructive'}`}>
+            Password
+          </Label>
+          <Input
+            id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
+            name="password"
+            value={password}
+            onChange={onPasswordChange}
+          />
+          {passwordErrors.map((error) => (
+            <FormMessage key={error.code} message={error.message} />
+          ))}
+        </FormField>
         <Button type="submit" disabled={loading}>
           Register
         </Button>
-        <p className="text-sm">
+        <p className="text-sm text-muted">
           Already have an account?&nbsp;
-          <Link to={loginHref} className="text-blue-800 hover:underline">
-            Click here!
-          </Link>
+          <Button variant="link" asChild className="p-0">
+            <Link to={loginHref}>Click here!</Link>
+          </Button>
         </p>
-      </form>
+      </Form>
     </div>
   );
 };

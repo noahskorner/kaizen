@@ -40,3 +40,4 @@
 - [Package Management](./docs/packages.md)
 - CLI to generate packages
 - CLI to generate features within packages
+- CLI to add errors

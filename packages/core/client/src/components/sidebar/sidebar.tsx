@@ -1,23 +1,30 @@
 import './sidebar.css';
 import { useEffect, useRef } from 'react';
 import { SidebarButton } from './sidebar-link';
-import {
-  BankNotesIcon,
-  LogoutIcon,
-  SidebarDispatch,
-  selectShowSidebar,
-  toggleSidebarAction
-} from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
+import { HomeIcon } from '../../icons/home';
+import { TagIcon } from '../../icons/tag';
+import { SidebarDispatch } from './sidebar.store';
+import { selectShowSidebar } from './sidebar.selectors';
+import { toggleSidebarAction } from './sidebar.actions';
+import { SettingsIcon } from '../../icons/settings';
+import { LogoutIcon } from '../../icons/logout';
 
 export interface SidebarProps {
   transcribedAudio: string | null;
-  financeHref: string;
+  dashboardHref: string;
+  spendingHref: string;
+  accountHref: string;
   onLogoutClick?: React.MouseEventHandler<HTMLButtonElement>;
   onAssistantClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
+export const Sidebar = ({
+  dashboardHref,
+  spendingHref,
+  accountHref,
+  onLogoutClick
+}: SidebarProps) => {
   const firstRenderRef = useRef(true);
   const dispatch = useDispatch<SidebarDispatch>();
   const showSidebar = useSelector(selectShowSidebar);
@@ -31,64 +38,56 @@ export const Sidebar = ({ financeHref, onLogoutClick }: SidebarProps) => {
   }, []);
 
   return (
-    <>
+    <div
+      className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
       <div
-        className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
-        <div
-          className={`flex h-full w-64 flex-col items-center justify-between bg-neutral-700 px-3 py-2 text-neutral-600`}>
-          <div className="flex w-full flex-col gap-y-4">
-            <div>
-              <button
-                onClick={toggleSidebar}
-                className="rounded-lg p-2 text-neutral-50 hover:bg-neutral-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
-              </button>
-            </div>
-            <SidebarButton
-              icon={<BankNotesIcon />}
-              href={financeHref}
-              label="Finances"
-            />
+        className={`flex h-full w-64 flex-col items-center justify-between bg-zinc-900 px-3 py-2 text-zinc-600`}>
+        <div className="flex w-full flex-col gap-y-4">
+          <div>
+            <button
+              onClick={toggleSidebar}
+              className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            </button>
           </div>
-          <div className="w-full">
-            <p className="mb-2 text-xs text-neutral-100">Account</p>
+          <div className="flex flex-col gap-y-1">
             <SidebarButton
-              icon={<LogoutIcon />}
-              onClick={onLogoutClick}
-              label="Logout"
+              icon={<HomeIcon />}
+              href={dashboardHref}
+              label="Dashboard"
+            />
+            <SidebarButton
+              icon={<TagIcon />}
+              href={spendingHref}
+              label="Spending"
             />
           </div>
         </div>
-      </div>
-      <button
-        onClick={toggleSidebar}
-        className={`${!showSidebar ? 'appear' : 'disappear'} fixed left-3 top-2 rounded-lg bg-neutral-600 p-2 text-neutral-50 hover:bg-neutral-800`}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        <div className="flex w-full flex-col gap-y-1">
+          <SidebarButton
+            icon={<SettingsIcon />}
+            href={accountHref}
+            label="Settings"
           />
-        </svg>
-      </button>
-    </>
+          <SidebarButton
+            icon={<LogoutIcon />}
+            onClick={onLogoutClick}
+            label="Logout"
+          />
+        </div>
+      </div>
+    </div>
   );
 };

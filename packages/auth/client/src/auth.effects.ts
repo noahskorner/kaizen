@@ -12,6 +12,18 @@ import { AccessToken, LoginRequest } from '@kaizen/auth';
 import { jwtDecode } from 'jwt-decode';
 import { AuthDispatch } from './auth.store';
 
+let silentRefreshTimeout: NodeJS.Timeout | null;
+
+const silentRefresh = (exp: number, dispatch: AuthDispatch) => {
+  if (silentRefreshTimeout) clearTimeout(silentRefreshTimeout);
+
+  const currentTime = Math.floor(Date.now() / 1000); // get current time in seconds
+  const ms = (exp - currentTime) * 1000; // remaining time in milliseconds
+  silentRefreshTimeout = setTimeout(() => {
+    dispatch(refreshToken());
+  }, ms);
+};
+
 export const login = (request: LoginRequest, onLoginSuccess: () => void) => {
   return async (dispatch: AuthDispatch) => {
     dispatch(loginAction());
@@ -52,12 +64,4 @@ export const logout = () => {
     AuthClient.logout();
     dispatch(logoutAction());
   };
-};
-
-const silentRefresh = (exp: number, dispatch: AuthDispatch) => {
-  const currentTime = Math.floor(Date.now() / 1000); // get current time in seconds
-  const ms = (exp - currentTime) * 1000; // remaining time in milliseconds
-  setTimeout(() => {
-    dispatch(refreshToken());
-  }, ms);
 };

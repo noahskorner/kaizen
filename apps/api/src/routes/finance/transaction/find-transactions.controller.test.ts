@@ -157,7 +157,7 @@ describe('/transaction', () => {
       const mockAccount = buildAccount({
         item_id: mockItem.item_id
       });
-      const mockTransactions = range(11).map(() =>
+      const mockTransactions = range(26).map(() =>
         buildTransaction({ account_id: mockAccount.account_id })
       );
       const { testBed } = buildTestBed({

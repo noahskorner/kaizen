@@ -7,9 +7,9 @@ import {
   toSearchParams
 } from '@kaizen/core';
 import {
-  AccountSnapshot,
-  FindAccountHistoryRequest,
-  SnapshotAccountsCommand
+  AccountHistory,
+  CreateAccountHistoryCommand,
+  FindAccountHistoryRequest
 } from '@kaizen/finance';
 import { createAndLoginUser } from '../../../../test/create-and-login-user';
 import { expectError, createInstitution } from '../../../../test';
@@ -143,7 +143,7 @@ describe('/account/history', () => {
       const response = await supertest(testBed)
         .get(`/account/history?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body = response.body as ApiResponse<Paginated<AccountSnapshot>>;
+      const body = response.body as ApiResponse<Paginated<AccountHistory>>;
 
       // Asserts
       expect(response.status).toBe(200);
@@ -157,11 +157,11 @@ describe('/account/history', () => {
       // Arrange
       const { testBed, serviceCollection } = buildTestBed();
       const { user, authToken } = await createInstitution(testBed);
-      const { data: accountSnapshots } =
-        (await serviceCollection.snapshotAccountsService.snapshot({
+      const { data: accountHistory } =
+        (await serviceCollection.createAccountHistoryService.create({
           userId: user.id
-        } satisfies SnapshotAccountsCommand)) as unknown as ServiceSuccessResponse<
-          ApiResponse<AccountSnapshot[]>
+        } satisfies CreateAccountHistoryCommand)) as unknown as ServiceSuccessResponse<
+          ApiResponse<AccountHistory[]>
         >;
 
       // Build request
@@ -176,14 +176,14 @@ describe('/account/history', () => {
       const response = await supertest(testBed)
         .get(`/account/history?${toSearchParams(request)}`)
         .auth(authToken.accessToken, { type: 'bearer' });
-      const body = response.body as ApiResponse<Paginated<AccountSnapshot>>;
+      const body = response.body as ApiResponse<Paginated<AccountHistory>>;
 
       // Asserts
       expect(response.status).toBe(200);
       expect(body.type).toBe('SUCCESS');
       if (body.type === 'SUCCESS') {
         expect(body.data.total).toBe(1);
-        expect(body.data.hits[0]).toEqual(accountSnapshots[0]);
+        expect(body.data.hits[0]).toEqual(accountHistory[0]);
       }
     });
   });

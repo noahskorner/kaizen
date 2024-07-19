@@ -74,7 +74,7 @@ export default function HomePage() {
         <div className="flex w-full items-center justify-center">
           <div className="w-full max-w-xl rounded bg-slate-50 p-8 shadow-lg">
             <form className="flex w-full flex-col">
-              <h2 className="mb-8 font-secondary text-3xl font-semibold leading-snug text-gray-900">
+              <h2 className="font-secondary mb-8 text-3xl font-semibold leading-snug text-gray-900">
                 How can we help?
               </h2>
               <div className="mb-5">

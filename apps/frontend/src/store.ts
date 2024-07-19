@@ -2,17 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { walletReducers } from '@kaizen/wallet-client';
 import { authReducers } from '@kaizen/auth-client';
 import {
+  accountHistoryReducers,
   categoryReducers,
   institutionReducers,
   transactionReducers
 } from '@kaizen/finance-client';
-import {
-  screenReducers,
-  sidebarReducers,
-  toastReducers
-} from '@kaizen/core-client';
+import { screenReducers, sidebarReducers } from '@kaizen/core-client';
 import { effects } from './effects/effects';
-import { onLoginFailureDisplayToast } from './effects/on-login-failure-display-toast';
 import { onLoginLoadInstitutions } from './effects/on-login-load-institutions';
 import { onLoginLoadWallet } from './effects/on-login-load-wallet';
 import {
@@ -21,6 +17,7 @@ import {
   onLoginLoadTransactions
 } from './effects';
 import { onMobileHideSidebar } from './effects/on-mobile-hide-sidebar';
+import { onLoginLoadAccountHistory } from './effects/on-login-load-account-history';
 
 const rootReducer = combineReducers({
   screen: screenReducers,
@@ -28,9 +25,9 @@ const rootReducer = combineReducers({
   wallet: walletReducers,
   auth: authReducers,
   institution: institutionReducers,
-  toast: toastReducers,
   transaction: transactionReducers,
-  category: categoryReducers
+  category: categoryReducers,
+  accountHistory: accountHistoryReducers
 });
 
 export const store = configureStore({
@@ -40,8 +37,8 @@ export const store = configureStore({
 
 effects.run(onMobileHideSidebar);
 effects.run(onDesktopShowSidebar);
-effects.run(onLoginFailureDisplayToast);
 effects.run(onLoginLoadWallet);
 effects.run(onLoginLoadInstitutions);
 effects.run(onLoginLoadTransactions);
 effects.run(onLoginLoadCategories);
+effects.run(onLoginLoadAccountHistory);

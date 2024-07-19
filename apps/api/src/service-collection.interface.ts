@@ -10,8 +10,6 @@ import {
   ISyncAccountsService,
   IGetAccountRepository,
   ISyncInstitutionsService,
-  ISnapshotAccountsService,
-  ICreateAccountSnapshotRepository,
   IFindCategoriesRepository,
   IFindCategoriesService,
   ICreateCategoryRepository,
@@ -20,7 +18,9 @@ import {
   IUpdateTransactionCategoryRepository,
   IUpdateTransactionCategoryService,
   IFindAccountHistoryRepository,
-  IFindAccountHistoryService
+  IFindAccountHistoryService,
+  ICreateAccountHistoryService,
+  ICreateAccountHistoryRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -28,13 +28,16 @@ import {
   IGetUserRepository,
   IGetUserService,
   ICreateUserService,
-  ICreateLinkTokenService
+  ICreateLinkTokenService,
+  IUpdateEmailService,
+  IUpdateEmailRepository,
+  IVerifyUpdateEmailService
 } from '@kaizen/user';
 import { PlaidApi } from 'plaid';
 import { HomeController } from './routes/home.controller';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
-import { IServiceEventBus } from '@kaizen/core-server';
+import { IEmailProvider, IServiceEventBus } from '@kaizen/core-server';
 import {
   ICreateWalletRepository,
   ICreateWalletService,
@@ -45,7 +48,9 @@ import {
 } from '@kaizen/wallet';
 import {
   CreateLinkTokenController,
-  CreateUserController
+  CreateUserController,
+  UpdateEmailController,
+  VerifyUpdateEmailController
 } from '@kaizen/user-server';
 import {
   LoginController,
@@ -82,13 +87,14 @@ export interface IServiceCollection {
   // Providers
   financialProvider: IFinancialProvider;
   transcriptionProvider: ITranscriptionProvider;
+  emailProvider: IEmailProvider;
 
   // Repositories
   createUserRepository: ICreateUserRepository;
   findUserByEmailRepository: IFindUserByEmailRepository;
   getUserRepository: IGetUserRepository;
   getAccountRepository: IGetAccountRepository;
-  createAccountSnapshotRepository: ICreateAccountSnapshotRepository;
+  createAccountHistoryRepository: ICreateAccountHistoryRepository;
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
@@ -100,6 +106,7 @@ export interface IServiceCollection {
   createCategoryRepository: ICreateCategoryRepository;
   getCategoryRepository: IGetCategoryRepository;
   findAccountHistoryRepository: IFindAccountHistoryRepository;
+  updateEmailRepository: IUpdateEmailRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -108,7 +115,7 @@ export interface IServiceCollection {
   loginService: ILoginService;
   refreshTokenService: IRefreshTokenService;
   syncAccountsService: ISyncAccountsService;
-  snapshotAccountsService: ISnapshotAccountsService;
+  createAccountHistoryService: ICreateAccountHistoryService;
   syncInstitutionsService: ISyncInstitutionsService;
   createInstitutionService: ICreateInstitutionService;
   findInstitutionsService: IFindInstitutionsService;
@@ -120,6 +127,8 @@ export interface IServiceCollection {
   findCategoriesService: IFindCategoriesService;
   createCategoryService: ICreateCategoryService;
   findAccountHistoryService: IFindAccountHistoryService;
+  updateEmailService: IUpdateEmailService;
+  verifyUpdateEmailService: IVerifyUpdateEmailService;
 
   // Controllers
   homeController: HomeController;
@@ -137,4 +146,6 @@ export interface IServiceCollection {
   findCategoriesController: FindCategoriesController;
   createCategoryController: CreateCategoryController;
   findAccountHistoryController: FindAccountHistoryController;
+  updateEmailController: UpdateEmailController;
+  verifyUpdateEmailController: VerifyUpdateEmailController;
 }

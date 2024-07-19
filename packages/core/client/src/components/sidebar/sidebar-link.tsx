@@ -7,10 +7,6 @@ export interface SidebarButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
-const BUTTON_CLASS =
-  'flex w-full cursor-pointer items-center justify-start rounded-lg p-2 hover:bg-neutral-600 text-neutral-50';
-const BUTTON_LABEL_CLASS = 'font-primary text-sm ml-3 font-normal';
-
 export const SidebarButton = ({
   icon,
   label,
@@ -18,14 +14,18 @@ export const SidebarButton = ({
   onClick = () => {}
 }: SidebarButtonProps) => {
   return href != null ? (
-    <Link to={href} className={BUTTON_CLASS}>
+    <Link
+      to={href}
+      className="inline-flex h-10 items-center justify-start gap-x-2 whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-zinc-50 ring-offset-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
       {icon}
-      <span className={BUTTON_LABEL_CLASS}>{label}</span>
+      <span>{label}</span>
     </Link>
   ) : (
-    <button onClick={onClick} className={BUTTON_CLASS}>
+    <button
+      onClick={onClick}
+      className="inline-flex h-10 items-center justify-start gap-x-2 whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-zinc-50 ring-offset-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
       {icon}
-      <span className={BUTTON_LABEL_CLASS}>{label}</span>
+      <span>{label}</span>
     </button>
   );
 };

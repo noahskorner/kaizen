@@ -3,3 +3,4 @@ export * from './middleware';
 export * from './repository';
 export * from './service-event';
 export * from './service';
+export * from './email-provider';

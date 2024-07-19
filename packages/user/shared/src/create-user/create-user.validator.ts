@@ -1,7 +1,6 @@
 import { ErrorCode, ServiceError } from '@kaizen/core';
 import { CreateUserRequest } from './create-user.request';
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { emailRegex } from '../email.regex';
 
 export class CreateUserValidator {
   public static validate(command: CreateUserRequest): ServiceError[] {

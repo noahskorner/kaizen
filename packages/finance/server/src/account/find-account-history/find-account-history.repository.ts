@@ -1,7 +1,7 @@
 import { Paginated } from '@kaizen/core';
 import { Repository } from '@kaizen/core-server';
 import {
-  AccountSnapshotRecord,
+  AccountHistoryRecord,
   FindAccountHistoryQuery,
   IFindAccountHistoryRepository
 } from '@kaizen/finance';
@@ -12,9 +12,9 @@ export class FindAccountHistoryRepository
 {
   public async find(
     query: FindAccountHistoryQuery
-  ): Promise<Paginated<AccountSnapshotRecord>> {
-    const [accountSnapshotRecords, total] = await Promise.all([
-      this._prisma.accountSnapshotRecord.findMany({
+  ): Promise<Paginated<AccountHistoryRecord>> {
+    const [accountHistoryRecords, total] = await Promise.all([
+      this._prisma.accountHistoryRecord.findMany({
         where: {
           account: {
             institution: {
@@ -32,7 +32,7 @@ export class FindAccountHistoryRepository
         skip: query.pageSize * (query.page - 1),
         take: query.pageSize
       }),
-      this._prisma.accountSnapshotRecord.count({
+      this._prisma.accountHistoryRecord.count({
         where: {
           account: {
             institution: {
@@ -49,7 +49,7 @@ export class FindAccountHistoryRepository
 
     return {
       total: total,
-      hits: accountSnapshotRecords
-    } satisfies Paginated<AccountSnapshotRecord>;
+      hits: accountHistoryRecords
+    } satisfies Paginated<AccountHistoryRecord>;
   }
 }

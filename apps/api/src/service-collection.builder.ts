@@ -1,5 +1,4 @@
 import {
-  CreateAccountSnapshotRepository,
   CreateCategoryController,
   CreateCategoryRepository,
   CreateCategoryService,
@@ -20,7 +19,6 @@ import {
   GetAccountRepository,
   GetCategoryRepository,
   GetTransactionRepository,
-  SnapshotAccountsService,
   SyncAccountsRepository,
   SyncAccountsService,
   SyncInstitutionsController,
@@ -32,7 +30,9 @@ import {
   UpdateTransactionCategoryService,
   FindAccountHistoryRepository,
   FindAccountHistoryService,
-  FindAccountHistoryController
+  FindAccountHistoryController,
+  CreateAccountHistoryRepository,
+  CreateAccountHistoryService
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -50,7 +50,12 @@ import {
   GetUserRepository,
   GetUserService,
   CreateUserController,
-  CreateLinkTokenController
+  CreateLinkTokenController,
+  VerifyUpdateEmailService,
+  VerifyUpdateEmailController,
+  UpdateEmailRepository,
+  UpdateEmailService,
+  UpdateEmailController
 } from '@kaizen/user-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -59,7 +64,9 @@ import { HomeController } from './routes/home.controller';
 import { PrismaClient } from '@prisma/client';
 import {
   CreateUserSuccessEvent,
+  IEmailProvider,
   IServiceEventBus,
+  LocalEmailProvider,
   LoginSuccessEvent,
   ServiceEventBusBuilder,
   ServiceEventType,
@@ -76,9 +83,9 @@ import {
 } from '@kaizen/wallet-server';
 import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
-import { SnapshotAccountsCommand } from '@kaizen/finance';
 import { OpenAITranscriptionProvider } from '@kaizen/assist-server';
 import { Environment, environment } from './env';
+import { CreateAccountHistoryCommand } from '@kaizen/finance';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -100,6 +107,11 @@ export class ServiceCollectionBuilder {
 
   public withEventBus(serviceEventBus: IServiceEventBus) {
     this._serviceCollection.serviceEventBus = serviceEventBus;
+    return this;
+  }
+
+  public withEmailProvider(emailProvider: IEmailProvider) {
+    this._serviceCollection.emailProvider = emailProvider;
     return this;
   }
 
@@ -126,10 +138,10 @@ export class ServiceCollectionBuilder {
         .withHandler(
           ServiceEventType.SYNC_ACCOUNTS_SUCCESS,
           async (event: SyncAccountsSuccessEvent) => {
-            const command: SnapshotAccountsCommand = {
+            const command: CreateAccountHistoryCommand = {
               userId: event.payload.userId
             };
-            await serviceCollection.snapshotAccountsService.snapshot(command);
+            await serviceCollection.createAccountHistoryService.create(command);
           }
         )
         // When a user logs in, give them 10 coins
@@ -177,9 +189,9 @@ export class ServiceCollectionBuilder {
     const getAccountRepository =
       this._serviceCollection.getAccountRepository ??
       new GetAccountRepository(prisma);
-    const createAccountSnapshotRepository =
-      this._serviceCollection.createAccountSnapshotRepository ??
-      new CreateAccountSnapshotRepository(prisma);
+    const createAccountHistoryRepository = new CreateAccountHistoryRepository(
+      prisma
+    );
     const createInstitutionRepository =
       this._serviceCollection.createInstitutionRepository ??
       new CreateInstitutionRepository(prisma);
@@ -205,6 +217,7 @@ export class ServiceCollectionBuilder {
     const findAccountHistoryRepository = new FindAccountHistoryRepository(
       prisma
     );
+    const updateEmailRepository = new UpdateEmailRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -213,6 +226,8 @@ export class ServiceCollectionBuilder {
     const transcriptionProvider =
       this._serviceCollection.transcriptionProvider ??
       new OpenAITranscriptionProvider(environment.OPENAI_API_KEY);
+    const emailProvider =
+      this._serviceCollection.emailProvider ?? new LocalEmailProvider();
 
     // Services
     const getUserService =
@@ -260,9 +275,9 @@ export class ServiceCollectionBuilder {
       syncAccountsRepository,
       syncTransactionsService
     );
-    const snapshotAccountsService = new SnapshotAccountsService(
+    const createAccountHistoryService = new CreateAccountHistoryService(
       findAccountsRepository,
-      createAccountSnapshotRepository
+      createAccountHistoryRepository
     );
     const createInstitutionService =
       this._serviceCollection.createInstitutionService ??
@@ -305,6 +320,17 @@ export class ServiceCollectionBuilder {
     );
     const findAccountHistoryService = new FindAccountHistoryService(
       findAccountHistoryRepository
+    );
+    const updateEmailService = new UpdateEmailService(
+      environment.FRONTEND_DOMAIN,
+      environment.EMAIL_VERIFICATION_SECRET,
+      environment.EMAIL_VERIFICATION_EXPIRATION,
+      findUserByEmailRepository,
+      emailProvider
+    );
+    const verifyUpdateEmailService = new VerifyUpdateEmailService(
+      environment.EMAIL_VERIFICATION_SECRET,
+      updateEmailRepository
     );
 
     // Controllers
@@ -361,6 +387,13 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       findAccountHistoryService
     );
+    const updateEmailController = new UpdateEmailController(
+      authMiddleware,
+      updateEmailService
+    );
+    const verifyUpdateEmailController = new VerifyUpdateEmailController(
+      verifyUpdateEmailService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -374,12 +407,13 @@ export class ServiceCollectionBuilder {
       // Providers
       financialProvider,
       transcriptionProvider,
+      emailProvider,
       // Repositories
       createUserRepository,
       findUserByEmailRepository,
       getUserRepository,
       getAccountRepository,
-      createAccountSnapshotRepository,
+      createAccountHistoryRepository,
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
@@ -391,6 +425,7 @@ export class ServiceCollectionBuilder {
       createCategoryRepository,
       getCategoryRepository,
       findAccountHistoryRepository,
+      updateEmailRepository,
       // Services
       getUserService,
       createUserService,
@@ -398,7 +433,7 @@ export class ServiceCollectionBuilder {
       loginService,
       refreshTokenService,
       syncAccountsService,
-      snapshotAccountsService,
+      createAccountHistoryService,
       createInstitutionService,
       findInstitutionsService,
       findTransactionsService,
@@ -410,6 +445,8 @@ export class ServiceCollectionBuilder {
       findCategoriesService,
       createCategoryService,
       findAccountHistoryService,
+      updateEmailService: updateEmailService,
+      verifyUpdateEmailService,
       // Controllers
       homeController,
       createUserController,
@@ -425,7 +462,9 @@ export class ServiceCollectionBuilder {
       updateTransactionCategoryController,
       findCategoriesController,
       createCategoryController,
-      findAccountHistoryController
+      findAccountHistoryController,
+      updateEmailController,
+      verifyUpdateEmailController
     };
 
     return serviceCollection;

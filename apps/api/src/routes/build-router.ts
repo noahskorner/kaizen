@@ -32,6 +32,18 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
       serviceCollection.createLinkTokenController.create
     )
   );
+  router.post(
+    '/user/email/token',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.updateEmailController.update
+    )
+  );
+  router.put(
+    '/user/email',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.verifyUpdateEmailController.verify
+    )
+  );
 
   // /auth
   router.post(

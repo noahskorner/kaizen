@@ -13,12 +13,12 @@ export const LoginPage = () => {
   const [searchParams] = useSearchParams<LoginPageQueryParams>();
 
   return (
-    <div className="flex h-screen w-screen justify-center pt-16">
+    <div className="flex h-screen w-screen justify-center pt-4 lg:pt-16">
       <LoginForm
         registerHref={paths.register}
         email={searchParams.email}
         password={searchParams.password}
-        onLoginSuccess={() => navigate(paths.finance)}
+        onLoginSuccess={() => navigate(paths.dashboard)}
       />
     </div>
   );
