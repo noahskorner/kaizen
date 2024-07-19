@@ -54,8 +54,8 @@ describe('/user/email', () => {
       );
       const updateEmailService = new UpdateEmailService(
         environment.FRONTEND_DOMAIN,
-        environment.EMAIL_VERIFICATION_SECRET,
-        environment.EMAIL_VERIFICATION_EXPIRATION,
+        environment.UPDATE_EMAIL_SECRET,
+        environment.UPDATE_EMAIL_EXPIRATION,
         findUserByEmailRepository,
         localEmailProvider
       );

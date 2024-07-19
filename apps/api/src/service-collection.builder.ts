@@ -329,13 +329,13 @@ export class ServiceCollectionBuilder {
     );
     const updateEmailService = new UpdateEmailService(
       environment.FRONTEND_DOMAIN,
-      environment.EMAIL_VERIFICATION_SECRET,
-      environment.EMAIL_VERIFICATION_EXPIRATION,
+      environment.UPDATE_EMAIL_SECRET,
+      environment.UPDATE_EMAIL_EXPIRATION,
       findUserByEmailRepository,
       emailProvider
     );
     const verifyUpdateEmailService = new VerifyUpdateEmailService(
-      environment.EMAIL_VERIFICATION_SECRET,
+      environment.UPDATE_EMAIL_SECRET,
       updateEmailRepository
     );
     const updatePasswordService = new UpdatePasswordService(

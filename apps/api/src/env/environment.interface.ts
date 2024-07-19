@@ -5,8 +5,8 @@ export interface Environment {
   REFRESH_TOKEN_SECRET: string;
   REFRESH_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_COOKIE_DOMAIN: string;
-  EMAIL_VERIFICATION_SECRET: string;
-  EMAIL_VERIFICATION_EXPIRATION: string;
+  UPDATE_EMAIL_SECRET: string;
+  UPDATE_EMAIL_EXPIRATION: string;
   API_PORT: string;
   API_DOMAIN: string;
   FRONTEND_DOMAIN: string;

@@ -21,7 +21,7 @@ export class VerifyUpdateEmailService
   implements IVerifyUpdateEmailService
 {
   constructor(
-    private readonly EMAIL_VERIFICATION_SECRET: string,
+    private readonly UPDATE_EMAIL_SECRET: string,
     private readonly updateEmailRepository: IUpdateEmailRepository
   ) {
     super();
@@ -39,7 +39,7 @@ export class VerifyUpdateEmailService
     try {
       const emailVerificationToken = (await verify(
         command.token,
-        this.EMAIL_VERIFICATION_SECRET
+        this.UPDATE_EMAIL_SECRET
       )) as EmailVerificationToken;
 
       const userRecord = await this.updateEmailRepository.update({
