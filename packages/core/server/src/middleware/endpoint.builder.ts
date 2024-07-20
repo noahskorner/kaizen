@@ -35,6 +35,7 @@ export class EndpointBuilder {
             try {
               await middleware(req, res, next);
             } catch (error) {
+              console.error(error);
               res.send(500, {
                 type: 'FAILURE',
                 errors: [

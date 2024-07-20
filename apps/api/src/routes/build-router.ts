@@ -94,6 +94,12 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
       serviceCollection.findAccountHistoryController.find
     )
   );
+  router.delete(
+    '/account/:accountId',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.deleteAccountController.delete
+    )
+  );
 
   // /category
   router.post(

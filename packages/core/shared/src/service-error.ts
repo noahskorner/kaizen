@@ -393,6 +393,14 @@ export interface VerifyUpdateEmailTokenNotValidError {
   };
 }
 
+export interface DeleteAccountNotFoundError {
+  code: ErrorCode.DELETE_ACCOUNT_NOT_FOUND;
+  params: {
+    userId: string;
+    accountId: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -448,6 +456,7 @@ export interface BaseError {
     | ErrorCode.EMAIL_PROVIDER_SEND_EMAIL_FAILED
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_PROVIDED
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_VALID
+    | ErrorCode.DELETE_ACCOUNT_NOT_FOUND
   >;
   params?: never;
 }
@@ -505,4 +514,5 @@ export type ServiceError =
   | UpdateEmailAlreadyInUseError
   | EmailProviderSendEmailFailedError
   | VerifyUpdateEmailTokenNotProvidedError
-  | VerifyUpdateEmailTokenNotValidError;
+  | VerifyUpdateEmailTokenNotValidError
+  | DeleteAccountNotFoundError;
