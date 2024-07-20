@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { UserClient } from '@kaizen/user-client';
 import {
   NetworthGraph,
   selectAccountGroups,
@@ -15,23 +14,10 @@ import {
 import { formatCurrency, formatDate } from '@kaizen/core-client';
 
 export const DashboardPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setLinkToken] = useState<string | null>(null);
   const accountGroups = useSelector(selectAccountGroups);
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
     []
   );
-
-  useEffect(() => {
-    const createLinkToken = async () => {
-      const response = await UserClient.createLinkToken();
-      if (response.type === 'SUCCESS') {
-        setLinkToken(response.data.token);
-      }
-    };
-
-    createLinkToken();
-  }, []);
 
   useEffect(() => {
     const loadRecentTransactions = async () => {

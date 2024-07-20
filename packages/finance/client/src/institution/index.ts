@@ -5,3 +5,4 @@ export * from './institution.effects';
 export * from './institution.reducers';
 export * from './institution.selectors';
 export * from './institution.store';
+export * from './plaid-link';

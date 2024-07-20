@@ -20,7 +20,8 @@ import {
   IFindAccountHistoryRepository,
   IFindAccountHistoryService,
   ICreateAccountHistoryService,
-  ICreateAccountHistoryRepository
+  ICreateAccountHistoryRepository,
+  IDeleteAccountService
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -66,6 +67,8 @@ import { GetWalletController } from '@kaizen/wallet-server';
 import {
   CreateCategoryController,
   CreateInstitutionController,
+  DeleteAccountController,
+  DeleteAccountRepository,
   FindAccountHistoryController,
   FindCategoriesController,
   FindInstitutionsController,
@@ -113,6 +116,7 @@ export interface IServiceCollection {
   findAccountHistoryRepository: IFindAccountHistoryRepository;
   updateEmailRepository: IUpdateEmailRepository;
   updatePasswordRepository: IUpdatePasswordRepository;
+  deleteAccountRepository: DeleteAccountRepository;
 
   // Services
   getUserService: IGetUserService;
@@ -137,6 +141,7 @@ export interface IServiceCollection {
   verifyUpdateEmailService: IVerifyUpdateEmailService;
   updatePasswordService: IUpdatePasswordService;
   forgotPasswordService: IForgotPasswordService;
+  deleteAccountService: IDeleteAccountService;
 
   // Controllers
   homeController: HomeController;
@@ -158,4 +163,5 @@ export interface IServiceCollection {
   verifyUpdateEmailController: VerifyUpdateEmailController;
   updatePasswordController: UpdatePasswordController;
   forgotPasswordController: ForgotPasswordController;
+  deleteAccountController: DeleteAccountController;
 }

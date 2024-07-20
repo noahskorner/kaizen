@@ -28,6 +28,7 @@
     "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
     "db:seed": "npm run --prefix ./apps/api seed",
     "format": "prettier . --write",
+    "keygen": "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "start": "turbo run start",

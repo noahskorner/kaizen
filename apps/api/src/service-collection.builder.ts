@@ -32,7 +32,10 @@ import {
   FindAccountHistoryService,
   FindAccountHistoryController,
   CreateAccountHistoryRepository,
-  CreateAccountHistoryService
+  CreateAccountHistoryService,
+  DeleteAccountRepository,
+  DeleteAccountService,
+  DeleteAccountController
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -224,6 +227,7 @@ export class ServiceCollectionBuilder {
     );
     const updateEmailRepository = new UpdateEmailRepository(prisma);
     const updatePasswordRepository = new UpdatePasswordRepository(prisma);
+    const deleteAccountRepository = new DeleteAccountRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -346,6 +350,10 @@ export class ServiceCollectionBuilder {
       environment.FORGOT_PASSWORD_EXPIRATION,
       findUserByEmailRepository
     );
+    const deleteAccountService = new DeleteAccountService(
+      getAccountRepository,
+      deleteAccountRepository
+    );
 
     // Controllers
     const homeController =
@@ -415,6 +423,10 @@ export class ServiceCollectionBuilder {
     const forgotPasswordController = new ForgotPasswordController(
       forgotPasswordService
     );
+    const deleteAccountController = new DeleteAccountController(
+      authMiddleware,
+      deleteAccountService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -448,6 +460,7 @@ export class ServiceCollectionBuilder {
       findAccountHistoryRepository,
       updateEmailRepository,
       updatePasswordRepository,
+      deleteAccountRepository,
       // Services
       getUserService,
       createUserService,
@@ -471,6 +484,7 @@ export class ServiceCollectionBuilder {
       verifyUpdateEmailService,
       updatePasswordService,
       forgotPasswordService,
+      deleteAccountService,
       // Controllers
       homeController,
       createUserController,
@@ -490,7 +504,8 @@ export class ServiceCollectionBuilder {
       updateEmailController,
       verifyUpdateEmailController,
       updatePasswordController,
-      forgotPasswordController
+      forgotPasswordController,
+      deleteAccountController
     };
 
     return serviceCollection;
