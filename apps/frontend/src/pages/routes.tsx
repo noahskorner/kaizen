@@ -7,6 +7,7 @@ import { RouteObject } from 'react-router-dom';
 import { SpendingPage } from './spending/spending.page';
 import { SettingsPage } from './settings/settings-page';
 import { VerifyUpdateEmailPage } from './verify-update-email';
+import { AccountsPage } from './accounts';
 
 export const paths = {
   home: '/',
@@ -38,6 +39,10 @@ export const routes: RouteObject[] = [
       {
         path: paths.settings,
         element: <SettingsPage />
+      },
+      {
+        path: paths.accounts,
+        element: <AccountsPage />
       }
     ]
   }

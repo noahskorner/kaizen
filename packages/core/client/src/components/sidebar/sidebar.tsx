@@ -9,12 +9,14 @@ import { selectShowSidebar } from './sidebar.selectors';
 import { toggleSidebarAction } from './sidebar.actions';
 import { SettingsIcon } from '../../icons/settings';
 import { LogoutIcon } from '../../icons/logout';
+import { CreditCardIcon } from '../../icons';
 
 export interface SidebarProps {
   transcribedAudio: string | null;
   dashboardHref: string;
   spendingHref: string;
   accountHref: string;
+  settingsHref: string;
   onLogoutClick?: React.MouseEventHandler<HTMLButtonElement>;
   onAssistantClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -23,6 +25,7 @@ export const Sidebar = ({
   dashboardHref,
   spendingHref,
   accountHref,
+  settingsHref,
   onLogoutClick
 }: SidebarProps) => {
   const firstRenderRef = useRef(true);
@@ -73,12 +76,17 @@ export const Sidebar = ({
               href={spendingHref}
               label="Spending"
             />
+            <SidebarButton
+              icon={<CreditCardIcon />}
+              href={accountHref}
+              label="Accounts"
+            />
           </div>
         </div>
         <div className="flex w-full flex-col gap-y-1">
           <SidebarButton
             icon={<SettingsIcon />}
-            href={accountHref}
+            href={settingsHref}
             label="Settings"
           />
           <SidebarButton

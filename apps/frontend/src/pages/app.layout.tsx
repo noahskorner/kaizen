@@ -65,7 +65,8 @@ export const AppLayout = () => {
           transcribedAudio={transcribedAudio}
           dashboardHref={paths.dashboard}
           spendingHref={paths.spending}
-          accountHref={paths.settings}
+          accountHref={paths.accounts}
+          settingsHref={paths.settings}
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />

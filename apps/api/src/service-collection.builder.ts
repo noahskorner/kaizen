@@ -55,7 +55,12 @@ import {
   VerifyUpdateEmailController,
   UpdateEmailRepository,
   UpdateEmailService,
-  UpdateEmailController
+  UpdateEmailController,
+  UpdatePasswordRepository,
+  UpdatePasswordService,
+  UpdatePasswordController,
+  ForgotPasswordController,
+  ForgotPasswordService
 } from '@kaizen/user-server';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 import { IServiceCollection } from './service-collection.interface';
@@ -218,6 +223,7 @@ export class ServiceCollectionBuilder {
       prisma
     );
     const updateEmailRepository = new UpdateEmailRepository(prisma);
+    const updatePasswordRepository = new UpdatePasswordRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -323,14 +329,22 @@ export class ServiceCollectionBuilder {
     );
     const updateEmailService = new UpdateEmailService(
       environment.FRONTEND_DOMAIN,
-      environment.EMAIL_VERIFICATION_SECRET,
-      environment.EMAIL_VERIFICATION_EXPIRATION,
+      environment.UPDATE_EMAIL_SECRET,
+      environment.UPDATE_EMAIL_EXPIRATION,
       findUserByEmailRepository,
       emailProvider
     );
     const verifyUpdateEmailService = new VerifyUpdateEmailService(
-      environment.EMAIL_VERIFICATION_SECRET,
+      environment.UPDATE_EMAIL_SECRET,
       updateEmailRepository
+    );
+    const updatePasswordService = new UpdatePasswordService(
+      updatePasswordRepository
+    );
+    const forgotPasswordService = new ForgotPasswordService(
+      environment.FORGOT_PASSWORD_SECRET,
+      environment.FORGOT_PASSWORD_EXPIRATION,
+      findUserByEmailRepository
     );
 
     // Controllers
@@ -394,6 +408,13 @@ export class ServiceCollectionBuilder {
     const verifyUpdateEmailController = new VerifyUpdateEmailController(
       verifyUpdateEmailService
     );
+    const updatePasswordController = new UpdatePasswordController(
+      authMiddleware,
+      updatePasswordService
+    );
+    const forgotPasswordController = new ForgotPasswordController(
+      forgotPasswordService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -426,6 +447,7 @@ export class ServiceCollectionBuilder {
       getCategoryRepository,
       findAccountHistoryRepository,
       updateEmailRepository,
+      updatePasswordRepository,
       // Services
       getUserService,
       createUserService,
@@ -447,6 +469,8 @@ export class ServiceCollectionBuilder {
       findAccountHistoryService,
       updateEmailService: updateEmailService,
       verifyUpdateEmailService,
+      updatePasswordService,
+      forgotPasswordService,
       // Controllers
       homeController,
       createUserController,
@@ -464,7 +488,9 @@ export class ServiceCollectionBuilder {
       createCategoryController,
       findAccountHistoryController,
       updateEmailController,
-      verifyUpdateEmailController
+      verifyUpdateEmailController,
+      updatePasswordController,
+      forgotPasswordController
     };
 
     return serviceCollection;

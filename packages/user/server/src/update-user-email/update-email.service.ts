@@ -17,8 +17,8 @@ import jwt from 'jsonwebtoken';
 export class UpdateEmailService extends Service implements IUpdateEmailService {
   constructor(
     private readonly FRONTEND_DOMAIN: string,
-    private readonly EMAIL_VERIFICATION_SECRET: string,
-    private readonly EMAIL_VERIFICATION_EXPIRATION: string,
+    private readonly UPDATE_EMAIL_SECRET: string,
+    private readonly UPDATE_EMAIL_EXPIRATION: string,
     private readonly findUserByEmailRepository: IFindUserByEmailRepository,
     private readonly emailProvider: IEmailProvider
   ) {
@@ -51,9 +51,9 @@ export class UpdateEmailService extends Service implements IUpdateEmailService {
         userId: command.userId,
         email: normalizedEmail
       } satisfies EmailVerificationToken,
-      this.EMAIL_VERIFICATION_SECRET,
+      this.UPDATE_EMAIL_SECRET,
       {
-        expiresIn: this.EMAIL_VERIFICATION_EXPIRATION
+        expiresIn: this.UPDATE_EMAIL_EXPIRATION
       }
     );
 

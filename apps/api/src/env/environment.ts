@@ -79,17 +79,31 @@ if (OPENAI_API_KEY == null) {
   );
 }
 
-const EMAIL_VERIFICATION_SECRET = process.env.EMAIL_VERIFICATION_SECRET;
-if (EMAIL_VERIFICATION_SECRET == null) {
+const UPDATE_EMAIL_SECRET = process.env.UPDATE_EMAIL_SECRET;
+if (UPDATE_EMAIL_SECRET == null) {
   throw new Error(
-    `Must provide EMAIL_VERIFICATION_SECRET. Did you forget to set it in your environment file?`
+    `Must provide UPDATE_EMAIL_SECRET. Did you forget to set it in your environment file?`
   );
 }
 
-const EMAIL_VERIFICATION_EXPIRATION = process.env.EMAIL_VERIFICATION_EXPIRATION;
-if (EMAIL_VERIFICATION_EXPIRATION == null) {
+const UPDATE_EMAIL_EXPIRATION = process.env.UPDATE_EMAIL_EXPIRATION;
+if (UPDATE_EMAIL_EXPIRATION == null) {
   throw new Error(
-    `Must provide EMAIL_VERIFICATION_EXPIRATION. Did you forget to set it in your environment file?`
+    `Must provide UPDATE_EMAIL_EXPIRATION. Did you forget to set it in your environment file?`
+  );
+}
+
+const FORGOT_PASSWORD_SECRET = process.env.FORGOT_PASSWORD_SECRET;
+if (FORGOT_PASSWORD_SECRET == null) {
+  throw new Error(
+    `Must provide FORGOT_PASSWORD_SECRET. Did you forget to set it in your environment file?`
+  );
+}
+
+const FORGOT_PASSWORD_EXPIRATION = process.env.FORGOT_PASSWORD_EXPIRATION;
+if (FORGOT_PASSWORD_EXPIRATION == null) {
+  throw new Error(
+    `Must provide FORGOT_PASSWORD_EXPIRATION. Did you forget to set it in your environment file?`
   );
 }
 
@@ -99,8 +113,10 @@ export const environment: Environment = {
   ACCESS_TOKEN_EXPIRATION: ACCESS_TOKEN_EXPIRATION,
   REFRESH_TOKEN_SECRET: REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRATION: REFRESH_TOKEN_EXPIRATION,
-  EMAIL_VERIFICATION_SECRET: EMAIL_VERIFICATION_SECRET,
-  EMAIL_VERIFICATION_EXPIRATION: EMAIL_VERIFICATION_EXPIRATION,
+  UPDATE_EMAIL_SECRET: UPDATE_EMAIL_SECRET,
+  UPDATE_EMAIL_EXPIRATION: UPDATE_EMAIL_EXPIRATION,
+  FORGOT_PASSWORD_SECRET: FORGOT_PASSWORD_SECRET,
+  FORGOT_PASSWORD_EXPIRATION: FORGOT_PASSWORD_EXPIRATION,
   API_PORT: API_PORT,
   API_DOMAIN: API_DOMAIN,
   FRONTEND_DOMAIN: FRONTEND_DOMAIN,

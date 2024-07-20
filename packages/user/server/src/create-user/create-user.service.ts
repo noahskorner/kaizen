@@ -43,7 +43,9 @@ export class CreateUserService extends Service implements ICreateUserService {
       });
     }
 
-    const hashedPassword = await this.hashPassword(command.password);
+    const hashedPassword = await CreateUserService.hashPassword(
+      command.password
+    );
     const userRecord = await this._createUserRepository.create({
       normalizedEmail,
       hashedPassword
@@ -64,7 +66,7 @@ export class CreateUserService extends Service implements ICreateUserService {
     return this.success(user);
   }
 
-  private async hashPassword(password: string): Promise<string> {
+  public static async hashPassword(password: string): Promise<string> {
     const salt = await genSalt();
     return await hash(password, salt);
   }
