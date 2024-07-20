@@ -1,29 +1,15 @@
-import { PlaidLink, selectAccountGroups } from '@kaizen/finance-client';
-import { UserClient } from '@kaizen/user-client';
 import {
-  Button,
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Input,
-  Label
-} from '@kaizen/core-client';
+  DeleteAccountButton,
+  PlaidLink,
+  selectAccountGroups
+} from '@kaizen/finance-client';
+import { UserClient } from '@kaizen/user-client';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 export const AccountsPage = () => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const accountGroups = useSelector(selectAccountGroups);
-  const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
-
-  const onDeleteAccountClick = async () => {
-    setDeleteAccountOpen(false);
-  };
 
   useEffect(() => {
     const createLinkToken = async () => {
@@ -43,40 +29,14 @@ export const AccountsPage = () => {
           Accounts
         </h1>
         {linkToken && <PlaidLink linkToken={linkToken} />}
-        {Object.entries(accountGroups).map(([accountType, accountGroup]) => {
+        {Object.entries(accountGroups).map(([, accountGroup]) => {
           return accountGroup.accounts.map((account) => {
             return (
-              <Dialog
+              <DeleteAccountButton
                 key={account.id}
-                open={deleteAccountOpen}
-                onOpenChange={setDeleteAccountOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="destructive" key={account.id}>
-                    {account.name}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-xl">
-                  <DialogHeader>
-                    <DialogTitle>
-                      Are you sure you want to remove this account?
-                    </DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will remove the
-                      account, it&apos;s transactions, and any historical data.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogClose>
-                      <Button variant="secondary">Cancel</Button>
-                    </DialogClose>
-                    <Button
-                      variant="destructive"
-                      onClick={onDeleteAccountClick}>
-                      Remove
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                accountId={account.id}
+                name={account.name ?? ''}
+              />
             );
           });
         })}
