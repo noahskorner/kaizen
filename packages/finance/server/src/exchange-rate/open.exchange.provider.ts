@@ -5,40 +5,45 @@ import {
 } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
-  ExchangeRate,
+  ExternalExchangeRate,
   GetExchangeRateCommand,
   IExchangeProvider
 } from '@kaizen/finance';
-import { rejects } from 'assert';
-import https from 'https';
+import fetch from 'node-fetch';
+
+const OPEN_EXCHANGE_API_URL = 'https://openexchangerates.org/api/latest.json';
 
 export class OpenExchangeProvider extends Service implements IExchangeProvider {
-  constructor(private readonly OPEN_EXCHANGE_RATES_APP_ID) {
+  constructor(private readonly OPEN_EXCHANGE_RATES_APP_ID: string) {
     super();
   }
 
   public async get(
     command: GetExchangeRateCommand
-  ): Promise<ServiceResponse<ExchangeRate>> {
-    const response = await new Promise((resolve, reject) => {
-      https
-        .get(
-          `https://openexchangerates.org/api/latest.json?app_id=${this.OPEN_EXCHANGE_RATES_APP_ID}&base=${command.base}`,
-          (res) => {
-            let data = '';
+  ): Promise<ServiceResponse<ExternalExchangeRate>> {
+    try {
+      const response = await fetch(
+        `${OPEN_EXCHANGE_API_URL}?app_id=${this.OPEN_EXCHANGE_RATES_APP_ID}&base=${command.base}`
+      );
+      const body = await response.json();
 
-            res.on('data', (chunk) => {
-              data += chunk;
-            });
-
-            res.on('end', () => {
-              const data = JSON.parse(data);
-            });
+      if (response.status !== 200) {
+        return this.failure({
+          code: ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED,
+          params: {
+            error: body
           }
-        )
-        .on('error', (err) => {
-          resolve({});
-        });
-    });
+        } satisfies OpenExchangeRequestFailedError);
+      }
+
+      return this.success(body as ExternalExchangeRate);
+    } catch (error: unknown) {
+      return this.failure({
+        code: ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED,
+        params: {
+          error: error
+        }
+      } satisfies OpenExchangeRequestFailedError);
+    }
   }
 }
