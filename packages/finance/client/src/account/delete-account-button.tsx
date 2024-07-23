@@ -59,9 +59,9 @@ export const DeleteAccountButton = ({
       open={deleteAccountOpen}
       onOpenChange={onDialogClose}>
       <DialogTrigger asChild>
-        <Button disabled={disabled} variant="destructive" key={accountId}>
-          {name}
-        </Button>
+        <div className="relative flex w-full cursor-pointer select-none justify-start rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-zinc-800 focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+          Delete
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>

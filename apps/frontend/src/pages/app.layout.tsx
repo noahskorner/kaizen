@@ -1,7 +1,13 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthRoute, AuthDispatch, logout } from '@kaizen/auth-client';
 import { paths } from './routes';
-import { Sidebar, selectShowSidebar } from '@kaizen/core-client';
+import {
+  Button,
+  Sidebar,
+  SidebarDispatch,
+  selectShowSidebar,
+  toggleSidebarAction
+} from '@kaizen/core-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AssistClient } from '@kaizen/assist-client';
 import { useRef, useState } from 'react';
@@ -61,6 +67,7 @@ export const AppLayout = () => {
   return (
     <AuthRoute onUnauthenticated={onUnauthenticated}>
       <div className="flex h-screen">
+        <Navbar />
         <Sidebar
           transcribedAudio={transcribedAudio}
           dashboardHref={paths.dashboard}
@@ -70,10 +77,43 @@ export const AppLayout = () => {
           onLogoutClick={onLogoutClick}
           onAssistantClick={onAssistantClick}
         />
-        <div className={`${showSidebar ? 'md:ml-64' : ''} w-full p-2 lg:p-8`}>
+        <div
+          className={`${showSidebar ? 'md:ml-64' : ''} w-full px-2 pb-2 pt-16 lg:px-8 lg:pb-8`}>
           <Outlet />
         </div>
       </div>
     </AuthRoute>
+  );
+};
+
+const Navbar = () => {
+  const dispatch = useDispatch<SidebarDispatch>();
+
+  const toggleSidebar = () => {
+    dispatch(toggleSidebarAction());
+  };
+
+  return (
+    <div className="fixed z-10 flex w-full items-center p-2">
+      <Button
+        onClick={toggleSidebar}
+        size="icon"
+        variant="ghost"
+        className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-700">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+      </Button>
+    </div>
   );
 };

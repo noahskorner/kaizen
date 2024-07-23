@@ -20,12 +20,12 @@ export const TransactionsTable = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-1">
+    <div className="flex w-full flex-col gap-2">
       {transactions.map((transaction) => {
         return (
           <div
             key={transaction.id}
-            className="flex w-full items-center justify-center gap-x-2 border-b border-zinc-800 px-4 py-3">
+            className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-zinc-900 px-4 py-3">
             {transaction.category == null && (
               <span className="size-2 rounded-full bg-blue-600"></span>
             )}
@@ -41,8 +41,10 @@ export const TransactionsTable = () => {
             <div className="flex w-full items-center justify-between">
               <div className="flex w-full flex-col items-start gap-3 lg:flex-row lg:items-center">
                 <div>
-                  <h6 className="text-sm font-semibold">{transaction.name}</h6>
-                  <span className="text-xs text-zinc-300">
+                  <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
+                    {transaction.name}
+                  </h6>
+                  <span className="text-sm text-muted-foreground">
                     {formatDate(transaction.date)}
                   </span>
                 </div>

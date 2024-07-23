@@ -12,15 +12,15 @@ datasource db {
 
 // User
 model UserRecord {
-  id                     String              @id @default(uuid()) @map("id")
-  createdAt              DateTime            @default(now()) @map("created_at")
-  updatedAt              DateTime            @default(now()) @updatedAt @map("updated_at")
-  email                  String              @unique @map("email")
-  password               String              @map("password")
-  institutions           InstitutionRecord[]
-  transactions           TransactionRecord[]
-  categories             CategoryRecord[]
-  wallet                 WalletRecord?
+  id           String              @id @default(uuid()) @map("id")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
+  email        String              @unique @map("email")
+  password     String              @map("password")
+  institutions InstitutionRecord[]
+  transactions TransactionRecord[]
+  categories   CategoryRecord[]
+  wallet       WalletRecord?
 
   @@index([email])
   @@map("user")
@@ -307,4 +307,14 @@ model WalletTransactionRecord {
   amount        Int          @map("amount")
 
   @@map("wallet_transaction")
+}
+
+// Exchange Rate
+
+model ExchangeRateRecord {
+  id        String   @id @default(uuid()) @map("id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  base      String   @unique @map("base")
+  rates     Json     @map("rates")
 }

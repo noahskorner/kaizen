@@ -29,6 +29,7 @@
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1"
   }
 }
