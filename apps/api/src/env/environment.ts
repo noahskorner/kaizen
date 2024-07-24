@@ -107,6 +107,13 @@ if (FORGOT_PASSWORD_EXPIRATION == null) {
   );
 }
 
+const OPEN_EXCHANGE_RATE_APP_ID = process.env.OPEN_EXCHANGE_RATE_APP_ID;
+if (OPEN_EXCHANGE_RATE_APP_ID == null) {
+  throw new Error(
+    `Must provide OPEN_EXCHANGE_RATE_APP_ID. Did you forget to set it in your environment file?`
+  );
+}
+
 export const environment: Environment = {
   NODE_ENV: NODE_ENV,
   ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
@@ -126,5 +133,8 @@ export const environment: Environment = {
   OPENAI_API_KEY: OPENAI_API_KEY,
   AWS_REGION: process.env.AWS_REGION ?? null,
   AWS_DATABASE_SECRET_ID: process.env.AWS_DATABASE_SECRET_ID ?? null,
-  AWS_DATABASE_WHITELIST: JSON.parse(process.env.AWS_DATABASE_WHITELIST ?? '[]')
+  AWS_DATABASE_WHITELIST: JSON.parse(
+    process.env.AWS_DATABASE_WHITELIST ?? '[]'
+  ),
+  OPEN_EXCHANGE_RATE_APP_ID: OPEN_EXCHANGE_RATE_APP_ID
 };

@@ -401,8 +401,8 @@ export interface DeleteAccountNotFoundError {
   };
 }
 
-export interface OpenExchangeRequestFailedError {
-  code: ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED;
+export interface ExchangeRateRequestFailedError {
+  code: ErrorCode.EXCHANGE_RATE_REQUEST_FAILED;
   params: {
     error: unknown;
   };
@@ -464,7 +464,7 @@ export interface BaseError {
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_PROVIDED
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_VALID
     | ErrorCode.DELETE_ACCOUNT_NOT_FOUND
-    | ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED
+    | ErrorCode.EXCHANGE_RATE_REQUEST_FAILED
   >;
   params?: never;
 }
@@ -524,4 +524,4 @@ export type ServiceError =
   | VerifyUpdateEmailTokenNotProvidedError
   | VerifyUpdateEmailTokenNotValidError
   | DeleteAccountNotFoundError
-  | OpenExchangeRequestFailedError;
+  | ExchangeRateRequestFailedError;

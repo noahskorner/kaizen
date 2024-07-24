@@ -1,20 +1,23 @@
 import {
   ErrorCode,
-  OpenExchangeRequestFailedError,
+  ExchangeRateRequestFailedError,
   ServiceResponse
 } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   ExternalExchangeRate,
   GetExchangeRateCommand,
-  IExchangeProvider
+  IExchangeRateProvider
 } from '@kaizen/finance';
 import fetch from 'node-fetch';
 
 const OPEN_EXCHANGE_API_URL = 'https://openexchangerates.org/api/latest.json';
 
-export class OpenExchangeProvider extends Service implements IExchangeProvider {
-  constructor(private readonly OPEN_EXCHANGE_RATES_APP_ID: string) {
+export class OpenExchangeRateProvider
+  extends Service
+  implements IExchangeRateProvider
+{
+  constructor(private readonly OPEN_EXCHANGE_RATE_APP_ID: string) {
     super();
   }
 
@@ -23,27 +26,27 @@ export class OpenExchangeProvider extends Service implements IExchangeProvider {
   ): Promise<ServiceResponse<ExternalExchangeRate>> {
     try {
       const response = await fetch(
-        `${OPEN_EXCHANGE_API_URL}?app_id=${this.OPEN_EXCHANGE_RATES_APP_ID}&base=${command.base}`
+        `${OPEN_EXCHANGE_API_URL}?app_id=${this.OPEN_EXCHANGE_RATE_APP_ID}&base=${command.base}`
       );
       const body = await response.json();
 
       if (response.status !== 200) {
         return this.failure({
-          code: ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED,
+          code: ErrorCode.EXCHANGE_RATE_REQUEST_FAILED,
           params: {
             error: body
           }
-        } satisfies OpenExchangeRequestFailedError);
+        } satisfies ExchangeRateRequestFailedError);
       }
 
       return this.success(body as ExternalExchangeRate);
     } catch (error: unknown) {
       return this.failure({
-        code: ErrorCode.OPEN_EXCHANGE_REQUEST_FAILED,
+        code: ErrorCode.EXCHANGE_RATE_REQUEST_FAILED,
         params: {
           error: error
         }
-      } satisfies OpenExchangeRequestFailedError);
+      } satisfies ExchangeRateRequestFailedError);
     }
   }
 }
