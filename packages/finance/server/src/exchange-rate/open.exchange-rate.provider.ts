@@ -9,7 +9,6 @@ import {
   GetExchangeRateCommand,
   IExchangeRateProvider
 } from '@kaizen/finance';
-import fetch from 'node-fetch';
 
 const OPEN_EXCHANGE_API_URL = 'https://openexchangerates.org/api/latest.json';
 

@@ -4,6 +4,7 @@ import { authReducers } from '@kaizen/auth-client';
 import {
   accountHistoryReducers,
   categoryReducers,
+  exchangeRateReducers,
   institutionReducers,
   transactionReducers
 } from '@kaizen/finance-client';
@@ -14,6 +15,7 @@ import { onLoginLoadWallet } from './effects/on-login-load-wallet';
 import {
   onDesktopShowSidebar,
   onLoginLoadCategories,
+  onLoginLoadExchangeRate,
   onLoginLoadTransactions
 } from './effects';
 import { onMobileHideSidebar } from './effects/on-mobile-hide-sidebar';
@@ -27,7 +29,8 @@ const rootReducer = combineReducers({
   institution: institutionReducers,
   transaction: transactionReducers,
   category: categoryReducers,
-  accountHistory: accountHistoryReducers
+  accountHistory: accountHistoryReducers,
+  exchangeRate: exchangeRateReducers
 });
 
 export const store = configureStore({
@@ -37,8 +40,9 @@ export const store = configureStore({
 
 effects.run(onMobileHideSidebar);
 effects.run(onDesktopShowSidebar);
-effects.run(onLoginLoadWallet);
+effects.run(onLoginLoadExchangeRate);
 effects.run(onLoginLoadInstitutions);
 effects.run(onLoginLoadTransactions);
 effects.run(onLoginLoadCategories);
 effects.run(onLoginLoadAccountHistory);
+effects.run(onLoginLoadWallet);

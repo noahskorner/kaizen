@@ -10,8 +10,7 @@ import {
 import {
   DeleteAccountButton,
   PlaidLink,
-  selectAccountGroups,
-  selectAccountHistories
+  selectAccountGroups
 } from '@kaizen/finance-client';
 import { UserClient } from '@kaizen/user-client';
 import { useState, useEffect } from 'react';
@@ -45,7 +44,7 @@ export const AccountsPage = () => {
               return (
                 <div
                   key={account.id}
-                  className="relative flex w-full items-center justify-between rounded-lg bg-zinc-900 p-4">
+                  className="relative flex w-full items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4">
                   <div>
                     <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
                       {account.name}

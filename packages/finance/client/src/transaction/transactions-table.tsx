@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import './transactions-table.css';
 import { selectTransactions } from './transaction.selectors';
 import { formatCurrency, formatDate } from '@kaizen/core-client';
 import { CategorySelector } from '../category/category.selector';
@@ -25,7 +24,7 @@ export const TransactionsTable = () => {
         return (
           <div
             key={transaction.id}
-            className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-zinc-900 px-4 py-3">
+            className="flex w-full items-center justify-center gap-x-2 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
             {transaction.category == null && (
               <span className="size-2 rounded-full bg-blue-600"></span>
             )}
