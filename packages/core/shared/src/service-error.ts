@@ -401,8 +401,15 @@ export interface DeleteAccountNotFoundError {
   };
 }
 
-export interface ExchangeRateRequestFailedError {
-  code: ErrorCode.EXCHANGE_RATE_REQUEST_FAILED;
+export interface GetExchangeRateInvalidCurrencyError {
+  code: ErrorCode.GET_EXCHANGE_RATE_INVALID_CURRENCY;
+  params: {
+    base: string;
+  };
+}
+
+export interface GetExchangeRateRequestFailedError {
+  code: ErrorCode.GET_EXCHANGE_RATE_REQUEST_FAILED;
   params: {
     error: unknown;
   };
@@ -464,7 +471,8 @@ export interface BaseError {
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_PROVIDED
     | ErrorCode.VERIFY_UPDATE_EMAIL_TOKEN_NOT_VALID
     | ErrorCode.DELETE_ACCOUNT_NOT_FOUND
-    | ErrorCode.EXCHANGE_RATE_REQUEST_FAILED
+    | ErrorCode.GET_EXCHANGE_RATE_REQUEST_FAILED
+    | ErrorCode.GET_EXCHANGE_RATE_INVALID_CURRENCY
   >;
   params?: never;
 }
@@ -524,4 +532,5 @@ export type ServiceError =
   | VerifyUpdateEmailTokenNotProvidedError
   | VerifyUpdateEmailTokenNotValidError
   | DeleteAccountNotFoundError
-  | ExchangeRateRequestFailedError;
+  | GetExchangeRateInvalidCurrencyError
+  | GetExchangeRateRequestFailedError;

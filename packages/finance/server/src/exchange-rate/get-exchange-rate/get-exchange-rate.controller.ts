@@ -1,3 +1,4 @@
+import { ErrorCode, hasErrorFor } from '@kaizen/core';
 import {
   AuthenticatedEndpointBuilder,
   Controller,
@@ -29,11 +30,15 @@ export class GetExchangeRateController extends Controller {
         request satisfies GetExchangeRateCommand
       );
 
-      if (response.type === 'FAILURE') {
-        return this.internalServerError(res, next, response);
+      if (response.type === 'SUCCESS') {
+        return this.ok(res, next, response);
       }
 
-      return this.ok(res, next, response);
+      if (hasErrorFor(response, ErrorCode.GET_EXCHANGE_RATE_INVALID_CURRENCY)) {
+        return this.notFound(res, next, response);
+      }
+
+      return this.internalServerError(res, next, response);
     })
     .build();
 }

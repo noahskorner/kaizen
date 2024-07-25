@@ -38,7 +38,9 @@ import {
   DeleteAccountController,
   OpenExchangeRateProvider,
   GetExchangeRateService,
-  GetExchangeRateController
+  GetExchangeRateController,
+  GetExchangeRateRepository,
+  SyncExchangeRateRepository
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -243,6 +245,8 @@ export class ServiceCollectionBuilder {
     const updateEmailRepository = new UpdateEmailRepository(prisma);
     const updatePasswordRepository = new UpdatePasswordRepository(prisma);
     const deleteAccountRepository = new DeleteAccountRepository(prisma);
+    const getExchangeRateRepository = new GetExchangeRateRepository(prisma);
+    const syncExchangeRateRepository = new SyncExchangeRateRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -370,7 +374,9 @@ export class ServiceCollectionBuilder {
       deleteAccountRepository
     );
     const getExchangeRateService = new GetExchangeRateService(
-      exchangeRateProvider
+      getExchangeRateRepository,
+      exchangeRateProvider,
+      syncExchangeRateRepository
     );
 
     // Controllers
