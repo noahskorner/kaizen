@@ -317,4 +317,6 @@ model ExchangeRateRecord {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   base      String   @unique @map("base")
   rates     Json     @map("rates")
+
+  @@map("exchange_rate")
 }
