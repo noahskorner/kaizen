@@ -3,6 +3,7 @@ export * from './bank-notes';
 export * from './close';
 export * from './coins';
 export * from './credit-card';
+export * from './ellipses-vertical';
 export * from './home';
 export * from './logout';
 export * from './pencil';

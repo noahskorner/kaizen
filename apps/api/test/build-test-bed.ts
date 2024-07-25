@@ -16,6 +16,7 @@ import { Express } from 'express';
 // eslint-disable-next-line no-restricted-imports
 import { PrismaClient } from '@prisma/client';
 import { ServiceEventBusBuilder } from '@kaizen/core-server';
+import { LocalExchangeRateProvider } from '@kaizen/finance-server';
 
 export interface BuildSutCommand {
   itemPublicTokenExchangeResponse: ItemPublicTokenExchangeResponse;
@@ -44,10 +45,13 @@ export const buildTestBed = (command?: Partial<BuildSutCommand>) => {
 
   const serviceEventBus = new ServiceEventBusBuilder().build();
 
+  const localExchangeRateProvider = new LocalExchangeRateProvider();
+
   const serviceCollection = new ServiceCollectionBuilder()
     .withPrisma(cachedPrismaClient)
     .withPlaidApi(mockPlaidApi)
     .withEventBus(serviceEventBus)
+    .withExchangeRateProvider(localExchangeRateProvider)
     .build();
 
   const testBed = new AppBuilder()

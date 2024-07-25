@@ -8,6 +8,14 @@ import { AccountType } from '@kaizen/finance';
 export const selectAccountHistories = (state: AccountHistoryState) =>
   state.accountHistory.accountHistories;
 
+export const selectAccountHistory = (accountId: string) => {
+  return createSelector(selectAccountHistories, (accountHistories) => {
+    return accountHistories.find(
+      (accountHistory) => accountHistory.accountId === accountId
+    );
+  });
+};
+
 export const createNetworthHistorySelector = (timeframe: Timeframe) =>
   createSelector(selectAccountHistories, (accountHistories) => {
     const { startDate, endDate } = getTimeframe(timeframe);

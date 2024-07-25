@@ -137,5 +137,13 @@ export const buildRouter = (serviceCollection: IServiceCollection) => {
     ExpressAdapter.toRequestHandler(serviceCollection.getWalletController.get)
   );
 
+  // /exchange-rate
+  router.get(
+    '/exchange-rate/:base',
+    ExpressAdapter.toRequestHandler(
+      serviceCollection.getExchangeRateController.get
+    )
+  );
+
   return router;
 };

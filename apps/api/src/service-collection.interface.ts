@@ -21,7 +21,9 @@ import {
   IFindAccountHistoryService,
   ICreateAccountHistoryService,
   ICreateAccountHistoryRepository,
-  IDeleteAccountService
+  IDeleteAccountService,
+  IGetExchangeRateService,
+  IExchangeRateProvider
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -73,6 +75,7 @@ import {
   FindCategoriesController,
   FindInstitutionsController,
   FindTransactionsController,
+  GetExchangeRateController,
   SyncInstitutionsController,
   UpdateTransactionCategoryController
 } from '@kaizen/finance-server';
@@ -96,6 +99,7 @@ export interface IServiceCollection {
   financialProvider: IFinancialProvider;
   transcriptionProvider: ITranscriptionProvider;
   emailProvider: IEmailProvider;
+  exchangeRateProvider: IExchangeRateProvider;
 
   // Repositories
   createUserRepository: ICreateUserRepository;
@@ -142,6 +146,7 @@ export interface IServiceCollection {
   updatePasswordService: IUpdatePasswordService;
   forgotPasswordService: IForgotPasswordService;
   deleteAccountService: IDeleteAccountService;
+  getExchangeRateService: IGetExchangeRateService;
 
   // Controllers
   homeController: HomeController;
@@ -164,4 +169,5 @@ export interface IServiceCollection {
   updatePasswordController: UpdatePasswordController;
   forgotPasswordController: ForgotPasswordController;
   deleteAccountController: DeleteAccountController;
+  getExchangeRateController: GetExchangeRateController;
 }

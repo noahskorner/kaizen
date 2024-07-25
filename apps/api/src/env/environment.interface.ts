@@ -18,4 +18,5 @@ export interface Environment {
   AWS_DATABASE_WHITELIST: string[] | null;
   FORGOT_PASSWORD_SECRET: string;
   FORGOT_PASSWORD_EXPIRATION: string;
+  OPEN_EXCHANGE_RATE_APP_ID: string;
 }

@@ -35,7 +35,12 @@ import {
   CreateAccountHistoryService,
   DeleteAccountRepository,
   DeleteAccountService,
-  DeleteAccountController
+  DeleteAccountController,
+  OpenExchangeRateProvider,
+  GetExchangeRateService,
+  GetExchangeRateController,
+  GetExchangeRateRepository,
+  SyncExchangeRateRepository
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -93,7 +98,10 @@ import { UpdateWalletCommand } from '@kaizen/wallet';
 import { v4 as uuid } from 'uuid';
 import { OpenAITranscriptionProvider } from '@kaizen/assist-server';
 import { Environment, environment } from './env';
-import { CreateAccountHistoryCommand } from '@kaizen/finance';
+import {
+  CreateAccountHistoryCommand,
+  IExchangeRateProvider
+} from '@kaizen/finance';
 
 export class ServiceCollectionBuilder {
   private _serviceCollection: Partial<IServiceCollection> = {};
@@ -120,6 +128,11 @@ export class ServiceCollectionBuilder {
 
   public withEmailProvider(emailProvider: IEmailProvider) {
     this._serviceCollection.emailProvider = emailProvider;
+    return this;
+  }
+
+  public withExchangeRateProvider(exchangeRateProvider: IExchangeRateProvider) {
+    this._serviceCollection.exchangeRateProvider = exchangeRateProvider;
     return this;
   }
 
@@ -184,6 +197,10 @@ export class ServiceCollectionBuilder {
     // Prisma
     const prisma = this._serviceCollection.prisma ?? new PrismaClient();
 
+    const exchangeRateProvider =
+      this._serviceCollection.exchangeRateProvider ??
+      new OpenExchangeRateProvider(environment.OPEN_EXCHANGE_RATE_APP_ID);
+
     // Repositories
     const createUserRepository =
       this._serviceCollection.createUserRepository ??
@@ -228,6 +245,8 @@ export class ServiceCollectionBuilder {
     const updateEmailRepository = new UpdateEmailRepository(prisma);
     const updatePasswordRepository = new UpdatePasswordRepository(prisma);
     const deleteAccountRepository = new DeleteAccountRepository(prisma);
+    const getExchangeRateRepository = new GetExchangeRateRepository(prisma);
+    const syncExchangeRateRepository = new SyncExchangeRateRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -354,6 +373,11 @@ export class ServiceCollectionBuilder {
       getAccountRepository,
       deleteAccountRepository
     );
+    const getExchangeRateService = new GetExchangeRateService(
+      getExchangeRateRepository,
+      exchangeRateProvider,
+      syncExchangeRateRepository
+    );
 
     // Controllers
     const homeController =
@@ -427,6 +451,10 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       deleteAccountService
     );
+    const getExchangeRateController = new GetExchangeRateController(
+      authMiddleware,
+      getExchangeRateService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -441,6 +469,7 @@ export class ServiceCollectionBuilder {
       financialProvider,
       transcriptionProvider,
       emailProvider,
+      exchangeRateProvider,
       // Repositories
       createUserRepository,
       findUserByEmailRepository,
@@ -485,6 +514,7 @@ export class ServiceCollectionBuilder {
       updatePasswordService,
       forgotPasswordService,
       deleteAccountService,
+      getExchangeRateService,
       // Controllers
       homeController,
       createUserController,
@@ -505,7 +535,8 @@ export class ServiceCollectionBuilder {
       verifyUpdateEmailController,
       updatePasswordController,
       forgotPasswordController,
-      deleteAccountController
+      deleteAccountController,
+      getExchangeRateController
     };
 
     return serviceCollection;
