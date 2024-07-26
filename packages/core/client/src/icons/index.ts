@@ -1,5 +1,6 @@
 export * from './account';
 export * from './bank-notes';
+export * from './chevron-down';
 export * from './close';
 export * from './coins';
 export * from './credit-card';

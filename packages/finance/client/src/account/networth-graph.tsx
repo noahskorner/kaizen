@@ -48,9 +48,9 @@ export const NetworthGraph = () => {
   }, [networth]);
 
   return (
-    <div className="flex h-full w-full flex-col rounded-lg p-4 text-white">
+    <div className="flex h-full w-full flex-col rounded-lg text-white">
       <div>
-        <h2 className="mb-1 text-4xl font-bold">
+        <h2 className="mb-1 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
           {formatCurrency(currentNetworth, 'USD')}
         </h2>
         <div className="mb-4 flex items-center">
@@ -75,7 +75,7 @@ export const NetworthGraph = () => {
           <button
             key={timeframe}
             onClick={() => onTimeframeClick(timeframe as Timeframe)}
-            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-300 text-zinc-900' : 'bg-red-700 text-zinc-50'}` : ''} rounded-lg px-2 py-1 text-xs font-semibold`}>
+            className={`${currentTimeframe === timeframe ? `${positive ? ' bg-green-300 text-zinc-900' : 'bg-red-700 text-zinc-50'}` : ''} rounded-lg px-2 py-0.5 text-xs font-semibold`}>
             {timeframe}
           </button>
         ))}
