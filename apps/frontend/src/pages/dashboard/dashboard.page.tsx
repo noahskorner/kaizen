@@ -41,8 +41,8 @@ export const DashboardPage = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-6">
-      <div className="flex h-full w-full flex-col gap-x-6 gap-y-6 lg:flex-row">
-        <div className="order-2 flex flex-col gap-y-2 lg:order-1">
+      <div className="flex h-full w-full flex-col gap-x-6 gap-y-6 xl:flex-row">
+        <div className="order-2 flex h-full flex-col gap-y-2 xl:order-2">
           <div className="flex flex-col gap-2">
             {Object.entries(accountGroups).map(
               ([accountType, accountGroup]) => {
@@ -58,7 +58,7 @@ export const DashboardPage = () => {
             )}
           </div>
         </div>
-        <div className="order-1 flex h-full w-full items-stretch md:max-h-[50rem] lg:order-2">
+        <div className="order-1 flex h-full w-full items-stretch xl:order-1">
           <NetworthGraph />
         </div>
       </div>

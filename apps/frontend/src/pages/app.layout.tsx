@@ -78,7 +78,7 @@ export const AppLayout = () => {
           onAssistantClick={onAssistantClick}
         />
         <div
-          className={`${showSidebar ? 'md:ml-64' : ''} w-full overflow-hidden px-2 pb-2 pt-16 lg:px-8 lg:pb-8`}>
+          className={`${showSidebar ? 'md:ml-64' : ''} w-full px-2 pb-2 pt-16 lg:px-8 lg:pb-8`}>
           <Outlet />
         </div>
       </div>

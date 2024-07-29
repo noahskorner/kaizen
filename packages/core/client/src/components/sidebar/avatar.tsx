@@ -1,4 +1,4 @@
-export const Avatar = () => {
+export const AvatarIcon = () => {
   return (
     <div className="h-16 w-16">
       <img

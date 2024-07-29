@@ -1,3 +1,4 @@
+export * from './avatar';
 export * from './button';
 export * from './dialog';
 export * from './dropdown-menu';
@@ -9,6 +10,8 @@ export * from './line-chart';
 export * from './modal';
 export * from './pie-chart';
 export * from './scroll-area';
+export * from './seperator';
+export * from './sheet';
 export * from './sidebar';
 export * from './simple-line-chart';
 export * from './toast';
