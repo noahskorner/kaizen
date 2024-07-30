@@ -11,19 +11,12 @@ import {
   FindTransactionsRequest,
   Transaction
 } from '@kaizen/finance';
-import {
-  formatCurrency,
-  formatDate,
-  ScrollArea,
-  ScrollBar
-} from '@kaizen/core-client';
 import './dashboard.css';
 
 export const DashboardPage = () => {
   const accountGroups = useSelector(selectAccountGroups);
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
-    []
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setRecentTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     const loadRecentTransactions = async () => {

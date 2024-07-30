@@ -1,19 +1,7 @@
-import {
-  Category,
-  CreateCategoryRequest,
-  UpdateTransactionCategoryRequest
-} from '@kaizen/finance';
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Category } from '@kaizen/finance';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { selectCategories } from './category.selectors';
-import { CategoryClient } from './category.client';
-import { addCategoryAction } from './category.actions';
-import { CategoryDispatch } from './category.store';
-import {
-  TransactionClient,
-  TransactionDispatch,
-  setTransactionAction
-} from '../transaction';
 
 export interface CategorySelectorProps {
   transactionId: string;
@@ -34,18 +22,18 @@ export const CategorySelector = ({
   const categories = useSelector(selectCategories);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch<CategoryDispatch & TransactionDispatch>();
+  // const dispatch = useDispatch<CategoryDispatch & TransactionDispatch>();
 
-  const createCategory = async (categoryId: string) => {
-    const response = await TransactionClient.updateCategory({
-      transactionId: transactionId,
-      categoryId: categoryId
-    } satisfies UpdateTransactionCategoryRequest);
+  // const createCategory = async (categoryId: string) => {
+  //   const response = await TransactionClient.updateCategory({
+  //     transactionId: transactionId,
+  //     categoryId: categoryId
+  //   } satisfies UpdateTransactionCategoryRequest);
 
-    if (response.type === 'SUCCESS') {
-      dispatch(setTransactionAction(response.data));
-    }
-  };
+  //   if (response.type === 'SUCCESS') {
+  //     dispatch(setTransactionAction(response.data));
+  //   }
+  // };
 
   const onCategoryClick = () => {
     if (selected) {
@@ -59,32 +47,32 @@ export const CategorySelector = ({
     onTransactionSelected(transactionId);
   };
 
-  const onCategoryMouseLeave = () => {
-    onTransactionDeselected();
-  };
+  // const onCategoryMouseLeave = () => {
+  //   onTransactionDeselected();
+  // };
 
-  const onUpdateCategoryClick = async (categoryId: string) => {
-    await createCategory(categoryId);
-    onTransactionDeselected();
-  };
+  // const onUpdateCategoryClick = async (categoryId: string) => {
+  //   await createCategory(categoryId);
+  //   onTransactionDeselected();
+  // };
 
-  const onCategorySearch = (event: FormEvent<HTMLInputElement>) => {
-    setSearchText(event.currentTarget.value);
-  };
+  // const onCategorySearch = (event: FormEvent<HTMLInputElement>) => {
+  //   setSearchText(event.currentTarget.value);
+  // };
 
-  const onCreateCategoryClick = async (name: string) => {
-    const response = await CategoryClient.create({
-      name: name
-    } satisfies CreateCategoryRequest);
+  // const onCreateCategoryClick = async (name: string) => {
+  //   const response = await CategoryClient.create({
+  //     name: name
+  //   } satisfies CreateCategoryRequest);
 
-    if (response.type === 'SUCCESS') {
-      dispatch(addCategoryAction(response.data));
+  //   if (response.type === 'SUCCESS') {
+  //     dispatch(addCategoryAction(response.data));
 
-      await createCategory(response.data.id);
-    }
+  //     await createCategory(response.data.id);
+  //   }
 
-    onTransactionDeselected();
-  };
+  //   onTransactionDeselected();
+  // };
 
   useEffect(() => {
     if (!selected) {
