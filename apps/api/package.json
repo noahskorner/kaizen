@@ -10,7 +10,7 @@
   },
   "scripts": {
     "db:setup": "docker-compose -f ./docker-compose.development.yml up -d",
-    "dev": "docker-compose -f ./docker-compose.development.yml up -d && dotenv -e ./src/env/.env.development nodemon src/server.ts",
+    "dev": "docker-compose -f ./docker-compose.development.yml up -d && sleep 1 && dotenv -e ./src/env/.env.development -- prisma migrate dev && dotenv -e ./src/env/.env.development nodemon src/server.ts",
     "build": "tsc",
     "lint": "eslint . --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --fix --ignore-path ../../.eslintignore",
