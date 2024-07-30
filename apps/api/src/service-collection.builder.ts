@@ -40,7 +40,10 @@ import {
   GetExchangeRateService,
   GetExchangeRateController,
   GetExchangeRateRepository,
-  SyncExchangeRateRepository
+  SyncExchangeRateRepository,
+  UpdateTransactionRepository,
+  UpdateTransactionService,
+  UpdateTransactionController
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -235,7 +238,7 @@ export class ServiceCollectionBuilder {
     const getWalletRepository = new GetWalletRepository(prisma);
     const createWalletRepository = new CreateWalletRepository(prisma);
     const updateWalletRepository = new UpdateWalletRepository(prisma);
-    const getTransactionRepositroy = new GetTransactionRepository(prisma);
+    const getTransactionRepository = new GetTransactionRepository(prisma);
     const findCategoriesRepository = new FindCategoriesRepository(prisma);
     const createCategoryRepository = new CreateCategoryRepository(prisma);
     const getCategoryRepository = new GetCategoryRepository(prisma);
@@ -247,6 +250,7 @@ export class ServiceCollectionBuilder {
     const deleteAccountRepository = new DeleteAccountRepository(prisma);
     const getExchangeRateRepository = new GetExchangeRateRepository(prisma);
     const syncExchangeRateRepository = new SyncExchangeRateRepository(prisma);
+    const updateTransactionRepository = new UpdateTransactionRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -295,7 +299,8 @@ export class ServiceCollectionBuilder {
       findInstitutionsRepository,
       findAccountsRepository,
       financialProvider,
-      syncTransactionsRepository
+      syncTransactionsRepository,
+      getTransactionRepository
     );
     const syncAccountsService = new SyncAccountsService(
       financialProvider,
@@ -324,7 +329,7 @@ export class ServiceCollectionBuilder {
     const updateTransactionCategoryService =
       this._serviceCollection.updateTransactionCategoryService ??
       new UpdateTransactionCategoryService(
-        getTransactionRepositroy,
+        getTransactionRepository,
         getCategoryRepository,
         updateTransactionCategoryRepository
       );
@@ -377,6 +382,10 @@ export class ServiceCollectionBuilder {
       getExchangeRateRepository,
       exchangeRateProvider,
       syncExchangeRateRepository
+    );
+    const updateTransactionService = new UpdateTransactionService(
+      getTransactionRepository,
+      updateTransactionRepository
     );
 
     // Controllers
@@ -455,6 +464,10 @@ export class ServiceCollectionBuilder {
       authMiddleware,
       getExchangeRateService
     );
+    const updateTransactionController = new UpdateTransactionController(
+      authMiddleware,
+      updateTransactionService
+    );
 
     const serviceCollection: IServiceCollection = {
       // Environment
@@ -490,6 +503,7 @@ export class ServiceCollectionBuilder {
       updateEmailRepository,
       updatePasswordRepository,
       deleteAccountRepository,
+      updateTransactionRepository,
       // Services
       getUserService,
       createUserService,
@@ -515,6 +529,7 @@ export class ServiceCollectionBuilder {
       forgotPasswordService,
       deleteAccountService,
       getExchangeRateService,
+      updateTransactionService,
       // Controllers
       homeController,
       createUserController,
@@ -536,7 +551,8 @@ export class ServiceCollectionBuilder {
       updatePasswordController,
       forgotPasswordController,
       deleteAccountController,
-      getExchangeRateController
+      getExchangeRateController,
+      updateTransactionController
     };
 
     return serviceCollection;

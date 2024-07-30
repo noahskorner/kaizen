@@ -23,7 +23,7 @@ export const AccountGroupCard = ({
   return (
     <div
       className={`credit-card flex w-full flex-col justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4 shadow-2xl hover:z-10 xl:w-[24rem] xl:gap-y-8`}>
-      <span className="w-full font-mono text-lg font-medium uppercase tracking-wide text-zinc-50 xl:mt-16">
+      <span className="mb-1 scroll-m-20 font-mono text-lg font-bold uppercase tracking-tight xl:mt-16">
         {getAccountGroupLabel(accountType)}
       </span>
       <div className="flex items-center justify-between">

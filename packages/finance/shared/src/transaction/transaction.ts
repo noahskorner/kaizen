@@ -36,4 +36,8 @@ export interface Transaction {
   originalName: string | null;
   originalDescription: string | null;
   originalMerchantName: string | null;
+  name: string | null;
+  amount: number;
+  description: string | null;
+  merchantName: string | null;
 }

@@ -415,6 +415,50 @@ export interface GetExchangeRateRequestFailedError {
   };
 }
 
+export interface UpdateTransactionNotFoundError {
+  code: ErrorCode.UPDATE_TRANSACTION_NOT_FOUND;
+  params: {
+    transactionId: string;
+    userId: string;
+  };
+}
+
+export interface UpdateTransactionInvalidNameError {
+  code: ErrorCode.UPDATE_TRANSACTION_INVALID_NAME;
+  params: {
+    transactionId: string;
+    userId: string;
+    name?: string;
+  };
+}
+
+export interface UpdateTransactionInvalidAmountError {
+  code: ErrorCode.UPDATE_TRANSACTION_INVALID_AMOUNT;
+  params: {
+    transactionId: string;
+    userId: string;
+    amount: unknown;
+  };
+}
+
+export interface UpdateTransactionInvalidDescriptionError {
+  code: ErrorCode.UPDATE_TRANSACTION_INVALID_DESCRIPTION;
+  params: {
+    transactionId: string;
+    userId: string;
+    description?: string;
+  };
+}
+
+export interface UpdateTransactionInvalidMerchantNameError {
+  code: ErrorCode.UPDATE_TRANSACTION_INVALID_MERCHANT_NAME;
+  params: {
+    transactionId: string;
+    userId: string;
+    merchantName?: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -473,6 +517,11 @@ export interface BaseError {
     | ErrorCode.DELETE_ACCOUNT_NOT_FOUND
     | ErrorCode.GET_EXCHANGE_RATE_REQUEST_FAILED
     | ErrorCode.GET_EXCHANGE_RATE_INVALID_CURRENCY
+    | ErrorCode.UPDATE_TRANSACTION_NOT_FOUND
+    | ErrorCode.UPDATE_TRANSACTION_INVALID_NAME
+    | ErrorCode.UPDATE_TRANSACTION_INVALID_AMOUNT
+    | ErrorCode.UPDATE_TRANSACTION_INVALID_DESCRIPTION
+    | ErrorCode.UPDATE_TRANSACTION_INVALID_MERCHANT_NAME
   >;
   params?: never;
 }
@@ -533,4 +582,9 @@ export type ServiceError =
   | VerifyUpdateEmailTokenNotValidError
   | DeleteAccountNotFoundError
   | GetExchangeRateInvalidCurrencyError
-  | GetExchangeRateRequestFailedError;
+  | GetExchangeRateRequestFailedError
+  | UpdateTransactionNotFoundError
+  | UpdateTransactionInvalidNameError
+  | UpdateTransactionInvalidAmountError
+  | UpdateTransactionInvalidDescriptionError
+  | UpdateTransactionInvalidMerchantNameError;

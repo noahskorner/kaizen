@@ -1,12 +1,6 @@
 import {
-  Button,
-  Form,
   formatCurrency,
   formatDate,
-  FormDescription,
-  FormField,
-  Input,
-  Label,
   Separator,
   Sheet,
   SheetContent,
@@ -18,6 +12,7 @@ import {
 import { CategorySelector } from '../category/category.selector';
 import { Transaction } from '@kaizen/finance';
 import { useState } from 'react';
+import { UpdateTransactionForm } from './update-transaction-form';
 
 export interface TransactionItemProps {
   transaction: Transaction;
@@ -31,6 +26,10 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
   };
 
   const onCancelClick = () => {
+    setOpen(false);
+  };
+
+  const onTransactionUpdated = () => {
     setOpen(false);
   };
 
@@ -56,7 +55,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
             <div className="flex w-full flex-row items-center justify-start gap-2">
               <div className="flex flex-col items-start gap-2">
                 <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
-                  {transaction.originalName}
+                  {transaction.name}
                 </h6>
                 <span className="block text-sm text-muted-foreground">
                   {formatDate(transaction.date)}
@@ -65,13 +64,13 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
               <CategorySelector
                 transactionId={transaction.id}
                 selected={false}
-                name={transaction.originalName ?? ''}
+                name={'category'}
                 onTransactionSelected={() => {}}
                 onTransactionDeselected={() => {}}
               />
             </div>
             <span className="text-sm">
-              {formatCurrency(transaction.originalAmount, 'USD')}
+              {formatCurrency(transaction.amount, 'USD')}
             </span>
           </div>
         </div>
@@ -80,74 +79,23 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
         <SheetHeader>
           <SheetTitle>Transaction details</SheetTitle>
           <SheetDescription>
-            On [date], you spent $[amount] at [merchantName]. The transaction
-            was recorded as [originalDescription] and is categorized under
-            [category].
+            On {formatDate(transaction.date)}, you spent&nbsp;
+            {formatCurrency(transaction.amount, 'USD')}&nbsp;at&nbsp;
+            {transaction.merchantName ?? 'unknown'}. The transaction was
+            recorded as &apos;{transaction.description}&apos; and is categorized
+            under category.
           </SheetDescription>
         </SheetHeader>
         <Separator />
-        <Form>
-          <FormField>
-            <Label className="w-64 text-left capitalize  text-white">
-              name
-            </Label>
-            <Input name="name" value={transaction.originalName ?? ''} />
-            <FormDescription>The name of the transaction.</FormDescription>
-          </FormField>
-          <FormField>
-            <Label className="w-64 text-left capitalize  text-white">
-              Category
-            </Label>
-            <CategorySelector
-              transactionId={transaction.id}
-              selected={false}
-              name={transaction.originalName ?? ''}
-              onTransactionSelected={() => {}}
-              onTransactionDeselected={() => {}}
-            />
-          </FormField>
-          <FormField>
-            <Label className="w-64 text-left capitalize  text-white">
-              amount
-            </Label>
-            <Input name="amount" value={transaction.originalAmount} />
-            <FormDescription>The amount of the transaction.</FormDescription>
-          </FormField>
-          <FormField>
-            <Label className="w-64 text-left capitalize  text-white">
-              merchant name
-            </Label>
-            <Input
-              name="merchant-name"
-              value={transaction.originalMerchantName ?? ''}
-            />
-            <FormDescription>The date of the transaction.</FormDescription>
-          </FormField>
-          <FormField>
-            <Label className="w-64 text-left capitalize  text-white">
-              description
-            </Label>
-            <Input
-              name="description"
-              value={transaction.originalDescription ?? ''}
-            />
-            <FormDescription>
-              The description of the transaction.
-            </FormDescription>
-          </FormField>
-          <div className="flex w-full flex-row gap-x-2">
-            <Button
-              type="button"
-              onClick={onCancelClick}
-              variant="secondary"
-              className="w-full">
-              Cancel
-            </Button>
-            <Button type="submit" className="w-full">
-              Save changes
-            </Button>
-          </div>
-        </Form>
+        <UpdateTransactionForm
+          id={transaction.id}
+          name={transaction.name ?? ''}
+          amount={transaction.amount}
+          merchantName={transaction.merchantName ?? ''}
+          description={transaction.description ?? ''}
+          onCancelClick={onCancelClick}
+          onTransactionUpdated={onTransactionUpdated}
+        />
       </SheetContent>
     </Sheet>
   );

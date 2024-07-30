@@ -103,11 +103,11 @@ export const CategorySelector = ({
   }, [categories, searchText]);
 
   return (
-    <div>
+    <div className="flex gap-1">
       <button
         onMouseEnter={onCategoryMouseEnter}
         onClick={onCategoryClick}
-        className="my-2 rounded-lg bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-950">
+        className="rounded-lg bg-green-300 px-2 py-1 text-xs text-zinc-900">
         {name}
       </button>
       {filteredCategories.map((category) => {
@@ -116,8 +116,8 @@ export const CategorySelector = ({
             key={category.id}
             onMouseEnter={onCategoryMouseEnter}
             onClick={onCategoryClick}
-            className="my-2 rounded-lg bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-950">
-            {name}
+            className="rounded-lg  bg-zinc-700 px-2 py-1.5  text-xs text-zinc-50 hover:bg-zinc-700/80">
+            {category.name}
           </button>
         );
       })}

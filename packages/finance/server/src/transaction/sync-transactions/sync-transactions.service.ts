@@ -20,7 +20,9 @@ import {
   SyncTransactionsResponse,
   Transaction,
   TransactionAdapter,
-  TransactionRecordAdapter
+  TransactionRecordAdapter,
+  IGetTransactionRepository,
+  GetTransactionByExternalIdQuery
 } from '@kaizen/finance';
 
 export class SyncTransactionsService
@@ -28,10 +30,11 @@ export class SyncTransactionsService
   implements ISyncTransactionsService
 {
   constructor(
-    private readonly _findInstitutionsRepository: IFindInstitutionsRepository,
-    private readonly _findAccountsRepository: IFindAccountsRepository,
-    private readonly _financialProvider: IFinancialProvider,
-    private readonly _syncTransactionsRepository: ISyncTransactionsRepository
+    private readonly findInstitutionsRepository: IFindInstitutionsRepository,
+    private readonly findAccountsRepository: IFindAccountsRepository,
+    private readonly financialProvider: IFinancialProvider,
+    private readonly syncTransactionsRepository: ISyncTransactionsRepository,
+    private readonly getTransactionRepository: IGetTransactionRepository
   ) {
     super();
   }
@@ -67,7 +70,7 @@ export class SyncTransactionsService
       institutionIds: command.institutionIds
     };
     const institutionRecords =
-      await this._findInstitutionsRepository.find(query);
+      await this.findInstitutionsRepository.find(query);
     if (command.institutionIds == null || command.institutionIds.length === 0) {
       return this.success(institutionRecords);
     }
@@ -104,7 +107,7 @@ export class SyncTransactionsService
     while (hasMore) {
       // Get a batch from the financial provider
       const syncExternalTransactionsResponse =
-        await this._financialProvider.syncExternalTransactions(
+        await this.financialProvider.syncExternalTransactions(
           plaidAccessToken,
           cursor
         );
@@ -187,8 +190,9 @@ export class SyncTransactionsService
         TransactionRecordAdapter.toDeleteTransactionQuery
       )
     };
-    const syncTransactionsResponse =
-      await this._syncTransactionsRepository.sync(syncTransactionsQuery);
+    const syncTransactionsResponse = await this.syncTransactionsRepository.sync(
+      syncTransactionsQuery
+    );
 
     return this.success({
       institution: InstitutionAdapter.toInstitution(
@@ -224,7 +228,7 @@ export class SyncTransactionsService
       ]
     };
     const accountRecords =
-      await this._findAccountsRepository.findByExternalId(query);
+      await this.findAccountsRepository.findByExternalId(query);
     const accountIdMap = accountRecords.reduce((prev, curr) => {
       return prev.set(curr.externalId, curr.id);
     }, new Map<string, string>());
@@ -268,10 +272,9 @@ export class SyncTransactionsService
     const queries: SyncTransactionQuery[] = [];
     for (const externalTransaction of externalTransactions) {
       // Find the existing transaction
-      const transaction =
-        await this._syncTransactionsRepository.getByExternalId(
-          externalTransaction.externalId
-        );
+      const transaction = await this.getTransactionRepository.getByExternalId({
+        externalId: externalTransaction.externalId
+      } satisfies GetTransactionByExternalIdQuery);
       if (transaction === null) {
         missingTransactionIds.push(externalTransaction.externalId);
         continue;
@@ -280,7 +283,7 @@ export class SyncTransactionsService
       // Map to the database query
       queries.push(
         TransactionRecordAdapter.toSyncTransactionQuery({
-          id: transaction.id,
+          transactionRecord: transaction,
           externalTransaction,
           locationId: transaction.locationId
         })

@@ -2,8 +2,7 @@ import { Repository } from '@kaizen/core-server';
 import {
   ISyncTransactionsRepository,
   SyncTransactionRecordsResponse,
-  SyncTransactionsQuery,
-  TransactionRecord
+  SyncTransactionsQuery
 } from '@kaizen/finance';
 
 export class SyncTransactionsRepository
@@ -79,7 +78,11 @@ export class SyncTransactionsRepository
               originalDetailed: createTransactionQuery.originalDetailed,
               originalConfidenceLevel:
                 createTransactionQuery.originalConfidenceLevel,
-              originalIconUrl: createTransactionQuery.originalIconUrl
+              originalIconUrl: createTransactionQuery.originalIconUrl,
+              amount: createTransactionQuery.amount,
+              name: createTransactionQuery.name,
+              merchantName: createTransactionQuery.merchantName,
+              description: createTransactionQuery.description
             }
           });
         }),
@@ -135,7 +138,11 @@ export class SyncTransactionsRepository
                     storeNumber: updateTransactionQuery.location.storeNumber
                   }
                 }
-              }
+              },
+              name: updateTransactionQuery.name,
+              amount: updateTransactionQuery.amount,
+              merchantName: updateTransactionQuery.merchantName,
+              description: updateTransactionQuery.description
             }
           });
         }),
@@ -176,21 +183,5 @@ export class SyncTransactionsRepository
       )
     };
     return result;
-  }
-
-  public async getByExternalId(
-    externalId: string
-  ): Promise<TransactionRecord | null> {
-    const transactionRecord = await this._prisma.transactionRecord.findFirst({
-      include: {
-        category: true,
-        location: true
-      },
-      where: {
-        externalId: externalId
-      }
-    });
-
-    return transactionRecord;
   }
 }

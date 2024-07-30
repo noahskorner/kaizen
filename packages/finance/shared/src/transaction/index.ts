@@ -17,4 +17,5 @@ export * from './transaction-record.adapter';
 export * from './transaction-record';
 export * from './transaction.adapter';
 export * from './transaction';
+export * from './update-transaction';
 export * from './update-transaction-category';
