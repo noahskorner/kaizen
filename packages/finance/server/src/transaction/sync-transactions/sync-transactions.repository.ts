@@ -37,14 +37,14 @@ export class SyncTransactionsRepository
             data: {
               externalId: createTransactionQuery.externalId,
               externalAccountId: createTransactionQuery.externalAccountId,
-              amount: createTransactionQuery.amount,
+              originalAmount: createTransactionQuery.originalAmount,
               isoCurrencyCode: createTransactionQuery.isoCurrencyCode,
               unofficialCurrencyCode:
                 createTransactionQuery.unofficialCurrencyCode,
               checkNumber: createTransactionQuery.checkNumber,
               date: createTransactionQuery.date,
-              name: createTransactionQuery.name,
-              merchantName: createTransactionQuery.merchantName,
+              originalName: createTransactionQuery.originalName,
+              originalMerchantName: createTransactionQuery.originalMerchantName,
               originalDescription: createTransactionQuery.originalDescription,
               pending: createTransactionQuery.pending,
               pendingTransactionId: createTransactionQuery.pendingTransactionId,
@@ -94,14 +94,14 @@ export class SyncTransactionsRepository
               location: true
             },
             data: {
-              amount: updateTransactionQuery.amount,
+              originalAmount: updateTransactionQuery.originalAmount,
               isoCurrencyCode: updateTransactionQuery.isoCurrencyCode,
               unofficialCurrencyCode:
                 updateTransactionQuery.unofficialCurrencyCode,
               checkNumber: updateTransactionQuery.checkNumber,
               date: updateTransactionQuery.date,
-              name: updateTransactionQuery.name,
-              merchantName: updateTransactionQuery.merchantName,
+              originalName: updateTransactionQuery.originalName,
+              originalMerchantName: updateTransactionQuery.originalMerchantName,
               originalDescription: updateTransactionQuery.originalDescription,
               pending: updateTransactionQuery.pending,
               pendingTransactionId: updateTransactionQuery.pendingTransactionId,

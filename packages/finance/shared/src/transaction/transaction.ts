@@ -13,14 +13,10 @@ export interface Transaction {
   categoryId: string | null;
   category: Category | null;
   location: Location;
-  amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
   checkNumber: string | null;
   date: string;
-  name: string | null;
-  merchantName: string | null;
-  originalDescription: string | null;
   pending: boolean;
   pendingTransactionId: string | null;
   accountOwner: string | null;
@@ -36,4 +32,8 @@ export interface Transaction {
   originalDetailed: string | null;
   originalConfidenceLevel: string | null;
   originalIconUrl: string | null;
+  originalAmount: number;
+  originalName: string | null;
+  originalDescription: string | null;
+  originalMerchantName: string | null;
 }

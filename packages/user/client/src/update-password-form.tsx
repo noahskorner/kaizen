@@ -49,7 +49,7 @@ export const UpdatePasswordForm = () => {
   return (
     <Form
       onSubmit={onSendVerificationPasswordSubmit}
-      className="flex w-full flex-col gap-y-4 rounded-lg border border-zinc-700 bg-zinc-900">
+      className="flex w-full flex-col gap-y-4 rounded-lg border border-zinc-800 bg-zinc-900">
       <div className="flex flex-col gap-y-6 p-6">
         <h3 className="text-xl font-bold">Password</h3>
         <FormField>
@@ -70,7 +70,7 @@ export const UpdatePasswordForm = () => {
           ))}
         </FormField>
       </div>
-      <div className="flex flex-col items-end justify-center border-t border-zinc-700 px-6 py-4">
+      <div className="flex flex-col items-end justify-center border-t border-zinc-800 px-6 py-4">
         <Button size="sm" type="submit" variant="destructive">
           Change my password
         </Button>

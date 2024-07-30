@@ -17,11 +17,11 @@ export const selectTransactionsByCategory = createSelector(
         );
 
         if (existingCategory) {
-          existingCategory.value += transaction.amount;
+          existingCategory.value += transaction.originalAmount;
         } else {
           prev.push({
             name: currentCategory,
-            value: transaction.amount
+            value: transaction.originalAmount
           });
         }
 
@@ -35,7 +35,7 @@ export const selectTotalSpent = createSelector(
   selectTransactions,
   (transactions) => {
     return transactions.reduce((prev, curr) => {
-      return prev + curr.amount;
+      return prev + curr.originalAmount;
     }, 0);
   }
 );

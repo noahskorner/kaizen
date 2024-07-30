@@ -52,7 +52,7 @@ describe('CreateAccountHistoryService', () => {
         expect(response.data.length).toBe(0);
       }
     });
-    it('returns latest History of accounts', async () => {
+    it('returns latest history of accounts', async () => {
       // Arrange
       const { serviceCollection, testBed } = buildTestBed({
         accountsBalanceGetResponse: buildAccountsBalanceGetResponse({

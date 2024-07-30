@@ -4,15 +4,11 @@ import { SyncLocationQuery } from './sync-location.query';
 
 export interface SyncTransactionQuery {
   id: string;
-  amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
   checkNumber: string | null;
   date: string;
   location: SyncLocationQuery;
-  name: string | null;
-  merchantName: string | null;
-  originalDescription: string | null;
   pending: boolean;
   pendingTransactionId: string | null;
   accountOwner: string | null;
@@ -29,4 +25,8 @@ export interface SyncTransactionQuery {
   originalDetailed: string | null;
   originalConfidenceLevel: string | null;
   originalIconUrl: string | null;
+  originalAmount: number;
+  originalMerchantName: string | null;
+  originalName: string | null;
+  originalDescription: string | null;
 }

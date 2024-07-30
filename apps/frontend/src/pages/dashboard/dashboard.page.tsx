@@ -11,13 +11,12 @@ import {
   FindTransactionsRequest,
   Transaction
 } from '@kaizen/finance';
-import { formatCurrency, formatDate } from '@kaizen/core-client';
+import './dashboard.css';
 
 export const DashboardPage = () => {
   const accountGroups = useSelector(selectAccountGroups);
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
-    []
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setRecentTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     const loadRecentTransactions = async () => {
@@ -35,15 +34,9 @@ export const DashboardPage = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-6">
-      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
-        Dashboard
-      </h1>
-      <div className="flex h-full w-full flex-col items-stretch gap-x-6 gap-y-6 lg:flex-row">
-        <div className="order-2 flex h-full w-full flex-col gap-y-6 lg:order-1 lg:max-w-sm">
-          <div className="w-full rounded-lg border border-zinc-800 ">
-            <div className="border-b border-zinc-800 p-4">
-              <h2 className="font-bold">Accounts</h2>
-            </div>
+      <div className="flex h-full w-full flex-col gap-x-6 gap-y-6 xl:flex-row">
+        <div className="order-2 flex h-full flex-col gap-y-2 xl:order-2">
+          <div className="flex flex-col gap-2">
             {Object.entries(accountGroups).map(
               ([accountType, accountGroup]) => {
                 return (
@@ -51,36 +44,14 @@ export const DashboardPage = () => {
                     key={accountType}
                     accountType={accountType as AccountType}
                     accountGroup={accountGroup}
-                    showAccounts={true}
+                    showAccounts={false}
                   />
                 );
               }
             )}
           </div>
-          <div className="w-full rounded-lg border border-zinc-800 ">
-            <div className="border-b border-zinc-800 p-4 ">
-              <h2 className="font-bold">Recent Transactions</h2>
-            </div>
-            {recentTransactions.map((transaction) => {
-              return (
-                <div
-                  className="flex w-full items-center justify-between p-4"
-                  key={transaction.id}>
-                  <div className="flex flex-col gap-y-1">
-                    <span className="text-sm">{transaction.name}&nbsp;</span>
-                    <span className="text-xs text-zinc-300">
-                      {formatDate(transaction.date)}
-                    </span>
-                  </div>
-                  <span className="text-sm">
-                    {formatCurrency(transaction.amount ?? 0, 'USD')}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
         </div>
-        <div className="order-1 flex h-full w-full items-stretch lg:order-2 lg:max-h-[50rem]">
+        <div className="order-1 flex h-full w-full items-stretch xl:order-1">
           <NetworthGraph />
         </div>
       </div>
