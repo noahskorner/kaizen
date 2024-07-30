@@ -6,15 +6,11 @@ import { ExternalTransactionPaymentChannel } from './external-transaction-paymen
 export interface ExternalTransaction {
   externalId: string;
   externalAccountId: string;
-  amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
   checkNumber: string | null;
   date: string;
   location: ExternalLocation;
-  name: string | null;
-  merchantName: string | null;
-  originalDescription: string | null;
   pending: boolean;
   pendingTransactionId: string | null;
   accountOwner: string | null;
@@ -28,4 +24,8 @@ export interface ExternalTransaction {
   code: ExternalTransactionCode | null;
   categoryIconUrl: string | null;
   merchantEntityId: string | null;
+  originalDescription: string | null;
+  originalMerchantName: string | null;
+  originalName: string | null;
+  originalAmount: number;
 }

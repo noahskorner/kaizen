@@ -9,14 +9,10 @@ export interface CreateTransactionQuery {
   externalId: string;
   externalAccountId: string;
   location: CreateLocationQuery;
-  amount: number;
   isoCurrencyCode: string | null;
   unofficialCurrencyCode: string | null;
   checkNumber: string | null;
   date: string;
-  name: string | null;
-  merchantName: string | null;
-  originalDescription: string | null;
   pending: boolean;
   pendingTransactionId: string | null;
   accountOwner: string | null;
@@ -32,4 +28,8 @@ export interface CreateTransactionQuery {
   originalDetailed: string | null;
   originalConfidenceLevel: string | null;
   originalIconUrl: string | null;
+  originalAmount: number;
+  originalMerchantName: string | null;
+  originalDescription: string | null;
+  originalName: string | null;
 }

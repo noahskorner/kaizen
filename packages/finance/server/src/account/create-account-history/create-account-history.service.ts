@@ -30,17 +30,18 @@ export class CreateAccountHistoryService
       return this.success([]);
     }
 
-    // Unique id for this set of Historys
-    const HistoryId = uuid();
+    const snapshotId = uuid();
     const query = accounts.map((account) =>
       AccountHistoryRecordAdapter.toCreateAccountHistoryQuery(
-        HistoryId,
+        snapshotId,
         account
       )
     );
-    const Historys =
+    const accountHistories =
       await this.createAccountHistoryRepository.bulkCreate(query);
 
-    return this.success(Historys.map(AccountHistoryAdapter.toAccountHistory));
+    return this.success(
+      accountHistories.map(AccountHistoryAdapter.toAccountHistory)
+    );
   }
 }
