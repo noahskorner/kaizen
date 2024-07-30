@@ -2,8 +2,7 @@ import { Repository } from '@kaizen/core-server';
 import {
   ISyncTransactionsRepository,
   SyncTransactionRecordsResponse,
-  SyncTransactionsQuery,
-  TransactionRecord
+  SyncTransactionsQuery
 } from '@kaizen/finance';
 
 export class SyncTransactionsRepository
@@ -176,21 +175,5 @@ export class SyncTransactionsRepository
       )
     };
     return result;
-  }
-
-  public async getByExternalId(
-    externalId: string
-  ): Promise<TransactionRecord | null> {
-    const transactionRecord = await this._prisma.transactionRecord.findFirst({
-      include: {
-        category: true,
-        location: true
-      },
-      where: {
-        externalId: externalId
-      }
-    });
-
-    return transactionRecord;
   }
 }

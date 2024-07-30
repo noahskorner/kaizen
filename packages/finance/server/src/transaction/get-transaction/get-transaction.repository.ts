@@ -1,5 +1,6 @@
 import { Repository } from '@kaizen/core-server';
 import {
+  GetTransactionByExternalIdQuery,
   GetTransactionQuery,
   IGetTransactionRepository,
   TransactionRecord
@@ -22,5 +23,21 @@ export class GetTransactionRepository
         location: true
       }
     });
+  }
+
+  public async getByExternalId({
+    externalId
+  }: GetTransactionByExternalIdQuery): Promise<TransactionRecord | null> {
+    const transactionRecord = await this._prisma.transactionRecord.findFirst({
+      include: {
+        category: true,
+        location: true
+      },
+      where: {
+        externalId: externalId
+      }
+    });
+
+    return transactionRecord;
   }
 }
