@@ -11,6 +11,7 @@ import {
 } from './sync-transactions';
 import { TransactionCodeRecord } from './transaction-code-record';
 import { TransactionPaymentChannelRecord } from './transaction-payment-channel-record';
+import { TransactionRecord } from './transaction-record';
 
 export class TransactionRecordAdapter {
   public static toCreateTransactionQuery({
@@ -55,19 +56,42 @@ export class TransactionRecordAdapter {
       originalDetailed: externalTransaction.category?.detailed ?? null,
       originalConfidenceLevel:
         externalTransaction.category?.confidenceLevel ?? null,
-      originalIconUrl: externalTransaction.category?.iconUrl ?? null
+      originalIconUrl: externalTransaction.category?.iconUrl ?? null,
+      // Initialize these fields as the fields from the finance provider
+      name: externalTransaction.originalName ?? null,
+      amount: externalTransaction.originalAmount,
+      description: externalTransaction.originalDescription ?? null,
+      merchantName: externalTransaction.originalMerchantName ?? null
     };
 
     return query;
   }
 
   public static toSyncTransactionQuery({
-    id,
+    transactionRecord,
     externalTransaction,
     locationId
   }: _ToUpdateTransactionQueryCommand): SyncTransactionQuery {
+    // If the field is the same as the original field, then let's update it
+    const name =
+      transactionRecord.name === transactionRecord.originalName
+        ? externalTransaction.originalName
+        : undefined;
+    const amount =
+      transactionRecord.amount === transactionRecord.originalAmount
+        ? externalTransaction.originalAmount
+        : undefined;
+    const merchantName =
+      transactionRecord.merchantName === transactionRecord.originalMerchantName
+        ? externalTransaction.originalMerchantName
+        : undefined;
+    const description =
+      transactionRecord.description === transactionRecord.originalDescription
+        ? externalTransaction.originalDescription
+        : undefined;
+
     const query: SyncTransactionQuery = {
-      id: id,
+      id: transactionRecord.id,
       location: TransactionRecordAdapter.toUpdateLocationQuery(
         locationId,
         externalTransaction.location
@@ -100,7 +124,11 @@ export class TransactionRecordAdapter {
       originalDetailed: externalTransaction.category?.detailed ?? null,
       originalConfidenceLevel:
         externalTransaction.category?.confidenceLevel ?? null,
-      originalIconUrl: externalTransaction.category?.iconUrl ?? null
+      originalIconUrl: externalTransaction.category?.iconUrl ?? null,
+      name,
+      amount,
+      description,
+      merchantName
     };
 
     return query;
@@ -212,7 +240,7 @@ interface _ToCreateTransactionQueryCommand {
 }
 
 interface _ToUpdateTransactionQueryCommand {
-  id: string;
+  transactionRecord: TransactionRecord;
   externalTransaction: ExternalTransaction;
   locationId: string;
 }

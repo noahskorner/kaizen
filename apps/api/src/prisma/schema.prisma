@@ -248,6 +248,10 @@ model TransactionRecord {
   originalDetailed        String?                         @map("detailed_category")
   originalConfidenceLevel String?                         @map("original_confidence_level")
   originalIconUrl         String?                         @map("original_icon_url")
+  name                    String?                         @map("name")
+  amount                  Float                           @map("amount")
+  description             String?                         @map("description")
+  merchantName            String?                         @map("merchant_name")
 
   @@map("transaction")
 }

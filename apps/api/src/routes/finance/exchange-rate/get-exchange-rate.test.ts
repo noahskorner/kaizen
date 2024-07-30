@@ -1,5 +1,8 @@
 import supertest from 'supertest';
-import { buildTestBed } from '../../../../test/build-test-bed';
+import {
+  buildTestBed,
+  cachedPrismaClient
+} from '../../../../test/build-test-bed';
 import { createAndLoginUser } from '../../../../test/create-and-login-user';
 import {
   ErrorCode,
@@ -18,6 +21,9 @@ import { AppBuilder } from '../../../app-builder';
 
 describe('/exchange-rate/:base', () => {
   describe('get should', () => {
+    beforeEach(async () => {
+      await cachedPrismaClient.exchangeRateRecord.deleteMany();
+    });
     it('returns 404 when base currency is invalid', async () => {
       // Arrange
       const { testBed } = buildTestBed();

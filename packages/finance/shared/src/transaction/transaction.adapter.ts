@@ -54,7 +54,11 @@ export class TransactionAdapter {
       originalCategory: transactionRecord.originalCategory,
       originalDetailed: transactionRecord.originalDetailed,
       originalConfidenceLevel: transactionRecord.originalConfidenceLevel,
-      originalIconUrl: transactionRecord.originalIconUrl
+      originalIconUrl: transactionRecord.originalIconUrl,
+      name: transactionRecord.name,
+      amount: transactionRecord.amount,
+      description: transactionRecord.description,
+      merchantName: transactionRecord.merchantName
     };
     return transaction;
   }

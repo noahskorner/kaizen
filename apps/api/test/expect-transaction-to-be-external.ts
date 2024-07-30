@@ -71,4 +71,8 @@ export const expectTransactionToBeExternal = (
   expect(transaction.originalIconUrl).toBe(
     external.personal_finance_category_icon_url
   );
+  expect(transaction.name).toBe(external.name);
+  expect(transaction.merchantName).toBe(external.merchant_name);
+  expect(transaction.description).toBe(external.original_description);
+  expect(transaction.amount).toBe(external.amount);
 };

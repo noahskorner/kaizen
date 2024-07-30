@@ -29,4 +29,8 @@ export interface SyncTransactionQuery {
   originalMerchantName: string | null;
   originalName: string | null;
   originalDescription: string | null;
+  name?: string | null;
+  amount?: number;
+  merchantName?: string | null;
+  description?: string | null;
 }

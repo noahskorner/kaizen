@@ -283,7 +283,7 @@ export class SyncTransactionsService
       // Map to the database query
       queries.push(
         TransactionRecordAdapter.toSyncTransactionQuery({
-          id: transaction.id,
+          transactionRecord: transaction,
           externalTransaction,
           locationId: transaction.locationId
         })

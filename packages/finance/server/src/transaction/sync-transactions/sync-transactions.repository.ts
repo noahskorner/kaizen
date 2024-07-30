@@ -78,7 +78,11 @@ export class SyncTransactionsRepository
               originalDetailed: createTransactionQuery.originalDetailed,
               originalConfidenceLevel:
                 createTransactionQuery.originalConfidenceLevel,
-              originalIconUrl: createTransactionQuery.originalIconUrl
+              originalIconUrl: createTransactionQuery.originalIconUrl,
+              amount: createTransactionQuery.amount,
+              name: createTransactionQuery.name,
+              merchantName: createTransactionQuery.merchantName,
+              description: createTransactionQuery.description
             }
           });
         }),
@@ -134,7 +138,11 @@ export class SyncTransactionsRepository
                     storeNumber: updateTransactionQuery.location.storeNumber
                   }
                 }
-              }
+              },
+              name: updateTransactionQuery.name,
+              amount: updateTransactionQuery.amount,
+              merchantName: updateTransactionQuery.merchantName,
+              description: updateTransactionQuery.description
             }
           });
         }),

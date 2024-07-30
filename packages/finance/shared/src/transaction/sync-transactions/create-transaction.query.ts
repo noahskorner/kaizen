@@ -32,4 +32,8 @@ export interface CreateTransactionQuery {
   originalMerchantName: string | null;
   originalDescription: string | null;
   originalName: string | null;
+  amount: number;
+  merchantName: string | null;
+  description: string | null;
+  name: string | null;
 }
