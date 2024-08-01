@@ -19,7 +19,11 @@ export class GetTransactionRepository
         userId: query.userId
       },
       include: {
-        category: true,
+        categories: {
+          include: {
+            category: true
+          }
+        },
         location: true
       }
     });
@@ -30,7 +34,11 @@ export class GetTransactionRepository
   }: GetTransactionByExternalIdQuery): Promise<TransactionRecord | null> {
     const transactionRecord = await this._prisma.transactionRecord.findFirst({
       include: {
-        category: true,
+        categories: {
+          include: {
+            category: true
+          }
+        },
         location: true
       },
       where: {

@@ -1,8 +1,10 @@
 import { Repository } from '@kaizen/core-server';
 import {
+  InstitutionRecord,
   ISyncTransactionsRepository,
   SyncTransactionRecordsResponse,
-  SyncTransactionsQuery
+  SyncTransactionsQuery,
+  TransactionRecord
 } from '@kaizen/finance';
 
 export class SyncTransactionsRepository
@@ -12,10 +14,10 @@ export class SyncTransactionsRepository
   public async sync(
     query: SyncTransactionsQuery
   ): Promise<SyncTransactionRecordsResponse> {
-    const [updatedInstitutionRecord, ...transactionRecords] =
-      await this._prisma.$transaction([
-        // Update the institutionRecord with the latest cursor
-        this._prisma.institutionRecord.update({
+    return this._prisma.$transaction(async (prisma) => {
+      // Update the institutionRecord with the latest cursor
+      const updatedInstitutionRecord: InstitutionRecord =
+        await prisma.institutionRecord.update({
           data: {
             plaidCursor: query.syncInstitutionQuery.cursor
           },
@@ -25,12 +27,18 @@ export class SyncTransactionsRepository
           include: {
             accounts: true
           }
-        }),
-        // Create the new transactions
-        ...query.createTransactionQueries.map((createTransactionQuery) => {
-          return this._prisma.transactionRecord.create({
+        });
+
+      // Create the new transactions
+      const createdTransactionRecords: TransactionRecord[] = await Promise.all(
+        query.createTransactionQueries.map((createTransactionQuery) => {
+          return prisma.transactionRecord.create({
             include: {
-              category: true,
+              categories: {
+                include: {
+                  category: true
+                }
+              },
               location: true
             },
             data: {
@@ -85,15 +93,22 @@ export class SyncTransactionsRepository
               description: createTransactionQuery.description
             }
           });
-        }),
-        // Update the existing transactions
-        ...query.syncTransactionQueries.map((updateTransactionQuery) => {
-          return this._prisma.transactionRecord.update({
+        })
+      );
+
+      // Update the existing transactions
+      const updatedTransactionRecords: TransactionRecord[] = await Promise.all(
+        query.syncTransactionQueries.map((updateTransactionQuery) => {
+          return prisma.transactionRecord.update({
             where: {
               id: updateTransactionQuery.id
             },
             include: {
-              category: true,
+              categories: {
+                include: {
+                  category: true
+                }
+              },
               location: true
             },
             data: {
@@ -145,43 +160,32 @@ export class SyncTransactionsRepository
               description: updateTransactionQuery.description
             }
           });
-        }),
-        // Delete the removed transactions
-        ...query.deleteTransactionQueries.map((deleteTransactionQuery) => {
-          return this._prisma.transactionRecord.delete({
+        })
+      );
+
+      // Delete the removed transactions
+      const deletedTransactionRecords: TransactionRecord[] = await Promise.all(
+        query.deleteTransactionQueries.map((deleteTransactionQuery) => {
+          return prisma.transactionRecord.delete({
             where: { externalId: deleteTransactionQuery.externalId },
             include: {
-              category: true,
+              categories: {
+                include: {
+                  category: true
+                }
+              },
               location: true
             }
           });
         })
-      ]);
+      );
 
-    const result: SyncTransactionRecordsResponse = {
-      updatedInstitutionRecord,
-      createdTransactionRecords: transactionRecords.filter(
-        (transactionRecord) =>
-          query.createTransactionQueries.some(
-            (createTransactionQuery) =>
-              createTransactionQuery.externalId === transactionRecord.externalId
-          )
-      ),
-      updatedTransactionRecords: transactionRecords.filter(
-        (transactionRecord) =>
-          query.syncTransactionQueries.some(
-            (updateTransactionQuery) =>
-              updateTransactionQuery.id === transactionRecord.id
-          )
-      ),
-      deletedTransactionRecords: transactionRecords.filter(
-        (transactionRecord) =>
-          query.deleteTransactionQueries.some(
-            (deleteTransactionQuery) =>
-              deleteTransactionQuery.externalId === transactionRecord.externalId
-          )
-      )
-    };
-    return result;
+      return {
+        updatedInstitutionRecord,
+        createdTransactionRecords,
+        updatedTransactionRecords,
+        deletedTransactionRecords
+      } satisfies SyncTransactionRecordsResponse;
+    }) satisfies Promise<SyncTransactionRecordsResponse>;
   }
 }

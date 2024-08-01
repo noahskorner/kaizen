@@ -24,7 +24,11 @@ export class UpdateTransactionRepository
       },
       include: {
         location: true,
-        category: true
+        categories: {
+          include: {
+            category: true
+          }
+        }
       }
     });
   }
