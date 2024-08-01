@@ -9,7 +9,6 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@kaizen/core-client';
-import { CategorySelector } from '../category/category.selector';
 import { Transaction } from '@kaizen/finance';
 import { useState } from 'react';
 import { UpdateTransactionForm } from './update-transaction-form';
@@ -38,41 +37,38 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
       <SheetTrigger>
         <div
           key={transaction.id}
-          className="flex w-full items-center justify-center gap-x-2 rounded-lg border border-zinc-800 bg-zinc-900 p-4">
-          {transaction.category == null && (
-            <span className="size-2 rounded-full bg-blue-600"></span>
-          )}
-          {transaction.logoUrl ? (
-            <img
-              loading="lazy"
-              className="h-8 w-8 flex-shrink-0 rounded-full"
-              src={transaction.logoUrl}
-            />
-          ) : (
-            <div className="h-8 w-8 flex-shrink-0 rounded-full bg-zinc-800"></div>
-          )}
-          <div className="flex w-full items-center justify-between">
-            <div className="flex w-full flex-row items-center justify-start gap-2">
-              <div className="flex flex-col items-start gap-2">
-                <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
-                  {transaction.name}
-                </h6>
-                <span className="block text-sm text-muted-foreground">
-                  {formatDate(transaction.date)}
-                </span>
-              </div>
-              <CategorySelector
-                transactionId={transaction.id}
-                selected={false}
-                name={'category'}
-                onTransactionSelected={() => {}}
-                onTransactionDeselected={() => {}}
+          className="flex w-full items-center justify-between gap-x-2 border-b border-zinc-800 p-3 hover:bg-zinc-900">
+          <div className="flex w-4/12 items-center gap-x-2">
+            {transaction.category == null && (
+              <span className="size-2 rounded-full bg-blue-600"></span>
+            )}
+            {transaction.logoUrl ? (
+              <img
+                loading="lazy"
+                className="h-8 w-8 flex-shrink-0 rounded-full"
+                src={transaction.logoUrl}
               />
-            </div>
-            <span className="text-sm">
-              {formatCurrency(transaction.amount, 'USD')}
+            ) : (
+              <div className="h-8 w-8 flex-shrink-0 rounded-full bg-zinc-900"></div>
+            )}
+            <span className="text-left text-sm font-medium">
+              {transaction.name}
             </span>
           </div>
+          <span className="w-2/12 text-left">
+            <span className="rounded-full bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-950">
+              {transaction.originalCategory ?? 'category'}
+            </span>
+          </span>
+          <span className="w-2/12 text-left text-sm text-zinc-300">
+            {formatDate(transaction.date)}
+          </span>
+          <span className="w-2/12 text-left text-sm text-zinc-300">
+            {transaction.merchantName ?? ''}
+          </span>
+          <span className="w-2/12 text-right text-sm font-medium">
+            {formatCurrency(transaction.amount, 'USD')}
+          </span>
         </div>
       </SheetTrigger>
       <SheetContent className="flex flex-col gap-4 md:max-w-xl">

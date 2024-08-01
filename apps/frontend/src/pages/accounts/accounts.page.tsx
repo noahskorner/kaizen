@@ -33,7 +33,7 @@ export const AccountsPage = () => {
 
   return (
     <div className="flex w-full flex-col-reverse gap-6 lg:flex-row">
-      <div className="flex w-full max-w-5xl flex-col gap-4">
+      <div className="flex w-full flex-col gap-4">
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
           Accounts
         </h1>
@@ -44,7 +44,7 @@ export const AccountsPage = () => {
               return (
                 <div
                   key={account.id}
-                  className="relative flex w-full items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4">
+                  className="relative flex w-full items-center justify-between rounded-lg border border-zinc-800 px-4 py-6">
                   <div>
                     <h6 className="scroll-m-20 text-sm font-semibold tracking-tight">
                       {account.name}

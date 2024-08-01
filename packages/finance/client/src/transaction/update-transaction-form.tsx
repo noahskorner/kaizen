@@ -126,7 +126,7 @@ export const UpdateTransactionForm = ({
           className={`${nameErrors.length > 0 ? 'text-destructive' : 'text-white'} w-64 text-left capitalize `}>
           name
         </Label>
-        <Input name="name" value={name} onChange={onNameChange} />
+        <Input name="transaction-name" value={name} onChange={onNameChange} />
         <FormDescription>The name of the transaction.</FormDescription>
         {nameErrors.map((error) => (
           <FormMessage key={error} message={error} />
@@ -191,17 +191,11 @@ export const UpdateTransactionForm = ({
           <FormMessage key={error} message={error} />
         ))}
       </FormField>
-      <div className="flex w-full flex-row gap-x-2">
-        <Button
-          type="button"
-          onClick={onCancelClick}
-          variant="secondary"
-          className="w-full">
+      <div className="flex w-full flex-row justify-end gap-x-2">
+        <Button type="button" onClick={onCancelClick} variant="secondary">
           Cancel
         </Button>
-        <Button type="submit" className="w-full">
-          Save changes
-        </Button>
+        <Button type="submit">Save changes</Button>
       </div>
     </Form>
   );
