@@ -2,6 +2,9 @@ import { ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   Category,
+  CategoryAdapter,
+  FindCategoriesCommand,
+  FindCategoriesQuery,
   IFindCategoriesRepository,
   IFindCategoriesService
 } from '@kaizen/finance';
@@ -16,12 +19,13 @@ export class FindCategoriesService
     super();
   }
 
-  public async find(): Promise<ServiceResponse<Category[]>> {
-    throw new Error('Method not implemented.');
-    // const response = await this._findCategoriesRepository.find(
-    //   command satisfies FindCategoriesQuery
-    // );
+  public async find(
+    command: FindCategoriesCommand
+  ): Promise<ServiceResponse<Category[]>> {
+    const records = await this._findCategoriesRepository.find(
+      command satisfies FindCategoriesQuery
+    );
 
-    // return this.success(response);
+    return this.success(CategoryAdapter.toCategories(records));
   }
 }

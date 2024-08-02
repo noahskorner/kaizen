@@ -2,43 +2,45 @@ import { Category } from './category';
 import { CategoryRecord } from './category-record';
 
 export class CategoryAdapter {
-  public static toCategory(categoryRecords: CategoryRecord[]): Category[] {
+  public static toCategory(categoryRecord: CategoryRecord): Category {
+    return {
+      id: categoryRecord.id,
+      userId: categoryRecord.userId,
+      parentId: categoryRecord.parentId,
+      name: categoryRecord.name,
+      subcategories: []
+    } satisfies Category;
+  }
+
+  public static toCategories(categoryRecords: CategoryRecord[]): Category[] {
     const rootCategoryRecords = categoryRecords.filter(
       (category) => category.parentId == null
     );
     if (rootCategoryRecords.length === 0) return [];
 
     return rootCategoryRecords.map((categoryRecord) => {
-      const rootCategory: Category = {
-        id: categoryRecord.id,
-        userId: categoryRecord.userId,
-        parentId: categoryRecord.parentId,
-        name: categoryRecord.name,
-        subcategories: []
-      };
-
-      return CategoryAdapter.toCategoryRecursive(rootCategory, categoryRecords);
+      return CategoryAdapter.toCategoriesRecursive(
+        categoryRecord,
+        categoryRecords
+      );
     });
   }
 
-  private static toCategoryRecursive(
-    category: Category,
-    categories: CategoryRecord[]
+  private static toCategoriesRecursive(
+    categoryRecord: CategoryRecord,
+    categoryRecords: CategoryRecord[]
   ): Category {
-    const subcategories = categories.filter(
-      (category) => category.parentId === category.id
+    const category = CategoryAdapter.toCategory(categoryRecord);
+    const subcategoryRecords = categoryRecords.filter(
+      (record) => record.parentId === categoryRecord.id
     );
-    if (subcategories.length === 0) return category;
+    if (subcategoryRecords.length === 0) return category;
 
-    category.subcategories = subcategories.map((subcategoryRecord) => {
-      const subcategory: Category = {
-        id: subcategoryRecord.id,
-        userId: subcategoryRecord.userId,
-        parentId: subcategoryRecord.parentId,
-        name: subcategoryRecord.name,
-        subcategories: []
-      };
-      return CategoryAdapter.toCategoryRecursive(subcategory, categories);
+    category.subcategories = subcategoryRecords.map((subcategoryRecord) => {
+      return CategoryAdapter.toCategoriesRecursive(
+        subcategoryRecord,
+        categoryRecords
+      );
     });
     return category;
   }

@@ -24,7 +24,7 @@ export class TransactionCategoryAdapter {
     const rootCategory: TransactionCategory = {
       id: rootCategories[0].id,
       userId: rootCategories[0].userId,
-      parentCategoryId: rootCategories[0].parentId,
+      parentId: rootCategories[0].parentId,
       name: rootCategories[0].name,
       subcategory: null
     };
@@ -53,7 +53,7 @@ export class TransactionCategoryAdapter {
     const subcategory: TransactionCategory = {
       id: subcategories[0].id,
       userId: subcategories[0].userId,
-      parentCategoryId: subcategories[0].parentId,
+      parentId: subcategories[0].parentId,
       name: subcategories[0].name,
       subcategory: null
     };

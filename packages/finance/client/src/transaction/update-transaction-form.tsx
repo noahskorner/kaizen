@@ -8,7 +8,6 @@ import {
   Label,
   useToast
 } from '@kaizen/core-client';
-import { CategorySelector } from '../category/category.selector';
 import { ChangeEvent, FormEvent, MouseEventHandler, useState } from 'react';
 import { UpdateTransactionClient } from './update-transaction.client';
 import {
@@ -20,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { TransactionDispatch } from './transaction.store';
 import { setTransactionAction } from './transaction.actions';
 import { ErrorCode } from '@kaizen/core';
+import { CategorySelect } from '../category/category-select';
 
 export interface UpdateTransactionFormProps {
   id: string;
@@ -136,13 +136,7 @@ export const UpdateTransactionForm = ({
         <Label className="w-64 text-left capitalize  text-white">
           Category
         </Label>
-        <CategorySelector
-          transactionId={id}
-          selected={false}
-          name={'category'}
-          onTransactionSelected={() => {}}
-          onTransactionDeselected={() => {}}
-        />
+        <CategorySelect />
       </FormField>
       <FormField>
         <Label

@@ -312,6 +312,14 @@ export interface CreateCategoryAlreadyExistsError {
   };
 }
 
+export interface CreateCategoryParentDoesNotExistError {
+  code: ErrorCode.CREATE_CATEGORY_PARENT_DOES_NOT_EXIST;
+  params: {
+    userId: string;
+    parentId: string;
+  };
+}
+
 export interface TranscriptionProviderTranscriptionFailedError {
   code: ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED;
   params: {
@@ -502,6 +510,7 @@ export interface BaseError {
     | ErrorCode.UPDATE_TRANSACTION_CATEGORY_NOT_FOUND
     | ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME
     | ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS
+    | ErrorCode.CREATE_CATEGORY_PARENT_DOES_NOT_EXIST
     | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
     | ErrorCode.TRANSCRIPTION_PROVIDER_TRANSCRIPTION_FAILED
     | ErrorCode.FIND_ACCOUNT_HISTORY_INVALID_PAGE
@@ -569,6 +578,7 @@ export type ServiceError =
   | UpdateTransactionCategoryNotFoundError
   | CreateCategoryMustProvideNameError
   | CreateCategoryAlreadyExistsError
+  | CreateCategoryParentDoesNotExistError
   | TranscriptionProviderTranscriptionFailedError
   | FindAccountHistoryInvalidPageError
   | FindAccountHistoryInvalidPageSizeError
