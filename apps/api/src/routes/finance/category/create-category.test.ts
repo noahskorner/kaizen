@@ -5,7 +5,7 @@ import { ApiSuccessResponse, ErrorCode } from '@kaizen/core';
 import { Category, CreateCategoryRequest } from '@kaizen/finance';
 import { v4 as uuid } from 'uuid';
 
-describe('/institution', () => {
+describe('/category', () => {
   describe('create should', () => {
     it('returns 400 when no name is provided', async () => {
       // Arrange

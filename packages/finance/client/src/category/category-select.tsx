@@ -1,25 +1,34 @@
 import { useSelector } from 'react-redux';
 import { selectCategoriesByParentId } from './category.selectors';
 import { Category } from '@kaizen/finance';
+import { CreateCategoryDialog } from './create-category-dialog';
+import { Button } from '@kaizen/core-client';
+import { MouseEvent } from 'react';
 
 export interface CategorySelectProps {}
 
 export const CategorySelect = () => {
   const rootCategories = useSelector(selectCategoriesByParentId(null));
 
+  const onCategoryClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <div className="flex flex-col gap-2.5">
-      <span className="text-xs text-muted-foreground">Primary categories</span>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {rootCategories.map((category) => {
           return (
-            <button
+            <Button
+              onClick={onCategoryClick}
               key={category.id}
-              className="flex items-center rounded-full bg-green-300 px-2.5 py-1 text-xs font-semibold text-zinc-950 transition-colors hover:border-green-300/80 hover:bg-green-300/80 focus:outline-none focus:ring-2 focus:ring-ring">
+              variant="secondary"
+              size="pill">
               {category.name}
-            </button>
+            </Button>
           );
         })}
+        <CreateCategoryDialog />
       </div>
       {rootCategories[0] && (
         <CategorySelectRecursive category={rootCategories[0]} level={1} />
@@ -40,7 +49,6 @@ const CategorySelectRecursive = ({
   if (category.subcategories.length === 0) return null;
   return (
     <>
-      <span className="text-xs text-muted-foreground">Subcategories</span>
       <div className="flex gap-2">
         {category.subcategories.map((category) => {
           return (

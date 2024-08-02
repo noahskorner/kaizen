@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
   useToast
 } from '@kaizen/core-client';
 import { useState } from 'react';
