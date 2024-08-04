@@ -8,7 +8,7 @@ import { SpendingPage } from './spending/spending.page';
 import { SettingsPage } from './settings/settings-page';
 import { VerifyUpdateEmailPage } from './verify-update-email';
 import { AccountsPage } from './accounts';
-
+import { RetirementPage } from './retirement/retirement.page';
 export const paths = {
   home: '/',
   login: '/login',
@@ -17,7 +17,9 @@ export const paths = {
   spending: '/spending',
   accounts: '/accounts',
   settings: '/settings',
-  verifyUpdateEmail: '/verify-update-email'
+  verifyUpdateEmail: '/verify-update-email',
+  finance: '/dashboard/finance',
+  retirement: '/retirement'
 };
 
 export const routes: RouteObject[] = [
@@ -43,6 +45,10 @@ export const routes: RouteObject[] = [
       {
         path: paths.accounts,
         element: <AccountsPage />
+      },
+      {
+        path: paths.retirement,
+        element: <RetirementPage />
       }
     ]
   }
