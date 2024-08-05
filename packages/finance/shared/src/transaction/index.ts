@@ -1,3 +1,5 @@
+export * from './create-transaction-category';
+export * from './delete-transaction-category';
 export * from './external-category';
 export * from './external-location';
 export * from './external-transaction-code';
