@@ -12,6 +12,7 @@ import { ChangeEvent, FormEvent, MouseEventHandler, useState } from 'react';
 import { UpdateTransactionClient } from './update-transaction.client';
 import {
   Transaction,
+  TransactionCategory,
   UpdateTransactionRequest,
   UpdateTransactionValidator
 } from '@kaizen/finance';
@@ -27,6 +28,7 @@ export interface UpdateTransactionFormProps {
   amount: number;
   merchantName: string;
   description: string;
+  category: TransactionCategory | null;
   onCancelClick: MouseEventHandler<HTMLButtonElement>;
   onTransactionUpdated: (transaction: Transaction) => void;
 }
@@ -37,6 +39,7 @@ export const UpdateTransactionForm = ({
   amount: initialAmount,
   merchantName: initialMerchantName,
   description: initialDescription,
+  category: category,
   onCancelClick,
   onTransactionUpdated
 }: UpdateTransactionFormProps) => {
@@ -132,12 +135,8 @@ export const UpdateTransactionForm = ({
           <FormMessage key={error} message={error} />
         ))}
       </FormField>
-      <FormField>
-        <Label className="w-64 text-left capitalize  text-white">
-          Category
-        </Label>
-        <CategorySelect />
-      </FormField>
+      <Label className="w-64 text-left capitalize  text-white">Category</Label>
+      <CategorySelect transactionId={id} selectedCategory={category} />
       <FormField>
         <Label
           className={`${amountErrors.length > 0 ? 'text-destructive' : 'text-white'} w-64 text-left capitalize `}>

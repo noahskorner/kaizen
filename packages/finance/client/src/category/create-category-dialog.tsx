@@ -20,7 +20,13 @@ import { useDispatch } from 'react-redux';
 import { CategoryDispatch } from './category.store';
 import { addCategoryAction } from './category.actions';
 
-export const CreateCategoryDialog = () => {
+export interface CreateCategoryDialogProps {
+  parentId: string | null;
+}
+
+export const CreateCategoryDialog = ({
+  parentId
+}: CreateCategoryDialogProps) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const dispatch = useDispatch<CategoryDispatch>();
@@ -46,7 +52,7 @@ export const CreateCategoryDialog = () => {
 
     const request: CreateCategoryRequest = {
       name: name,
-      parentId: null
+      parentId: parentId
     };
 
     const response = await CategoryClient.create(request);
@@ -65,7 +71,7 @@ export const CreateCategoryDialog = () => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="link" size="pill">
+        <Button variant="outline" size="pill" className="dark:text-zinc-100">
           &#x2b;&nbsp;Add category
         </Button>
       </DialogTrigger>

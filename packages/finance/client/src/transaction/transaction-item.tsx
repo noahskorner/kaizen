@@ -37,7 +37,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
       <SheetTrigger>
         <div
           key={transaction.id}
-          className="flex w-full items-center justify-between gap-x-2 border-b border-zinc-800 p-3 hover:bg-zinc-900">
+          className="flex w-full items-center justify-between gap-x-2 border-b border-zinc-800 p-2 hover:bg-zinc-900">
           <div className="flex w-4/12 items-center gap-x-2">
             {transaction.category == null && (
               <span className="size-2 rounded-full bg-blue-600"></span>
@@ -56,9 +56,11 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
             </span>
           </div>
           <span className="w-2/12 text-left">
-            <span className="rounded-full bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-950">
-              {transaction.originalCategory ?? 'category'}
-            </span>
+            {transaction.category && (
+              <span className="rounded-full bg-green-300 px-2 py-1 text-xs font-medium lowercase text-zinc-950">
+                {transaction.category.name}
+              </span>
+            )}
           </span>
           <span className="w-2/12 text-left text-sm text-zinc-300">
             {formatDate(transaction.date)}
@@ -89,6 +91,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
           amount={transaction.amount}
           merchantName={transaction.merchantName ?? ''}
           description={transaction.description ?? ''}
+          category={transaction.category}
           onCancelClick={onCancelClick}
           onTransactionUpdated={onTransactionUpdated}
         />

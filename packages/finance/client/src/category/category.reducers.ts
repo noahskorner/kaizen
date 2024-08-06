@@ -1,3 +1,4 @@
+import { Category } from '@kaizen/finance';
 import {
   ADD_CATEGORY,
   CategoryAction,
@@ -35,9 +36,34 @@ export const categoryReducers = (
     case ADD_CATEGORY:
       return {
         loading: false,
-        categories: [action.payload, ...state.categories]
+        categories:
+          action.payload.parentId == null
+            ? [...state.categories, action.payload]
+            : addCategoryRecursively(state.categories, action.payload)
       };
     default:
       return state;
   }
+};
+
+const addCategoryRecursively = (
+  categories: Category[],
+  newCategory: Category
+): Category[] => {
+  return categories.map((category) => {
+    if (category.id === newCategory.parentId) {
+      return {
+        ...category,
+        subcategories: [...category.subcategories, newCategory]
+      } satisfies Category;
+    } else {
+      return {
+        ...category,
+        subcategories: addCategoryRecursively(
+          category.subcategories,
+          newCategory
+        )
+      } satisfies Category;
+    }
+  });
 };
