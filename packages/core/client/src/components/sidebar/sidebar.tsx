@@ -45,7 +45,7 @@ export const Sidebar = ({
     <div
       className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
       <div
-        className={`flex h-full w-64 flex-col items-center justify-between border-r border-zinc-800 bg-zinc-900 p-2 text-zinc-600`}>
+        className={`flex h-full w-64 flex-col items-center justify-between border-r border-zinc-800 bg-zinc-950 p-2 text-zinc-600`}>
         <div className="flex w-full flex-col gap-y-4">
           <Button
             onClick={toggleSidebar}

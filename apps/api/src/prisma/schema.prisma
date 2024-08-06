@@ -219,8 +219,6 @@ model TransactionRecord {
   institution             InstitutionRecord               @relation(fields: [institutionId], references: [id])
   accountId               String                          @map("account_id")
   account                 AccountRecord                   @relation(fields: [accountId], references: [id])
-  categoryId              String?                         @map("category_id")
-  category                CategoryRecord?                 @relation(fields: [categoryId], references: [id])
   locationId              String                          @unique @map("location_id")
   location                LocationRecord                  @relation(fields: [locationId], references: [id])
   date                    DateTime                        @map("date")
@@ -252,19 +250,36 @@ model TransactionRecord {
   amount                  Float                           @map("amount")
   description             String?                         @map("description")
   merchantName            String?                         @map("merchant_name")
+  categories              TransactionCategoryRecord[]
 
   @@map("transaction")
 }
 
+model TransactionCategoryRecord {
+  id            String            @id @default(uuid()) @map("id")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @default(now()) @updatedAt @map("updated_at")
+  transactionId String
+  transaction   TransactionRecord @relation(fields: [transactionId], references: [id])
+  categoryId    String            @map("category_id")
+  category      CategoryRecord    @relation(fields: [categoryId], references: [id])
+
+  @@unique([transactionId, categoryId])
+  @@map("transaction_category")
+}
+
 // Category
 model CategoryRecord {
-  id           String              @id @default(uuid()) @map("id")
-  userId       String              @map("user_id")
-  user         UserRecord          @relation(fields: [userId], references: [id])
-  createdAt    DateTime            @default(now()) @map("created_at")
-  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
-  name         String              @map("name")
-  transactions TransactionRecord[]
+  id            String                      @id @default(uuid()) @map("id")
+  userId        String                      @map("user_id")
+  user          UserRecord                  @relation(fields: [userId], references: [id])
+  createdAt     DateTime                    @default(now()) @map("created_at")
+  updatedAt     DateTime                    @default(now()) @updatedAt @map("updated_at")
+  name          String                      @map("name")
+  transactions  TransactionCategoryRecord[]
+  parentId      String?                     @map("parent_id")
+  parent        CategoryRecord?             @relation("category_to_category", fields: [parentId], references: [id])
+  subcategories CategoryRecord[]            @relation("category_to_category")
 
   @@unique([userId, name])
   @@map("category")
@@ -314,7 +329,6 @@ model WalletTransactionRecord {
 }
 
 // Exchange Rate
-
 model ExchangeRateRecord {
   id        String   @id @default(uuid()) @map("id")
   createdAt DateTime @default(now()) @map("created_at")

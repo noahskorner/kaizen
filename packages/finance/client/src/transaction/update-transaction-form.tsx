@@ -8,11 +8,11 @@ import {
   Label,
   useToast
 } from '@kaizen/core-client';
-import { CategorySelector } from '../category/category.selector';
 import { ChangeEvent, FormEvent, MouseEventHandler, useState } from 'react';
 import { UpdateTransactionClient } from './update-transaction.client';
 import {
   Transaction,
+  TransactionCategory,
   UpdateTransactionRequest,
   UpdateTransactionValidator
 } from '@kaizen/finance';
@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import { TransactionDispatch } from './transaction.store';
 import { setTransactionAction } from './transaction.actions';
 import { ErrorCode } from '@kaizen/core';
+import { CategorySelect } from '../category/category-select';
 
 export interface UpdateTransactionFormProps {
   id: string;
@@ -27,6 +28,7 @@ export interface UpdateTransactionFormProps {
   amount: number;
   merchantName: string;
   description: string;
+  category: TransactionCategory | null;
   onCancelClick: MouseEventHandler<HTMLButtonElement>;
   onTransactionUpdated: (transaction: Transaction) => void;
 }
@@ -37,6 +39,7 @@ export const UpdateTransactionForm = ({
   amount: initialAmount,
   merchantName: initialMerchantName,
   description: initialDescription,
+  category: category,
   onCancelClick,
   onTransactionUpdated
 }: UpdateTransactionFormProps) => {
@@ -126,24 +129,14 @@ export const UpdateTransactionForm = ({
           className={`${nameErrors.length > 0 ? 'text-destructive' : 'text-white'} w-64 text-left capitalize `}>
           name
         </Label>
-        <Input name="name" value={name} onChange={onNameChange} />
+        <Input name="transaction-name" value={name} onChange={onNameChange} />
         <FormDescription>The name of the transaction.</FormDescription>
         {nameErrors.map((error) => (
           <FormMessage key={error} message={error} />
         ))}
       </FormField>
-      <FormField>
-        <Label className="w-64 text-left capitalize  text-white">
-          Category
-        </Label>
-        <CategorySelector
-          transactionId={id}
-          selected={false}
-          name={'category'}
-          onTransactionSelected={() => {}}
-          onTransactionDeselected={() => {}}
-        />
-      </FormField>
+      <Label className="w-64 text-left capitalize  text-white">Category</Label>
+      <CategorySelect transactionId={id} selectedCategory={category} />
       <FormField>
         <Label
           className={`${amountErrors.length > 0 ? 'text-destructive' : 'text-white'} w-64 text-left capitalize `}>
@@ -191,17 +184,11 @@ export const UpdateTransactionForm = ({
           <FormMessage key={error} message={error} />
         ))}
       </FormField>
-      <div className="flex w-full flex-row gap-x-2">
-        <Button
-          type="button"
-          onClick={onCancelClick}
-          variant="secondary"
-          className="w-full">
+      <div className="flex w-full flex-row justify-end gap-x-2">
+        <Button type="button" onClick={onCancelClick} variant="secondary">
           Cancel
         </Button>
-        <Button type="submit" className="w-full">
-          Save changes
-        </Button>
+        <Button type="submit">Save changes</Button>
       </div>
     </Form>
   );

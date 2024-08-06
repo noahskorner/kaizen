@@ -26,7 +26,6 @@ import {
   SyncTransactionsRepository,
   SyncTransactionsService,
   UpdateTransactionCategoryController,
-  UpdateTransactionCategoryRepository,
   UpdateTransactionCategoryService,
   FindAccountHistoryRepository,
   FindAccountHistoryService,
@@ -43,7 +42,9 @@ import {
   SyncExchangeRateRepository,
   UpdateTransactionRepository,
   UpdateTransactionService,
-  UpdateTransactionController
+  UpdateTransactionController,
+  CreateTransactionCategoryRepository,
+  DeleteTransactionCategoryRepository
 } from '@kaizen/finance-server';
 import {
   LoginController,
@@ -229,9 +230,6 @@ export class ServiceCollectionBuilder {
     const findTransactionsRepository =
       this._serviceCollection.findTransactionsRepository ??
       new FindTransactionsRepository(prisma);
-    const updateTransactionCategoryRepository =
-      this._serviceCollection.updateTransactionCategoryRepository ??
-      new UpdateTransactionCategoryRepository(prisma);
     const syncAccountsRepository = new SyncAccountsRepository(prisma);
     const syncTransactionsRepository = new SyncTransactionsRepository(prisma);
     const findAccountsRepository = new FindAccountsRepository(prisma);
@@ -251,6 +249,10 @@ export class ServiceCollectionBuilder {
     const getExchangeRateRepository = new GetExchangeRateRepository(prisma);
     const syncExchangeRateRepository = new SyncExchangeRateRepository(prisma);
     const updateTransactionRepository = new UpdateTransactionRepository(prisma);
+    const createTransactionCategoryRepository =
+      new CreateTransactionCategoryRepository(prisma);
+    const deleteTransactionCategoryRepository =
+      new DeleteTransactionCategoryRepository(prisma);
 
     // Providers
     const financialProvider =
@@ -331,7 +333,8 @@ export class ServiceCollectionBuilder {
       new UpdateTransactionCategoryService(
         getTransactionRepository,
         getCategoryRepository,
-        updateTransactionCategoryRepository
+        deleteTransactionCategoryRepository,
+        createTransactionCategoryRepository
       );
     const syncInstitutionsService =
       this._serviceCollection.syncInstitutionsService ??
@@ -492,7 +495,6 @@ export class ServiceCollectionBuilder {
       createInstitutionRepository,
       findInstitutionsRepository,
       findTransactionsRepository,
-      updateTransactionCategoryRepository,
       getWalletRepository,
       createWalletRepository,
       updateWalletRepository,
@@ -504,6 +506,8 @@ export class ServiceCollectionBuilder {
       updatePasswordRepository,
       deleteAccountRepository,
       updateTransactionRepository,
+      createTransactionCategoryRepository,
+      deleteTransactionCategoryRepository,
       // Services
       getUserService,
       createUserService,

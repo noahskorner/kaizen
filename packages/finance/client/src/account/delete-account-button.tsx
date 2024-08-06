@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
   useToast
 } from '@kaizen/core-client';
 import { useState } from 'react';
@@ -53,6 +52,11 @@ export const DeleteAccountButton = ({
     setDisabled(false);
   };
 
+  const onCancelClick = () => {
+    setDeleteAccountOpen(false);
+    setDisabled(false);
+  };
+
   return (
     <Dialog
       key={accountId}
@@ -72,9 +76,9 @@ export const DeleteAccountButton = ({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
-            <Button variant="secondary">Cancel</Button>
-          </DialogClose>
+          <Button variant="secondary" onClick={onCancelClick}>
+            Cancel
+          </Button>
           <Button
             disabled={disabled}
             variant="destructive"

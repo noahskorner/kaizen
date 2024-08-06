@@ -13,7 +13,8 @@ export class CreateCategoryRepository
     return await this._prisma.categoryRecord.create({
       data: {
         userId: command.userId,
-        name: command.name
+        name: command.name,
+        parentId: command.parentId
       }
     });
   }

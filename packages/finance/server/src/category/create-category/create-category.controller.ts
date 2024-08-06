@@ -31,7 +31,8 @@ export class CreateCategoryController extends Controller {
       if (response.type == 'FAILURE') {
         if (
           hasErrorFor(response, ErrorCode.CREATE_CATEGORY_MUST_PROVIDE_NAME) ||
-          hasErrorFor(response, ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS)
+          hasErrorFor(response, ErrorCode.CREATE_CATEGORY_ALREADY_EXISTS) ||
+          hasErrorFor(response, ErrorCode.CREATE_CATEGORY_PARENT_DOES_NOT_EXIST)
         ) {
           return this.badRequest(res, next, response);
         }

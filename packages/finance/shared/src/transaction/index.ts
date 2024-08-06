@@ -1,3 +1,5 @@
+export * from './create-transaction-category';
+export * from './delete-transaction-category';
 export * from './external-category';
 export * from './external-location';
 export * from './external-transaction-code';
@@ -9,6 +11,9 @@ export * from './get-transaction';
 export * from './location-record';
 export * from './location';
 export * from './sync-transactions';
+export * from './transaction-category-record';
+export * from './transaction-category.adapter';
+export * from './transaction-category';
 export * from './transaction-code-record';
 export * from './transaction-code';
 export * from './transaction-payment-channel-record';

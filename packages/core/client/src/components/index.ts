@@ -8,6 +8,7 @@ export * from './input-errors';
 export * from './label';
 export * from './line-chart';
 export * from './modal';
+export * from './navigation-menu';
 export * from './pie-chart';
 export * from './scroll-area';
 export * from './seperator';

@@ -11,7 +11,8 @@ export function* onLoginLoadTransactions() {
     });
 
     const request: FindTransactionsRequest = {
-      page: 1
+      page: 1,
+      pageSize: 100
     };
     yield put(loadTransactions(request));
   });

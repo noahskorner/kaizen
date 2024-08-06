@@ -24,7 +24,11 @@ export class FindTransactionsRepository
     const [transactionRecords, total] = await Promise.all([
       this._prisma.transactionRecord.findMany({
         include: {
-          category: true,
+          categories: {
+            include: {
+              category: true
+            }
+          },
           location: true
         },
         where: where,

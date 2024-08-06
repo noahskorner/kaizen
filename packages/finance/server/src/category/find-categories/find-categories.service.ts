@@ -2,6 +2,7 @@ import { ServiceResponse } from '@kaizen/core';
 import { Service } from '@kaizen/core-server';
 import {
   Category,
+  CategoryAdapter,
   FindCategoriesCommand,
   FindCategoriesQuery,
   IFindCategoriesRepository,
@@ -21,10 +22,10 @@ export class FindCategoriesService
   public async find(
     command: FindCategoriesCommand
   ): Promise<ServiceResponse<Category[]>> {
-    const response = await this._findCategoriesRepository.find(
+    const records = await this._findCategoriesRepository.find(
       command satisfies FindCategoriesQuery
     );
 
-    return this.success(response);
+    return this.success(CategoryAdapter.toCategories(records));
   }
 }

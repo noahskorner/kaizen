@@ -15,7 +15,6 @@ import {
   ICreateCategoryRepository,
   ICreateCategoryService,
   IGetCategoryRepository,
-  IUpdateTransactionCategoryRepository,
   IUpdateTransactionCategoryService,
   IFindAccountHistoryRepository,
   IFindAccountHistoryService,
@@ -25,7 +24,9 @@ import {
   IGetExchangeRateService,
   IExchangeRateProvider,
   IUpdateTransactionRepository,
-  IUpdateTransactionService
+  IUpdateTransactionService,
+  IDeleteTransactionCategoryRepository,
+  ICreateTransactionCategoryRepository
 } from '@kaizen/finance';
 import {
   ICreateUserRepository,
@@ -113,7 +114,6 @@ export interface IServiceCollection {
   createInstitutionRepository: ICreateInstitutionRepository;
   findInstitutionsRepository: IFindInstitutionsRepository;
   findTransactionsRepository: IFindTransactionsRepository;
-  updateTransactionCategoryRepository: IUpdateTransactionCategoryRepository;
   getWalletRepository: IGetWalletRepository;
   createWalletRepository: ICreateWalletRepository;
   updateWalletRepository: IUpdateWalletRepository;
@@ -125,6 +125,8 @@ export interface IServiceCollection {
   updatePasswordRepository: IUpdatePasswordRepository;
   deleteAccountRepository: DeleteAccountRepository;
   updateTransactionRepository: IUpdateTransactionRepository;
+  deleteTransactionCategoryRepository: IDeleteTransactionCategoryRepository;
+  createTransactionCategoryRepository: ICreateTransactionCategoryRepository;
 
   // Services
   getUserService: IGetUserService;

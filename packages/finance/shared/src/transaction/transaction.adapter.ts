@@ -1,7 +1,7 @@
-import { CategoryAdapter } from '../category';
 import { Location } from './location';
 import { LocationRecord } from './location-record';
 import { Transaction } from './transaction';
+import { TransactionCategoryAdapter } from './transaction-category.adapter';
 import { TransactionCode } from './transaction-code';
 import { TransactionCodeRecord } from './transaction-code-record';
 import { TransactionPaymentChannel } from './transaction-payment-channel';
@@ -23,10 +23,9 @@ export class TransactionAdapter {
       institutionId: transactionRecord.institutionId,
       accountId: transactionRecord.accountId,
       externalId: transactionRecord.externalId,
-      categoryId: transactionRecord.categoryId,
-      category: transactionRecord.category
-        ? CategoryAdapter.toCategory(transactionRecord.category)
-        : null,
+      category: TransactionCategoryAdapter.toTransactionCategory(
+        transactionRecord.categories
+      ),
       externalAccountId: transactionRecord.externalAccountId,
       originalAmount: transactionRecord.originalAmount,
       isoCurrencyCode: transactionRecord.isoCurrencyCode,

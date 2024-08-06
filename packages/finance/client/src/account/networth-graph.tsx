@@ -48,7 +48,7 @@ export const NetworthGraph = () => {
   }, [networth]);
 
   return (
-    <div className="flex h-full w-full flex-col rounded-lg text-white">
+    <div className="flex h-full w-full flex-col rounded-lg">
       <div>
         <h2 className="mb-1 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
           {formatCurrency(currentNetworth, 'USD')}
