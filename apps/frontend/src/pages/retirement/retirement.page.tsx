@@ -1,5 +1,7 @@
 import { formatCurrency } from '@kaizen/core-client';
 import { useMemo } from 'react';
+import { RetirementChart } from './retirement-chart';
+import { RetirementItem } from './retirement-item';
 
 export const RetirementPage = () => {
   const retirementData = useMemo(() => {
@@ -7,7 +9,8 @@ export const RetirementPage = () => {
   }, []);
 
   return (
-    <div className="flex w-full">
+    <div className="flex h-full w-full flex-col items-stretch">
+      <RetirementChart chartData={retirementData} />
       <div className="w-full">
         <div className="sticky top-0 flex w-full justify-between border-b border-zinc-800 bg-zinc-950 bg-opacity-60 p-2 backdrop-blur-md">
           <span className="w-full text-left text-xs text-zinc-300">Year</span>
@@ -50,23 +53,15 @@ export const RetirementPage = () => {
   );
 };
 
-interface Retirement {
-  year: number;
-  age: number;
-  totalContribution: number;
-  totalInterestEarned: number;
-  endBalance: number;
-}
-
 const calculateRetirementData = (
   startAge: number,
   endAge: number,
   startingAmount: number,
   monthlyContribution: number,
   annualInterestRate: number
-): Retirement[] => {
+): RetirementItem[] => {
   const monthlyInterestRate = annualInterestRate / 12;
-  const retirementData: Retirement[] = [];
+  const retirementData: RetirementItem[] = [];
 
   for (let age = startAge + 1; age <= endAge; age++) {
     const years = age - startAge;
