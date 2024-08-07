@@ -1,7 +1,6 @@
 import { HomePage } from './home/home.page';
 import { LoginPage } from './login/login.page';
 import { RegisterPage } from './register/register.page';
-import { AppLayout } from './app.layout';
 import { DashboardPage } from './dashboard/dashboard.page';
 import { RouteObject } from 'react-router-dom';
 import { SpendingPage } from './spending/spending.page';
@@ -9,6 +8,8 @@ import { SettingsPage } from './settings/settings-page';
 import { VerifyUpdateEmailPage } from './verify-update-email';
 import { AccountsPage } from './accounts';
 import { RetirementPage } from './retirement/retirement.page';
+import { AppLayout } from './app-layout';
+
 export const paths = {
   home: '/',
   login: '/login',
