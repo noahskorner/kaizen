@@ -29,5 +29,10 @@ export const config = {
   API_LOAD_BALANCER_ID: 'kaizen-api-load-balancer',
   API_TARGET_GROUP_ID: 'kaizen-api-target-group',
   API_LISTENER_ID: 'kaizen-api-listener',
-  API_LOAD_BALANCER_DNS_ID: 'kaizen-api-load-balancer-dns'
+  API_LOAD_BALANCER_DNS_ID: 'kaizen-api-load-balancer-dns',
+  API_LOG_GROUP_ID: 'kaizen-api-log-group',
+  FRONTEND_STACK_ID: 'kaizen-frontend-stack',
+  FRONTEND_BUCKET_ID: 'kaizen-frontend-bucket',
+  FRONTEND_DISTRIBUTION_ID: 'kaizen-frontend-distribution',
+  FRONTEND_DISTRIBUTION_URL: 'kaizen-frontend-distribution-url'
 };

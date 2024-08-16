@@ -4,7 +4,6 @@ import * as rds from 'aws-cdk-lib/aws-rds';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { config } from './config';
-import { environment } from '../../apps/api/src/env/environment';
 
 export interface DatabaseStackProps {
   vpc: ec2.Vpc;
@@ -39,13 +38,13 @@ export class DatabaseStack extends Stack {
     );
 
     // Allow the database to be accessed from whitelisted IPs
-    environment.AWS_DATABASE_WHITELIST?.forEach((ipAddress) => {
-      dbSecurityGroup.addIngressRule(
-        ec2.Peer.ipv4(ipAddress),
-        ec2.Port.tcp(config.DATABASE_PORT),
-        'Allow postgres from whitelisted IP'
-      );
-    });
+    // environment.AWS_DATABASE_WHITELIST?.forEach((ipAddress) => {
+    //   dbSecurityGroup.addIngressRule(
+    //     ec2.Peer.ipv4(ipAddress),
+    //     ec2.Port.tcp(config.DATABASE_PORT),
+    //     'Allow postgres from whitelisted IP'
+    //   );
+    // });
 
     // Allow the API to connect to the database
     dbSecurityGroup.addIngressRule(

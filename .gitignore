@@ -49,3 +49,4 @@ venv
 apps/api/src/env/.env.production
 
 tools/cli/src/output
+apps/frontend/src/env/.env.production

@@ -1,5 +1,6 @@
 export interface Environment {
   NODE_ENV: 'DEVELOPMENT' | 'TEST' | 'PRODUCTION';
+  DATABASE_URL: string;
   ACCESS_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_SECRET: string;
@@ -13,9 +14,10 @@ export interface Environment {
   PLAID_CLIENT_ID: string;
   PLAID_SECRET: string;
   OPENAI_API_KEY: string;
-  AWS_REGION: string | null;
-  AWS_DATABASE_SECRET_ID: string | null;
-  AWS_DATABASE_WHITELIST: string[] | null;
+  AWS_ACCESS_KEY_ID: string;
+  AWS_SECRET_ACCESS_KEY: string;
+  AWS_REGION: string;
+  AWS_DATABASE_SECRET_ID: string;
   FORGOT_PASSWORD_SECRET: string;
   FORGOT_PASSWORD_EXPIRATION: string;
   OPEN_EXCHANGE_RATE_APP_ID: string;

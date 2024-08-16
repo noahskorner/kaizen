@@ -37,9 +37,8 @@ export class ApiStack extends cdk.Stack {
     });
 
     // Create a log group
-    // TODO: Move to config
-    const logGroup = new logs.LogGroup(this, 'kaizen-ecs-container', {
-      logGroupName: 'kaizen-ecs-container',
+    const logGroup = new logs.LogGroup(this, config.API_LOG_GROUP_ID, {
+      logGroupName: config.API_LOG_GROUP_ID,
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
@@ -61,17 +60,9 @@ export class ApiStack extends cdk.Stack {
     taskDefinition.addToTaskRolePolicy(secretAccessPolicyStatement);
 
     // Create the task definition
-    // TODO: Fix this environment bullshit
-    const ecsEnvironment = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ...(environment as any)
-    };
-    if (ecsEnvironment.AWS_DATABASE_WHITELIST != null) {
-      delete ecsEnvironment.AWS_DATABASE_WHITELIST;
-    }
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
-      environment: ecsEnvironment,
+      environment: environment as unknown as { [key: string]: string },
       portMappings: [
         {
           containerPort: 3001
@@ -79,7 +70,7 @@ export class ApiStack extends cdk.Stack {
       ],
       logging: ecs.LogDrivers.awsLogs({
         logGroup: logGroup,
-        streamPrefix: 'kaizen-ecs-container'
+        streamPrefix: config.API_LOG_GROUP_ID
       })
     });
 
