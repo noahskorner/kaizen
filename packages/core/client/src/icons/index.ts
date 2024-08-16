@@ -8,6 +8,7 @@ export * from './ellipses-vertical';
 export * from './home';
 export * from './logout';
 export * from './pencil';
+export * from './presentation-chart';
 export * from './settings';
 export * from './sparkles';
 export * from './tag';

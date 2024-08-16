@@ -23,7 +23,7 @@
     "api:docker:login": "aws ecr get-login-password --region $npm_config_aws_region | docker login --username AWS --password-stdin $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com",
     "api:docker:tag": "docker tag $npm_config_aws_repository_id:latest $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
     "api:docker:push": "docker push $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com/$npm_config_aws_repository_id:latest",
-    "clean": "find . -type d ( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' ) -exec rm -rf {} +",
+    "clean": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' -o -name 'cdk.out' -o -name '.next' -o -name 'out' \\) -exec rm -rf {} +",
     "dev": "turbo run dev --filter=@kaizen/api --filter=@kaizen/frontend",
     "db:connect": "psql -h localhost -p 54320 -U kaizen_api -d kaizen",
     "db:seed": "npm run --prefix ./apps/api seed",

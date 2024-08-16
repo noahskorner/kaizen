@@ -48,8 +48,8 @@ export const NetworthGraph = () => {
   }, [networth]);
 
   return (
-    <div className="flex h-full w-full flex-col rounded-lg">
-      <div>
+    <div className="flex h-full w-full flex-col items-stretch rounded-lg">
+      <div className="p-4">
         <h2 className="mb-1 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
           {formatCurrency(currentNetworth, 'USD')}
         </h2>
@@ -70,7 +70,7 @@ export const NetworthGraph = () => {
           onTooltipHover={onTooltipHover}
         />
       </div>
-      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-zinc-800 pb-4">
+      <div className="mt-4 flex w-full items-center justify-start gap-x-2 border-b border-zinc-800 p-4 pb-4">
         {TIMEFRAMES.map((timeframe) => (
           <button
             key={timeframe}
