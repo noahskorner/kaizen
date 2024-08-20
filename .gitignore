@@ -50,3 +50,5 @@ apps/api/src/env/.env.production
 
 tools/cli/src/output
 apps/frontend/src/env/.env.production
+infrastructure/cdk.context.json
+infrastructure/src/env/.env.production

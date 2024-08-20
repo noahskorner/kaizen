@@ -5,24 +5,23 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 import { config } from './config';
-import { environment } from '../../apps/api/src/env/environment';
 
-export interface ApiStackProps {
+export interface ApiStackProps extends cdk.StackProps {
   vpc: ec2.Vpc;
-  apiSecurityGroup: ec2.SecurityGroup;
   databaseSecret: secretsmanager.ISecret;
 }
 
 export class ApiStack extends cdk.Stack {
-  constructor(
-    scope: Construct,
-    id: string,
-    { vpc, apiSecurityGroup, databaseSecret }: ApiStackProps
-  ) {
-    super(scope, id);
+  public readonly securityGroup: ec2.SecurityGroup;
+
+  constructor(scope: Construct, id: string, props: ApiStackProps) {
+    super(scope, id, props);
 
     // Retreive the ECR repository
     const repository = ecr.Repository.fromRepositoryName(
@@ -33,7 +32,7 @@ export class ApiStack extends cdk.Stack {
 
     // Create an ECS cluster in the VPC
     const cluster = new ecs.Cluster(this, config.API_CLUSTER_ID, {
-      vpc: vpc
+      vpc: props.vpc
     });
 
     // Create a log group
@@ -55,14 +54,13 @@ export class ApiStack extends cdk.Stack {
     // Allow the task to access the database secret
     const secretAccessPolicyStatement = new iam.PolicyStatement({
       actions: ['secretsmanager:GetSecretValue'],
-      resources: [databaseSecret.secretArn]
+      resources: [props.databaseSecret.secretArn]
     });
     taskDefinition.addToTaskRolePolicy(secretAccessPolicyStatement);
 
     // Create the task definition
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
-      environment: environment as unknown as { [key: string]: string },
       portMappings: [
         {
           containerPort: 3001
@@ -79,7 +77,7 @@ export class ApiStack extends cdk.Stack {
       vpcSubnets: {
         // TODO: Making this public to save on NAT Gateway costs
         // subnets: vpc.privateSubnets
-        subnets: vpc.publicSubnets
+        subnets: props.vpc.publicSubnets
       },
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T3,
@@ -87,21 +85,31 @@ export class ApiStack extends cdk.Stack {
       ),
       machineImage: ecs.EcsOptimizedImage.amazonLinux2()
     });
-    cluster.connections.addSecurityGroup(apiSecurityGroup);
 
     // Create a fargate service
+    this.securityGroup = new ec2.SecurityGroup(
+      this,
+      config.API_SECURITY_GROUP_ID,
+      { vpc: props.vpc }
+    );
+    this.securityGroup.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(3001),
+      'Load balancer to target'
+    );
     const fargateService = new ecs.FargateService(this, config.API_SERVICE_ID, {
       cluster,
       taskDefinition,
       assignPublicIp: true
     });
+    fargateService.connections.addSecurityGroup(this.securityGroup);
 
     // Create an application load balancer
     const loadBalancer = new elbv2.ApplicationLoadBalancer(
       this,
       config.API_LOAD_BALANCER_ID,
       {
-        vpc: vpc,
+        vpc: props.vpc,
         internetFacing: true
       }
     );
@@ -111,7 +119,7 @@ export class ApiStack extends cdk.Stack {
       this,
       config.API_TARGET_GROUP_ID,
       {
-        vpc: vpc,
+        vpc: props.vpc,
         port: 80,
         targetType: elbv2.TargetType.IP,
         protocol: elbv2.ApplicationProtocol.HTTP,
@@ -128,16 +136,48 @@ export class ApiStack extends cdk.Stack {
     // Associate the target group with the Fargate service
     targetGroup.addTarget(fargateService);
 
-    // Create a listener for the load balancer
-    loadBalancer.addListener(config.API_LISTENER_ID, {
-      port: 80,
-      protocol: elbv2.ApplicationProtocol.HTTP,
+    // Get the certificate from ACM
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      config.CERTIFICATE_ID,
+      process.env.AWS_CERTIFICATE_ARN_US_EAST_2 ?? ''
+    );
+
+    // Create a listener for HTTPS (port 443)
+    loadBalancer.addListener(config.API_HTTPS_LISTENER_ID, {
+      port: 443,
+      protocol: elbv2.ApplicationProtocol.HTTPS,
+      certificates: [certificate],
       defaultTargetGroups: [targetGroup]
     });
 
-    // Output the DNS name of the load balancer
-    new cdk.CfnOutput(this, config.API_LOAD_BALANCER_DNS_ID, {
-      value: loadBalancer.loadBalancerDnsName
+    // Create a listener for HTTP (port 80) to redirect to HTTPS
+    loadBalancer.addListener(config.API_HTTP_LISTENER_ID, {
+      port: 80,
+      protocol: elbv2.ApplicationProtocol.HTTP,
+      defaultAction: elbv2.ListenerAction.redirect({
+        protocol: 'HTTPS',
+        port: '443',
+        permanent: true
+      })
+    });
+
+    // Create a Route 53 hosted zone
+    const hostedZone = route53.HostedZone.fromLookup(
+      this,
+      config.HOSTED_ZONE_ID,
+      {
+        domainName: config.DOMAIN
+      }
+    );
+
+    // Create an alias record for the load balancer
+    new route53.ARecord(this, config.API_A_RECORD_ID, {
+      zone: hostedZone,
+      target: route53.RecordTarget.fromAlias(
+        new targets.LoadBalancerTarget(loadBalancer)
+      ),
+      recordName: config.API_SUBDOMAIN
     });
   }
 }

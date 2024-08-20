@@ -1,5 +1,6 @@
 {
   "app": "npx ts-node --prefer-ts-exts src/index.ts",
+  "requireApproval": "never",
   "watch": {
     "include": ["**"],
     "exclude": [
