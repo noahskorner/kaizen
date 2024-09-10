@@ -467,6 +467,13 @@ export interface UpdateTransactionInvalidMerchantNameError {
   };
 }
 
+export interface HandlePlaidWebhookInvalidWebhookCodeError {
+  code: ErrorCode.HANDLE_PLAID_WEBHOOK_INVALID_WEBHOOK_CODE;
+  params: {
+    webhookCode: string;
+  };
+}
+
 export interface BaseError {
   code: Exclude<
     ErrorCode,
@@ -531,6 +538,7 @@ export interface BaseError {
     | ErrorCode.UPDATE_TRANSACTION_INVALID_AMOUNT
     | ErrorCode.UPDATE_TRANSACTION_INVALID_DESCRIPTION
     | ErrorCode.UPDATE_TRANSACTION_INVALID_MERCHANT_NAME
+    | ErrorCode.HANDLE_PLAID_WEBHOOK_INVALID_WEBHOOK_CODE
   >;
   params?: never;
 }
@@ -597,4 +605,5 @@ export type ServiceError =
   | UpdateTransactionInvalidNameError
   | UpdateTransactionInvalidAmountError
   | UpdateTransactionInvalidDescriptionError
-  | UpdateTransactionInvalidMerchantNameError;
+  | UpdateTransactionInvalidMerchantNameError
+  | HandlePlaidWebhookInvalidWebhookCodeError;
