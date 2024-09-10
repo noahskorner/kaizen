@@ -1,6 +1,7 @@
 import { CreateUserForm } from '@kaizen/user-client';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../routes';
+import { AuthLayout } from '../auth-layout';
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -10,11 +11,11 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center pt-4 lg:pt-16">
+    <AuthLayout>
       <CreateUserForm
         loginHref={paths.login}
         onRegisterSuccess={onRegisterSuccess}
       />
-    </div>
+    </AuthLayout>
   );
 };

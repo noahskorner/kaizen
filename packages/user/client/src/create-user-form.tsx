@@ -86,7 +86,15 @@ export const CreateUserForm = ({
   };
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-y-6 p-4">
+    <div className="flex w-full flex-col gap-y-8">
+      <div className="w-full">
+        <h2 className="w-full scroll-m-20 pb-2 text-left text-3xl font-semibold tracking-tight first:mt-0">
+          Lorem, ipsum dolor.
+        </h2>
+        <p className="w-full text-left text-sm text-muted-foreground">
+          Lorem ipsum dolor sit amet.
+        </p>
+      </div>
       <Form onSubmit={onSubmitRegisterForm}>
         <FormField>
           <Label className={`${emailErrors.length && 'text-destructive'}`}>
@@ -119,13 +127,15 @@ export const CreateUserForm = ({
             <FormMessage key={error.code} message={error.message} />
           ))}
         </FormField>
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" variant="primary" disabled={loading}>
           Register
         </Button>
-        <p className="text-sm text-muted">
+        <p className="text-center text-xs text-zinc-300">
           Already have an account?&nbsp;
           <Button variant="link" asChild className="p-0">
-            <Link to={loginHref}>Click here!</Link>
+            <Link to={loginHref} className="underline">
+              Click here!
+            </Link>
           </Button>
         </p>
       </Form>

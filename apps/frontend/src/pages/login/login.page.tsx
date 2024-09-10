@@ -2,6 +2,7 @@ import { LoginForm } from '@kaizen/auth-client';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '../routes';
 import { useSearchParams } from '@kaizen/core-client';
+import { AuthLayout } from '../auth-layout';
 
 export interface LoginPageQueryParams {
   email?: string;
@@ -13,13 +14,13 @@ export const LoginPage = () => {
   const [searchParams] = useSearchParams<LoginPageQueryParams>();
 
   return (
-    <div className="flex h-screen w-screen justify-center pt-4 lg:pt-16">
+    <AuthLayout>
       <LoginForm
         registerHref={paths.register}
         email={searchParams.email}
         password={searchParams.password}
         onLoginSuccess={() => navigate(paths.dashboard)}
       />
-    </div>
+    </AuthLayout>
   );
 };
