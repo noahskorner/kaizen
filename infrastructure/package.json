@@ -10,9 +10,9 @@
   },
   "scripts": {
     "stack:build": "npx cdk synth",
-    "stack:build:prod": "dotenv -e ./src/env/.env.production npx cdk synth",
-    "stack:deploy:prod": "dotenv -e ./src/env/.env.production npx cdk deploy kaizen-stack",
-    "stack:deploy:ecr:prod": "dotenv -e ./src/env/.env.production npx cdk deploy kaizen-ecr-stack",
+    "stack:build:prod": "dotenv -e ../apps/api/src/env/.env.production npx cdk synth",
+    "stack:deploy:prod": "dotenv -e ../apps/api/src/env/.env.production npx cdk deploy kaizen-stack/kaizen-vpc-stack kaizen-stack/kaizen-frontend-stack kaizen-stack/kaizen-db-stack kaizen-stack/kaizen-api-stack kaizen-stack",
+    "stack:deploy:ecr:prod": "dotenv -e ../apps/api/src/env/.env.production npx cdk deploy kaizen-ecr-stack",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   }

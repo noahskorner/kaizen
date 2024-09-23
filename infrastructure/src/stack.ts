@@ -3,7 +3,6 @@ import { VpcStack } from './vpc';
 import { DatabaseStack } from './database';
 import { ApiStack } from './api';
 import { FrontendStack } from './frontend';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 import { Stack, StackProps } from 'aws-cdk-lib';
 
@@ -27,7 +26,7 @@ export class KaizenStack extends Stack {
       vpc: vpcStack.vpc
     });
 
-    const apiStack = new ApiStack(this, config.API_STACK_ID, {
+    new ApiStack(this, config.API_STACK_ID, {
       ...props,
       stackName: config.API_STACK_ID,
       vpc: vpcStack.vpc,
