@@ -34,6 +34,24 @@ jobs:
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update Security Group Ingress Rule
+        run: |
+          SECURITY_GROUP_ID=${{ secrets.AWS_DATABASE_SECURITY_GROUP_ID }}
+          MY_IP=$(curl -s http://checkip.amazonaws.com)
+
+          aws ec2 authorize-security-group-ingress \
+            --group-id $SECURITY_GROUP_ID \
+            --protocol tcp \
+            --port 3306 \
+            --cidr ${MY_IP}/32
+
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
         env:
