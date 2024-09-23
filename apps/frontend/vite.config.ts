@@ -9,6 +9,7 @@ export default defineConfig({
   },
   envDir: './src/env',
   build: {
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {

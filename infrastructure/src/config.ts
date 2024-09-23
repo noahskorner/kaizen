@@ -3,6 +3,10 @@ import * as rds from 'aws-cdk-lib/aws-rds';
 export const config = {
   ECR_STACK_ID: 'kaizen-ecr-stack',
   ECR_REPOSITORY_ID: 'kaizen-ecr-repository',
+  KAIZEN_STACK_ID: 'kaizen-stack',
+  HOSTED_ZONE_ID: 'kaizen-hosted-zone',
+  DOMAIN: 'curabu.com',
+  CERTIFICATE_ID: 'kaizen-certificate',
   VPC_STACK_ID: 'kaizen-vpc-stack',
   VPC_ID: 'kaizen-vpc',
   VPC_PUBLIC_SUBNET_NAME: 'kaizen-vpc-public-subnet',
@@ -28,6 +32,16 @@ export const config = {
   API_SERVICE_ID: 'kaizen-api-service',
   API_LOAD_BALANCER_ID: 'kaizen-api-load-balancer',
   API_TARGET_GROUP_ID: 'kaizen-api-target-group',
-  API_LISTENER_ID: 'kaizen-api-listener',
-  API_LOAD_BALANCER_DNS_ID: 'kaizen-api-load-balancer-dns'
+  API_HTTPS_LISTENER_ID: 'kaizen-api-https-listener',
+  API_HTTP_LISTENER_ID: 'kaizen-api-http-listener',
+  API_LOAD_BALANCER_DNS_ID: 'kaizen-api-load-balancer-dns',
+  API_LOG_GROUP_ID: 'kaizen-api-log-group',
+  API_A_RECORD_ID: 'kaizen-api-a-record',
+  API_SUBDOMAIN: 'api.finance',
+  FRONTEND_SUBDOMAIN: 'finance',
+  FRONTEND_STACK_ID: 'kaizen-frontend-stack',
+  FRONTEND_BUCKET_ID: 'kaizen-frontend-bucket',
+  FRONTEND_DISTRIBUTION_ID: 'kaizen-frontend-distribution',
+  FRONTEND_DISTRIBUTION_URL: 'kaizen-frontend-distribution-url',
+  FRONTEND_A_RECORD_ID: 'kaizen-frontend-a-record'
 };

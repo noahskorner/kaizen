@@ -41,7 +41,7 @@ export class EndpointBuilder {
                 errors: [
                   {
                     code: ErrorCode.INTERNAL_SERVER_ERROR,
-                    message: ErrorCode.INTERNAL_SERVER_ERROR
+                    message: JSON.stringify(error)
                   }
                 ]
               } satisfies ApiFailureResponse);
