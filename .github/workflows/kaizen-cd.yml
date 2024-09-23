@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-api:
     runs-on: ubuntu-latest
     environment: production
 
@@ -141,9 +141,29 @@ jobs:
             --service ${{ secrets.AWS_ECS_SERVICE }} \
             --force-new-deployment \
             --region ${{ secrets.AWS_REGION }}
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.9.0
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Build frontend
-        run: cd frontend && npm run build:production
+        run: |
+          cd frontend
+          export NODE_ENV=${{ secrets.VITE_NODE_ENV }} \
+                 API_DOMAIN=${{ secrets.VITE_API_DOMAIN }} \
+                 PLAID_WEBHOOK_URL=${{ secrets.VITE_PLAID_WEBHOOK_URL }}
+          npm run build:production
 
       - name: Deploy to S3
         run: |

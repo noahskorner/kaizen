@@ -102,6 +102,11 @@
         "ec2:RevokeSecurityGroupIngress"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["ecs:DescribeTaskDefinition"],
+      "Resource": "*"
     }
   ]
 }
