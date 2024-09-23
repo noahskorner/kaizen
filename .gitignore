@@ -23,9 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-!apps/frontend/src/env/.env.development
-!apps/frontend/src/env/.env.production
-!apps/frontend/src/env/.env
 .env
 .env.local
 .env.development
@@ -33,6 +30,7 @@ yarn-error.log*
 .env.test
 .env.test.local
 .env.production.local
+!apps/frontend/src/env/*
 
 # turbo
 .turbo
@@ -52,6 +50,5 @@ venv
 apps/api/src/env/.env.production
 
 tools/cli/src/output
-apps/frontend/src/env/.env.production
 infrastructure/cdk.context.json
 infrastructure/src/env/.env.production
