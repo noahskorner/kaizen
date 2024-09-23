@@ -107,6 +107,11 @@
       "Effect": "Allow",
       "Action": ["ecs:DescribeTaskDefinition"],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["cloudfront:CreateInvalidation"],
+      "Resource": "*"
     }
   ]
 }
