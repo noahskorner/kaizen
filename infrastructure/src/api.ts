@@ -9,6 +9,7 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import { Environment } from '../../apps/api/src/env/environment.interface';
 import { Construct } from 'constructs';
 import { config } from './config';
 
@@ -59,6 +60,33 @@ export class ApiStack extends cdk.Stack {
     taskDefinition.addToTaskRolePolicy(secretAccessPolicyStatement);
 
     // Create the task definition
+    const environment: Environment = {
+      NODE_ENV:
+        (process.env.NODE_ENV as Environment['NODE_ENV']) ??
+        ('DEVELOPMENT' as Environment['NODE_ENV']),
+      DATABASE_URL: process.env.DATABASE_URL ?? '',
+      ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? '',
+      ACCESS_TOKEN_EXPIRATION: process.env.ACCESS_TOKEN_EXPIRATION ?? '',
+      REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET ?? '',
+      REFRESH_TOKEN_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION ?? '',
+      REFRESH_TOKEN_COOKIE_DOMAIN:
+        process.env.REFRESH_TOKEN_COOKIE_DOMAIN ?? '',
+      UPDATE_EMAIL_SECRET: process.env.UPDATE_EMAIL_SECRET ?? '',
+      UPDATE_EMAIL_EXPIRATION: process.env.UPDATE_EMAIL_EXPIRATION ?? '',
+      API_PORT: process.env.API_PORT ?? '',
+      API_DOMAIN: process.env.API_DOMAIN ?? '',
+      FRONTEND_DOMAIN: process.env.FRONTEND_DOMAIN ?? '',
+      PLAID_CLIENT_ID: process.env.PLAID_CLIENT_ID ?? '',
+      PLAID_SECRET: process.env.PLAID_SECRET ?? '',
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? '',
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ?? '',
+      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ?? '',
+      AWS_REGION: process.env.AWS_REGION ?? '',
+      AWS_DATABASE_SECRET_ID: process.env.AWS_DATABASE_SECRET_ID ?? '',
+      FORGOT_PASSWORD_SECRET: process.env.FORGOT_PASSWORD_SECRET ?? '',
+      FORGOT_PASSWORD_EXPIRATION: process.env.FORGOT_PASSWORD_EXPIRATION ?? '',
+      OPEN_EXCHANGE_RATE_APP_ID: process.env.OPEN_EXCHANGE_RATE_APP_ID ?? ''
+    };
     taskDefinition.addContainer(config.API_CONTAINER_ID, {
       image: ecs.ContainerImage.fromEcrRepository(repository),
       portMappings: [
@@ -66,6 +94,7 @@ export class ApiStack extends cdk.Stack {
           containerPort: 3001
         }
       ],
+      environment: environment as unknown as { [key: string]: string },
       logging: ecs.LogDrivers.awsLogs({
         logGroup: logGroup,
         streamPrefix: config.API_LOG_GROUP_ID

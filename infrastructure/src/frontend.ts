@@ -40,6 +40,7 @@ export class FrontendStack extends cdk.Stack {
     );
 
     // Create a CloudFront distribution
+    const frontendDomain = `${config.FRONTEND_SUBDOMAIN}.${config.DOMAIN}`;
     const distribution = new cloudfront.Distribution(
       this,
       config.FRONTEND_DISTRIBUTION_ID,
@@ -49,7 +50,7 @@ export class FrontendStack extends cdk.Stack {
           viewerProtocolPolicy:
             cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
         },
-        domainNames: [config.DOMAIN],
+        domainNames: [frontendDomain],
         certificate: certificate
       }
     );
@@ -66,6 +67,7 @@ export class FrontendStack extends cdk.Stack {
     // Create an alias record for the CloudFront distribution
     new route53.ARecord(this, config.FRONTEND_A_RECORD_ID, {
       zone: hostedZone,
+      recordName: frontendDomain,
       target: route53.RecordTarget.fromAlias(
         new targets.CloudFrontTarget(distribution)
       )
