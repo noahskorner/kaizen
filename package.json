@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "turbo run build --filter=@kaizen/api --filter=@kaizen/frontend",
+    "build:frontend": "turbo run build --filter=@kaizen/frontend",
     "api:docker:build": "docker build -t $npm_config_aws_repository_id .",
     "api:docker:start": "docker run -p 3001:3001 $npm_config_aws_repository_id",
     "api:docker:login": "aws ecr get-login-password --region $npm_config_aws_region | docker login --username AWS --password-stdin $npm_config_aws_account_id.dkr.ecr.$npm_config_aws_region.amazonaws.com",

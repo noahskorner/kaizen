@@ -143,11 +143,11 @@ jobs:
             --region ${{ secrets.AWS_REGION }}
 
       - name: Build frontend
-        run: npm run build --prefix frontend
+        run: cd frontend && npm run build:production
 
       - name: Deploy to S3
         run: |
-          aws s3 sync frontend/build s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete --region ${{ secrets.AWS_REGION }}
+          aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete --region ${{ secrets.AWS_REGION }}
 
       - name: Invalidate CloudFront cache
         run: |
