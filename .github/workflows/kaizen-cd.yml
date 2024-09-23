@@ -160,8 +160,6 @@ jobs:
       - name: Build frontend
         run: |
           cd apps/frontend
-          export VITE_NODE_ENV=${{ secrets.VITE_NODE_ENV }} \
-                 VITE_API_DOMAIN=${{ secrets.VITE_API_DOMAIN }}
           npm run build:production
 
       - name: Configure AWS credentials
