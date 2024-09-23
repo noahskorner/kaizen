@@ -86,7 +86,7 @@
     "tailwindcss": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.1",
-    "turbo": "^2.1.1",
+    "turbo": "^2.1.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
   }
