@@ -159,7 +159,7 @@ jobs:
 
       - name: Build frontend
         run: |
-          cd frontend
+          cd apps/frontend
           export NODE_ENV=${{ secrets.VITE_NODE_ENV }} \
                  API_DOMAIN=${{ secrets.VITE_API_DOMAIN }} \
                  PLAID_WEBHOOK_URL=${{ secrets.VITE_PLAID_WEBHOOK_URL }}
