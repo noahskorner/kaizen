@@ -33,6 +33,9 @@ export class KaizenStack extends Stack {
       databaseSecret: databaseStack.secret
     });
 
+    // TODO: I have not yet been able to figure out how to do this.
+    // If you deploy a new stack, you will need to manually add the ingress rule.
+
     // Allow the API to connect to the database
     // const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
     //   this,

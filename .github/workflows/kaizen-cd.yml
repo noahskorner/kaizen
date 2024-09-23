@@ -24,21 +24,20 @@ jobs:
         run: npm ci
 
       - name: Retrieve database credentials from AWS Secrets Manager
+        id: retrieve-db-credentials
         run: |
           SECRET_STRING=$(aws secretsmanager get-secret-value --secret-id ${{ secrets.AWS_DATABASE_SECRET_ID }} --region ${{ secrets.AWS_REGION }} --query SecretString --output text)
           echo "$SECRET_STRING" > secret.json
+          DATABASE_URL=$(jq -r '.DATABASE_URL' secret.json)
+          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Set up database environment variables
-        run: |
-          export DATABASE_URL=$(jq -r '.DATABASE_URL' secret.json)
-
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ env.DATABASE_URL }}
 
       - name: Log in to Amazon ECR
         id: login-ecr
@@ -50,13 +49,6 @@ jobs:
           docker build -t ${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG .
           docker tag ${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPOSITORY }}:$IMAGE_TAG
-
-          - name: Build, tag, and push Docker image to ECR
-          run: |
-            IMAGE_TAG=latest
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REPOSITORY_URL }}
-            docker build -t ${{ secrets.AWS_ECR_REPOSITORY_URL }}:$IMAGE_TAG .
-            docker push ${{ secrets.AWS_ECR_REPOSITORY_URL }}:$IMAGE_TAG
 
       - name: Update ECS Task Definition
         id: task-def
