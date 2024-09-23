@@ -49,7 +49,7 @@ jobs:
           aws ec2 authorize-security-group-ingress \
             --group-id $SECURITY_GROUP_ID \
             --protocol tcp \
-            --port 3306 \
+            --port 5432 \
             --cidr ${MY_IP}/32
 
       - name: Run Prisma migrations
