@@ -70,8 +70,7 @@ jobs:
       - name: Update ECS Task Definition
         id: task-def
         run: |
-          TASK_DEFINITION_JSON=$(aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --region ${{ secrets.AWS_REGION }})
-
+          TASK_DEFINITION_JSON=$(aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --region ${{ secrets.AWS_REGION }} | jq '.taskDefinition') 
           NEW_TASK_DEF=$(echo "$TASK_DEFINITION_JSON" | jq --arg IMAGE "${{ secrets.AWS_ECR_REPOSITORY_URL }}:latest" \
             --arg NODE_ENV "${{ secrets.NODE_ENV}}" \
             --arg DATABASE_URL "${{ secrets.DATABASE_URL}}" \
@@ -126,7 +125,6 @@ jobs:
               { "name": "AWS_DATABASE_SECRET_ID", "value": $AWS_DATABASE_SECRET_ID },
               { "name": "OPEN_EXCHANGE_RATE_APP_ID", "value": $OPEN_EXCHANGE_RATE_APP_ID }
             ]')
-
           echo "$NEW_TASK_DEF" > task-def.json
 
       - name: Register new task definition
