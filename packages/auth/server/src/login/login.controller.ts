@@ -4,10 +4,11 @@ import { AuthController } from '../auth.controller';
 
 export class LoginController extends AuthController {
   constructor(
-    protected readonly NODE_ENV: string,
+    NODE_ENV: string,
+    REFRESH_TOKEN_COOKIE_DOMAIN: string,
     private readonly _loginService: ILoginService
   ) {
-    super(NODE_ENV);
+    super(NODE_ENV, REFRESH_TOKEN_COOKIE_DOMAIN);
   }
 
   public login = new EndpointBuilder()

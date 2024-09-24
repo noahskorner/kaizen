@@ -3,7 +3,10 @@ import { Controller, Cookie, MiddlewareResponse } from '@kaizen/core-server';
 import { REFRESH_TOKEN_COOKIE_KEY } from './refresh-token-cookie-key';
 
 export abstract class AuthController extends Controller {
-  constructor(protected readonly NODE_ENV: string) {
+  constructor(
+    private readonly NODE_ENV: string,
+    private readonly REFRESH_TOKEN_COOKIE_DOMAIN: string
+  ) {
     super();
   }
 
@@ -11,7 +14,7 @@ export abstract class AuthController extends Controller {
     res.setCookie({
       key: REFRESH_TOKEN_COOKIE_KEY,
       value: refreshToken,
-      domain: 'localhost',
+      domain: this.REFRESH_TOKEN_COOKIE_DOMAIN,
       path: '/',
       secure: this.NODE_ENV !== 'TEST' && this.NODE_ENV !== 'DEVELOPMENT',
       httpOnly: true,

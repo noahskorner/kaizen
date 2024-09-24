@@ -5,10 +5,11 @@ import { EndpointBuilder } from '@kaizen/core-server';
 
 export class RefreshTokenController extends AuthController {
   constructor(
-    protected readonly NODE_ENV: string,
+    NODE_ENV: string,
+    REFRESH_TOKEN_COOKIE_DOMAIN: string,
     private readonly _refreshTokenService: IRefreshTokenService
   ) {
-    super(NODE_ENV);
+    super(NODE_ENV, REFRESH_TOKEN_COOKIE_DOMAIN);
   }
 
   public refreshToken = new EndpointBuilder()

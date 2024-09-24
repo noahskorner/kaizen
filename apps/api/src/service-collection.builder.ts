@@ -402,11 +402,16 @@ export class ServiceCollectionBuilder {
       new CreateLinkTokenController(authMiddleware, createLinkTokenService);
     const loginController =
       this._serviceCollection.loginController ??
-      new LoginController(serverEnvironment.NODE_ENV, loginService);
+      new LoginController(
+        serverEnvironment.NODE_ENV,
+        serverEnvironment.REFRESH_TOKEN_COOKIE_DOMAIN,
+        loginService
+      );
     const refreshTokenController =
       this._serviceCollection.refreshTokenController ??
       new RefreshTokenController(
         serverEnvironment.NODE_ENV,
+        serverEnvironment.REFRESH_TOKEN_COOKIE_DOMAIN,
         refreshTokenService
       );
     const logoutController =
