@@ -43,7 +43,8 @@ export class ExpressAdapter {
 
     // Clear cookies
     response._clearCookie.forEach((cookie) => {
-      res.clearCookie(cookie);
+      const options = cookie.domain ? { domain: cookie.domain } : undefined;
+      res.clearCookie(cookie.key, options);
     });
 
     // Send response
