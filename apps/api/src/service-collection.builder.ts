@@ -416,7 +416,10 @@ export class ServiceCollectionBuilder {
       );
     const logoutController =
       this._serviceCollection.logoutController ??
-      new LogoutController(authMiddleware);
+      new LogoutController(
+        authMiddleware,
+        serverEnvironment.REFRESH_TOKEN_COOKIE_DOMAIN
+      );
     const createInstitutionController =
       this._serviceCollection.createInstitutionController ??
       new CreateInstitutionController(authMiddleware, createInstitutionService);

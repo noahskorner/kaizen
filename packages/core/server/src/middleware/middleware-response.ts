@@ -1,10 +1,11 @@
+import { ClearCookie } from './clear-cookie';
 import { Cookie } from './cookie';
 
 export class MiddlewareResponse {
   public _sent: boolean = false;
   public _status: number = 418;
   public _setCookie: Cookie[] = [];
-  public _clearCookie: string[] = [];
+  public _clearCookie: ClearCookie[] = [];
   public _body?: unknown;
 
   public send(status: number, body?: unknown) {
@@ -19,8 +20,8 @@ export class MiddlewareResponse {
     return this;
   }
 
-  public clearCookie(key: string) {
-    this._clearCookie.push(key);
+  public clearCookie(cookie: ClearCookie) {
+    this._clearCookie.push(cookie);
     return this;
   }
 }
