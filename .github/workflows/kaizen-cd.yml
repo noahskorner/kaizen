@@ -124,7 +124,7 @@ jobs:
               { "name": "AWS_CERTIFICATE_ARN_US_EAST_2", "value": $AWS_CERTIFICATE_ARN_US_EAST_2 },
               { "name": "AWS_ACCOUNT_ID", "value": $AWS_ACCOUNT_ID },
               { "name": "AWS_DATABASE_SECRET_ID", "value": $AWS_DATABASE_SECRET_ID },
-              { "name": "OPEN_EXCHANGE_RATE_APP_ID", "value": $OPEN_EXCHANGE_RATE_APP_ID },
+              { "name": "OPEN_EXCHANGE_RATE_APP_ID", "value": $OPEN_EXCHANGE_RATE_APP_ID }
             ]')
           echo "$NEW_TASK_DEF" > task-def.json
 
