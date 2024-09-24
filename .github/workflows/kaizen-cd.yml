@@ -71,6 +71,7 @@ jobs:
       - name: Update ECS Task Definition
         id: task-def
         run: |
+          sudo apt-get update && sudo apt-get install -y jq
           TASK_DEFINITION_JSON=$(aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --region ${{ secrets.AWS_REGION }})
           NEW_TASK_DEF=$(echo $TASK_DEFINITION_JSON | jq --arg IMAGE "${{ secrets.AWS_ECR_REPOSITORY_URL }}:latest" \
             --arg NODE_ENV "${{ secrets.NODE_ENV}}" \
