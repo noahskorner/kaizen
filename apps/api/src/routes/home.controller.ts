@@ -6,7 +6,7 @@ export class HomeController extends Controller {
     .use((req, res, next) => {
       const response: ServiceSuccessResponse<string> = {
         type: 'SUCCESS',
-        data: 'Hello world 3!'
+        data: 'Hello world!'
       };
       return this.ok(res, next, response);
     })

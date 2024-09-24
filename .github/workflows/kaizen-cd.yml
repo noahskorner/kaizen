@@ -71,7 +71,6 @@ jobs:
       - name: Update ECS Task Definition
         id: task-def
         run: |
-          sudo apt-get update && sudo apt-get install -y jq
           TASK_DEFINITION_JSON=$(aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --region ${{ secrets.AWS_REGION }})
           NEW_TASK_DEF=$(echo $TASK_DEFINITION_JSON | jq --arg IMAGE "${{ secrets.AWS_ECR_REPOSITORY_URL }}:latest" \
             --arg NODE_ENV "${{ secrets.NODE_ENV}}" \
@@ -98,7 +97,7 @@ jobs:
             --arg AWS_CERTIFICATE_ARN_US_EAST_2 "${{ secrets.AWS_CERTIFICATE_ARN_US_EAST_2}}" \
             --arg AWS_ACCOUNT_ID "${{ secrets.AWS_ACCOUNT_ID}}" \
             --arg AWS_DATABASE_SECRET_ID "${{ secrets.AWS_DATABASE_SECRET_ID}}" \
-            --arg OPEN_EXCHANGE_RATE_APP_ID "${{ secrets.OPEN_EXCHANGE_RATE_APP_ID}}"
+            --arg OPEN_EXCHANGE_RATE_APP_ID "${{ secrets.OPEN_EXCHANGE_RATE_APP_ID}}" \
             '.taskDefinition.containerDefinitions[0].image=$IMAGE |
             .taskDefinition.containerDefinitions[0].environment=[
               { "name": "NODE_ENV", "value": $NODE_ENV },
