@@ -11,6 +11,7 @@ export interface Environment {
   API_PORT: string;
   API_DOMAIN: string;
   FRONTEND_DOMAIN: string;
+  PLAID_ENVIRONMENT: 'sandbox' | 'production';
   PLAID_CLIENT_ID: string;
   PLAID_SECRET: string;
   OPENAI_API_KEY: string;
