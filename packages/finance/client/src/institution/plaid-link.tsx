@@ -26,7 +26,7 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
 
   return (
     <button
-      className="flex min-h-24 items-center justify-center gap-2 rounded-lg border border-green-700 bg-green-800 text-sm hover:border-green-600 hover:bg-green-700"
+      className="flex min-h-24 items-center justify-start gap-2 rounded-lg border border-green-700 bg-green-800 p-4 text-sm font-medium hover:border-green-600 hover:bg-green-700"
       onClick={onCreateClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
