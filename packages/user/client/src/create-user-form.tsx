@@ -120,6 +120,7 @@ export const CreateUserForm = ({
           <Input
             id={CREATE_USER_FORM_PASSWORD_INPUT_ID}
             name="password"
+            type="password"
             value={password}
             onChange={onPasswordChange}
           />

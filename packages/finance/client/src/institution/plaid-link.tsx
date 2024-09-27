@@ -12,6 +12,7 @@ export const PlaidLink = ({ linkToken }: PlaidLinkProps) => {
 
   const { open } = usePlaidLink({
     token: linkToken,
+    env: import.meta.env.VITE_PLAID_ENVIRONMENT,
     onSuccess: (public_token: string) => {
       const request: CreateInstitutionRequest = {
         publicToken: public_token
