@@ -88,6 +88,16 @@ if (PLAID_SECRET == null) {
   );
 }
 
+const PLAID_ENVIRONMENT = process.env.PLAID_ENVIRONMENT;
+if (
+  PLAID_ENVIRONMENT == null ||
+  (PLAID_ENVIRONMENT != 'sandbox' && PLAID_ENVIRONMENT != 'production')
+) {
+  throw new Error(
+    `Must provide PLAID_ENVIRONMENT. Did you forget to set it in your environment file?`
+  );
+}
+
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (OPENAI_API_KEY == null) {
   throw new Error(
@@ -177,6 +187,7 @@ export const environment: Environment = {
   REFRESH_TOKEN_COOKIE_DOMAIN: REFRESH_TOKEN_COOKIE_DOMAIN,
   PLAID_CLIENT_ID: PLAID_CLIENT_ID,
   PLAID_SECRET: PLAID_SECRET,
+  PLAID_ENVIRONMENT: PLAID_ENVIRONMENT,
   OPENAI_API_KEY: OPENAI_API_KEY,
   AWS_REGION: AWS_REGION,
   AWS_DATABASE_SECRET_ID: AWS_DATABASE_SECRET_ID,

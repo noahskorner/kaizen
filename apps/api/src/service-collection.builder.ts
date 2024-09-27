@@ -188,7 +188,7 @@ export class ServiceCollectionBuilder {
       this._serviceCollection.plaid ??
       new PlaidApi(
         new Configuration({
-          basePath: PlaidEnvironments.sandbox,
+          basePath: PlaidEnvironments[serverEnvironment.PLAID_ENVIRONMENT],
           baseOptions: {
             headers: {
               'PLAID-CLIENT-ID': serverEnvironment.PLAID_CLIENT_ID,
