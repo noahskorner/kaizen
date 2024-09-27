@@ -1,3 +1,4 @@
+export * from './account-card';
 export * from './account-history.actions';
 export * from './account-history.effects';
 export * from './account-history.reducers';

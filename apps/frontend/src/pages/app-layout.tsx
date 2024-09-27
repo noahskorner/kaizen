@@ -61,7 +61,7 @@ export const AppLayout = () => {
 
   return (
     <AuthRoute onUnauthenticated={onUnauthenticated}>
-      <div className="flex h-screen flex-col items-stretch overflow-hidden">
+      <div className="flex h-screen flex-col">
         <Navbar />
         <Sidebar
           transcribedAudio={transcribedAudio}
@@ -74,7 +74,7 @@ export const AppLayout = () => {
           onAssistantClick={onAssistantClick}
         />
         <div
-          className={`${showSidebar ? 'md:pl-64' : ''} flex h-full w-full items-stretch justify-center overflow-auto pt-12`}>
+          className={`${showSidebar ? 'md:pl-64' : ''} flex min-h-full w-full justify-center pt-12`}>
           <Outlet />
         </div>
       </div>

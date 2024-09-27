@@ -46,66 +46,73 @@ export const Sidebar = ({
   }, []);
 
   return (
-    <div
-      className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-10 h-full`}>
+    <>
       <div
-        className={`flex h-full w-64 flex-col items-center justify-between border-r border-zinc-800 bg-zinc-950 p-2 text-zinc-600`}>
-        <div className="flex w-full flex-col gap-y-4">
-          <Button
-            onClick={toggleSidebar}
-            size="icon"
-            variant="ghost"
-            className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        className={`${showSidebar ? (!firstRenderRef.current ? 'slide-in-from-left' : '') : 'slide-out-from-left'} fixed z-20 h-full`}>
+        <div
+          className={`flex h-full w-64 flex-col items-center justify-between border-r border-zinc-800 bg-zinc-950 p-2 text-zinc-600`}>
+          <div className="flex w-full flex-col gap-y-4">
+            <Button
+              onClick={toggleSidebar}
+              size="icon"
+              variant="ghost"
+              className="rounded-lg p-2 text-zinc-50 hover:bg-zinc-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            </Button>
+            <div className="flex flex-col gap-y-1">
+              <SidebarButton
+                icon={<HomeIcon />}
+                href={dashboardHref}
+                label="Dashboard"
               />
-            </svg>
-          </Button>
-          <div className="flex flex-col gap-y-1">
+              <SidebarButton
+                icon={<TagIcon />}
+                href={spendingHref}
+                label="Spending"
+              />
+              <SidebarButton
+                icon={<CreditCardIcon />}
+                href={accountHref}
+                label="Accounts"
+              />
+              <SidebarButton
+                icon={<PresentationChartIcon />}
+                href={retirementHref}
+                label="Retirement"
+              />
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-y-1">
             <SidebarButton
-              icon={<HomeIcon />}
-              href={dashboardHref}
-              label="Dashboard"
+              icon={<SettingsIcon />}
+              href={settingsHref}
+              label="Settings"
             />
             <SidebarButton
-              icon={<TagIcon />}
-              href={spendingHref}
-              label="Spending"
-            />
-            <SidebarButton
-              icon={<CreditCardIcon />}
-              href={accountHref}
-              label="Accounts"
-            />
-            <SidebarButton
-              icon={<PresentationChartIcon />}
-              href={retirementHref}
-              label="Retirement"
+              icon={<LogoutIcon />}
+              onClick={onLogoutClick}
+              label="Logout"
             />
           </div>
         </div>
-        <div className="flex w-full flex-col gap-y-1">
-          <SidebarButton
-            icon={<SettingsIcon />}
-            href={settingsHref}
-            label="Settings"
-          />
-          <SidebarButton
-            icon={<LogoutIcon />}
-            onClick={onLogoutClick}
-            label="Logout"
-          />
-        </div>
       </div>
-    </div>
+      {showSidebar && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed bottom-0 left-0 right-0 top-0 z-10 block bg-black bg-opacity-50 md:hidden"></button>
+      )}
+    </>
   );
 };
