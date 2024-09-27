@@ -6,7 +6,7 @@ export const HomePage = () => {
   return (
     <div className="w-full bg-zinc-950">
       <div className="fixed left-0 top-0 flex h-16 w-full items-center justify-center border-b border-zinc-800 bg-zinc-950 bg-opacity-70 backdrop-blur-md">
-        <div className="flex w-full max-w-7xl items-center justify-between px-16 xl:px-0">
+        <div className="flex w-full max-w-7xl items-center justify-between px-2 xl:px-16">
           <div>
             <div>Logo</div>
             <div>Links</div>
